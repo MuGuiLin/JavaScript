@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>数字金额千分位格式化</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+        .box{
+            margin: 50px auto;
+            width: 500px;
+            padding: 50px;
+            text-align: center;
+            border: 1px solid gray;
+            font-size: 16px;
+        }
+        input{
+            width: 200px;
+            height: 30px;
+        }
+         button{
+            width: 80px;
+            height: 36px;
+            vertical-align: bottom;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>数字金额千分位格式化</h1>
+    <hr>
+    <section class="box">
+        <input type="text" id="num" />
+        <button id="btn">格式化</button>
+        <b id="rmb"></b>
+    </section>
+    <script>
+        const RMB = {
+            // 金额2000000转换为￥1,000,000
+            /*
+                rmb 金额数量
+                str 货币符号
+                num 小数位数
+            */
+            fmoney(rmb = 0, str = '￥', num = 2) {
+                if (isNaN(Number(rmb)) || !rmb) rmb = 0;
+                num = num > 0 && num <= 20 ? num : 2;
+                rmb = parseFloat((rmb + "").replace(/[^\d\.-]/g, "")).toFixed(num) + "";
+                let l = rmb.split(".")[0].split("").reverse(),
+                    r = rmb.split(".")[1],
+                    t = "";
+                for (let i = 0; i < l.length; i++) {
+                    t += l[i] + ((i + 1) % 3 == 0 && (i + 1) != l.length ? "," : "");
+                };
+                return str + t.split("").reverse().join("") + "." + r;
+            },
+
+            format(rmb = '00.00', str = '￥', num = 2) {
+                rmb = rmb + '';
+                num = num + '';
+                console.log(rmb, num);
+                // ["8", "7", "6", "5", "4", "3", "2", "1"]
+                return str + rmb.split("").reverse().reduce((prev, next, index) => {
+                    return ((index % 3) ? next : (next + ',')) + prev;
+                }) + "." + num;
+            },
+
+
+            // 金额￥1,000,000转换为1000000
+            rmoney(rmb) {
+                return parseFloat(rmb.replace(/[^\d\.-]/g, ""));
+            }
+        }
+
+        console.log(RMB.fmoney(12345678, '$'));
+        console.log(RMB.rmoney(RMB.fmoney(1000000.24)));
+
+        console.log(RMB.format(12345678));
+
+        document.querySelector('#btn').addEventListener('click', () => {
+            let num = document.querySelector('#num');
+            document.querySelector('#rmb').innerHTML = RMB.fmoney(num.value);
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>AnimationPlayState</title>
+</head>
+
+<style>
+	section {
+		width: 500px;
+		margin: auto;
+	}
+
+	textarea {
+		font-size: 1em;
+		width: 500px;
+		height: 100px;
+	}
+</style>
+</head>
+
+<body>
+
+	<section>
+		<textarea id="target"></textarea>
+		<p>
+			<button id="btn">插入话题</button>
+		</p>
+	</section>
+
+</body>
+
+
+<script type="text/javascript">
+	var $ = function (id) {
+		return document.getElementById(id);
+	};
+	$("btn").onclick = function () {
+		var txt = "请在这里输入自定义话题";
+		var dom = $("target");
+		//转载文字
+		dom.value += "#" + txt + "#";
+		var len = dom.value.length;
+		console.log(len)
+		//创建选择区域	
+		if ($("target").createTextRange) { //IE浏览器
+			var range = $("target").createTextRange();
+			range.moveEnd("character", -l)
+			//range.moveStart("character",-l)              
+			range.moveEnd("character", l - 1);
+			range.moveStart("character", l - 1 - txt.length);
+			range.select();
+		} else {
+			dom.setSelectionRange(len - 1 - txt.length, len - 1);
+			dom.focus();
+		}
+	};
+</script>
+
+</html>

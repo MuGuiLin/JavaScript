@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+</head>
+
+<body>
+
+<p>点击下面的按钮来显示今天是周几：</p>
+
+<button onclick="myFunction()">看看今天是星期几</button>
+
+<p id="demo"></p>
+
+<script>
+function myFunction()
+{
+var x;
+var d=new Date().getDay();
+switch (d)
+  {
+  case 0:
+    x="星期天";
+    break;
+  case 1:
+    x="星期一";
+    break;
+  case 2:
+    x="星期二";
+    break;
+  case 3:
+    x="星期三";
+    break;
+  case 4:
+    x="星期四";
+    break;
+  case 5:
+    x="星期五";
+    break;
+  case 6:
+    x="星期六";
+    break;
+  }
+document.getElementById("demo").innerHTML=x;
+}
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        /* 注意要复制的标签不能隐藏 */
+        /* span{ visibility: hidden;} */
+    </style>
+</head>
+
+<body>
+
+    <span id="copyMy">这是要被复制的内容!</span>
+    <button onClick="copyFn()">点击复制</button>
+
+    <br>
+    <hr><br>
+
+    <textarea cols="60" rows="10" id="biao1">用户定义的代码区域</textarea>
+    <input type="button" onClick="copyUrl2()" value="点击复制代码" />
+
+    <br>
+    <hr><br>
+
+    <input type="text" id="text" value="测试">
+    <input type="button" value="复制" onclick="setTxt()">
+    <input type="button" value="读取" onclick="readTxt()">
+
+    <br>
+    <hr><br>
+
+    <form name="form1">
+        <input name="title" type="text" size="50" value="点击我，我就选中我！" onClick="Myselect_txt()"> <br><br>
+        <textarea name="content" cols="52" rows="6" onClick="Myselect_txtarea()">点击我，我就选中我！...</textarea>
+    </form>
+
+
+
+    <button onClick="copyBtn('这是要被复制的粘贴板上的内容')">点击复制</button>
+
+    <script>
+        //方法一  浏览器提供了 copy 命令 ，可以复制选中的内容  document.execCommand("copy")
+        //1、
+        function copyFn() {
+            var val = document.getElementById('copyMy');
+            window.getSelection().selectAllChildren(val);
+            document.execCommand("Copy");
+            alert('已复制');
+        }
+
+        //2、
+        function copyUrl2() {
+            var Url2 = document.getElementById("biao1");
+            Url2.select(); // 选择对象
+            document.execCommand("Copy"); // 执行浏览器复制命令
+            alert("已复制好，可贴粘!");
+        }
+
+        /*  如果是输入框，可以通过 select() 方法，选中输入框的文本，然后调用  copy 命令，将文本复制到剪切板
+            但是 select() 方法只对 <input> 和 <textarea> 有效，对于 <p> 就不好使
+
+            最后我的解决方案是，在页面中添加一个 <textarea>，然后把它隐藏掉（css position: absolute;top: 0;left: 0;opacity: 0;z-index: -10;）
+            点击按钮的时候，先把 <textarea> 的 value 改为 <p> 的 innerText，然后复制 <textarea> 中的内容
+        */
+
+
+
+
+        //方法二： 在ie中window.clipboardData（剪切板对象）是可以被获取，所以利用这个方法我们可以实现在IE当中复制粘贴的功能。 
+        // 注：只在能IE中有效！！！
+        function readTxt() {
+            alert(window.clipboardData.getData("text"));
+        }
+
+        function setTxt() {
+            if (window.clipboardData) {
+                var t = document.getElementById("text");
+                t.select();
+                window.clipboardData.clearData(); //复制前先清除之前的旧数据
+                window.clipboardData.setData('text', t.createTextRange().text)
+                alert('复制成功！' + t.createTextRange().text)
+            } else {
+                alert('请手动复制！');
+            }
+        }
+
+
+
+        //点击选中文本
+        function Myselect_txt() {
+            if (document.form1.title.focus) {
+                document.form1.title.select();
+            }
+        }
+
+        function Myselect_txtarea() {
+            if (document.form1.content.focus) {
+                document.form1.content.select();
+            }
+        }
+
+
+
+
+        function copyBtn(txt) {
+            if (window.clipboardData) {
+                window.clipboardData.clearData();
+                clipboardData.setData("Text", txt);
+                alert("复制成功！");
+
+            } else if (navigator.userAgent.indexOf("Opera") != -1) {
+                window.location = txt;
+            } else if (window.netscape) {
+                try {
+                    netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+                } catch (e) {
+                    alert(
+                        "被浏览器拒绝！\n请在浏览器地址栏输入'about:config'并回车\n然后将 'signed.applets.codebase_principal_support'设置为'true'"
+                    );
+                }
+                var clip = Components.classes['@mozilla.org/widget/clipboard;1'].createInstance(Components.interfaces.nsIClipboard);
+                if (!clip)
+                    return;
+                var trans = Components.classes['@mozilla.org/widget/transferable;1'].createInstance(Components.interfaces
+                    .nsITransferable);
+                if (!trans)
+                    return;
+                trans.addDataFlavor("text/unicode");
+                var str = new Object();
+                var len = new Object();
+                var str = Components.classes["@mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString);
+                var copytext = txt;
+                str.data = copytext;
+                trans.setTransferData("text/unicode", str, copytext.length * 2);
+                var clipid = Components.interfaces.nsIClipboard;
+                if (!clip)
+                    return false;
+                clip.setData(trans, null, clipid.kGlobalClipboard);
+                alert("复制成功！");
+            }
+        };
+    </script>
+
+</body>
+
+</html>
