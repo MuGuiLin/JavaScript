@@ -1,0 +1,74 @@
+1. JSON 是什么
+
+JSON，全称是 JavaScript Object Notation，即 JavaScript 对象标记法。
+
+
+JSON 是一种轻量级（Light-Weight）、基于文本的（Text-Based）、可读的（Human-Readable）格式。
+
+
+JSON 的名称中虽然带有 JavaScript，但这是指其语法规则是参考 JavaScript 对象的，而不是指只能用于 JavaScript 语言。
+
+
+JSON 无论对于人，还是对于机器来说，都是十分便于阅读和书写的，而且相比 XML （另一种常见的数据交换格式），文件更小，因此迅速成为网络上十分流行的交换格式。
+
+
+近年来 JavaScript 已经成为浏览器上事实上的标准语言，JavaScript 的风靡，与 JSON 的流行也有密切的关系。
+
+
+因为 JSON 本身就是参考 JavaScript 对象的规则定义的，其语法与 JavaScript 定义对象的语法几乎完全相同。
+
+
+JSON 格式的创始人声称此格式永远不升级，这就表示这种格式具有长时间的稳定性，10 年前写的文件，10 年后也能用，没有任何兼容性问题。
+
+
+
+2. JSON 的语法规则是怎样的
+
+JSON 的语法规则十分简单，可称得上“优雅完美”，总结起来有：
+
+- 数组（Array）用方括号(“[]”)表示。
+- 对象（Object）用大括号（”{}”）表示。
+- 名称/值对（name/value）组合成数组和对象。
+- 名称（name）置于双引号中，值（value）有字符串、数值、布尔值、null、对象和数组。
+- 并列的数据之间用逗号（“,”）分隔
+
+{
+	"name": "Geoff Lui",
+	"age": 26
+}
+
+
+
+
+
+3. JSON 和 XML
+
+JSON 常被拿来与 XML 做比较，因为 JSON 的诞生本来就多多少少要有取代 XML 的意思。相比 XML，JSON 的优势如下：
+
+- 没有结束标签，长度更短，读写更快
+- 能够直接被 JavaScript 解释器解析
+- 可以使用数组
+
+JSON：
+
+{
+	"name": "Geoff Lui",
+	"age": 26,
+	"friends": ["Lily", "Lucy", "Gwen"]
+}
+
+XML：
+
+<root>
+	<name>Geoff Lui</name>
+	<age>26</age>
+	<friends>Lily</friends>
+	<friends>Lucy</friends>
+	<friends>Gwen</friends>
+</root>
+
+
+4. JSON 解析和生成
+
+在 JavaScript 中，有两个方法与此相关： JSON.parse 和 JSON.stringify 。
+

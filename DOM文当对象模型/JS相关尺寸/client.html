@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>client</title>
+
+	<style type="text/css">
+		h1 {
+			text-align: center;
+		}
+
+		section {
+			position: relative;
+			margin: 20px;
+			padding: 20px;
+			height: 300px;
+			font-size: 16px;
+			border: 1px solid green;
+			border-radius: 10px;
+		}
+
+		section div {
+			width: 200px;
+			height: 200px;
+		}
+
+		.client-top {
+			position: absolute;
+			top: 40px;
+			margin-top: 20px;
+			border: 10px solid blue;
+			border-top-width: 20px;
+		}
+
+		.client-left {
+			position: absolute;
+			top: 60px;
+			left: 50px;
+			margin-left: 30px;
+			border: 10px solid red;
+			border-left-width: 30px;
+		}
+
+		.client-width {
+			padding: 10px 20px 0 10px;
+			border: 2px solid blue;
+		}
+
+		.client-height {
+			padding: 10px 0 5px 0;
+			border: 2px solid green;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>client</h1>
+	<hr />
+
+	<pre>
+			
+	<h3>client可视区域的内容:</h3>
+
+			1、clientTop 【只读属性】元素顶部边框的宽度（以像素表示）。不包括顶部外边距或内边距。
+			3、clientLeft 【只读属性】元素的左边框的宽度，以像素表示。如果元素的文本方向是从右向左（RTL, right-to-left），并且由于内容溢出导致左边出现了一个垂直滚动条，则该属性包括滚动条的宽度。clientLeft不包括左外边距和左内边距。
+
+			4、clientWidth 【只读属性】内联元素以及没有 CSS 样式的元素的 clientWidth 属性值为 0。Element.clientWidth 属性表示元素的内部宽度，以像素计。该属性包括内边距，但不包括垂直滚动条（如果有）、边框和外边距。
+			5、clientHeight 【只读属性】对于没有定义CSS或者内联布局盒子的元素为0，否则，它是元素内部的高度(单位像素)，包含内边距，但不包括水平滚动条、边框和外边距。lientHeight 可以通过 CSS height + CSS padding - 水平滚动条高度 (如果存在)来计算.
+
+			* 只读属性：只能查看、获取，不能修改
+
+		得出结论是: clientWidth是不包含边框的宽度，clientLeft 是左边框的宽度 clientX可是区域的 横坐标， clientY可视区域的 纵坐标。
+		每一个事件处理函数都有一个 隐藏的event 事件参数对象，但是IE8之前是没有的 window.event代替
+
+	</pre>
+
+	<section>
+		<div class="client-top">clientTop</div>
+		clientTop = border-top； 20 = 【border-top: 20px;】
+	</section>
+
+	<section>
+		<div class="client-left">clientLeft</div>
+		clientLeft = border-left； 30 = 【border-left: 30px;】
+	</section>
+
+	<section>
+		<div class="client-width">clientWidth</div>
+		clientWidth = padding-left + width + padding-right； 230 = 200 + 20 + 10 = 【width: 200px; padding: 10px 20px 0 10px;】
+	</section>
+
+	<section>
+		<div class="client-height">clientHeight</div>
+		clientHeight = padding-top + height + padding-bottom；  215 = 200 + 10 + 5 =【height: 200px; padding: 10px 0 5px 0;】
+	</section>
+
+
+	<script>
+
+		//clientTop
+		{
+			let div = document.querySelector('.client-top');
+
+			//获取元素距离父元素左上角的位置开始， 父元素上边，到元素上边的距离
+			div.innerHTML = 'clientTop：' + div.clientTop;
+
+		};
+
+		//clientLeft
+		{
+			let div = document.querySelector('.client-left');
+
+			//获取元素距离父元素左上角的位置开始，父元素左边，到元素左边的距离
+			div.innerHTML = 'clientLeft：' + div.clientLeft;
+
+		};
+
+		//clientWidth
+		{
+			let div = document.querySelector('.client-width');
+
+			//获取元素的宽度
+			div.innerHTML = 'clientWidth：' + div.clientWidth;
+
+		};
+
+		//clientHeight
+		{
+			let div = document.querySelector('.client-height');
+
+			//获取元素的高度
+			div.innerHTML = 'clientHeight：' + div.clientHeight;
+
+		};
+	</script>
+</body>
+
+</html>

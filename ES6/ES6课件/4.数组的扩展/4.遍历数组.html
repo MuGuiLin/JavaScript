@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训2017-10JS</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    //for of
+    let arr=[1,2,3,4,5];
+    for(var key in arr){
+        console.log("索引"+key);
+    }
+    for (let item of arr){
+        console.log("当前项"+item);
+    }
+    //keys 遍历索引
+    for(let index of arr.keys()){
+        console.log(index);
+    }
+
+    //entries()
+    for(let [index,item] of arr.entries()){
+        console.log(index,item);
+    }
+
+</script>

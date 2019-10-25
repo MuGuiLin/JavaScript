@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>本地页面与页面之间传参1</title>
+		<script type="text/javascript" src="jquery-2.2.0.js"></script>
+		<style type="text/css">
+			* {
+				margin: 0px;
+				padding: 0px;
+				text-align: center;
+			}
+			
+			#text {
+				width: 300px;
+				height: 100px;
+				margin: auto;
+			}
+			
+			#button {
+				width: 120px;
+				height: 40px;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<form action="#">
+			<textarea id="text" placeholder="在这里输入您想输入的内容！"></textarea><br/>
+			<input id="button" type="button" value="发送/传参">
+		</form>
+	</body>
+
+</html>
+<script type="text/javascript">
+	function mupiao(text) //去掉文本框里面的空的，空格字符串等
+	{
+		if (typeof(text) == "string") //如果文本框中的内容是字符串类型时
+		{
+			return text.replace(/^\s*|\s*$/g, ""); //正则（清空，删除所有的空格）
+		} else {
+			return text; //如果不是字符串类型，则直接反回
+		}
+	}
+	$('#button').click(function() 
+	{
+		var txt = $('#text').val();
+		var arr = [123, 456, 789];
+		if (mupiao(txt) == "") 
+		{
+			alert('不能为空');
+			return false;
+		} 
+		else
+		{
+			window.open("本地页面与页面之间接收2.html?" + txt);  //+ "&imgurl=" + 123456
+		}
+	})
+</script>

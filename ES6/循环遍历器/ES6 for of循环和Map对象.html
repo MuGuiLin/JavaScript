@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>ES6 for of循环和Map对象</title>
+		<style type="text/css">
+			h1 {
+				text-align: center;
+			}
+		</style>
+	</head>
+
+	<body>
+		<h1>ES6 for of循环和Map对象</h1>
+		<hr />
+	</body>
+	
+	<script type="text/javascript">
+		'use strict';
+	//循环数组
+		let arr = ['abc', 1024, 'apple', 'orange', 'hello'];
+	
+	//for in ：
+		for(let i in arr){
+			document.write(i+', '); //这里的i是索引值
+		}
+		document.write('<br/>');
+	//for of (ES6)：
+		for(let i of arr){
+			document.write(i+', '); //这里的i是value值
+		}
+		
+		document.write('<br/>');
+		
+	//for of (ES6)：
+		for(let i of arr.keys()){
+			document.write(i+', '); //这里的i是索引值
+		}
+		
+		document.write('<br/>');
+		
+	//for of (ES6)：
+		for(let i of arr.entries()){
+			document.write(i+', '); //这里的i是key值和value值
+		}
+		
+		document.write('<br/>');
+		
+	//循环JSON
+		let jsons = {'name':'姓名', 'age':'年龄', 'six':'性别', 'xxx': 'xxxx'};
+		
+	//for in :
+		for( let i in jsons){
+			document.write(i+', '); //出来的是key值
+		}
+		document.write('<br/>');
+		
+	//for of :
+		//for(let i of jsons){  //for of 不能直接循环JSON
+		//	document.write(i);
+		//}
+	//删除JSON ：
+		delete jsons.xxx;
+	
+	//Map对象：
+		//Map对象和JSON相似，也是一种key => value 键值对的形式。
+		//Map对象是为了和for of循环配合使用而生的。
+		
+		let maps = new Map();
+		
+		//设置内容：set('name', 'value');
+			maps.set('a', 'computer');
+			maps.set('b', 'banana');
+			console.log(maps); //{"a" => "apple", "b" => "banana"}
+		
+		//获取内容：get('name');
+			document.write(maps.get('a'));
+		
+		//删除内容：delete('name');
+			maps.delete('b');
+			console.log(maps); //{"a" => "computer"} //b被删除了
+		
+		document.write('<br/>');
+		
+	//for of or Map 配合使用：
+		let mapp = new Map();
+			mapp.set('name','姓名');
+			mapp.set('age','年龄');
+			mapp.set( 'six','性别');
+		
+		for(let i in mapp){
+			document.write(i); //没用，Msp对象不能用for in来循环哦！！！
+		}
+		
+		for(let i of mapp){
+			document.write(i); //name,姓名age,年龄six,性别  key value都出来了！！！
+		}
+		
+		document.write('<br/>');
+		
+		for(let [key, value] of mapp){
+			document.write([key,value]);
+		}
+		
+		document.write('<br/>');
+		
+		for(let [key] of mapp){
+			document.write([key]+', ');
+		}
+		
+		document.write('<br/>');
+		
+	//for of 循环 map 的方法：
+		for(let k of mapp.keys()){
+			document.write(k+', ');
+		}
+		
+		for(let v of mapp.values()){
+			document.write(v+', ');
+		}
+	</script>
+
+</html>

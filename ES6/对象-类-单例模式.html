@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>对象-单例模式</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>对象-单例模式</h1>
+    <hr>
+    <script>
+        'use strict';
+
+
+        //单例的本质就是一个Json
+        {
+            let job = ['H5', 'CSS3', 'ES6'];
+
+            let Preson = {
+
+                //ES5
+                name: 'mupiao',
+                sex: '男',
+                age: 28,
+                showAge: function () {
+                    alert(this.age);
+                },
+
+                //ES6 简洁的语法
+                job,    //变量名相同时直接一个变量名就可以了，这里的job, 相当于job: job,
+                showName: () => {
+                    alert(this.name);  //这里的this指向了window
+                },
+                showSex() {
+                    alert(this.sex);  //这里的this就正常了 所以在ES6中推荐用这种
+                },
+                sumNum(a, b) {
+                    return a + b;
+                }
+                
+            };
+
+            Preson.showAge();
+            Preson.showName();
+            Preson.showSex();
+        }
+
+
+
+
+
+
+    // 面向对象，类，构造函数
+        {
+            //ES5 的写法
+
+            function Preson(name, age) {   //在以前ES5中，这里的Preson 即是类，又是构造函数（当在实例化时，会自已执行的函数）！！！
+                this.name = name;
+                this.age = age;
+                this.init();
+            };
+            
+            Preson.prototype.alert = function() {
+                console.log('你是调用不到我的，因为我被下面的原型直接tjt覆盖了！！！');
+            };
+            
+            Preson.prototype = {
+                init() {
+                    console.log('我是ES5初始化方法！');
+                },
+                showName: function() {
+                    alert(this.name);
+                },
+                showAge: function() {
+                    alert(this.age);
+                }
+            };
+
+            // 注：如果构造函数的原型已写成：Preson.prototype = {....}，用花括号，但现在又想用Preson.prototype.xxx = xxx,的话一定要放在{}用花括号原型的后面！！！
+            Preson.prototype.sumNum = function(a, b) {
+                return a + b;
+            };
+
+            var P = new Preson('MuGuiLin', 30);
+                P.showAge();
+                //P.alert();  //P.alert is not a function
+                console.log(P.sumNum(2, 3));
+            var P2 = new Preson('张三', 18);
+
+
+            console.log('ES5中的 P.showName == P2.showName', P.showName == P2.showName); //true
+            
+            console.log('ES5中的 P.constructor == Preson：', P.constructor == Preson);  //fasle
+
+
+
+            // 继承 在以前的ES5中是原型继承的 => 子类.prototype = new 父类(); 这不是真正的继承
+            function Dog(name, age) {
+                Preson.apply(this, arguments);  //属性继承
+            };
+
+            Dog.prototype = new Preson();  //原型继承
+
+            var D = new Dog('小狂龙', 1010);
+                D.showName();
+                D.showAge();
+                console.log(D.name);
+
+
+            
+
+
+        } {
+
+            //ES6 的写法
+
+            //这是类
+            class Preson {
+                
+                //这是构造函数
+                constructor(name = 'mupiao', age = 18) {
+                    // super(props); 注：再没有继承其他类的情况下，super()是不能用的！！！它是用于获取父类constructor构造函数的内容
+
+                    //这是属性
+                    this.name = name;
+                    this.age = age;
+
+                    this.init();
+                };
+
+                // 这是方法
+                init() {
+                    console.log('我是ES6初始化方法！');
+                };
+
+                showName() {
+                    console.log(this.name);
+                };
+
+                showAge() {
+                    console.log(this.age);
+                };
+            };
+
+            let P = new Preson('MUPIAO', 26);
+                P.showAge();
+                P.showName();
+
+            console.log('ES6中的 P.showName == P2.showName', P.showName == P2.showName); //false
+
+            console.log('ES6中的P.constructor == Preson：', P.constructor == Preson);  //true
+
+
+
+            // 继承 现在的ES6中是真正的extends继承  => class 子类 extends 父类{} 
+            class Dog extends Preson {
+                constructor(name, age, job) {
+                    super(name, age); //调用父类的构造函数
+                    this.job = job;
+                };
+
+                showJob() {
+                    console.log('我是继承父类后，扩展的方法！！！');
+                }
+            };
+
+            let D = new Dog('继承-小猫', 2);
+                D.showAge();
+                D.showName();
+                D.showJob();
+                console.log(D.age);
+
+        }
+
+    </script>
+</body>
+
+</html>

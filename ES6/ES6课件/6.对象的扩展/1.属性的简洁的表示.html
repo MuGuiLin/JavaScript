@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训2017-10JS</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    let a="aa",b="bb";
+    let obj={a,b};
+    console.log(obj);
+    //属性是个函数
+    let obj1={
+        fn:function () {},
+        fn1(){}
+    };
+
+    //属性名中如果想表示变量就放在[]
+    obj.a;
+    obj["a"];
+    let obj2={
+        [a]:"AA",
+        [a+"QQ"]:"myQQ"
+    };
+    console.log(obj2);
+</script>

@@ -1,0 +1,123 @@
+什么是Babel？
+	官方解释,是下一代JavaScript 语法的编译器。
+
+
+为什么要使用Babel？
+	在当代环境中虽然对ES6的支持越来越好，但是大多数还是不支持ES6，这时候我们就需要把已经写好的ES6代码转换成ES5，而Babel就是将ES6转化成ES5的转码器，被广泛使用。 
+
+既然是下一代Javascript的标准，浏览器因版本的不同对此会有兼容性问题，JavaScript的新的方法都不能使用，但是目前我们在项目开发一直提倡使用最新的语法糖编写，不但能减少代码量，而且async,await等新特性还解决了回调的编写机制，减轻了代码维护成本。
+
+Babel就因此而生，它可以让你放心使用大部分的JavaScript的新的标准的方法，然后编译成兼容绝大多数的主流浏览器的代码。在项目工程脚手架中，一般会使用.babelrc文件，通过配置一些参数配合webpack进行打包压缩。也通过网上了解，写法各有不同，参数也大不相同，因此，我重新整理一份资料，详细的介绍下各个配置项的意义所在，以便清晰了解如果使用。
+
+开始搞吧！！！
+
+
+1、npm init				//初始化 package.json
+
+
+2、npm install --save-dev babel-cli	//在项目根目录下安装 babel脚手架工具
+
+
+3、安装babel插件
+
+【注：Babel5是默认包含各种转换插件，Babel6.x相关转换插件需要下载对应的插件，如果不去安装这些插件，
+那么在运行npm run build命令行进行转换时是不会有任何效果的】
+
+A、npm i babel-polyfill	//在项目根目录下安装 babel辅助工具: babel-polyfill
+
+B、babel-preset-es2015  //ES6
+
+babel-polyfill是用于在，Babel默认只转换新的JavaScript句法（syntax），而不转换新的API，比如Iterator、Generator、Set、Maps、Proxy、Reflect、Symbol、Promise等全局对象，
+
+以及一些定义在全局对象上的方法（比如Object.assign）都不会转码。 
+
+举例来说，ES6在Array对象上新增了Array.from方法。Babel就不会转码这个方法。如果想让这个方法运行，必须使用babel-polyfill，为当前环境提供一个垫片。
+
+ 
+
+
+4、创建一个名为.babelrc的文件，用于配置babel编译规则的
+{
+  "presets": ["es2015"],
+  "plugins": ["transform-es2015-arrow-functions"],
+  "comments": false
+}
+
+
+5、配置package.json文件 
+
+{
+  "name": "deom",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-polyfill": "^6.26.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+							// 这里build只是随便启的名字，运行是质询要npm run build就行了
+    "build": "babel js -d dist"				// npm run build 将 js 目录下的js文件 编译后存放在 dist目录下
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
+
+
+6、npm run build  					//运行编译
+
+【编译命令】:
+
+1、在当前命令行输出转换
+babel test1.js
+
+
+
+2、将转换后的js输出到指定文件中（使用 -o 或 --out-file ）
+babel a.js -o b.js 
+//或
+babel a.js --out-file b.js
+
+
+
+3、实时监控（使用 -w 或 --watch ）
+babel a.js -w --out-file b.js
+//或
+babel a.js --watch --out-file b.js
+
+
+
+4、编译文件夹并输出到文件夹中（使用 -d 或 --out-dir ）
+babel src -d lib
+//或
+babel src --out-dir lib
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

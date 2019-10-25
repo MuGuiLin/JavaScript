@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>一道题目理解js作用域链</title>
+		<link rel="stylesheet" type="text/css" href="../../public/css/base.css"/>
+	</head>
+	<body>
+		<h1>一道题目理解js作用域链</h1><hr />
+		<pre>
+			
+		</pre>
+	</body>
+	<script type="text/javascript">
+		/*
+			要做出这道题，最重要是理解js中作用域链的概念，
+			
+			变量查找顺序: 从内到外大致如下
+			内部(函数、方法) ---> 原型prototype ---> window对象
+			
+			注：JS在执行时：能在内部(函数、方法)属性中找到的绝不去prototype中找，能在prototype中找到的绝不去window中找。
+		*/
+		
+		function C1(name){
+		    if(name){
+		        this.name = name;
+		    }
+		}
+		/*
+		分析：
+			由于下面new C1(没有参数).name，所以 此时那name参数默认被赋值成了undefined，所以到了if这里就进不去了，因此在C1内部属性中找不到name这个属性，
+			只能傻逼嘻嘻的向上、外找了，又因为C1.prototype.name = "Tom"的存在，在prototype中找到了name属性，所以最后打印出来的答案是"Tom"
+		*/
+		
+		
+		
+		function C2(name){
+		    this.name = name;
+		}
+		/*
+		 分析：
+			由于这里和上面一样，还是没有参数，同样name默认被赋值成了undefined，并且内部属性this.name已经被赋值成了 undefined。于是在查找的时候一下子就查到了name的值为undefined,
+			因此C2.prototype.name = "Tom"并没有什么卵用，最终答案为undefined
+		*/
+		 
+		function C3(name){
+		    this.name = name || "John";
+		}
+		/*
+		 分析：
+			同样是没有参数，undefined作为参数进来以后情况变成了这样：this.name = undefined || "John"，然后结果很明显了内部属性name被赋值成"John"。
+			接着是从内往外查找，一下子就锁定了内部属性name，此时的值为"John"。 因此C3.prototype.name = "John"同样并没有什么用
+		*/
+		
+		 
+		C1.prototype.name = "Tom";
+		C2.prototype.name = "Tom";
+		C3.prototype.name = "John";
+		 
+		console.log(new C1().name + "," + new C2().name + "," + new C3().name);
+	</script>
+</html>

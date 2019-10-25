@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训</title>
+</head>
+<body>
+
+</body>
+</html>
+<script type="text/javascript">
+    'use strict';
+    let [x,y,z]=[1,2];
+    console.log(x, y, z);
+    let arr=[[1],[[[[2]]]]];
+    //let [[m],[[[[n]]]]]=;
+    console.log(arr.toString());
+    console.log(arr.join(","));
+    console.log(arr+"");
+    //[[1],2]
+
+    //let [,,,Z]=[1,2,3];
+    let a1=[,,,];
+    let a2=[undefined,undefined,undefined,undefined];
+    //let obj={"0":0}
+    //当前索引下有没有值
+    console.log("1" in a1);//索引 in 数组
+    console.log(5 in a2);
+    let [A,B=(function () {
+        console.log("h");
+        return "h"
+    })()]=[1,3];
+    //注意结构赋值的时候,没有附上值得才会走默认值,能赋值就不会走默认值
+</script>

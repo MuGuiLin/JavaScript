@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>DIV移动</title>
+
+</head>
+
+<body>
+    <div id="div1" style="position: absolute; width: 100px; height: 100px; background: blue;">← ↔ →</div>
+    <script>
+        var a = 0, //向左
+            b = 0; //向右
+        window.onload = function () {
+            var oDiv = document.getElementById('div1');
+            var timer = null;
+
+            document.onkeydown = function (ev) {
+                var oEvent = ev || event;
+                if (oEvent.keyCode == 37) {
+                    if (a == 0) {
+                        timer = setInterval(function () {
+                            a = 1;
+                            oDiv.style.left = oDiv.offsetLeft - 10 + "px";
+                        }, 40);
+                    }
+                }
+                else if (oEvent.keyCode == 39) {
+                    if (b == 0) {
+                        timer = setInterval(function () {
+                            b = 2;
+                            oDiv.style.left = oDiv.offsetLeft + 10 + "px";
+                        }, 40);
+                    }
+                }
+            };
+
+            document.onkeyup = function () {
+                a = 0; b = 0;
+                clearInterval(timer);
+            }
+        }
+    </script>
+</body>
+
+</html>

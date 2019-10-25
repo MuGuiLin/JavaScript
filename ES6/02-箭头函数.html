@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>箭头函数</title>
+    <style>
+        *{margin: 0; padding: 0;}
+        h1 {
+            text-align: center;
+        }
+
+    </style>
+</head>
+
+<body>
+    <h1>箭头函数 =></h1>
+    <hr>
+
+    // 箭头函数中的上下文对象：没有this！！！
+    // 箭头函数的参数中：没有arguments！！！
+
+    <script>
+        // 以前的function(){}
+        function fn1(par) {
+            return par;
+        };
+        console.log(fn1('以前的function(){}'));
+
+
+        // 现在的 () => {}
+        let fn2 = (par) => {
+            return par;
+        };
+        console.log(fn2('现在的 () => {}'));
+
+
+        // 1、现在简写的 par => par... 前面的par是参数，后面的par是返回值，可省去return 语句;
+        let fn2b = mm => mm < 10 ? `0${mm}` : mm;  //给分钟小于10以下的数，在前面加0！！ (前面的mm是参数，后面的mm是返回值)
+        console.log(fn2b(8), fn2b(24));
+
+
+        // 2、如果没有参数时，()就不能省了哦！！！
+        let fn2c = () => 3.1415926;
+        console.log(fn2c());
+
+
+        // 3、有两个或以上的参数时，()就更不能省了哦！！！
+        let fn2d = (a, b, c) => a + b * c;
+        console.log(fn2d(10, 20, 30));
+
+
+        // 4、参数黙认值，如果函数在被调用时没有传够那么多参数时，就取参数黙认值
+        let fn2e = (a = 1, b = 2, c = '3') => a + b * c;
+        console.log(fn2e(5));
+
+
+        // 5、如果函数中有执行语句时，必须加上{}
+        let fn3 = (n, a) => {
+            let obj = {
+                name: n || 'mupiao',
+                age: a || 28
+            };
+            const PI = 1.1415926;
+            return {
+                getName: ()=> {
+                    return obj.name;
+                },
+                age: obj.age,
+                PI
+            }
+        };
+        console.log(fn3('', 24).age, fn3().getName(), fn3().PI)
+
+
+        // 箭头函数中的上下文对象：没有this！！！
+        document.onclick = function() {
+            console.info(this);  //这里的this是document 【这里的this是，默认情况下 谁调用我，我就指向谁！（当然可以用 call(), apple()来改变）】
+        };
+
+
+        document.onclick = () => {
+            console.info(this);  //这里的this是window 【这里的this是，看当前（定义函数时）所在的作用域（上下文对象）】
+        };
+
+        document.onclick = function () {
+            let fn = (par) => {
+                console.info(par, this); //这里的this就是document 【这里所在的作用域（上下文对象）就是document】
+            };
+            fn('fn');
+
+            let obj = {
+                fn: fn
+            };
+            obj.fn('obj.fn');
+        };
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<form action="#" method="post">
+			<input type="text" name="SearchText" id="SearchText" value="" placeholder="请输入搜索内容！。。。" />
+			<input type="button" name="SearchBtn"  id="SearchBtn" value="搜 索" />
+		</form>
+	</body>
+	
+	<script src="jquery-2.2.0.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(document.body).on('click', '#SearchBtn' ,function() {
+		
+			$.get('https://www.baidu.com/su?&wd='+ $('#SearchText').val() +'&p=3&cb=BaiduSuggestion.callbacks.give1488853207294&t=1488853541140', function(data) {
+				if(data) {
+					console.log(data);
+//					var obj = data.AS.Results[0].Suggests;
+//					for(var i in obj) {
+//						console.log(obj[i].Txt);
+//					}
+				}
+			}, 'json');
+			return false;
+			$.ajax({
+				type: "GET",
+				url: "",
+				timeout: 30,
+				async: false, //是否支持异步
+				cache: true,
+				dataType: "json",
+				data: {
+					p: "1",
+				},
+				success: function(data, textStatus) {
+					var mupiao = '';
+					for(var g in data) {
+						mupiao += '<tr>';
+						mupiao += '<td width="50%">' + data[g].goods_name + '<input type="hidden" name="goods_id" value="' + data[g].goods_id + '"/></td>';
+						mupiao += '<td width="25%">100</td>';
+						mupiao += '<td width="25%"><input class="inputCss" name="goods_Number" onfocus="Get(this)" onblur="Lose(this)" type="number" onkeyup="value=value.replace(/[^\\d.]/g,\'\')"/></td>';
+						mupiao += '</tr>';
+					}
+					$('#TableBoXs1').append(mupiao); //TableBoXs1, 2, 3, 4 共4个表格的ID
+				},
+				error: function(textStatus, errorThrown) {
+					alert("访问失败！");
+					//通常情况下textStatus和errorThrown只有其中一个包含信息
+					//this;   //调用本次ajax请求时传递的options参数
+				}
+			})
+		});
+	</script>
+
+</html>

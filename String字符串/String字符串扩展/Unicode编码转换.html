@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Unicode编码转换</title>
+		<style type="text/css">
+			.article {
+				width: 80%;
+				margin: auto;
+			}
+			
+			.section {
+				display: flex;
+			}
+			
+			.textarea,
+			.show-box {
+				flex: 1;
+				max-width: 50%;
+				height: 200px;
+				margin-right: 10px;
+				padding: 6px;
+				resize: none;
+				word-wrap: break-word;
+				font-size: 18px;
+				line-height: 24px;
+				border: 1px solid gainsboro;
+				border-radius: 4px;
+				overflow: auto;
+			}
+			
+			.show-box {
+				margin: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<article class="article">
+			<h2>字符（文字）转 Unicode编码</h2>
+			<hr />
+			<section class="section">
+				<textarea class="textarea" id="strings" placeholder="请在此输入转码字符"></textarea>
+				<div class="show-box" id="strings-show"></div>
+			</section>
+
+			<br />
+			<h2>Unicode编码 转 字符（文字）</h2>
+			<hr />
+			<section class="section">
+				<textarea class="textarea" id="unicode" placeholder="请在此输入转码编码"></textarea>
+				<div class="show-box" id="unicode-show"></div>
+			</section>
+		</article>
+	</body>
+
+	<script type="text/javascript">
+		
+		//只转汉字为Unicode码
+		let toChinese = (data) => {
+			var newdata = "";
+			if("" != data) {
+				return data.replace(/([\u4E00-\u9FA5]|[\uFE30-\uFFA0])/g, function(){
+		          	return "\\u" + RegExp["$1"].charCodeAt(0).toString(16);
+		        });
+			} else {
+				return '请输入编码要的汉字';
+			}
+		}
+		
+		//字符转Unicode码
+		let toUnicode = (data) => {
+			var newdata = "";
+			if("" != data) {
+				for(var i in data) {
+					newdata += "\\u" + parseInt(data[i].charCodeAt(0), 10).toString(16);
+				}
+			} else {
+				newdata = '请输入编码要的字符';
+			}
+			return newdata;
+		}
+
+		//Unicode码转字符
+		let toStringe = (data) => {
+			var newdata = "", data = data.split("\\u");
+			if("" != data) {
+				for(var i in data) {
+					newdata += String.fromCharCode(parseInt(data[i], 16).toString(10));
+				}
+			} else {
+				newdata = '请输入十六进制Unicode编码';
+			}
+			return newdata;
+		}
+
+		let strings = document.querySelector('#strings'),
+			stringsShow = document.querySelector('#strings-show'),
+
+			unicode = document.querySelector('#unicode'),
+			unicodeShow = document.querySelector('#unicode-show');
+
+		strings.oninput = () => {
+			stringsShow.innerHTML = toUnicode(strings.value);
+		}
+
+		unicode.oninput = () => {
+			unicodeShow.innerHTML = toStringe(unicode.value);
+		}
+	</script>
+
+</html>

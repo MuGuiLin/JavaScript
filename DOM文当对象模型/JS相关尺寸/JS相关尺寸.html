@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>JS相关尺寸</title>
+
+	<style type="text/css">
+		h1 {
+			text-align: center;
+		}
+		.box{
+			color: white;
+			text-align: center;
+			line-height: 100px;
+		}
+		.left{
+			float: left;
+			width: 200px;
+			height: 100px;
+			background: red;
+		}
+		.middle{
+			margin: 0 200px;
+			height: 100px;
+			background: blue;
+		}
+		.right{
+			float: right;
+			width: 200px;
+			height: 100px;
+			background: green;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>JS相关尺寸</h1>
+	<hr />
+
+	<div class="box">
+		<div class="left">left</div>
+		<div class="right">right</div>
+		<div class="middle">CSS三栏布局 中间自适应，在代码中我的位置在最后</div>
+	</div>
+
+	<pre>
+		<img src="./js三大尺寸.gif" alt="" srcset="" />
+
+	<h3>offset：</h3>
+		offset，偏移，补偿和位移的意思。
+		JS中有一些offset方法/属性属性用于获取元素尺寸。
+
+		element.offsetParent 返回元素的偏移容器。
+		element.offsetTop    返回元素的垂直偏移位置
+		element.offsetLeft   返回元素的水平偏移位置。。
+		element.offsetWidth  返回元素的宽度。
+		element.offsetHeight 返回元素的高度。
+		
+	<h3>client：</h3>
+		client，客户端
+		element.clientTop    返回元素上边框宽度。
+		element.clientLeft   返回元素左边框宽度。
+		element.clientWidth  返回元素的可见宽度。
+		element.clientHeight 返回元素的可见高度。
+		
+			
+	<h3>scroll：</h3>
+		scroll，滚动，一般讨论的是网页整体与浏览器之间的关系。
+		浏览器的的宽高是固定的，但是页面的一般高度都远远大于浏览器的高度，有时候宽度也会大于浏览器的宽度。
+
+		element.scrollTop    返回元素上边缘与视图之间的距离。
+		element.scrollLeft   返回元素左边缘与视图之间的距离。
+		element.scrollWidth  返回元素的整体宽度。
+		element.scrollHeight 返回元素的整体高度。
+
+		window.scrollTo(x,y) 滚动当前window中显示的文档，让文档中由坐标x和y指定的点位于显示区域的左上角。
+		window.scrollBy(x,y) 滚动当前window中显示的文档，x和y指定滚动的相对量。
+
+
+	<h3>window对象：</h3>
+		获取去除工具条与滚动条的窗口高度与宽度(不包含工具条与滚动条):
+			window.innerHeight 返回窗口的文档显示区的高度。
+			window.innerWidth  返回窗口的文档显示区的宽度。
+
+		获取加上工具条与滚动条窗口的宽度与高度（包括工具栏/滚动）
+			window.outerHeight 属性设置或返回一个窗口的外部高度，包括所有界面元素（如工具栏/滚动条）。
+			window.outerWidth  属性设置或返回窗口的外部宽度，包括所有的界面元素（如工具栏/滚动）。
+		
+		获取文档在窗口左上角水平和垂直方向滚动的像素。
+			window.pageXOffset 设置或返回当前页面相对于窗口显示区左上角的 X 位置（水平滚动）。
+			window.pageYOffset 设置或返回当前页面相对于窗口显示区左上角的 Y 位置（垂直滚动）。
+
+		获取窗口相对于屏幕的X和Y坐标。
+			window.screenX 属性 返回相对于屏幕窗口的x坐标
+			window.screenY 属性 返回相对于屏幕窗口的y坐标
+		
+
+	<h3>使用场景：</h3>
+		网页可见区域宽： document.body.clientWidth;
+		网页可见区域高： document.body.clientHeight;
+
+		网页可见区域宽： document.body.offsetWidth (包括边线的宽);
+		网页可见区域高： document.body.offsetHeight (包括边线的宽);
+
+		网页正文全文宽： document.body.scrollWidth;
+		网页正文全文高： document.body.scrollHeight;
+		网页被卷去的高： document.body.scrollTop;
+		网页被卷去的左： document.body.scrollLeft;
+
+		网页正文部分上： window.screenTop;
+		网页正文部分左： window.screenLeft;
+		屏幕分辨率的高： window.screen.height;
+		屏幕分辨率的宽： window.screen.width;
+		屏幕可用工作区高度： window.screen.availHeight;
+		
+		屏幕可用工作区宽度：window.screen.availWidth;
+
+	</pre>
+
+
+</body>
+
+</html>

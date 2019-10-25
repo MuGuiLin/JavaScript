@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>fromCharCode编码</title>
+		<style type="text/css">
+			h1 { text-align: center;}
+		</style>
+	</head>
+
+	<body>
+		<h1>romCharCode编码</h1><hr />
+		<h2 id="h2"></h2>
+		<h2 class="h2"></h2>
+		<h2 id="b2"></h2>
+		<h2 class="b2"></h2>
+		
+	</body>
+	
+	<script type="text/javascript">
+		let str = `穆`, str2 = `飘`;
+		
+		let code = str.charCodeAt(0);
+		document.querySelector('#h2').innerHTML = code;
+		document.querySelector('.h2').innerHTML = String.fromCharCode(code);
+		
+		document.querySelector('#b2').innerHTML = str2.charCodeAt(0);
+		document.querySelector('.b2').innerHTML = String.fromCharCode(str2.charCodeAt(0));
+		console.log("%c \u5b89\u5168\u8b66\u544a\uff01","font-size:50px;color:red; font-weight: bold; -webkit-text-fill-color:red;-webkit-text-stroke: 1px white; background:yellow;");
+	</script>
+
+</html>

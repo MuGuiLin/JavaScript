@@ -1,0 +1,4 @@
+header('Content-Type:text/html;charset=utf-8'); 
+header("expires:mon,26jul199705:00:00gmt"); 
+header("cache-control:no-cache,must-revalidate"); 
+header("pragma:no-cache");

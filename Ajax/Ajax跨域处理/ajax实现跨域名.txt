@@ -1,0 +1,95 @@
+ajax 设置Access-Control-Allow-Origin实现跨域访问
+
+1、在被请求的Response header中加入
+header('Access-Control-Allow-Origin:*'); //表示允许任何域名跨域访问
+
+2、指定某域名才允许跨域访问，只需把Access-Control-Allow-Origin:  *  改为Access-Control-Allow-Origin:允许的域名
+例如：header('Access-Control-Allow-Origin:http://www.client.com');
+
+以上两种方式都要加上下面的响应类型才行哦！
+header('Access-Control-Allow-Methods:POST,GET');
+  // 响应类型
+
+
+header('Access-Control-Allow-Headers:x-requested-with,content-type');  // 响应头设置
+
+
+header('Access-Control-Max-Age: 3600');  //来缓存 CORS 配置
+
+
+
+代码如下：
+client.html 路径：http://www.client.com/client.html
+
+<!DOCTYPE HTML>  
+<html>  
+ <head>  
+  <meta charset=utf-8">  
+  <title> 跨域测试 </title>  
+  <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>  
+ </head>  
+  
+ <body>  
+    <div id="show"></div>  
+    <script type="text/javascript">  
+    $.post("http://www.server.com/server.php",{name:"fdipzone",gender:"male"})  
+      .done(function(data){  
+        document.getElementById("show").innerHTML = data.name + ' ' + data.gender;  
+      });  
+    </script>  
+ </body>  
+</html>  
+
+server.php 路径：http://www.server.com/server.php
+
+<?php  
+$ret = array(  
+    'name' => isset($_POST['name'])? $_POST['name'] : '',  
+    'gender' => isset($_POST['gender'])? $_POST['gender'] : ''  
+);  
+  
+header('content-type:application:json;charset=utf8');  
+header('Access-Control-Allow-Origin:*');  
+header('Access-Control-Allow-Methods:POST');  
+header('Access-Control-Allow-Headers:x-requested-with,content-type');  
+  
+echo json_encode($ret);  
+?>  
+
+如果需要设置多个域名允许访问，这里需要用php处理一下
+例如允许 www.client.com 与 www.client2.com 可以跨域访问
+server.php 修改为
+
+<?php  
+$ret = array(  
+    'name' => isset($_POST['name'])? $_POST['name'] : '',  
+    'gender' => isset($_POST['gender'])? $_POST['gender'] : ''  
+);  
+  
+header('content-type:application:json;charset=utf8');  
+  
+$origin = isset($_SERVER['HTTP_ORIGIN'])? $_SERVER['HTTP_ORIGIN'] : '';  
+  
+$allow_origin = array(  
+    'http://www.client.com',  
+    'http://www.client2.com'  
+);  
+  
+if(in_array($origin, $allow_origin)){  
+    header('Access-Control-Allow-Origin:'.$origin);  
+    header('Access-Control-Allow-Methods:POST');  
+    header('Access-Control-Allow-Headers:x-requested-with,content-type');  
+}  
+  
+echo json_encode($ret);  
+?>  
+===================================================================================
+header('Access-Control-Max-Age: 3600');解释设置了 Max-Age:
+
+<script>
+with(new XMLHttpRequest)
+  open('DELETE', 'http://127.0.0.1/test.php'),
+  send();
+</script> 由于设置了 Max-Age，所以这里的 DELETE 只会在首次请求时发起一个 OPTIONS。如果没有设置这个，将会在每次发起 DELETE 请求前发起一个 OPTIONS 方法。
+
+但是这东西也会有坑，比如 Chrome 的控制台要是勾起这货就不会缓存(chrome:network的disalbe cache)

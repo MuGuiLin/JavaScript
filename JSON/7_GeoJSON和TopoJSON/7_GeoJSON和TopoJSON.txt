@@ -1,0 +1,103 @@
+GeoJSON 和 TopoJSON 是符合 JSON 语法规则的两种数据格式，用于表示地理信息。
+
+1. GeoJSON
+
+GeoJSON 是用于描述地理空间信息的数据格式。GeoJSON 不是一种新的格式，其语法规范是符合 JSON 格式的，只不过对其名称进行了规范，专门用于表示地理信息。
+
+GeoJSON 的最外层是一个单独的对象（object）。这个对象可表示：
+
+- 几何体（Geometry）。
+- 特征（Feature）。
+- 特征集合（FeatureCollection）。
+
+最外层的 GeoJSON 里可能包含有很多子对象，每一个 GeoJSON 对象都有一个 type 属性，表示对象的类型，type 的值必须是下面之一。
+
+- Point：点。
+- MultiPoint：多点。
+- LineString：线。
+- MultiLineString：多线。
+- Polygon：面。
+- MultiPolygon：多面。
+- GeometryCollection：几何体集合。
+- Feature：特征。
+- FeatureCollection：特征集合。
+
+下面举几个例子。
+
+点对象：
+
+{
+"type": "Point",
+"coordinates": [ -105, 39 ]
+}
+
+线对象：
+
+{
+"type": "LineString",
+"coordinates": [[-105, 39 ], [-107, 38 ]]
+}
+
+面对象：
+
+
+{
+"type": "Polygon",
+"coordinates":[[ [30, 0], [31, 0], [31, 5], [30, 5], [30, 0] ]]
+}
+
+
+由以上格式可以发现，每一个对象都有一个成员变量 coordinates。如果 type 的值为 Point、MultiPoint、LineString、MultiLineString、Polygon、MultiPolygon 之一，则该对象必须有变量 coordinates。
+
+如果 type 的值为 GeometryCollection（几何体集合），那么该对象必须有变量 geometries，其值是一个数组，数组的每一项都是一个 GeoJSON 的几何对象。例如：
+
+
+{
+    "type": "GeometryCollection",
+    "geometries": [
+        {
+            "type": "Point",
+            "coordinates": [100, 40]
+        },
+        {
+            "type": "LineString",
+            "coordinates": [ [100, 30], [100, 35] ]
+        }
+    ]
+}
+
+如果 type 的值为 Feature（特征），那么此特征对象必须包含有变量 geometry，表示几何体，geometry 的值必须是几何体对象。此特征对象还包含有一个 properties，表示特性，properties 的值可以是任意 JSON 对象或 null。例如：
+
+
+{
+    "type": "Feature",
+    "properties": {
+        "name": "北京"
+    },
+    "geometry": {
+        "type": "Point",
+        "coordinates": [ 116.3671875, 39.977120098439634]
+    }
+}
+
+如果 type 的值为 FeatureCollection（特征集合），则该对象必须有一个名称为 features 的成员。features 的值是一个数组，数组的每一项都是一个特征对象。
+
+
+
+
+2. TopoJSON
+
+TopoJSON 是 GeoJSON 按拓扑学编码后的扩展形式，是由 D3 的作者 Mike Bostock 制定的。相比 GeoJSON 直接使用 Polygon、Point 之类的几何体来表示图形的方法，TopoJSON 中的每一个几何体都是通过将共享边（被称为arcs）整合后组成的。
+
+TopoJSON 消除了冗余，文件大小缩小了 80%，因为：
+
+边界线只记录一次（例如广西和广东的交界线只记录一次）。
+地理坐标使用整数，不使用浮点数。
+
+
+
+3. 在线工具
+
+在线生成 GeoJSON：http://geojson.io/
+
+简化、转换 GeoJSON 和 TopoJSON：http://mapshaper.org/

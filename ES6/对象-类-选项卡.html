@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>对象-选项卡</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        .btn {
+            padding: 6px 20px;
+            font-size: 16px;
+        }
+
+        .act {
+            background: blue;
+            color: white;
+        }
+
+        .con {
+            display: none;
+            width: 500px;
+            height: 300px;
+            border: 1px solid gray;
+            font-size: 18px;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>对象-选项卡</h1>
+    <hr>
+
+    <section class="tab-box">
+        <div class="btn-box">
+            <button class="btn act">按扭一</button>
+            <button class="btn">按扭二</button>
+            <button class="btn">按扭三</button>
+            <button class="btn">按扭四</button>
+        </div>
+        <div class="con-box">
+            <div class="con show">11111111111111</div>
+            <div class="con">22222222222222</div>
+            <div class="con">33333333333333</div>
+            <div class="con">44444444444444</div>
+        </div>
+    </section>
+
+    <section class="tab-box2">
+        <div class="btn-box">
+            <button class="btn act">按扭一</button>
+            <button class="btn">按扭二</button>
+            <button class="btn">按扭三</button>
+        </div>
+        <div class="con-box">
+            <div class="con show">11111111111111</div>
+            <div class="con">22222222222222</div>
+            <div class="con">33333333333333</div>
+        </div>
+    </section>
+
+
+
+
+    <h1>对象-选项卡-类继承</h1>
+    <hr>
+
+    <section class="tab-box3">
+        <div class="btn-box">
+            <button class="btn act">按扭一</button>
+            <button class="btn">按扭二</button>
+            <button class="btn">按扭三</button>
+            <button class="btn">按扭四</button>
+            <button class="btn">按扭五</button>
+        </div>
+        <div class="con-box">
+            <div class="con show">11111111111111</div>
+            <div class="con">22222222222222</div>
+            <div class="con">33333333333333</div>
+            <div class="con">44444444444444</div>
+            <div class="con">55555555555555</div>
+        </div>
+    </section>
+    <script>
+        'use strict';
+
+        {
+            class Tab {
+                constructor(id) {
+                    this.now = 0;
+                    this.box = document.querySelector(`.${id}`);
+                    this.btn = this.box.querySelectorAll('.btn');
+                    this.con = this.box.querySelectorAll('.con');
+
+                    this.init();
+                };
+
+                init() {
+                    this.btn.forEach((item, index, array) => {
+                        console.log(item, index, array);
+
+                        (function (i, self) {
+                            item['onclick'] = () => {
+                                self.hide();
+                                self.show(i);
+                                self.now = i;
+                            };
+                        }(index, this));
+
+                    });
+                };
+
+                show(i) {
+                    this.btn[i].classList.add('act');
+                    this.con[i].classList.add('show');
+                };
+
+                hide() {
+                    for (let i = 0; i < this.con.length; i++) {
+                        this.btn[i].classList.remove('act');
+                        this.con[i].classList.remove('show');
+                    };
+                };
+
+            };
+
+
+            let T = new Tab('tab-box');
+            let T2 = new Tab('tab-box2');
+
+
+            //继承父类，创建新类
+            class AutoTab extends Tab {
+                constructor(id) {
+                    super(id);
+                    //this.auto();
+                    setInterval(this.next.bind(this), 1000);
+                };
+                
+                // AutoTab类自己扩展的方法
+                auto() {
+                    let i = 0;
+                    setInterval(() => {
+                        i++;
+                        if(i >= this.btn.length) {
+                            i = 0;
+                        };
+                        this.hide(); //调用父类的方法
+                        this.show(i);
+                    }, 1000);
+                };
+
+                next() {
+                    this.now++;
+                    this.now = (this.now == this.btn.length) ? 0 : this.now;
+                    this.hide();
+                    this.show(this.now);
+                };
+                
+            };
+
+
+            let A = new AutoTab('tab-box3');
+        };
+
+
+    </script>
+</body>
+
+</html>

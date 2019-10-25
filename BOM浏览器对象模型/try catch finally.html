@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+
+<body>
+    <ul id="ul"></ul>
+</body>
+<script type="text/javascript">
+    function Fsn() {
+        return b;
+    }
+    var a = 666,
+        msg;
+    try {
+        //要执行的代码
+        Fn();
+        msg = '代码正常运行！'
+        console.info(a)
+    } catch (e) {
+        //上面执行报错后
+        console.log(e);
+        msg = '运行出错啦！'
+        console.info('报错了，请在这里写报错后，我应该做什么？');
+        if (e instanceof TypeError) {
+            alert('TypeError异常');
+        } else if (e instanceof RangeError) {
+            alert('RangeError异常');
+        } else if (e instanceof EvalError) {
+            alert('EvalError异常');
+        } else {
+            alert('语句来处理任何未指定的异常');        //logMyErrors(e); //将异常对象传递给错误处理程序
+        }
+    } finally {
+        //不管上面对与错这里都会执行
+        console.info(msg);
+    }
+    //fetch == ajax == XMLHttpRequest
+
+    // function async() {
+    //     try {
+    //         let response = await fetch(url);
+    //         let data = await response.json();
+    //         console.log(data);
+    //     } catch (e) {
+    //         console.log("Oops, error", e);
+    //     }
+    // };
+
+
+    //get请求
+    fetch('/data.json').then((response) => {
+        if (response.ok) {
+            return response.json()
+        } else {
+            console.error('服务器繁忙，请稍后再试；\r\nCode:' + response.status)
+        }
+    }).then((data) => {
+        console.log(data)
+    }).catch((err) => {
+        console.error(err)
+    });
+
+
+    //post请求
+    fetch("data.json", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        //		  body: "firstName=Nikhil&favColor=blue&password=easytoguess"
+        body: JSON.stringify({
+            name: 'Hubot',
+            login: 'hubot',
+        })
+    }).then(function(res) {
+        if (res.ok) {
+            alert("Perfect! Your settings are saved.");
+        } else if (res.status == 401) {
+            alert("Oops! You are not authorized.");
+        }
+    }, function(e) {
+        alert("Error submitting form!");
+    });
+</script>
+
+</html>

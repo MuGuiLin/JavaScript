@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+	
+	<head>
+		<meta charset="UTF-8">
+		<title>js垃圾收集</title>
+		<link rel="stylesheet" type="text/css" href="../../public/css/base.css"/>
+	</head>
+	
+	<body>
+		<h1>js垃圾收集</h1><hr />
+		<pre>
+			<b>
+				程序的运行需要内存。只要程序提出要求，操作系统或者运行时（runtime）就必须供给内存。
+				对于持续运行的服务进程（daemon），必须及时释放不再用到的内存。否则，内存占用越来越高，轻则影响系统性能，重则导致进程崩溃。
+				另一个块作用域非常有用的原因和闭包及回收内存垃圾的回收机制相关。
+				
+				<i>不再用到的内存，没有及时释放，就叫做内存泄漏（memory leak）。</i>
+				
+				有些语言（比如 C 语言）必须手动释放内存，程序员负责内存管理。
+
+				这很麻烦，所以大多数语言提供自动内存管理，减轻程序员的负担，这被称为"垃圾回收机制"（garbage collector）。
+			</b>
+			
+			
+		考虑以下代码：
+			function process(data) {
+				// 在这里做点有趣的事情
+			}
+			var someReallyBigData = { .. };
+			process( someReallyBigData );
+			
+			var btn = document.getElementById( "my_button" );
+			
+			btn.addEventListener( "click", function click(evt) {
+				console.log("button clicked");
+			}, /*capturingPhase=*/false );
+			
+			上面click 函数的点击回调并不需要 someReallyBigData 变量。
+			理论上这意味着当 process(..) 执行后，在内存中占用大量空间的数据结构就可以被<i>垃圾回收</i>了。
+			
+			但是，由于 click 函数形成了一个覆盖整个作用域的闭包，JavaScript 引擎极有可能依然保存着这个结构（取决于具体实现）。
+			
+			当然在ES6 或 块作用域可以打消这种顾虑，因为块作用域可以让引擎清楚地知道没有必要继续保存 someReallyBigData。
+			
+		如：	
+			function process(data) {
+				// 在这里做点有趣的事情
+			}
+			
+			// 在这个块中定义的内容可以销毁了！
+			{
+				let someReallyBigData = { .. };
+				process( someReallyBigData );
+			}
+			
+			<!--此时：someReallyBigData 就被垃圾回收了-->
+			
+			var btn = document.getElementById( "my_button" );
+			
+			btn.addEventListener( "click", function click(evt){
+				console.log("button clicked");
+			}, /*capturingPhase=*/false );
+			
+			为变量显式声明块作用域，并对变量进行本地绑定是非常有用的工具，可以把它添加到你的代码工具箱中了。
+			
+			
+		<b>let 变量</b>
+			一个 let 可以发挥优势的典型例子就是之前讨论的 for 循环。
+			
+			for (let i=0; i<10; i++) {
+				console.log( i );
+			}
+			console.log( i ); // ReferenceError
+			
+			for 循环头部的 let 不仅将 i 绑定到了 for 循环的块中，事实上它将其重新绑定到了循环的每一个迭代中，确保使用上一个循环迭代结束时的值重新进行赋值。
+			
+			下面通过另一种方式来说明每次迭代时进行重新绑定的行为：
+			{
+				let j;
+				for (j=0; j<10; j++) {
+					let i = j; // 每个迭代重新绑定！
+					console.log( i );
+				}
+			}
+			
+		由于 let 声明附属于一个新的作用域而不是当前的函数作用域（也不属于全局作用域），
+			当代码中存在对于函数作用域中 var 声明的隐式依赖时，就会有很多隐藏的陷阱，如果用let 来替代 var 则需要在代码重构的过程中付出额外的精力。
+			
+			考虑以下代码：
+			
+			var foo = true, baz = 10;
+			if (foo) {
+				var bar = 3;
+				if (baz > bar) {
+					console.log( baz );
+				}
+				// ...
+			}
+			
+			这段代码可以简单地被重构成下面的同等形式：
+			
+			var foo = true, baz = 10;
+			if (foo) {
+				var bar = 3;
+				// ...
+			}
+			if (baz > bar) {
+				console.log( baz );
+			}
+			
+			但是在使用块级作用域的变量时需要注意以下变化：
+			
+			var foo = true, baz = 10;
+			if (foo) {
+				let bar = 3;
+				if (baz > bar) { // <-- 移动代码时不要忘了 bar!
+				console.log( baz );
+				}
+			}
+			
+			其中介绍了另外一种块作用域形式，可以用更健壮的方式实现目的，并且写出的代码更易维护和重构。
+			
+			
+		<b>const 常量</b>
+			除了 let 以外，ES6 还引入了 const ，同样可以用来创建块作用域变量，但其值是固定的（常量）。之后任何试图修改值的操作都会引起错误。
+
+			var foo = true;
+			if (foo) {
+				var a = 2;
+				const b = 3; // 包含在 if 中的块作用域常量
+				a = 3; // 正常 !
+				b = 4; // 错误 !
+			}
+			console.log( a ); // 3
+			console.log( b ); // ReferenceError!
+			
+		</pre>
+	</body>
+	
+	<script type="text/javascript">
+		
+		var foo = true, baz = 10;
+		if (foo) {
+			var bar = 3;
+			if (baz > bar) {
+				console.log( baz );
+			}
+			// ...
+		}
+		
+		//这段代码可以简单地被重构成下面的同等形式：
+		
+		var foo = true, baz = 10;
+		if (foo) {
+			var bar = 3;
+			// ...
+		}
+		if (baz > bar) {
+			console.log( baz );
+		}
+		
+		//但是在使用块级作用域的变量时需要注意以下变化：
+		
+		var foo = true, baz = 10;
+		if (foo) {
+			let bar = 3;
+			if (baz > bar) { // <-- 移动代码时不要忘了 bar!
+			console.log( baz );
+			}
+		}
+		var dom = '';
+		
+		for(var i = 0; i <= 9; i++) {
+			for(var j = 1; j <= i; j++) {
+				dom += j +'*'+ i + '='+ j * i; 
+			}
+			dom+='</br>';
+		}
+
+		var div = document.createElement('div');
+			div.append(dom);
+		document.body.appendChild(div)
+		
+	</script>
+</html>

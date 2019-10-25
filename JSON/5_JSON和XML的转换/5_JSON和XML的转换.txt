@@ -1,0 +1,13 @@
+1. 下载相关文件
+
+- JQuery
+- jquery.json2xml.js
+- jquery.xml2json.js
+
+2. XML 字符串转换成 JSON 对象
+
+$.xml2json(str);
+
+3. JSON 对象转换成 XML 字符串
+
+$.json2xml(obj);

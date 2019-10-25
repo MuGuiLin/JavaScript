@@ -1,0 +1,64 @@
+JSON 文件被放置在服务器端，客户端请求该文件用得最多的是 Ajax，能够实现异步请求。
+
+
+1. Ajax 是什么
+
+AJAX，全称 Asynchronous JavaScript and XML，即“异步的 JavaScript 和 XML”，一般写作 Ajax。
+
+Ajax 能够与服务器交换少量数据，从而异步地更新部分网页。
+
+异步,指的是当 Ajax 执行交换数据的操作时，其他的操作仍然可以执行。
+
+一个最常见的应用是：打开百度或谷歌首页，当输入文字后，搜索栏下方会显示出几个建议的搜索词。这正是 Ajax 的应用。
+
+
+
+
+2. 创建和使用 Ajax
+
+创建 Ajax 对象要考虑浏览器的版本问题，主要分为两大类：IE7+/Chrome/Firefox/… 和 IE6/IE5.。
+
+function CreateXHR(){
+    if (window.XMLHttpRequest)
+    {
+        //对浏览器 IE7+, Firefox, Chrome, Opera, Safari
+        return new XMLHttpRequest();
+    }
+    else
+    {
+        //对浏览器 IE6, IE5
+        return new ActiveXObject("Microsoft.XMLHTTP");
+    }
+}
+
+然后，只要用如下方式创建即可。
+
+var xmlhttp; 
+ 
+xmlhttp = CreateXHR();
+
+
+服务器端有一个文件 test.json，请求并输出。
+
+
+xmlhttp.open("GET","test.json",true);
+xmlhttp.send();
+ 
+xmlhttp.onreadystatechange = function(){
+    if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
+        var jsonstr = xmlhttp.responseText;
+        console.log(jsonstr);
+    }
+}
+
+其中，xmlhttp.readyState 存有 XMLHttpRequest 的状态，有五个值：
+
+0: 请求未初始化
+1: 服务器连接已建立
+2: 请求已接收
+3: 请求处理中
+4: 请求已完成，且响应已就绪
+
+xmlhttp.status 的值为请求结果，200 表示“OK”，404 表示未找到页面。
+
+获取来自服务器的响应，可使用 XMLHttpRequest 对象的 responseText 或 responseXML 属性，前者是以字符串形式，后者是以 XML 形式。

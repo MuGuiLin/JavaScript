@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>菜鸟教程(runoob.com)</title>
+	</head>
+
+	<body onhashchange="myFunction()">
+
+		<p>点击按钮修改当前 URL 的锚部分为 #part5</p>
+		<button onclick="changePart()">点我</button>
+		<p id="demo"></p>
+		<script>
+			// 使用 location.hash 属性来修改锚部分
+			function changePart() {
+				location.hash = "part5";
+				var x = "锚部分现在为: " + location.hash;
+				document.getElementById("demo").innerHTML = x;
+			}
+			// 如果锚部分改变则弹出提示窗口
+			function myFunction() {
+				alert("锚部分已修改！");
+			}
+		</script>
+		<pre>
+			
+		定义和用法：
+		
+		onhashchange 事件在当前 URL 的锚部分(以 '#' 号为开始) 发生改变时触发 。
+		锚部分的实例：指定当前 URL 为
+		http://www.example.com/test.htm#part2 - 这个 URL 中的锚部分为 #part2。
+		
+		你可以使用以下方式调用事件:
+			1.通过设置Location 对象 的 location.hash 或 location.href 属性修改锚部分。
+			2.使用不同书签导航到当前页面（使用"后退" 或"前进"按钮）
+			3.点击链接跳转到书签锚
+		</pre>
+
+	</body>
+
+</html>

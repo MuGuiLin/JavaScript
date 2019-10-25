@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>键盘控制DIV移动</title>
+	<style type="text/css">
+		* {
+			margin: 0px;
+			padding: 0px;
+		}
+
+		#BOX {
+			margin: auto;
+			width: 800px;
+			height: 520px;
+			border: 5px solid #003;
+			background: url(img/tkbg.jpg);
+		}
+
+		#TK {
+			position: absolute;
+			top: 500px;
+			left: 38%;
+		}
+
+		#bullet {
+			position: absolute;
+			width: 4px;
+			height: 4px;
+			background: red;
+			border-radius: 4px;
+		}
+	</style>
+</head>
+
+<body>
+	<center>
+		<audio id="myMusic" controls="controls" loop="loop" autoplay="autoplay">
+			<source src="坦克大战 Dj.mp3" type="audio/mpeg"></source>
+		</audio>
+
+		<div id="BOX">
+			<img id="TK" src="img/tk1.png" />
+		</div>
+		上:<span id="T"></span>左:<span id="L"></span>
+	</center>
+
+</body>
+
+<script type="text/javascript">
+	window.onload = function () {
+		var BOX = document.getElementById('BOX'); //背景画布
+		var boxW = BOX.offsetWidth;
+		var boxH = BOX.offsetHeight;
+
+		var TK = document.getElementById('TK'); //坦克
+		var tkW = TK.offsetWidth; //坦克宽度
+		var tkH = TK.offsetHeight; //坦克高度
+
+
+		var bullet; //
+		var timer = null; //定时器
+		var timer2 = null;
+		var on_off = true; //定时器开关
+		var speed = 40; //移动速度
+		var distance = 6; //移动距离
+		var left = false, top = false, right = false, bottom = false;
+
+
+
+		timer = setInterval(function () {
+			if (left) {
+				TK.src = "img/tk4.png";
+
+				var maxX = boxW - tkW; //可视区的宽 - 元素的宽
+				var maxY = boxH - tkH; //可视区的高 - 元素的高
+
+				var moveX = 0; //新建一个变量，用于存放移动后的新坐标
+				var moveY = 0; //新建一个变量，用于存放移动后的新坐标
+
+
+				//防止移出浏览器可视区域
+				moveX = Math.min(maxX, Math.max(0, maxX - maxX));
+				moveY = Math.min(maxY, Math.max(0, moveY));
+
+
+
+				TK.style.left = moveX - distance + 'px';
+				bullet.style.left = TK.offsetLeft + 'px';
+				bullet.style.top = TK.offsetTop + 23 + 'px';
+			}
+
+			else if (top) {
+				TK.src = "img/tk1.png";
+				TK.style.top = TK.offsetTop - distance + 'px';
+				bullet.style.left = TK.offsetLeft + 23 + 'px';
+				bullet.style.top = TK.offsetTop + 'px';
+			}
+			else if (right) {
+				TK.src = "img/tk2.png";
+				TK.style.left = TK.offsetLeft + distance + 'px';
+				bullet.style.left = TK.offsetLeft + 56 + 'px';
+				bullet.style.top = TK.offsetTop + 23 + 'px';
+			}
+			else if (bottom) {
+				TK.src = "img/tk3.png";
+				TK.style.top = TK.offsetTop + distance + 'px';
+				bullet.style.left = TK.offsetLeft + 23 + 'px';
+				bullet.style.top = TK.offsetTop + 56 + 'px';
+			}
+		}, speed);
+
+		document.onkeydown = function (ev) {
+			var oEvent = ev || event;
+
+			switch (oEvent.keyCode) {
+				case 37://方向键左
+					left = true; break;
+
+
+				case 38://方向键上
+					top = true; break;
+
+				case 39://方向键右
+					right = true; break;
+
+				case 40://方向键下
+					bottom = true; break;
+
+				case 32://空格键
+					bullet = document.createElement('div');
+					bullet.id = "bullet";
+					document.body.appendChild(bullet);//把创建的div添加到body下
+
+					break;
+
+				default:
+					return true;
+			}
+
+			document.getElementById('T').innerText = TK.style.top;
+			document.getElementById('L').innerText = TK.style.left;
+		}
+
+		document.onkeyup = function (ev) {
+			var oEvent = ev || event;
+
+			switch (oEvent.keyCode) {
+				case 37://方向键左
+					left = false; break;
+
+				case 38://方向键上
+					top = false; break;
+
+				case 39://方向键右
+					right = false; break;
+
+				case 40://方向键下
+					bottom = false; break;
+
+				default:
+					return false;
+			}
+			//clearInterval(timer);
+		}
+
+	}
+</script>
+
+</html>

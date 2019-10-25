@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>DOM的属性操作</title>
+	<style>
+		h1 {
+			text-align: center;
+		}
+
+		input {
+			padding: 10px;
+			width: 300px;
+		}
+
+		div {
+			padding: 20px;
+			line-height: 40px;
+			font-size: 16px;
+		}
+
+		div.hr {
+			margin: 20px;
+			border-bottom: 1px solid green;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>DOM的属性操作</h1>
+	<hr>
+
+	<pre>
+		<h3>DOM的属性操作的方式：</h3>
+
+        <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Element" target="_blank">Element 是一个通用性非常强的基类，所有 Document 对象下的对象都继承自它，这个接口描述了所有相同种类的元素所普遍具有的方法和属性。</a>
+
+		1、ECMA操作方式
+			* 属性保存在内存中的，不可见的，存储类型可以是各种如：数字，数组，对象
+			* 注：如果修改了元素的innerHTML，那之前存在内存中的事件和属性都会被丢失。
+
+			1、用 . 来获取、设置。
+			2、用 [] 来获取、设置。
+			3、用 delete 来删除，如 delete dom.value 。
+			
+
+		2、DOM操作方式
+			* 属性保存在dom文档中的，可见的，存储类型都是以字符串方式存储的。
+			* 注：如果希望修改了元素的innerHTML以后，想保留事件和属性，那么就用DOM操作方式来做
+
+			1、dom.attributes 查看所有属性 (NamedNodeMap类型)
+			2、dom.hasAttribute('attr') 判断是否有某个属性
+			3、dom.getAttribute('attr') 获取属性
+			4、dom.setAttribute('attr', 'value') 设置属性
+			5、dom.removeAttribute('attr') 删除属性
+
+
+
+		<h3>data自定义属性：</h3>
+		data-* 全局属性 是一类被称为自定义数据属性的属性，它赋予我们在所有 HTML 元素上嵌入自定义数据属性的能力，并可以通过脚本(一般指JavaScript) 与 HTML 之间进行专有数据的交换。
+
+			1、 data-* 属性是 HTML5 中的新属性，可用于存储页面或应用程序的私有自定义数据。
+			2、 data-* 属性包括两部分：
+				a、属性名：不应该包含任何大写字母，并且在前缀 "data-" 之后必须有至少一个字符
+				b、属性值：可以是任意字符串
+			3、data属性还可以应用在CSS中，前提是你的浏览器支持after伪类，以及content的attr属性
+
+			* 注：HTMLElement.dataset 属性是一个DOMStringMap，并且自定义数据属性 data-test-value 可以通过 HTMLElement.dataset.testValue ( 或者是HTMLElement.dataset["testValue"] ) 来访问，任何破折号(U+002D) 都会被下个字母的大写替代(驼峰拼写)
+
+			5、data自定义属性的操作方法：
+				
+				dom.dataset 
+			
+	</pre>
+
+	<section>
+		<h3>DOM的属性的操作：</h3>
+		<div class="hr">
+			<input type="text" class="text" style="color: blue; font-size: 18px;" id="text" />
+		</div>
+
+		<div>
+			ECMA的属性操作：
+			<button>设置属性</button>
+			<button>获取属性</button>
+			<button>删除属性</button>
+		</div>
+
+		<div>
+			DOM 的属性操作：
+			<button class="set-dom-attr">设置属性</button>
+			<button class="get-dom-attr">获取属性</button>
+			<button class="del-dom-attr">删除属性</button>
+		</div>
+
+		<h3>data自定义属性：</h3>
+
+		<div class="hr">
+			<div class="box" id="box" data-name="mupiao" data-my-age="28">
+				我是div标签，在这里用于演示data自定义属性操作用的，操用时请打开调试器中的Elements项查看！</div>
+		</div>
+
+		<div>
+			data-* 自定义属性：
+			<button class="set-data-attr">设置属性</button>
+			<button class="get-data-attr">获取属性</button>
+			<button class="del-data-attr">删除属性</button>
+			<button class="all-data-attr">删除所有属性</button>
+		</div>
+
+	</section>
+
+
+	<script>
+
+		//ECMAScript方式操作的属性，是保存在内存中的，是不可见的（也就是说设置或修改的属性，在标签上是看不到的）
+		{
+			var oTxt = document.getElementById('text');
+			let oSet = document.querySelectorAll('button')[0];
+			let oGet = document.querySelectorAll('button')[1];
+			let oDel = document.querySelectorAll('button')[2];
+
+			//设置属性
+			oSet.onclick = () => {
+				//设置（自定义的属性）
+				oTxt.mupiao = 666;
+				console.log(oTxt.mupiao)
+
+				//1、以 . 的形式
+				oTxt.value = '123456';
+				oTxt.value = [1, 'A', true];
+				console.log(oTxt.value);  //我的value值可以被取到，但是你在标签上看不到我的value值
+
+				//2、以 [] 形式
+				oTxt['value'] = 'ECMAScript操作方式的属性';
+				console.log(oTxt.value);
+
+			};
+
+			//获取属性
+			oGet.onclick = () => {
+				alert('自定义属性：' + oTxt.mupiao + '，value属性：' + oTxt.value);
+			};
+
+			//删除属性
+			oDel.onclick = () => {
+				delete oTxt.mupiao;
+				alert('自定义属性：' + oTxt.mupiao + '，value属性：' + oTxt.value);
+			};
+		};
+
+
+		//DOM操作方式的属性，是保存在dom文档（标签本身）中的，是可见的（也就是说设置或修改的属性，在标签上直接能看到的）
+		{
+			var oTxt = document.querySelector('input[type="text"]');
+			let oSet = document.querySelector('.set-dom-attr');
+			let oGet = document.querySelector('.get-dom-attr');
+			let oDel = document.querySelector('.del-dom-attr');
+
+			console.log('查看所有属性集合：', oTxt.attributes);
+
+			console.log('判断是否有某个属性：', oTxt.hasAttribute('value'));
+
+			//设置属性
+			oSet['onclick'] = () => {
+				// oTxt.setAttribute('value', 'DOM操作方式的属性');
+				oTxt.setAttribute('value', [1, 'A', true]); // 1, 'A', true 以字符串类型存储
+				// oTxt.setAttribute('value', { name: 'admin', age: 1, jog: 'A', off: [true]}); //[object Object] 
+				oTxt.setAttribute('mupiao', '666');
+
+				console.log('查看所有属性集合：', oTxt.attributes);
+				console.log('判断是否有某个属性：', oTxt.hasAttribute('value'));
+				console.log(oTxt.value);
+
+			};
+
+			//获取属性
+			oGet.onclick = () => {
+				alert('DOM：' + oTxt.getAttribute('value') + '，ECMA：' + oTxt.value);
+				alert('DOM：' + oTxt.getAttribute('class') + '，ECMA：' + oTxt.className);
+			};
+
+			//删除属性
+			oDel.onclick = () => {
+				oTxt.removeAttribute('value');
+			};
+
+		};
+
+
+		//data-* 自定义属性的操作，是保存在dom文档（标签本身）中的，是可见的（也就是说设置或修改的属性，在标签上直接能看到的）
+		{
+			var oDiv = document.querySelector('#box');
+			let oSet = document.querySelector('.set-data-attr');
+			let oGet = document.querySelector('.get-data-attr');
+			let oDel = document.querySelector('.del-data-attr');
+			let oAll = document.querySelector('.all-data-attr');
+
+			console.log('查看所有自定义属性集合：', oDiv.dataset);  //DOMStringMap {name: "mupiao", myAge: "28"}
+
+			//设置自定义属性
+			oSet['onclick'] = () => {
+
+
+				oDiv.dataset.val = '我是自定义属性';
+				oDiv.dataset.arr = [1, 'A', true];  //"1,A,true"
+				oDiv.dataset.obj = { name: 'admin', age: 1, jog: 'A', off: [true] };  //[object Object]
+				oDiv.dataset.obj2 = "{ name: 'admin', age: 1, jog: 'A', off: [true]}";  //"{ name: 'admin', age: 1, jog: 'A', off: [true]}"
+
+				console.log('查看所有自定义属性集合：', oDiv.dataset);
+
+			};
+
+			//获取自定义属性
+			oGet.onclick = () => {
+				let d = oDiv.dataset;
+				console.log('获取自定义属性', d.name, d.myAge, d.arr, d.obj);
+			};
+
+			//删除自定义属性
+			oDel.onclick = () => {
+				delete oDiv.dataset.name;
+			};
+
+			//删除所有自定义属性
+			oAll.onclick = () => {
+				console.log(oDiv.dataset.length);   //undefined 没有长度
+				for (let i in oDiv.dataset) {
+					delete oDiv.dataset[i]
+				};
+
+				console.log('查看所有自定义属性集合：', oDiv.dataset);
+			};
+
+		};
+
+	</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>事件对象</title>
+	<!--document:是什么?
+	document就是网页(文档),它位于整个网页的第1个父节点,是最大最外面的一个标签,哪怕是头文件,或者是HTML这个标签都被document包含在里面,可以这样说:网页上的所有东西都包含在document里面;所以它是网页中最顶层的父节点-->
+
+	<script type="text/javascript">
+		window.onload = function () {
+			/************************获取鼠标在页面可视区上的位置******************************/
+			document.onclick = function (ev) {
+				//event：事件对象，在event中包含很多事件的详细信息
+				//alert('横坐标'+event.clientX+',竖坐标'+event.clientY);//只能用在IE浏览器 
+				//alert('横坐标'+ev.clientX+',竖坐标'+ev.clientY)//只能用在火狐浏览器
+
+
+				/**************上面兼容问题的解决办法1，可以兼容所有浏览器！******************
+						 if(ev)
+						 {
+							 alert('横坐标X'+ev.clientX+',竖坐标Y'+ev.clientY);
+						 }
+						 else
+						 {
+							 alert('横坐标X'+event.clientX+',竖坐标Y'+event.clientY);
+						 }
+						 
+				/**************上面兼容问题的解决办法2，可以兼容所有浏览器！******************/
+
+				var oEvent = ev || event;//ev和event,在不同的浏览器中是一真一假，而用逻辑或方法就可以取出因为：或||，只要两边有一个为真，就返回真。
+				alert('横坐标X' + oEvent.clientX + ',竖坐标Y' + oEvent.clientY);
+			}
+
+
+			/************************获取鼠标在页面滚动条滚动后的位置******************************/
+
+			//document.onclick=function()
+			//{	//scrollTop：滚动条项部距离
+			//alert(document.documentElement.scrollTop);//在IE和火狐浏览器下可用，在Google，Opera下不能用
+			//alert(document.body.scrollTop);//它和上面相反，在IE和火狐浏览器下不可用，在Google，Opera下能用
+
+			/**************上面滚动条滚动后的位置兼容问题的解决办法，可以兼容所有浏览器！******************/
+			//var ScrollTop=document.documentElement.scrollTop||document.body.scrollTop;
+			//alert(ScrollTop);
+			//}
+		}
+
+	</script>
+</head>
+
+<body style="height:2000px;">
+	点击显示坐标
+</body>
+
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>日历操作</title>
+		<style type="text/css">
+			html, body{ margin: 0px; padding: 0px; text-align: center;}
+			section{ display: inline-block; margin-top: 20px; padding: 20px; width: 500px; height: 300; border: 1px solid dodgerblue;}
+			h1{text-align: left;}
+		</style>
+	</head>
+
+	<body>
+		<section>
+			<h1>获取本周日期（一整周）</h1>
+			<button id="Prev-A">上一周</button>
+			<button id="Next-A">下一周</button>
+			<div id="Box-A"></div>
+		</section>
+		
+		<section>
+			<h1>获取本周日期（从今天日期开始）</h1>
+			<button id="Prev-B">上一周</button>
+			<button id="Next-B">下一周</button>
+			<div id="Box-B"></div>
+		</section>
+	</body>
+	
+	<script type="text/javascript">
+		let num = 0;
+		var currentFirstDate;
+		function formatDate(date) {
+			var year = date.getFullYear() + '年';
+			var month = (date.getMonth() + 1) + '月';
+			var day = date.getDate() + '日';
+			var week = '(' + ['星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'][date.getDay()] + ')';
+			(month < 10) ? month = "0"+ month : ""; (day < 10) ? day = "0"+ day : "";
+			return year + month + day + ' ' + week +'</br>';
+		};
+		
+		function addDate(date, n) {
+			date.setDate(date.getDate() + n);
+			return date;
+			console.log(date);
+		};
+		
+		function setDate(date) {
+			var week = date.getDay() - 1;
+			date = addDate(date, week * -1);
+			currentFirstDate = new Date(date);
+			var time = '';
+			for(var i = 0; i < 7; i++) {
+				time += formatDate(i == 0 ? date : addDate(date, 1));
+			}
+			document.querySelector('#Box-A').innerHTML = time;
+		};
+		
+		document.querySelector('#Prev-A').onclick = () => {
+			setDate(addDate(currentFirstDate, -7));
+		};
+		
+		document.querySelector('#Next-A').onclick = () => {
+			setDate(addDate(currentFirstDate, 7));
+		};
+		
+		setDate(new Date());
+		
+		
+		
+		
+		getSendDate = () => {
+			var str = '', myDate = new Date(), Week = new Array();
+
+			myDate.setDate(myDate.getDate() + num);
+			
+			Week[0] = "日"; Week[1] = "一"; Week[2] = "二"; Week[3] = "三"; Week[4] = "四";Week[5] = "五"; Week[6] = "六";
+
+			for(let i = 0; i < 7; i++) {
+				let Year = myDate.getFullYear(), Month = myDate.getMonth() + 1, Day = myDate.getDate();
+					
+				(Month < 10) ? Month = "0"+ Month : ""; (Day < 10) ? Day = "0"+ Day : "";
+				
+				str += Year +"年"+ Month +"月"+ Day +"日   (星期"+ Week[myDate.getDay()] +')</br>';
+				
+				myDate.setDate(myDate.getDate()+1);
+			}
+			document.querySelector('#Box-B').innerHTML = str;
+		}
+		
+		document.querySelector('#Prev-B').onclick = () => {
+			num -= 7;
+			getSendDate();
+		};
+		
+		document.querySelector('#Next-B').onclick = () => {
+			num += 7;
+			getSendDate();
+		};
+		
+
+		window.onload = () => {
+			getSendDate``;
+		}
+		
+		
+	</script>
+
+</html>

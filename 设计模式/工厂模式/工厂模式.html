@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>工厂模式</title>
+		<style type="text/css">
+			h1{text-align: center;}
+			pre{font-size: 16px;}
+		</style>
+	</head>
+	<body>
+		<h1>工厂模式</h1><hr />
+		<pre>
+			
+		</pre>
+	</body>
+	<script src="mupiao.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		
+		//搭建一个工厂的环境
+		
+		//卖车的商店
+		var CarShop = function (){};
+		
+		CarShop.prototype = {
+			constructor : CarShop , //还原构造器
+			sellCar : function(type)//卖车的方法
+			{
+				var car ; //声明变量
+				switch(type)
+				{
+					case 'Benz':
+						car = new Benz(); break;
+					case 'Bmw':
+						car = new Bmw(); break;
+					case 'Audi':
+						car = new Audi(); break;
+					default:
+						'不好意思，没别的车型了！';
+				}
+				//调用检验接口是否实现成功！
+				mupiao.Interface.DetectMethods(car , CarInerface);
+				return car;
+			}
+		};
+		
+		//接口对象实例！
+		var CarInerface = new mupiao.Interface('CarInerface' , ['start','run']);
+		
+		//superClass超类
+
+		var BaseCar = function(){};
+		BaseCar.prototype = {
+			constructor : BaseCar,
+			start : function()
+			{
+				alert(this.constructor.name + "我是车的类型，方法！");
+			},
+			run : function()
+			{
+				alert(this.constructor.name + "我是车的跑的方法！");
+			}
+		}
+		
+		//Class Benz Bmw Audi //创建3个商品（车）类
+		var Benz = function(){}
+		mupiao.HeirMethod(Benz , BaseCar);
+//		Benz.prototype.start = function()
+//		{
+//			alert("我是奔驰车！");
+//		}
+//		Benz.prototype.run = function()
+//		{
+//			alert("我每小时能跑200公里");
+//		}
+		
+		var Bmw = function()
+		{
+			
+		}
+		mupiao.HeirMethod(Bmw , BaseCar);
+//		Bmw.prototype.start = function()
+//		{
+//			alert("我是宝马车！");
+//		}
+//		Bmw.prototype.run = function()
+//		{
+//			alert("我每小时能跑160公里");
+//		}
+		
+		var Audi = function()
+		{
+			
+		}
+		mupiao.HeirMethod(Audi , BaseCar);
+//		Audi.prototype.start = function()
+//		{
+//			alert("我是奥迪车！");
+//		}
+//		Audi.prototype.run = function()
+//		{
+//			alert("我每小时能跑120公里");
+//		}
+		
+		var NewShop = new CarShop();
+		var car = NewShop.sellCar('Bmw');
+		
+		car.start();
+		car.run();
+		
+		var NewShops = new CarShop();
+		var car = NewShop.sellCar('Benz');
+		
+		car.start();
+		car.run();
+	</script>
+</html>

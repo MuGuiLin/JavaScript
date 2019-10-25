@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<ul id="ul1">
+			<li>111111111111111</li>
+			<li>111111111111111</li>
+			<li>111111111111111</li>
+			<li>111111111111111</li>
+			<li>111111111111111</li>
+			<li>111111111111111</li>
+			<li>111111111111111</li>
+		</ul>
+		
+		<ul id="ul2">
+			<li>222222222222222</li>
+			<li>222222222222222</li>
+			<li>222222222222222</li>
+			<li>222222222222222</li>
+			<li>222222222222222</li>
+			<li>222222222222222</li>
+			<li>222222222222222</li>
+			
+		</ul>
+	</body>
+	<script type="text/javascript">
+		window.onload = function () {  
+			
+       		var ul1 = document.getElementById("ul1");
+       		var li1 = ul1.getElementsByTagName("li");  
+            for(var i = 0; i < li1.length ; i ++) {  
+                li1[i].onclick = function() {  
+                    alert(i);  
+                }  
+            }  
+            
+           	var ul2 = document.getElementById("ul2");
+       		var li2 = ul2.getElementsByTagName("li");  
+           	for (var i = 0; i < li2.length; i++) {  
+               (function (j) {  
+                   li2[j].onclick = function () {  
+                       alert(j);  
+                   }  
+               })(i);  
+           	}  
+       	} 
+	</script>
+</html>

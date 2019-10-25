@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>charCodeAt获取字符编码</title>
+		<style type="text/css">
+			h1{text-align: center;}
+			p{font-size: 28px; color: #ff008b; font-weight: bold;}
+		</style>
+	</head>
+	<body>
+		<h1>charCodeAt获取字符编码</h1><hr />
+		按下键盘试试：<h1 id="h1"></h1>
+		<pre>
+		&lt;meta charset="UTF-32">
+		&lt;meta charset="UTF-16">
+		&lt;meta charset="UTF-8">
+		
+		UTF-16比起UTF-8，好处在于大部分字符都以固定长度的字节 (2字节) 储存，但UTF-16却无法兼容于ASCII编码。
+		
+		UTF-32 (或 UCS-4)是一种将Unicode字符编码的协定，对每一个Unicode码位使用恰好32位元。其它的Unicode transformation formats则使用不定长度编码。因为UTF-32对每个字符都使用4字节，就空间而言，是非常没有效率的。特别地，非基本多文种平面的字符在大部分文件中通常很罕见，以致于它们通常被认为不存在占用空间大小的讨论，使得UTF-32通常会是其它编码的二到四倍。虽然每一个码位使用固定长定的字节看似方便，它并不如其它Unicode编码使用得广泛。
+		</pre>
+		编码符号：
+		<p id="p"></p>
+	</body>
+	<script type="text/javascript">
+		let code = '', h1 = document.querySelector('h1').innerHTML;
+
+		alert(h1);
+		
+		document.onkeydown = function(e){
+			document.querySelector('#h1').innerHTML = `按键:${String.fromCharCode(e.keyCode)} => 编码:${e.keyCode}`;
+		}
+		
+		for(let i = 0; i < 65356; i++){
+			code += String.fromCharCode(i) +' &nbsp; ';
+		}
+		document.querySelector('#p').innerHTML = code;
+	</script>
+</html>

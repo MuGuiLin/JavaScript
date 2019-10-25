@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训2017-10JS</title>
+</head>
+<body>
+<div id="box">box</div>
+</body>
+</html>
+<script>
+//    let fn=function (x) {
+//        let a=1;
+//        return a
+//    }
+
+    let fn=(x)=>{};
+    //x=>x 如果函数体只有一行代码而且是return ;可以间写
+//    function fn(x) {
+//        return x
+//    }
+
+    //箭头函数中this问题;
+//箭头函数没有this指向,它里面的this是谁,看他的上一级作用域中的this(保证上一级作用域不是箭头函数)
+    let obj={
+        fn:function () {
+            console.log(this);
+            let f=()=>{
+                console.log(this);
+            };
+            f();
+        },
+        fn1:()=>{
+            console.log(this);
+        }
+    };
+    obj.fn();//this==obj
+    obj.fn1();
+
+    box.onclick=()=>{
+        console.log(this);
+    }
+
+</script>

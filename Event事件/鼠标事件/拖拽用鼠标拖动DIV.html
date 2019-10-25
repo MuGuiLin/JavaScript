@@ -1,0 +1,126 @@
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>拖拽用鼠标拖动DIV</title>
+	<style type="text/css">
+		div {
+			width: 200px;
+			height: 200px;
+			background: blue;
+			position: absolute;
+			cursor: pointer;
+		}
+	</style>
+	<script type="text/javascript">
+		/*-----------------创建Cookie-----------------*/
+		function setCookie(name, value, iDay)//name=cookie名称，value=内容，iDay=过期时间
+		{
+			var oDate = new Date();
+			console.log(name, value);
+
+			oDate.setDate(oDate.getDate() + iDay);//n天以后的日
+			console.log(oDate);
+			document.cookie = name + '=' + value + ';expires=' + oDate;//name=cookie名称，value=内容，iDay=过期时间
+		}
+
+		/*-----------------读取Cookie-----------------*/
+		function getCookie(name) {
+			var aRr = document.cookie.split(';');
+
+			for (var i = 0; i < aRr.length; i++) {
+				var aRr2 = aRr[i].split('=');
+
+				if (aRr2[0] == name)//判断下面输入的cookie名称，是否保存得有，
+				{
+					return aRr2[1];//有就把内容返回去
+				}
+			}
+			return "对不起，没找到您的cookie！。。"//没有，就弹出这句话
+		}
+
+		window.onload = function ()
+/*程序问题总结：
+	1、鼠标按下拖动DIV时,会把DVI拖出浏览器
+	2、移动时鼠标是指在DIV上的，但是当鼠标拖得太快就会离开DIV，这时DIV就不会再跟着移动了
+	3、浏览器自带了些行为和事件，影响拖动DIV时的其他问题*/ {
+			var oDiv = document.getElementById('div');
+			var disX = 0;//鼠标离左边的默认距离
+			var disY = 0;//鼠标离上边的默认距离
+
+			oDiv.style.left = getCookie('xLift') + 'px';
+			oDiv.style.top = getCookie('yTop') + 'px';
+
+			/**********************当鼠标按下时**************************/
+			oDiv.onmousedown = function (ev) {
+				var oEvent = ev || event;//事件对件
+
+				disX = oEvent.clientX - oDiv.offsetLeft;//把鼠标所在位置 — 减去 页面左边的距离 并赋给disX左
+				disY = oEvent.clientY - oDiv.offsetTop;//把鼠标所在位置 — 减去 页面上边（顶部）的距离 并赋给disY上
+
+				/**********************当鼠标按下拖动DIV时**************************/
+				document.onmousemove = function (ev) {
+					var oEvent = ev || event;//事件对件
+					var oTxt1 = document.getElementById('txt1');
+					var oTxt2 = document.getElementById('txt2');
+					/**********************解决鼠标按下拖动DIV时,会把DVI拖出浏览器，让DIV怎么拖都在DIV中的代码开始Begin**************************/
+					var L = oEvent.clientX - disX;//把鼠拖动DIV改变位置后，把新位置的再 — 减去 disX的左距离赋给L
+					var T = oEvent.clientY - disY;//把鼠拖动DIV改变位置后，把新位置的再 — 减去 disY的上距离赋给Y
+
+					if (L < 0)//当如果把DIV往左边拖直到拖出浏览器时，（注意最左边的距离为X=0，如果拖出0（小于0）的范围以就是-负数，负的多少多少！。。）
+					{
+						L = 0;//这时，就把左边的边距指定设为0，让它不能在小于0的范围，这样就不会拖出浏览器了，
+					}
+
+					//clientWidth这是浏览器可视区的宽度，offsetWidth这是DIV自身宽度所占用浏览器可视区的宽度
+					else if (L > document.documentElement.clientWidth - oDiv.offsetWidth)//如果DIV右边移出（大于浏览器可视区）浏览器可视区的宽度 —减去 DIV所占用浏览器可视区的宽度时
+					{
+						L = document.documentElement.clientWidth - oDiv.offsetWidth;//把浏览器可视区的宽度 —减去 DIV所占用浏览器可视区的宽度再赋给它自己， 
+					}
+
+					if (T < 0)//当如果把DIV往上面拖直到拖出浏览器时，（注意最上边的距离为Y=0，如果拖出0的范围以就是-负数，负的多少多少！。。）
+					{
+						T = 0;//这时，就把上面的边距指定设为0，让它不能在小于0的范围，这样就不会拖出浏览器了，
+					}
+					else if (T > document.documentElement.clientHeight - oDiv.offsetHeight)//和上面意思一样，只是方向不同！》》》
+					{
+						T = document.documentElement.clientHeight - oDiv.offsetHeight;//把浏览器可视区的高度 —减去 DIV所占用浏览器可视区的高度再赋给它自己， 
+					}
+					/**********************解决鼠标按下拖动DIV时,把DVI拖出浏览器，让DIV怎么拖都在DIV中的代码结束End**************************/
+
+					oDiv.style.left = L + 'px';//当鼠拖动DIV改变位置后，把新位置的再 — 减去 disX的左距离
+					oDiv.style.top = T + 'px';//当鼠拖动DIV改变位置后，把新位置的再 — 减去 disY的上距离
+
+					oTxt1.value = ev.clientX;//移动时输出左边距离
+					oTxt2.value = ev.clientY;//移动时输出上边距离
+
+
+					/**这里的一个BUG，因为移动时鼠标是指在DIV上的，但是当鼠标拖得太快就会离开DIV，这时DIV就不会再跟着移动了**/
+					/**解决办法：把oDiv改成document,因为document是页面最大的元素，**/
+
+				}
+				/**********************当鼠标台起时**************************/
+				document.onmouseup = function () {
+					document.onmousemove = null;//当鼠标台起时清除DIV的移动事件
+					document.onmouseup = null;//当鼠标台起把自己的事件也一并清除
+					setCookie('yTop', oDiv.offsetTop, 6);
+					setCookie('xLift', oDiv.offsetLeft, 6);
+
+
+				}
+				return false;	//因为浏览器自带了些行为和事件，影响拖动DIV时的其他问题，解决办法：用return false 清除浏览器的默认事件！。。。。
+			}
+		}
+	</script>
+</head>
+
+<body>
+	<div id="div"><img src="黄奕.jpg " style="width:200px;height:200px;" /></div>
+
+	左距离:<input id="txt1" type="text" />
+	上距离:<input id="txt2" type="text" />
+</body>
+
+</html>

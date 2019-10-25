@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>可操作表格</title>
+</head>
+<body>
+  <div style="display: flex; flex-direction: row;">
+    <div style="width: 100px; margin: 60px 0;">
+      <div class="draggableElement" style="width: 100%;height: 30px;line-height: 30px;text-align: center;border: 1px solid #ddd; margin: 10px 0;cursor: move;" draggable="true" data-role="component1">控件1</div>
+      <div class="draggableElement" style="width: 100%;height: 30px;line-height: 30px;text-align: center;border: 1px solid #ddd; margin: 10px 0; cursor: move;" draggable="true" data-role="component2">控件2</div>
+      <div class="draggableElement" style="width: 100%;height: 30px;line-height: 30px;text-align: center;border: 1px solid #ddd; margin: 10px 0; cursor: move;" draggable="true" data-role="component3">控件3</div>
+      <div class="draggableElement" style="width: 100%;height: 30px;line-height: 30px;text-align: center;border: 1px solid #ddd; margin: 10px 0; cursor: move;" draggable="true" data-role="component4">控件4</div>
+    </div>
+    <div style="flex: 1;margin: 0 0 0 40px;">
+      <div class="controller" style="margin: 10px 0;">
+        <input type="text" id="cols" placeholder="请输入列数">
+        <input type="text" id="rows" placeholder="请输入行数">
+        <button id="create">创建表格</button>
+        <button id="combine">合并单元格</button>
+        <select name="字体" id="fontFamily"">
+          <option value="1">ni</option>
+        </select>
+        <select name="字号" id="fontSize"></select>
+      </div>
+      <div id="tableable">
+        <table style="border-collapse: collapse;">
+          <colgroup id="g1"></colgroup>
+          <thead>
+            <tr id="headGroup" style="background-color: #ececec;"></tr>
+          </thead>
+        </table>
+        <table style="border-collapse: collapse;">
+          <colgroup id="g2"></colgroup>
+          <tbody id="bodys"></tbody>
+        </table>
+        <div style="position: absolute; left: 200px; top: 0; bottom: 0; width: 0; border-left: 1px solid rgb(223, 230, 236); z-index: 10; display: none;"></div>
+      </div>
+    </div>
+  </div>
+  <script src="./src/index.js"></script>
+
+</body></html>

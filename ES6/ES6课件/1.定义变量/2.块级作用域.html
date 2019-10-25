@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训2017-10JS</title>
+</head>
+<body>
+<ul id="list">
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+</ul>
+</body>
+</html>
+<script>
+    //{块级作用域}
+    //for(){},if(){},{}
+    ({a:1});
+    //如果{}想表示一个对象,千万不要将它放在行首
+    var obj={};
+
+    console.log(eval("({a:1})"));
+
+    {
+        let a=1;
+    }
+    //console.log(a);
+    var oLis=list.getElementsByTagName("li");
+    console.log(oLis);
+    for(let i=0;i<oLis.length;i++){
+        oLis[i].onclick=function () {
+            alert(i);
+        }
+    }
+    //i is not defined
+    //console.log(i);
+
+    {
+        let aa=1;
+        {
+            let a=2;
+            console.log(aa);
+        }
+    }
+
+</script>

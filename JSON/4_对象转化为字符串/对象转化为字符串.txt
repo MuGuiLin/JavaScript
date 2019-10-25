@@ -1,0 +1,31 @@
+序列化，指将 JavaScript 值转化为 JSON 字符串的过程。
+
+JSON.stringify() 能够将 JavaScript 值转换成 JSON 字符串。JSON.stringify() 生成的字符串可以用 JSON.parse() 再还原成 JavaScript 值。
+
+
+
+1. 参数的含义
+
+JSON.stringify(value[, replacer[, space]])
+
+value：必选参数。被变换的 JavaScript 值，一般是对象或数组。
+
+replacer：可以省略。有两种选择：函数或数组。
+
+  - 如果是函数，则每一组名称/值对都会调用此函数，该函数返回一个值，作为名称的值变换到结果字符串中，如果返回 undefined，则该成员被忽略。
+
+  - 如果是数组，则只有数组中存在名称才能够被转换，且转换后顺序与数组中的值保持一致。
+
+space：可以省略。这是为了排版、方便阅读而存在的。可以在 JSON 字符串中添加空白或制表符等。
+
+
+
+2. value 用法
+
+
+
+3. replacer 的用法
+
+
+
+4. space 的用法

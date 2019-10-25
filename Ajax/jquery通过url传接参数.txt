@@ -1,0 +1,38 @@
+jquery通过url传递 和 接收 参数
+
+一传递参数页面.thml
+
+<script type="text/javascript">
+
+	var 参数变量1 = '../image/goods1.jpg';
+	var 参数变量2 = 998;
+
+	window.location.href = "../html/good_info.html?rmb=" + 参数变量1 + "&img=" + 参数变量2 + "&name=参数3(字符串)";
+</script>
+
+
+
+二、接收参数页面.html
+
+
+<script src="jQuery.js" type="text/javascript"> //注：要引用jQuery.js文件哦！
+
+<script type="text/javascript">  
+	(function ($) {  
+        	//扩展方法获取url参数  
+        	$.getUrlParam = function (name) {  
+           	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象  
+           	var r = window.location.search.substr(1).match(reg);  //匹配目标参数  
+           	if (r != null) return unescape(r[2]); return null; //返回参数值  
+		}  
+	})(jQuery);  
+
+	//调用上的$.getUrlParam('参数')方法 来获取传过来对应的参数 rmb、img、name
+
+	$('#RMB').html('销售价：' +  $.getUrlParam('rmb') + '.00元');//得到参数变量1的参数 998
+   	
+   	$('#IMG').attr({src :  $.getUrlParam('img')}); //得到参数变量2的参数  ../image/goods1.jpg
+	 
+	$('#NAME').text($.getUrlParam('name')); //得到参数3的参数 参数3(字符串)
+
+</script>

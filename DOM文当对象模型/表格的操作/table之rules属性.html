@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>table之rules属性</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+
+<body>
+    <h1>table之rules属性</h1>
+    <hr>
+    <table id="myTable" border="1" width="60%" align="center">
+        <tr align="center">
+            <td>cell 1</td>
+            <td>cell 2</td>
+            <td>cell 3</td>
+        </tr>
+        <tr align="right">
+            <td>cell 4</td>
+            <td>cell 5</td>
+            <td>cell 6</td>
+        </tr>
+        <tr>
+            <td>cell 7</td>
+            <td>cell 8</td>
+            <td>cell 9</td>
+        </tr>
+        <colgroup>
+        <tr>
+            <td>cell 1</td>
+            <td>cell 2</td>
+            <td>cell 3</td>
+        </tr>
+        </colgroup>
+        <tr>
+            <td>cell 4</td>
+            <td>cell 5</td>
+            <td>cell 6</td>
+        </tr>
+        <tr>
+            <td>cell 7</td>
+            <td>cell 8</td>
+            <td>cell 9</td>
+        </tr>
+    </table>
+    <br>
+    <button type="button" onclick="rows()">显示内部行之间的边界</button>
+    <button type="button" onclick="cols()">显示的列之间内部边界</button>
+    <button type="button" onclick="allFn()">显示行和列之间的内边界</button>
+    <button type="button" onclick="groups()">显示行组和列组之间的内部边界</button>
+    <button type="button" onclick="noneFn()">隐藏内部边界</button>
+
+    <p><b>注意:</b> rules属性在Internet Explorer 9之前版本不能正常显示。</p>
+    <script>
+        function rows() {
+            document.getElementById('myTable').rules = "rows";
+        }
+        function cols() {
+            document.getElementById('myTable').rules = "cols";
+        }
+        function allFn() {
+            document.getElementById('myTable').rules = "all";
+        }
+        function groups() {
+            document.getElementById('myTable').rules = "groups";
+        }
+        function noneFn() {
+            document.getElementById('myTable').rules = "none";
+        }
+    </script>
+</body>
+
+</html>

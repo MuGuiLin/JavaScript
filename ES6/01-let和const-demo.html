@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>let和const</title>
+    <style>
+        *{margin: 0; padding: 0;}
+        h1 {
+            text-align: center;
+        }
+        ul{ position: relative; margin: 100px auto; width: 200px; height: 200px; border-radius: 50%; border: 1px solid gray; background: center center no-repeat / auto 90% #DDD; }
+        li{ position: absolute; left: 75px; top: -49px; box-sizing: border-box; width: 50px; height: 50px; line-height: 50px; text-align: center; border: 1px solid #bfbfbf; border-radius: 50%; list-style: none; transform-origin: center 150px; cursor: pointer;}
+        b{ display: inline-block; color: white;}
+        .active{ border-color: blue; border-style:double; border-width: 2px; }
+    </style>
+</head>
+
+<body>
+    <h1>let变量 和 const常量</h1>
+    <hr>
+
+    <ul id="ul"></ul>
+
+    <script>
+        const oUl = document.querySelector('#ul');
+        const color = ['red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'purple'];
+
+        {
+            let dom = '';
+
+            color.forEach((o, i) => {
+                console.log(o, i)
+                dom += `<li style="background:${o}; transform: rotate(${360 / color.length * i}deg);">${i}<b style="transform: rotate(${-360 / color.length * i}deg)">${i}</b></li>`;
+            });
+            oUl.innerHTML = dom;
+        };
+
+        {
+            const oLi = document.querySelectorAll('#ul li');
+            console.log(oLi, oLi.length);
+
+            let now = 0;
+                oLi[now].classList.add('active');
+            oLi.forEach((o, i) => {
+                o.onclick = function() {
+                    // for(let i = 0; i < oLi.length; i++) {
+                    //     oLi[i].classList.remove('active');
+                    // };
+                    oLi[now].classList.remove('active');
+                    now = i;
+                    oLi[i].classList.add('active');
+                    oUl.style.background = color[i];
+                }
+            });
+            
+        }
+    </script>
+</body>
+
+</html>

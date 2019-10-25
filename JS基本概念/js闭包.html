@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+	
+	<head>
+		<meta charset="UTF-8">
+		<title>js闭包</title>
+		<link rel="stylesheet" type="text/css" href="../../public/css/base.css"/>
+	</head>
+	
+	<body>
+		<h1>js闭包</h1><hr />
+		<pre>
+			
+		<b>
+			要了解闭包 得先了解 作用域 <a href="js作用域.html">什么是作用域</a>，作用域链 <a href="js作用域链.html">什么是作用域链</a>
+			
+			什么是闭包：函数执行完成后，函数中的变量没有被销毁，被它返回的子函数所引用。
+			
+			当函数可以记住并访问所在的词法作用域时，就产生了闭包，即使函数是在当前词法作用域之外执行。
+		</b>
+		
+		
+			
+		</pre>
+	</body>
+	
+	<script type="text/javascript">
+		console.watch('123456')
+		var o = {
+			fn: function() {
+				alert(123);
+			}
+		}
+		o.fn();
+		
+		function fun(n,o) {
+		  console.log(o)
+		  return {
+		    fun:function(m){
+		     console.log('-----------------------'+ m +'---------------------------');
+		      return fun(m,n);
+		    }
+		  };
+		}
+		
+		var a = fun(0);  
+			a.fun(1);  a.fun(2);  a.fun(3);//undefined, 0, 0, 0
+		
+		var b = fun(0).fun(1).fun(2).fun(3);//undefined, 0, 1, 2
+		
+		var c = fun(0).fun(1);  //undefined, 0
+			c.fun(2);// 1 
+			c.fun(3);// 1
+		
+		//下面的代码会输出什么？怎么改动上述代码，使其依次输出1、2、3、4、5
+		for(var i = 1; i <= 5; i++) {
+			setTimeout( function timer() {
+		      console.log(i);
+		  	}, 1000 );
+		}
+		
+		//1(fun)()
+		for(var i = 1; i <= 5; i++) {
+			(function IIFE(i) {
+			  setTimeout( function timer() {
+			      console.log(i);
+			  }, 1000 );
+			}(i));
+		}
+		
+		//2 let
+		for(let i = 1; i <= 5; i++) {
+		  	setTimeout( function timer() {
+		      	console.log(i);
+		  	}, 1000 );
+		}
+		
+	
+		var name = "The Window";
+		
+	　　	var object = {
+	　　　　	name : "My Object",
+	　　　　	getNameFunc : function(){
+				　var _this = this;
+	　　　　　　	return function(){
+					console.log(this)
+	　　　　　　　　		return _this.name;
+	　　　　　　	};
+	　　　　	}
+	　　	};
+	
+	　　	console.log(object.getNameFunc()());
+		console.log(window.__proto__)
+	</script>
+</html>

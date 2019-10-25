@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训</title>
+</head>
+<body>
+
+</body>
+</html>
+<script type="text/javascript">
+    'use strict';
+    let str=new String("12345");
+    console.dir(str);
+    //includes->true /false
+    // 第二个参数:开始查找的索引 默认是0
+    //  indexOf
+    //startsWidth(),endsWidth()
+    ////第二个参数:开始查找的索引 默认是0
+    console.log(str.startsWith("1"));//true
+    console.log(str.startsWith("3",2));//true
+    console.log(str.endsWith("5"));//true
+    let  str2='1   2   3 4 5 ';
+    let str3='';
+    for(var i=0;i<str2.length;i++){
+        if(!str2.startsWith(" ",i)){
+            str3+=str2.substr(i,1);
+        }
+    }
+    console.log(str3);
+    str2=str2.replace(/ +/g,'');
+    console.log(str2);
+
+    //repeat 将原来的字符串重复n次得到一个新的字符串,原来的不变
+    console.log(str.repeat(2),str);
+    //小数向下取整
+    //负数/infinity 报错的
+    //0->-1 :0
+    console.log(str.repeat(-0.2));
+    console.log(str.repeat(0));
+    //console.log(str.repeat(-2));
+    console.log(str.repeat(2.9));
+
+    let g=0;
+    let fn=new Function("wd",`let a=${g};console.log(a);return wd`);
+    console.log(fn("哈哈哈"));
+//    function fn (wd) {
+//        let a=1;
+//        console.log(a);
+//        return wd;
+//    }
+
+</script>

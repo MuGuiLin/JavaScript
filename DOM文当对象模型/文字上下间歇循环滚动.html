@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>文字上下间歇循环滚动</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        #box {
+            height: 300px;
+            width: 500px;
+            margin: 0 auto;
+            border: 1px solid #0066FF;
+            overflow: hidden;
+            padding-bottom: 20px;
+        }
+
+        #box li {
+            color: #333;
+            height: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>文字上下间歇循环滚动</h1>
+    <hr>
+    <div id="box">
+        <ul>
+            <li>脚本之家1</li>
+            <li>脚本之家2</li>
+            <li>脚本之家3</li>
+            <li>脚本之家4</li>
+            <li>脚本之家5</li>
+            <li>脚本之家6</li>
+            <li>脚本之家7</li>
+            <li>脚本之家8</li>
+            <li>脚本之家9</li>
+        </ul>
+    </div>
+    <script>
+        var area = document.getElementById("box");
+        area.innerHTML += area.innerHTML;
+        var liHeight = 50;
+        area.scrollTop = 0;
+        var delay = 2000;
+        var speed = 50;
+        var time;
+        function starMove() {
+            area.scrollTop++;
+            time = setInterval("scrollUp()", speed);
+        }
+        function scrollUp() {
+            if (area.scrollTop % liHeight == 0) {
+                clearInterval(time);
+                setTimeout("starMove()", delay);
+            } else {
+                area.scrollTop++;
+                if (area.scrollTop >= area.offsetHeight / 2) {
+                    area.scrollTop = 0;
+                }
+            }
+        }
+        setTimeout("starMove()", delay);
+    </script>
+</body>
+
+</html>

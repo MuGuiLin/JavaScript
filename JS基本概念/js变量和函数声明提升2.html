@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>变量和函数声明提升</title>
+		<link rel="stylesheet" type="text/css" href="../../public/css/base.css"/>
+	</head>
+	<body>
+		<h1>变量和函数声明提升</h1><hr />
+		<pre>
+			提升: 声明提前（hoisting）是在JavaScript引擎的预编译时进行，是在代码开始运行之前。
+			
+			1. 在JavaScript中变量和函数的声明会提升到最顶部执行(变量和函数声明会被提升到可用范围的顶部)。
+			2. 函数的提升高于变量的提升。
+			3. 函数内部如果用var声明了相同名称的外部变量，函数将不再向上寻找。
+			4. 匿名函数不会提升。
+			5. 不同&lt;script>块中的函数互不影响。
+			
+			<b>一、变量提升:</b>
+　　				在ES6之前，JavaScript没有块级作用域(一对花括号{}即为一个块级作用域)，只有 <b>全局作用域</b> 和 <b>函数作用域</b>。 变量提升即将变量声明提升到它所在作用域的最开始的部分。
+				
+				//注: 如果变量左边不加var 时声明的变量就成了全局变量了,如:
+			
+				myName = 'mupiao';
+				console.log(myName);
+				
+			例：
+			<code>
+				console.log(global); // undefined
+				var global = 'global';
+				console.log(global); // global
+				 
+				function fn () {
+				　　console.log(a); // undefined
+				　　var a = 666;
+				　　console.log(a); // 666
+				}
+				fn();
+			</code>
+			
+			之所以会是以上的打印结果，是由于js的变量提升，实际上上面的代码是按照以下来执行的：
+			
+			<code>
+				var global; // 变量提升，全局作用域范围内，此时只是声明，并没有赋值
+				console.log(global); // undefined
+				global = 'global'; // 此时才赋值
+				console.log(global); // 打印出global
+				 
+				function fn () {
+				　　var a; // 变量提升，函数作用域范围内
+				　　console.log(a);
+				　　a = 666;
+				　　console.log(a);
+				}
+				fn();
+			</code>
+			
+			<b>二、函数提升:</b>
+　　				js中创建函数有两种方式：<b>函数声明式</b> 和 <b>函数字面量式(函数表达式)</b>。只有函数声明才存在函数提升
+		</pre>
+	</body>
+	
+	<script type="text/javascript">
+//		alert(a);
+//		alert(b);
+//		alert(c);
+//		
+//		var a = 0;
+//		
+//		//函数声明式
+//		function a(){ }
+//		
+//		//函数字面量式(函数表达式)
+//		var b = function(){ }
+//		
+//		//函数字面量式(函数表达式)
+//		var c = (function(){
+//			return 123;
+//		})();
+
+		if(true){
+		 function aaa(){
+		  alert('1');
+		 } 
+		}
+		else{
+		 function aaa(){
+		  alert('2');
+		 }
+		}
+		 
+		aaa();
+
+
+		function aaa(){
+		 	alert('11111');
+		} 
+
+		function aaa(){
+		  	alert('22222');
+		}
+		
+		function aaa(){
+		  	alert('33333');
+		}
+		aaa();
+		
+	</script>
+	
+	<!--<script>
+		getName();
+		var getName = function () {
+		    alert('closule');
+		}
+	</script>
+		
+	<script>
+		function getName() {
+		    alert('function');
+		}
+	</script>-->
+		 
+	<!--
+    	1.代码执行报错：TypeError: getName is not a function
+		2.因为第一个<script>块中getName()函数未定义,匿名函数又不会向上提升
+    -->
+		
+</html>

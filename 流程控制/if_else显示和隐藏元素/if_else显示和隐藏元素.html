@@ -1,0 +1,175 @@
+<!DOCTYPE html >
+<html>
+<head>
+	<meta  charset="utf-8" />
+	<title>if_else显示和隐藏元素</title>
+	<style type="text/css">
+		div{margin:0px auto;width:800px;height:330px;}
+		table{margin:0px auto;width:800px;height:200px;border:1px solid blue;}
+		tr{text-align:center;}
+		td{width:60px;height:30px;border:1px solid #999;}
+		#but{align:right;}
+	</style> 
+	<script type="text/javascript">
+		function mupiao()
+		{
+			if(document.getElementById('div2').style.display == 'none')
+			{
+				document.getElementById('div2').style.display = 'block';	
+			}
+			else
+			{
+				document.getElementById('div2').style.display = 'none';
+			}
+		}
+	</script>
+</head>
+
+<body>
+		<div id="div1">
+    	<table >
+			<tr >
+            	<td colspan="7" style="background:#03F;color:#FFF;font-weight:bold;">天气预报：（2015-5-25 11：48） &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                <input id="but"type="button" onclick="mupiao()" style="background:width;color:#06F;" value="查看未来3天的天气情况" />
+                </td>
+            </tr>
+            <tr style="font-weight:bold;background:#FFC;"  >
+            	<td colspan="2">日期时间</td>
+                <td colspan="2">天气现象</td>
+                <td>气温</td>
+                <td>风向</td>
+                <td>风力</td>
+            </tr>
+            <tr>
+            	<td>25日 星期一</td>
+                <td>黑夜</td>
+                <td><img src="2.jpg" /></td>
+                <td>晴</td>
+                <td>低温：19℃ </td>
+                <td>无持续风向</td>
+                <td>轻风</td>
+            </tr>
+            <tr>
+            	<td rowspan="2">26日 星期二</td>
+                <td>白天</td>
+                <td><img src="4.jpg" /></td>
+                <td>多云转阴</td>
+                <td>高温：28℃ </td>
+                <td>无持续风向</td>
+                <td>小风</td>
+            </tr>
+            <tr>
+            <td>黑夜</td>
+                <td><img src="2.jpg" /></td>
+                <td>晴</td>
+                <td>低温：17℃ </td>
+                <td>无持续风向</td>
+                <td>微风</td>
+            </tr>
+            <tr>
+              <td rowspan="2">27日 星期三</td>
+            	<td>白天</td>
+                <td><img src="1.jpg" /></td>
+                <td>多云</td>
+                <td>高温：32℃</td>
+                <td>无持续风向</td>
+                <td>小风</td>
+            </tr>
+            <tr>
+            	<td>黑夜</td>
+                <td><img src="3.jpg" /></td>
+                <td>阴</td>
+                <td>低温：16℃ </td>
+                <td>无持续风向</td>
+                <td>轻风</td>
+            </tr>
+            <tr>
+              <td rowspan="2">28日 星期四</td>
+            	<td>白天</td>
+                <td><img src="5.jpg" /></td>
+                <td>小雨转阴</td>
+                <td>高温：30℃</td>
+                <td>无持续风向</td>
+                <td>大风</td>
+            </tr>
+            <tr>
+            	<td>阵雨</td>
+                <td><img src="2.jpg" /></td>
+                <td>多云</td>
+                <td>低温：18℃ </td>
+                <td>无持续风向</td>
+                <td>中风</td>
+            </tr>			
+
+        </table>
+        </div>
+        
+        <div id="div2" style="display:none" >
+        <table>
+			<tr >
+            	<td colspan="7" style="background:#03F;color:#FFF;font-weight:bold;">未来3天的天气预报情况
+                </td>
+          </tr>
+            <tr style="font-weight:bold;background:#FFC;" >
+            	<td colspan="2">日期时间</td>
+                <td colspan="2">天气现象</td>
+                <td>气温</td>
+                <td>风向</td>
+                <td>风力</td>
+            </tr>
+            <tr>
+            	<td rowspan="2">29日 星期五</td>
+                <td>黑夜</td>
+                <td><img src="2.jpg" /></td>
+                <td>晴</td>
+                <td>低温：19℃ </td>
+                <td>无持续风向</td>
+                <td>轻风</td>
+            </tr>
+            <tr>
+            	<td>白天</td>
+                <td><img src="4.jpg" /></td>
+                <td>多云转阴</td>
+                <td>高温：28℃ </td>
+                <td>无持续风向</td>
+                <td>小风</td>
+            </tr>
+            <tr>
+              <td rowspan="2">30日 星期六</td>
+            <td>黑夜</td>
+                <td><img src="2.jpg" /></td>
+                <td>晴</td>
+                <td>低温：17℃ </td>
+                <td>无持续风向</td>
+                <td>微风</td>
+            </tr>
+            <tr>
+              <td>白天</td>
+                <td><img src="1.jpg" /></td>
+                <td>多云</td>
+                <td>高温：32℃</td>
+                <td>无持续风向</td>
+                <td>小风</td>
+            </tr>
+            <tr>
+              <td rowspan="2">31日 星期日</td>
+              <td>黑夜</td>
+                <td><img src="3.jpg" /></td>
+                <td>阴</td>
+                <td>低温：16℃ </td>
+                <td>无持续风向</td>
+                <td>轻风</td>
+            </tr>
+            <tr>
+              <td>白天</td>
+                <td><img src="5.jpg" /></td>
+                <td>小雨转阴</td>
+                <td>高温：30℃</td>
+                <td>无持续风向</td>
+                <td>大风</td>
+            </tr>		
+		</table>
+	</div>
+    <img src="201291313295226753.jpg" />
+</body>
+</html>

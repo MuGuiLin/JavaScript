@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>变量和函数声明提升</title>
+		<link rel="stylesheet" type="text/css" href="../../public/css/base.css"/>
+	</head>
+	<body>
+		<h1>变量和函数声明提升</h1><hr />
+		
+		<pre>
+		<b>
+			Js代码分为两个阶段：编译阶段和执行阶段。
+
+			Js引擎会 在解释 Js代码的编译阶段会找到所有的声明，并用合适的作用域将它们关联起来，这是词法作用域的核心内容。
+			因此，正确的思考思路是，包括变量和函数在内的所有声明都会在任何代码被执行前首先被处理(包括变量声明(var a)和函数声明(function fn(){})在内的所有声明都会在代码被执行前的编译阶段首先被处理)。
+			
+		如：	当你看到 var a = 2; 时，可能会认为这是一个声明。但 JavaScript 实际上会将其看成两个声明： var a; 和 a = 2; 。
+			第一个定义声明是在编译阶段进行的。第二个赋值声明会被留在原地等待执行阶段。
+				var a;
+				a = 2;
+				console.log( a );
+				其中第一部分是编译，而第二部分是执行。
+
+			过程就好像变量声明和函数声明从他们代码中出现的位置被移动到执行环境的顶部，<u>这个过程就叫做提升</u>。
+
+			所以：<i>只有声明操作会被提升，<u>赋值和逻辑操作会被留在原地等待执行。</u></i>
+			
+			foo();
+			function foo() {
+				console.log( a ); // undefined
+				var a = 2;
+			}
+			
+			上面foo()函数的声明（这个例子还包括实际函数的隐含值）被提升了，因此第一行中的调用可以正常执行。
+			
+			??? 在ES6中（不存在变量提升）新的用法不会出现变量提升!!!；
+			
+		另外值得注意的是，每个作用域都会进行提升操作。
+			
+			ES6中：let不允许在相同作用域内，重复声明同一个变量。
+			
+			var命令会发生”变量提升“现象，即变量可以在声明之前使用，值为undefined。这种现象多多少少是有些奇怪的，按照一般的逻辑，变量应该在声明语句之后才可以使用。
+
+			为了纠正这种现象，let命令改变了语法行为，它所声明的变量一定要在声明后使用，否则报错。
+		</b>
+			
+			变量提升(hoist)是在JavaScript引擎的预编译时进行，是在代码开始运行之前 （JavaScript解析器会在自身作用域内将变量和函数声明提前(hoist)）。
+			
+			1. 在JavaScript中变量和函数的声明会提升到最顶部执行(变量和函数声明会被提升到可用范围的顶部，变量的声明被提前到作用域顶部，赋值保留在原地)。
+			2. 函数的提升高于变量的提升(函数会首先被提升然后才是变量，重复的变量声明会被忽略，只剩下赋值操作，多个函数声明可以进行覆盖)。
+				声明的顺序是这样的：
+					(1). 先找到所有的函数声明，初始化函数体，如有同名的函数则会进行覆盖。
+					(2). 再查找变量声明，初始化为undefined，如果已经存在同名的变量，就什么也不做直接略过。
+					
+					尽管重复的 var 声明会被忽略掉，但出现在后面的函数声明还是可以覆盖前面的。
+					
+					foo(); // 3
+					
+					function foo() {
+						console.log( 1 );
+					}
+					
+					var foo = function() {
+						console.log( 2 );
+					};
+					
+					function foo() {
+						console.log( 3 );
+					}
+					
+					上面3个函数，说明了在同一个作用域中进行重复定义是非常糟糕的，而且经常会导致各种奇怪的问题。
+					
+					一个普通块内部的函数声明通常会被提升到所在作用域的顶部，这个过程不会像下面的代码暗示的那样可以被条件判断所控制：
+					
+					foo(); // "b"
+					var a = true;
+					
+					if (a) {
+						function foo() { console.log("a"); }
+					} else {
+						function foo() { console.log("b"); }
+					}
+					
+			3. 函数内部如果用var声明了相同名称的外部变量，函数将不再向上寻找。
+			4. 匿名函数不会提升。
+			5. 不同&lt;script>块中的函数互不影响。
+			
+		同时也要记住，即使是具名的函数表达式，名称标识符在赋值之前也无法在所在作用域中使用：
+			
+			foo(); // TypeError
+			bar(); // ReferenceError
+			var foo = function bar() {
+				// ...
+			};
+			
+			这个代码片段经过提升后，实际上会被理解为以下形式：
+			
+			var foo;
+			foo(); // TypeError
+			bar(); // ReferenceError
+			
+			foo = function() {
+				var bar = ...self...
+				// ...
+			}
+			
+			
+			
+		<b>一、变量提升:</b>
+			//在ES6之前，JavaScript没有块级作用域(一对花括号{}即为一个块级作用域)，只有 <b>全局作用域</b> 和 <b>函数作用域</b>。 变量提升即将变量声明提升到它所在作用域的最开始的部分。
+			
+			//Js编译器会把变量声明看成两个部分分别是声明操作(var a)和赋值操作(a=2)
+
+			//声明操作在编译阶段进行，声明操作会被提升到执行环境的顶部，值是undefined(表示未初始化)
+			
+			//赋值操作会被留在原地等待执行阶段
+			
+			//注: 
+				使用 let 进行的声明不会在块作用域中进行提升。声明的代码被运行之前，声明并不“存在”。
+				{
+				console.log( bar ); // ReferenceError!
+				let bar = 2;
+				}
+			
+				//1、用var(ES6看用let)定义变量，变量如果没有赋值，那变量的初始值为undefined。如:
+					var varname;
+					console.log(varname);// undefined
+						
+				//2、所有不使用var定义的变量都视为全局变量(就是在变量左边不加var 时声明的变量就成了全局变量了)。如:
+					myName = 'mupiao';
+					console.log(myName); //mupiao
+					
+				//3、变量作用域: 指变量起作用的范围。
+					
+				//4、变量分为：全局变量 和 局部变量(ES6中有块级作用域：一对花括号{。。。。}}。1、全局变量在全局都拥有定义；2、局部变量只能在函数内有效。
+				
+				//4、在函数体内，同名的局部变量或者参数的优先级会高于全局变量。也就是说，如果函数内存在和全局变量同名的局部变量或者参数，那么全局变量将会被局部变量覆盖。如：
+				 	var abc = 123;
+				 	function fun(){
+				 		var abc = 456;
+				 		console.log(abc);
+				 	}
+					fun();
+					
+					
+				
+			console.log(global); // undefined
+			var global = 'global';
+			console.log(global); // global
+			 
+			function fn () {
+			　　console.log(a); // undefined
+			　　var a = 666;
+			　　console.log(a); // 666
+			}
+			fn();
+			
+			//之所以会是以上的打印结果，是由于js的变量提升，实际上上面的代码是按照以下来执行的：
+			
+			var global; // 变量提升，全局作用域范围内，此时只是声明，并没有赋值
+			console.log(global); // undefined
+			global = 'global'; // 此时才赋值
+			console.log(global); // 打印出global
+			 
+			function fn () {
+			　　var a; // 变量提升，函数作用域范围内
+			　　console.log(a);
+			　　a = 666;
+			　　console.log(a);
+			}
+			fn();
+		
+		<b>二、函数提升:</b>
+
+			//1、定义函数有两种方式：函数声明和函数表达式
+				//函数声明式
+				function f1() {
+					console.log('我会被提升');
+				}
+				
+				//函数字面量式(函数表达式)
+				var f2 = function() {
+					console.log('我不被提升');
+				}
+
+			//2、函数声明(会提前预解析)提升会在编译阶段把声明和函数体整体都提前到执行环境顶部，所以我们可以在函数声明之前调用这个函数
+
+			//3、函数表达式(函数表达式、匿名函数)，其实就是变量声明的一种，声明操作会被提升到执行环境顶部，并赋值undefined。赋值操作被留在原地等到执行。
+			
+			//4、函数作用域和声明提前
+				//JavaScript的函数作用域是指在函数内声明的所有变量在函数体内始终是有定义的，也就是说变量在声明之前已经可用，所有这特性称为声明提前（hoisting），
+				//即JavaScript函数里的所有声明（只是声明，但不涉及赋值）都被提前到函数体的顶部，而变量赋值操作留在原来的位置
+			
+			//5、当同进存在多个相同函数时，后面覆盖前面。
+			
+			//如:
+			//aaa(); //33333
+			function aaa(){
+			 	alert('11111');
+			} 
+			//aaa(); //33333
+			function aaa(){
+			  	alert('22222');
+			}
+			//aaa(); //33333
+			function aaa(){
+			  	alert('33333');
+			}
+			aaa(); //33333
+			
+			
+			
+			
+			
+			console.log(f1); // function f1() {}   
+			console.log(f2); // undefined  
+			
+			//函数声明式
+			function f1() {
+				console.log('我会被提升');
+			}
+			
+			//函数字面量式(函数表达式)
+			var f2 = function() {
+				console.log('我不被提升');
+			}
+			
+			//之所以会有以上的打印结果，是由于js中的函数提升导致代码实际上是按照以下来执行的：
+			
+			function fa() {} // 函数提升，整个代码块提升到文件的最开始　　　　　   
+			console.log(fa);
+			
+			console.log(fb);
+			var fb = function() {}
+			
+			
+		<b>三、函数声明提升高于变量声明:</b>
+			//同时声明变量a和函数a
+			var a;
+			function a() {} 
+			alert(typeof a); //显示的是"function"，初步证明function的优先级高于var。
+			 
+			//先声明函数后声明变量，证明上边的例子不是function覆盖了变量
+			function a() {}
+			var a; 
+			alert(typeof a); //显示的仍是"function",而不是"undefined"，即function的优先级高于var。
+			 
+			//声明了变量的同时赋值
+			function a() {}
+			var a = 1;
+			alert(typeof a); //number,此时不是function了。
+			//说明："var a=1"相当于"var a;a=1",即先声明，后赋值，"a=1"相当于把a重新赋值了，自然就是number
+			
+			
+		<b>四、函数内部用var定义了和外部相同的变量，函数将不再向上找外部的变量：</b>
+			var value = 'hello';
+			function show() {
+			  alert(value);
+			  if (!value) {
+			    var value = 'function';
+			  }
+			  alert(value);
+			}
+			show() //此处调用函数依次弹出 "undefined", "function"
+			 
+			//上例相当于var value = 'hello';
+			function show() {
+			　　var value; //注意这行
+			  alert(value);
+			  if (!value) {
+			    value = 'function'; //这行去掉var
+			  }
+			  alert(value);
+			}
+			show()
+			//1.如果上列中show内部定义value未用var,则会用到外部的变量，弹出"hello", "hello"。
+			//2.如果函数内部未定义value,也能获取到外部的value值。
+			
+			
+		<b>五、匿名函数不会向上提升：</b>
+			getName()
+			var getName = function () {
+				console.log('closule')
+			}
+			
+			function getName() {
+			  console.log('function')
+			}
+			getName()
+			 
+			//上边的代码相当于
+			function getName() { //函数向上提升
+			  console.log('function')
+			}
+			getName()
+			var getName = function () {
+			  console.log('closule')
+			}
+			getName()
+			 
+			//代码执行分别弹出 "function", "closule"
+			
+		<b>六、小结</b>
+			
+			我们习惯将 var a = 2; 看作一个声明，而实际上 JavaScript 引擎并不这么认为。
+			
+			它将 var a 和 a = 2 当作两个单独的声明，第一个是编译阶段的任务，而第二个则是执行阶段的任务。
+			
+			这意味着无论作用域中的声明出现在什么地方，都将在代码本身被执行前首先进行处理。
+			
+			可以将这个过程形象地想象成所有的声明（变量和函数）都会被“移动”到各自作用域的最顶端，这个过程被称为提升。
+		</pre>
+	</body>
+	
+	<script type="text/javascript">
+		
+		//一、变量提升:
+			//在ES6之前，JavaScript没有块级作用域(一对花括号{}即为一个块级作用域)，只有 <b>全局作用域</b> 和 <b>函数作用域</b>。 变量提升即将变量声明提升到它所在作用域的最开始的部分。
+			
+			//Js编译器会把变量声明看成两个部分分别是声明操作(var a)和赋值操作(a=2)
+
+			//声明操作在编译阶段进行，声明操作会被提升到执行环境的顶部，值是undefined(表示未初始化)
+			
+			//赋值操作会被留在原地等待执行阶段
+			
+			//注: 
+				//1、用var(ES6看用let)定义变量，变量如果没有赋值，那变量的初始值为undefined。如:
+					var varname;
+					console.log(varname);// undefined
+						
+				//2、所有不使用var定义的变量都视为全局变量(就是在变量左边不加var 时声明的变量就成了全局变量了)。如:
+					myName = 'mupiao';
+					console.log(myName); //mupiao
+					
+				//3、变量作用域: 指变量起作用的范围。
+					
+				//4、变量分为：全局变量 和 局部变量(ES6中有块级作用域：一对花括号{。。。。}}。1、全局变量在全局都拥有定义；2、局部变量只能在函数内有效。
+				
+				//4、在函数体内，同名的局部变量或者参数的优先级会高于全局变量。也就是说，如果函数内存在和全局变量同名的局部变量或者参数，那么全局变量将会被局部变量覆盖。如：
+				 	var abc = 123;
+				 	function fun(){
+				 		var abc = 456;
+				 		console.log(abc);
+				 	}
+					fun();
+					
+					
+				
+			console.log(global); // undefined
+			var global = 'global';
+			console.log(global); // global
+			 
+			function fn () {
+			　　console.log(a); // undefined
+			　　var a = 666;
+			　　console.log(a); // 666
+			}
+			fn();
+			
+			//之所以会是以上的打印结果，是由于js的变量提升，实际上上面的代码是按照以下来执行的：
+			
+			var global; // 变量提升，全局作用域范围内，此时只是声明，并没有赋值
+			console.log(global); // undefined
+			global = 'global'; // 此时才赋值
+			console.log(global); // 打印出global
+			 
+			function fn () {
+			　　var a; // 变量提升，函数作用域范围内
+			　　console.log(a);
+			　　a = 666;
+			　　console.log(a);
+			}
+			fn();
+		
+		//二、函数提升:
+
+			//1、定义函数有两种方式：函数声明和函数表达式
+				//函数声明式
+				function f1() {
+					console.log('我会被提升');
+				}
+				
+				//函数字面量式(函数表达式)
+				var f2 = function() {
+					console.log('我不被提升');
+				}
+
+			//2、函数声明(会提前预解析)提升会在编译阶段把声明和函数体整体都提前到执行环境顶部，所以我们可以在函数声明之前调用这个函数
+
+			//3、函数表达式(函数表达式、匿名函数)，其实就是变量声明的一种，声明操作会被提升到执行环境顶部，并赋值undefined。赋值操作被留在原地等到执行。
+			
+			//4、函数作用域和声明提前
+				//JavaScript的函数作用域是指在函数内声明的所有变量在函数体内始终是有定义的，也就是说变量在声明之前已经可用，所有这特性称为声明提前（hoisting），
+				//即JavaScript函数里的所有声明（只是声明，但不涉及赋值）都被提前到函数体的顶部，而变量赋值操作留在原来的位置
+			
+			//5、当同进存在多个相同函数时，后面覆盖前面。
+			
+			//如:
+			//aaa(); //33333
+			function aaa(){
+			 	alert('11111');
+			} 
+			//aaa(); //33333
+			function aaa(){
+			  	alert('22222');
+			}
+			//aaa(); //33333
+			function aaa(){
+			  	//alert('33333');
+			  	alert('请在控制台看结果！');
+			}
+			aaa(); //33333
+			
+			
+			
+			
+			
+			console.log(f1); // function f1() {}   
+			console.log(f2); // undefined  
+			
+			//函数声明式
+			function f1() {
+				console.log('我会被提升');
+			}
+			
+			//函数字面量式(函数表达式)
+			var f2 = function() {
+				console.log('我不被提升');
+			}
+			
+			//之所以会有以上的打印结果，是由于js中的函数提升导致代码实际上是按照以下来执行的：
+			
+			function fa() {} // 函数提升，整个代码块提升到文件的最开始　　　　　   
+			console.log(fa);
+			
+			console.log(fb);
+			var fb = function() {}
+			
+			
+		//三、函数声明提升高于变量声明:
+			//同时声明变量a和函数a
+			var a;
+			function a() {} 
+			console.log(typeof a); //显示的是"function"，初步证明function的优先级高于var。
+			 
+			//先声明函数后声明变量，证明上边的例子不是function覆盖了变量
+			function a() {}
+			var a; 
+			console.log(typeof a); //显示的仍是"function",而不是"undefined"，即function的优先级高于var。
+			 
+			//声明了变量的同时赋值
+			function a() {}
+			var a = 1;
+			console.log(typeof a); //number,此时不是function了。
+			//说明："var a=1"相当于"var a;a=1",即先声明，后赋值，"a=1"相当于把a重新赋值了，自然就是number
+			
+			
+		//四、函数内部用var定义了和外部相同的变量，函数将不再向上找外部的变量：
+			var value = 'hello';
+			function show() {
+			  console.log(value);
+			  if (!value) {
+			    var value = 'function';
+			  }
+			  console.log(value);
+			}
+			show() //此处调用函数依次弹出 "undefined", "function"
+			 
+			//上例相当于var value = 'hello';
+			function show() {
+			　　var value; //注意这行
+			  console.log(value);
+			  if (!value) {
+			    value = 'function'; //这行去掉var
+			  }
+			  console.log(value);
+			}
+			show()
+			//1.如果上列中show内部定义value未用var,则会用到外部的变量，弹出"hello", "hello"。
+			//2.如果函数内部未定义value,也能获取到外部的value值。
+			
+			
+		//五、匿名函数不会向上提升：		
+			getName()
+			var getName = function () {
+				console.log('closule')
+			}
+			
+			function getName() {
+			  console.log('function')
+			}
+			getName()
+			 
+			//上边的代码相当于
+			function getName() { //函数向上提升
+			  console.log('function')
+			}
+			getName()
+			var getName = function () {
+			  console.log('closule')
+			}
+			getName()
+			 
+			//代码执行分别弹出 "function", "closule"
+	</script>
+		
+		<!--
+        	作者：muguilin@foxmail.com
+        	时间：2017-10-24
+        	描述：六、不同<script>块中的函数互不影响
+        	
+        -->
+		
+	<script>
+		getName();
+		var getName = function () {
+		    console.log('closule');
+		}
+	</script>
+		
+	<script>
+		function getName() {
+		    console.log('function');
+		}
+	</script>
+		 
+	<!--
+    	1.代码执行报错：TypeError: getName is not a function
+		2.因为第一个<script>块中getName()函数未定义,匿名函数又不会向上提升
+    -->
+		
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>onoffline断网或有网时</title>
+	</head>
+	<body>
+		<h1>把网络断开 或 链上试试吧！</h1>
+	</body>
+	<script type="text/javascript">
+		window.ononline = function() {
+			alert('有网了！');
+			document.querySelectorAll('h1').innerText = '有网了!';
+			document.body.style.background = 'green';
+		}
+		
+		window.onoffline = function() {
+			alert('断网了！');
+			document.querySelectorAll('h1').innerText = '断网了!';
+			document.body.style.background = 'red';
+		}
+		
+	</script>
+</html>

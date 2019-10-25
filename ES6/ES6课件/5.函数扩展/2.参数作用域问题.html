@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训2017-10JS</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    let n=10,m=20;
+    function fn1(x=n,y=m) {
+        let n=1,m=2;
+        console.log(x, y);
+    }
+    fn1();
+    let x=10;
+    function fn2(x=1,y=x) {
+        //let x=20;
+        console.log(y);
+    }
+    fn2();
+
+    //形参所在的小括号是一个单独的作用域,遇到变量了先看自己作用域下有没有,没有再往上一级找
+</script>

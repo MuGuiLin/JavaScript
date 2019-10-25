@@ -1,0 +1,75 @@
+HTML页面之间的传值，需要借助于jQuery。
+
+例:从Add页面新增数据，传入到List页面中。
+
+Add页面的传值：
+/*===================================================================================*/
+
+<script src="http://localhost:2474/Scripts/jquery-1.4.1.js" type="text/javascript"></script>  
+<script src="http://localhost:2474/Resource/js/jquery.params.js" type="text/javascript"></script>  
+<script language="javascript" type="text/javascript">  
+  
+   //从本页面 获取数据  
+    var url;  
+    function GetData(obj,tr) 
+    {  
+        var LogID = document.getElementById("txtLogID").value;  
+        var FHSRID = document.getElementById("txtFHSRID").value;  
+        var DeviceName = document.getElementById("txtDeviceName").value;  
+        var FHUser = document.getElementById("txtFHUser").value;  
+        var FHPhone = document.getElementById("txtFHPhone").value;  
+        var FHChuanZhen = document.getElementById("txtFHChuanZhen").value;  
+        var FHAddress = document.getElementById("txtFHAddress").value;  
+        var FHTime = document.getElementById("txtFHTime").value;  
+        var SHSRID = document.getElementById("txtSHSRID").value;  
+        var SHAddress = document.getElementById("txtSHAddress").value;  
+        var SHTime = document.getElementById("txtSHTime").value;  
+        var SHUser = document.getElementById("txtSHUser").value;  
+        var SHPhone = document.getElementById("txtSHPhone").value;  
+        var SHChuanZhen = document.getElementById("txtSHChuanZhen").value;  
+        var Demo = document.getElementById("txtDemo").value;  
+        url = "logisticList.htm?op=" + obj + "&tr="+tr +"&LogID=" + LogID + "&FHSRID=" + FHSRID + "&DeviceName=" + DeviceName + "&FHUser=" + FHUser + "&FHPhone=" + FHPhone + "&FHChuanZhen=" + FHChuanZhen + "&FHAddress=" + FHAddress + "&FHTime=" + FHTime + "&SHSRID=" + SHSRID + "&SHAddress=" + SHAddress + "&SHTime=" + SHTime + "&SHUser=" + SHUser + "&SHPhone=" + SHPhone + "&SHChuanZhen=" + SHChuanZhen + "&Demo=" + Demo;  
+  
+    }  
+  
+   //新增 ，提交  
+    function OKAdd() 
+    {             
+        alert('新增成功');  
+        GetData("add",0);  
+        var winobj = window.open(url, "_blank");  
+        winobj.location.href = url;  
+  
+    }  
+  
+</script>  
+
+
+在List页面的接值
+/*===================================================================================*/
+
+<script src="../../Scripts/jquery-1.4.1.js" type="text/javascript"></script>  
+ <script src="../../Resource/js/jquery.params.js" type="text/javascript" language="javascript"></script>  
+<script type="text/javascript" language="javascript"  >  
+
+//得到从Add页面传过来的数据  
+
+      function GetData()
+      {  
+          var LogID = $.query.get("LogID");  
+          var FHSRID = $.query.get("FHSRID");  
+          var DeviceName = $.query.get("DeviceName");  
+          var FHUser = $.query.get("FHUser");  
+          var FHPhone = $.query.get("FHPhone");  
+          var FHChuanZhen = $.query.get("FHChuanZhen");  
+          var FHAddress = $.query.get("FHAddress");  
+          var FHTime = $.query.get("FHTime");  
+          var SHSRID = $.query.get("SHSRID");  
+          var SHAddress = $.query.get("SHAddress");  
+          var SHTime = $.query.get("SHTime");  
+          var SHUser = $.query.get("SHUser");  
+          var SHPhone = $.query.get("SHPhone");  
+          var SHChuanZhen = $.query.get("SHChuanZhen");  
+          var Demo = $.query.get("Demo");  
+      }  
+</script>  

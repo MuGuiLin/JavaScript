@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>对象-队列类</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>对象-队列类</h1>
+    <hr>
+    <script>
+        'use strict';
+
+        {
+            class Queue {
+                constructor(arr = []) {
+                    this.arr = [...arr];  //复制数组，[...arr]复制一个新的数组并且新数组改变时，不会改变原来的数组
+                    this.init();
+
+                };
+
+                init() {
+
+                };
+
+                shift() {
+                    let arr = this.arr[0];
+                    this.arr.shift(); //删除数组中的第一个元素
+                    return arr;
+                };
+
+                push(i) {
+                    return this.arr.push(i); //向数组中的最后添加一个元素，并返回新数组的长度
+                }
+            };
+
+            const Q = new Queue(['H5', 'CSS3', 'ES6']);
+            
+            Q.shift();
+
+            console.log(Q.push(888));
+
+            console.log(Q.push(666));
+
+            console.log(Q.arr);
+
+        };
+
+    </script>
+</body>
+
+</html>

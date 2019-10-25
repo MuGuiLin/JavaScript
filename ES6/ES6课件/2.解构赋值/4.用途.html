@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训</title>
+</head>
+<body>
+
+</body>
+</html>
+<script type="text/javascript">
+    'use strict';
+    //1.交换位置
+    let x=10,y=20;
+    [x,y]=[y,x];
+    console.log(x, y);
+    //2.函数返回多个值
+    function offset() {
+        return{left:1,top:2}
+    }
+    let {left:l,top:t}=offset();
+
+    let json={
+        "code":0,
+        "msg":"ok",
+        "data":[{},{}]
+    };
+    let {code,msg,data:res}=json;
+    console.log(code, msg, res);
+    let obj1={'a':1,b:2};
+    console.log(obj1['b']);
+</script>

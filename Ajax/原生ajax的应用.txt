@@ -1,0 +1,72 @@
+//ajax中post传值
+<script>
+   function checkUname(obj)
+   {
+       //1.获得输入的用户名
+        var uname=obj.value;
+       //2.通过ajax方式传到服务器 返回结果
+       var xmlhttp;
+       if(window.ActiveXObject)
+	   xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+       else
+	   xmlhttp=new window.XMLHttpRequest();
+       xmlhttp.open("post","chuli2.php",true);
+
+       xmlhttp.onreadystatechange=function(){
+                  if(xmlhttp.readyState==4)
+                  {
+                      alert(xmlhttp.responseText)
+                      if(xmlhttp.responseText=="1")
+                      {
+                        document.getElementById("s1").innerHTML="可以注册";  
+                       }
+                      else
+                      {
+                    	  document.getElementById("s1").innerHTML="该用户名已存在";  
+                       }
+                     
+                  }
+           }
+       //设置头部信息
+       xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+       //传参
+       xmlhttp.send("uname="+uname);
+       
+   }
+
+</script>
+
+//ajax中get传值
+<script>
+   function checkUname(obj)
+   {
+     //1.获得输入的用户名
+     var uname=obj.value;
+	 //2.创建异步传输对象
+     var xmlhttp;
+    if(window.ActiveXObject)
+	   xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+       else
+	   xmlhttp=new window.XMLHttpRequest();
+     //3.设置响应的页面
+     xmlhttp.open("get","chuli.php?uname="+uname,true);
+	 //4.处理结果
+     xmlhttp.onreadystatechange=function(){
+
+         if(xmlhttp.readyState==4)
+           document.getElementById("s1").innerHTML=xmlhttp.responseText;
+         }
+     //5.发送
+     xmlhttp.send(null);
+   }
+</script>
+<form action='' method='post'>
+  用户名:<input type='text' name='uname' onblur='checkUname(this)' /><span id="s1"></span>
+
+ <input type='submit' name='sub' value='注册' />
+
+</form>
+
+//ajax返回过来的数据有三种格式text、json、xml;
+
+//如果返回json类型的数据,如果是数组，首先在处理页面json_encode（数组）转换成json格式，接收的时候通过eval("("+传过来的数据+")")转化成数组格式

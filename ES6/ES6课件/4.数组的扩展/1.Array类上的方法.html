@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训2017-10JS</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    //Array(),将传进来的值变成数组返回
+    //注意:只传一个参数n,代表返回数组的长度
+    console.log(Array(1, 2, 3, 4));
+    console.log(Array( 4));
+    //Array.of(),跟Array一样,只有一点区别就是传一个参数时候返回就是当前参数组成的数组
+
+    //Array.from()
+    //参数是:数组或者类数组
+    //返回值是一个新的数组
+    //将类数组变成数组
+    let ary=[1,2,3,4];
+    let newAry=Array.from(ary);
+    function toArray() {
+        return Array.from(arguments)
+    }
+
+    console.log(toArray(1, 2, 3, 4));
+
+</script>

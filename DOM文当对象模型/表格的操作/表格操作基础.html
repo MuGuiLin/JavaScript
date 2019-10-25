@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>DOM表格的操作</title>
+	<style>
+		h1 {
+			text-align: center;
+		}
+
+		table {
+			border-collapse: collapse;
+			border-spacing: 0px;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>DOM表格的操作</h1>
+	<hr>
+
+	<pre>
+		<h3>表格相关元素和属性样式：</h3>
+		### 表格相关的HTML元素:
+			&lt;table> 定义表格
+			&lt;th> 定义表格的表头
+			&lt;tr> 定义表格的行
+			&lt;td> 定义表格单元
+			&lt;caption> 定义表格标题
+			&lt;colgroup> 定义表格列的组
+			&lt;col> 定义用于表格列的属性
+			&lt;thead> 定义表格的页眉
+			&lt;tbody> 定义表格的主体
+			&lt;tfoot> 定义表格的页脚
+
+		### 表格相关的行内属性:
+			width： 宽度
+			border： 边框
+			bgcolor：背景颜色
+			rowspan： 合并行
+			colspan： 合并列
+			cellpadding：单元格内边距(相当于padding)
+			cellspacing：单元格外边距(相当于margin)
+			frame：表格外部边框
+			rules：表格内部边线
+			summary：表格描述
+
+		### 可以代替表格行内属性的 CSS样式属性：
+			* width 控制表格的宽度；
+			* border, border-style, border-color, border-width, border-collapse, border-spacing 控制单元格边框，规则和框架方面；
+			* margin 和padding 设定特定的单元格内容样式；
+			* text-align 和vertical-align 定义文本和单元格内容的对齐方式。
+
+
+
+		<h3>表格标签属性。一般现在都用CSS来代替</h3> 
+		### width 宽度：
+			- 这个属性定义了表格的宽度。宽度可能是一个像素或者是一个百分比值，宽度的百分比值将被定义为表格容器的宽度。
+			CSS 【在CSS中可以用：width 来实现类似于 width 属性的效果】。
+		### align对齐方式：
+			- 这个枚举属性指定了包含在文档中的表格必须如何对齐。有如下值:
+			- left，表格将在文档左侧显示；
+			- center， 表格将在文档中央显示；
+			- right， 表格将在文档右侧显示；
+			CSS 【在CSS中可以用：margin-left 、margin-right 为 auto ( 或者 margin 设置为 0 auto) 来实现类似于 align 属性的效果】。
+
+		### border边框
+			- 这个整型元素使用像素，定义了表格边框的大小。 如果设置为0，这意味着frame 属性被设置为空。如果设置为1，表示表格具有1px大小的边框。
+			CSS 【在CSS中可以用：border-color, border-width 和 border-style 可实现相同效果】。
+
+		### bgcolor背景颜色：
+			- 这个属性定义了表格的背景颜色。 它是一个6位的十六进制编码，定义于 sRGB，需要加上'#'作为前缀。 当然也可以使用下面已经被预先定义的字符串，来表示常用的16种颜色：
+			CSS 【在CSS中可以用：background-color 属性能够和bgcolor属性达到一样的效果】。
+		<table>
+			<tbody>
+				<tr>
+					<td style="width: 24px; background-color: black;"></td>
+					<td><span>black</span> = "#000000"</td>
+					<td style="width: 24px; background-color: green;"></td>
+					<td><span>green</span> = "#008000"</td>
+				</tr>
+				<tr>
+					<td style="width: 24px; background-color: silver;"></td>
+					<td><span>silver</span> = "#C0C0C0"</td>
+					<td style="width: 24px; background-color: lime;"></td>
+					<td><span>lime</span> = "#00FF00"</td>
+				</tr>
+				<tr>
+					<td style="width: 24px; background-color: gray;"></td>
+					<td><span>gray</span> = "#808080"</td>
+					<td style="width: 24px; background-color: olive;"></td>
+					<td><span>olive</span> = "#808000"</td>
+				</tr>
+				<tr>
+					<td style="width: 24px; background-color: white;"></td>
+					<td><span>white</span> = "#FFFFFF"</td>
+					<td style="width: 24px; background-color: yellow;"></td>
+					<td><span>yellow</span> = "#FFFF00"</td>
+				</tr>
+				<tr>
+					<td style="width: 24px; background-color: maroon;"></td>
+					<td><span>maroon</span> = "#800000"</td>
+					<td style="width: 24px; background-color: navy;"></td>
+					<td><span>navy</span> = "#000080"</td>
+				</tr>
+				<tr>
+					<td style="width: 24px; background-color: red;"></td>
+					<td><span>red</span> = "#FF0000"</td>
+					<td style="width: 24px; background-color: blue;"></td>
+					<td><span>blue</span> = "#0000FF"</td>
+				</tr>
+				<tr>
+					<td style="width: 24px; background-color: purple;"></td>
+					<td><span>purple</span> = "#800080"</td>
+					<td style="width: 24px; background-color: teal;"></td>
+					<td><span>teal</span> = "#008080"</td>
+				</tr>
+				<tr>
+					<td style="width: 24px; background-color: fuchsia;"></td>
+					<td><span>fuchsia</span> = "#FF00FF"</td>
+					<td style="width: 24px; background-color: aqua;"></td>
+					<td><span>aqua</span> = "#00FFFF"</td>
+				</tr>
+			</tbody>
+		</table>
+
+		### cellpadding：单元格内边距(相当于padding)
+			- 这个属性定义了表格单元的内容和边框之间的空间。如果它是一个像素长度单位，这个像素将被应用到所有的四个侧边；如果它是一个百分比的长度单位，内容将被作为中心，总的垂直（上和下）长度将代表这个百分比。这同样适用于总的水平（左和右）空间。
+			CSS 【在CSS中可以用：在&lt;table> 元素上使用 CSS 属性值为 collapse 的 border-collapse 属性，在 &lt;td> 元素上使用属性 padding，以达到类似于 cellpadding 的效果】。
+	
+		### cellspacing：单元格外边距(相当于margin)
+			- 这个属性（使用百分比或像素）定义了两个单元格之间空间的大小（从水平和垂直方向上），包括了表格的顶部与第一行的单元格，表的左边与第一列单元格，表的右边与最后一列的单元格，表的底部与最后一行单元格之间的空间。
+			CSS 【在CSS中可以用：在 &lt;table> 元素上使用 CSS 的属性 border-spacing ，以达到类似于 cellspacing 的效果】。
+
+		### frame：设置或返回表格的外部边框。
+			- 这个枚举属性定义了包围在表格周围的框架的哪个边必须显示。
+			- 它可能有下列值： 
+				above，below，hsides，vsides，lhs，rhs，border，box，void。
+			CSS 【在CSS中可以用：在 &lt;table> 元素上使用 CSS 的属性 border-style 和 border-width ，以达到类似于 frame 的效果】。
+		
+		### rules 设置或返回表格的内部边线：
+			- 这个枚举属性定义了在一个表格中规则的显示位置。它可以有以下值：:
+			- none, 这表明没有规格将被显示；这是默认的值；
+			- groups, 这将使规则只显示在行组（row groups，通过 &lt;thead>， &lt;tbody> 和 &lt;tfoot> 元素定义）和列组（ column groups，通过&lt;col> 和 &lt;colgroup> 元素定义）之间
+				* rows, 这将使规则在行之间显示；
+				* columns, 这将使规则在列之间显示；
+				* all, 这将使规则在列和行之间显示；
+			CSS 【在CSS中可以用：border属性，以达到类似于 rules 的效果】。
+
+			JS 【https://www.runoob.com/try/try.php?filename=tryjsref_table_rules】
+
+		### summary 设置或返回表格概述：
+			- 该属性定义了一个替代文本，当表格无法在用户代理中显示的时候用来描述表格。
+			- 通常，它被用来为残障人士提供可用性，比如，盲人使用盲文屏幕（Braille screen）浏览网页，从中获取信息。
+			- 如果要想对于非视力受限的人来说也可以提供作用，考虑使用 &lt;caption> 代替。
+			- summary 属性不是强制性的，当一个 &lt;caption> 发挥它应有的作用时，可以省略summary 属性。
+			
+			可选择下列其中一种方法为表格添加描述：
+				* 在表格周围使用散文（此方法语义较少）。
+				* 在表格的 &lt;caption> 元素中添加描述。
+				* 在表格的 &lt;caption> 元素中，添加一个带有描述的 &lt;details> 元素。
+				* 将 &lt;table> 元素包含在一个&lt;figure> 元素中，并且在旁边添加散文（prose ）描述。
+				* 将 &lt;table> 元素包含在一个&lt;figure> 元素中，并且在 &lt;thead> 元素中添加散文（prose ）描述。
+				* 调整表格，以便不需要这样的描述 (比如，使用 &lt;th> 和 &lt;thead> 元素)。
+			
+			JS 【在JS中可以获取到 document.getElementById('table').summary】。
+
+
+	</pre>
+
+	<section class="box">
+		<table border="1" align="center" summary="例如表中的员工">
+			<caption>DOM表格的操作</caption>
+			<colgroup span="4" class="columns"></colgroup>
+			<colgroup>
+				<col class="column1">
+				<col class="columns2plus3" span="2">
+			</colgroup>
+			<thead>
+				<tr>
+					<th>序号</th>
+					<th>姓名</th>
+					<th>性别</th>
+					<th>年龄</th>
+					<th>职业</th>
+				</tr>
+			</thead>
+
+			<tbody align="center">
+				<tr>
+					<th>1</th>
+					<td align="left">muguilin</td>
+					<td>男</td>
+					<td>29</td>
+					<td bgcolor="red">Web前端</td>
+				</tr>
+			</tbody>
+
+			<tfoot>
+				<tr>
+					<th></th>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+
+			</tfoot>
+		</table>
+		<br>
+		<table>
+			<caption>Color names and values</caption>
+			<tbody>
+				<tr>
+					<th scope="col">Name</th>
+					<th scope="col">HEX</th>
+					<th scope="col">HSLa</th>
+					<th scope="col">RGBa</th>
+				</tr>
+				<tr>
+					<th scope="row">Teal</th>
+					<td><code>#51F6F6</code></td>
+					<td><code>hsla(180, 90%, 64%, 1)</code></td>
+					<td><code>rgba(81, 246, 246, 1)</code></td>
+				</tr>
+				<tr>
+					<th scope="row">Goldenrod</th>
+					<td><code>#F6BC57</code></td>
+					<td><code>hsla(38, 90%, 65%, 1)</code></td>
+					<td><code>rgba(246, 188, 87, 1)</code></td>
+				</tr>
+			</tbody>
+		</table>
+	</section>
+	<script>
+		console.table([1, 2, 3]);
+	</script>
+</body>
+
+</html>

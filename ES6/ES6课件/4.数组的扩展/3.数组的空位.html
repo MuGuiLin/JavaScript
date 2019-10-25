@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训2017-10JS</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    //空位不是undefined
+    var ary1=Array(3);//三个空位
+    var ary2=[undefined,undefined,undefined];
+
+    console.log(1 in ary1);
+    console.log(1 in ary2);
+    var ary3=[1,,,2,,];
+    console.log(ary3.length);
+    ary3.forEach(function (item) {
+        console.log(item);
+    });
+    //ES5中的方法对空位处理都不太一致,大部分都是挑过空位
+    console.log(ary3.map(function (item) {
+        return item
+    }));
+
+    //Es6中的方法会将空位处理为undefined
+    ary3.find(function (item) {
+        console.log(item);
+    });
+</script>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>去除重复方法</title>
+	<style type="text/css">
+		h1 {
+			text-align: center;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>去除重复方法</h1>
+	<hr />
+</body>
+<script type="text/javascript">
+
+	var arr = [2, 4, 8, 5, 2, 4, 13, 8, 5, 6, 10, 7, 9, 3, 1, 5];
+
+
+	function ObjFN(arr) {
+		var Object = {};
+		for (var i = 0; i < arr.length; i++) {
+			Object[arr[i]] = true;
+		}
+		return Object;
+	}
+
+	function ArrFN(obj) {
+		var Array = [];
+		for (var i in obj) {
+			if (obj.hasOwnProperty(i)) {
+				Array.push(i);
+			}
+		}
+		return Array;
+	}
+
+	function ObjArr(val) {
+		return ArrFN(ObjFN(val));
+	}
+
+	document.write(arr + '<br/>');
+	document.write(ObjArr(arr));
+
+	{
+		var arr1 = [2, 4, 8, 5, 2, 4, 13, 8, 5, 6, 10, 7, 9, 3, 1, 5], arr2 = [];
+
+		for (var i = 0; i < arr1.length; i++) {
+			if (arr2.indexOf(arr1[i]) < 0) {
+				arr2.push(arr1[i]);
+			}
+		}
+
+		document.write('原来的数组：' + arr1 + '</br>');
+		document.write('去重复的数组：' + arr2);
+	}
+
+</script>
+
+</html>

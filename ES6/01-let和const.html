@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>let和const</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        button.active {
+            background: blue;
+            color: white;
+            padding: 2px 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>let变量 和 const常量</h1>
+    <hr>
+
+    <button>按扭1</button>
+    <button>按扭2</button>
+    <button>按扭3</button>
+    <button>按扭4</button>
+    <button>按扭5</button>
+
+    <script>
+
+        // JavaScript 变量生命周期
+        //     JavaScript 变量生命周期在它声明时初始化。
+
+        //     局部变量在函数执行完毕后销毁。
+
+        //     全局变量在页面关闭后销毁。
+
+        // let 和 var 差不多，let比var更严谨
+
+
+        let bl = 123;
+        //let不能重复声明
+        //let bl = 'ok123' // 错：不能重复声明bl
+        console.log(bl)
+
+
+        //不会提升（必须先定义，后使用）它不会进行预解析
+        //console.log(name); // 错：必须先定义，后使用
+        let name = 'mupiao';
+
+        console.log(name2); //我可以先使用【虽然我是undefined，但是我不会报错】（因为我会变量提升）
+        var name2 = 'muguilin';
+
+        // 可以一次声明多个变量
+        let a, b, c = 3, d = 'f';
+
+        //块级作用域{}  
+        {
+            let age = 28;
+            {
+                console.log('我是子级，我可以拿到age:', age);
+                let age2 = 30;
+                console.log('我是平级，我可以拿到age2:', age2);
+            };
+            console.log('我是平级，我也可以拿到age:', age);
+            //console.log('我是上外级，我拿不到age2:', age2); // Error Uncaught ReferenceError: age2 is not defined
+
+            var ages = 30;
+
+        };
+        //console.log(age); // 错：在这里不能访问{}里面的age,因为age这个变量只在{}里面使用
+
+        console.log('我是用var声明的', ages);  //在这里的ages是用var声明的，就可以访问
+
+
+
+
+
+
+
+
+        // const 常量，就是一旦声明就不能改变（即使要改，也是一改全改，如圆的PI = 3.1415926 这种就可以用常量来声明），并且在声明时就要给赋值，更不能重复声明！！！
+        const PI = 3.115926;
+
+        // 【注：如果 变量值是一个不会改变的值，都推荐用const来声明！！，这样性能会好点】
+
+        //作用域：就是可以范围
+        // 1、全局作用域
+        window.myVar = '我是全局的';
+        var myVar2 = '我也是全局的';
+        let myVar3 = '我也是全局的';
+        const myVar4 = '我也是全局的';
+
+
+        // 2、函数作用域
+        function Fn() {
+            //只能在这里面使用
+            var mu = 666;
+        };
+        //console.log(mu) // 错： 这里就会报错！！
+
+
+        // 3、块级作用域{}
+        {
+            //只能在这里面使用
+            var mc = 888;
+            let md = 999;
+        }
+
+        //console.log(mc, md) // var 的 mc不会报错， let 的 md就会报错
+
+        // 块级作用域{}，说白了作用范围就在{}中
+        {
+            let oBtns = document.querySelectorAll('button');
+
+            // 用document.querySelectorAll()获取的是一个数组！！！
+            console.log(oBtns, oBtns.length);
+
+            //问题：
+            for (var i = 0; i < oBtns.length; i++) {
+                oBtns[i].onclick = function (event) {
+                    console.log(event, i)
+                    alert(i) //注：这里的i都是5， 因为上面是用var声明的i，每次循环的i都覆盖了！！， 
+                };
+            };
+
+            //解决1
+            for (var i = 0; i < oBtns.length; i++) {
+                //用闭包把变量i保存起来，
+                (function (i) {
+                    oBtns[i].onclick = function () {
+                        alert(i) // 0 1 2 3 4
+                    };
+                })(i)
+            };
+
+            //解决2 用let声明  【注：上面虽然多次绑定了onclick事件，但是以最后一次绑定的为主！！！】
+            let now = 0;
+            oBtns[now].classList.add('active');
+            for (let i = 0; i < oBtns.length; i++) {
+                
+                oBtns[i].onclick = function () {
+                    oBtns[now].classList.remove('active');
+                    now = i; //注：先删除，再重新赋i给now
+
+                    alert(i) //用let就不会被覆盖  // 0 1 2 3 4
+
+                    oBtns[i].classList.add('active');
+                };
+            };
+
+        }
+    </script>
+</body>
+
+</html>

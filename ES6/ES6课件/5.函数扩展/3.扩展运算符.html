@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训2017-10JS</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    //...
+    //可以将数组变成非数组,也可以将非数组变成数组
+
+    let ary=[1,2,3];
+    console.log(...ary);
+
+    //将字符串变成数组
+    let str="12345";
+    console.log([...str]);
+    //将类数组变成数组
+    function fn() {
+        return [...arguments].sort();
+    }
+
+    console.log(fn(3, 2, 5, 4, 1, 6));
+
+    //应用
+    //求最大值的方法
+    let ary1=[1,2,3,31.3,112,234];
+    console.log(eval("Math.max(" + ary1 + ")"));
+    "Math.max(1,2,3,31.3,112,234)";
+    //apply
+    console.log(Math.max.apply(null, ary1));
+    //...
+    Math.max(...ary);
+    let a1=[1,2,3],a2=[4,5,6];
+    a1.concat(a2);
+    [...a1,...a2]
+
+</script>

@@ -1,0 +1,129 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>用键盘提交留言</title>
+	<script type="text/javascript">
+		window.onload = function () {
+			var oBut = document.getElementById('but1');
+			var oTxt1 = document.getElementById('txt1');
+			var oTxt2 = document.getElementById('txt2');
+
+			/***********************用鼠标提交****************************/
+			oBut.onclick = function () {
+				oTxt1.value += oTxt2.value + '\n';//当点击控扭时，将oTxt2中的内容移到oTxt1中
+
+				if (oTxt2.value == '')//如果用户没有输入任何内容就提交，那就提示用户输入内容
+				{
+					alert("对不起，请输入您的留言！。。。");
+				}
+				else {
+					alert("恭喜您，提交成功！。。。");//当用户输入内容后点提交，那就提示用户提交成功
+				}
+
+				oTxt2.value = '';//当oTxt2中的内容提交后，就清空oTxt2中的内容
+			}
+
+			/***********************按回车键提交****************************/
+			oTxt2.onkeydown = function (ev) {
+				var oEvent = ev || event;
+
+				if (oEvent.keyCode == 13) {
+					oTxt1.value += oTxt2.value + '\n';
+
+					if (oTxt2.value == '')//如果用户没有输入任何内容就提交，那就提示用户输入内容
+					{
+						alert("对不起，请输入您的留言！。。。");
+					}
+					else {
+						alert("恭喜您，提交成功！。。。");//当用户输入内容后点提交，那就提示用户提交成功
+					}
+
+					oTxt2.value = '';//当oTxt2中的内容提交后，就清空oTxt2中的内容
+				}
+			}
+
+			/***********************按Ctrl+回车键提交****************************/
+			window.onkeydown = function (ev) {
+				var oEvent = ev || event;
+
+				if (oEvent.ctrlKey && oEvent.keyCode == 13) {
+					oTxt1.value += oTxt2.value + '\n';
+
+					if (oTxt2.value == '')//如果用户没有输入任何内容就提交，那就提示用户输入内容
+					{
+						alert("对不起，请输入您的留言！。。。");
+					}
+					else {
+						alert("恭喜您，提交成功！。。。");//当用户输入内容后点提交，那就提示用户提交成功
+					}
+
+					oTxt2.value = '';//当oTxt2中的内容提交后，就清空oTxt2中的内容
+				}
+			}
+
+			/***********************按Shift+回车键提交****************************/
+			document.onkeydown = function (ev) {
+				var oEvent = ev || event;
+
+				if (oEvent.shiftKey && oEvent.keyCode == 13) {
+					oTxt1.value += oTxt2.value + '\n';
+
+					if (oTxt2.value == '')//如果用户没有输入任何内容就提交，那就提示用户输入内容
+					{
+						alert("对不起，请输入您的留言！。。。");
+					}
+					else {
+						alert("恭喜您，提交成功！。。。");//当用户输入内容后点提交，那就提示用户提交成功
+					}
+
+					oTxt2.value = '';//当oTxt2中的内容提交后，就清空oTxt2中的内容
+				}
+			}
+
+			/***********************按Alt+回车键提交****************************/
+			// oTxt2.onkeydown = function (ev) {
+			document.addEventListener('keydown', function (ev) {
+				var oEvent = ev || event;
+
+				if (oEvent.altKey && oEvent.keyCode == 13) {
+					oTxt1.value += oTxt2.value + '\n';
+
+					if (oTxt2.value == '')//如果用户没有输入任何内容就提交，那就提示用户输入内容
+					{
+						alert("对不起，请输入您的留言！。。。");
+					}
+					else {
+						alert("恭喜您，提交成功！。。。");//当用户输入内容后点提交，那就提示用户提交成功
+					}
+
+					oTxt2.value = '';//当oTxt2中的内容提交后，就清空oTxt2中的内容
+				}
+			})
+		}
+	</script>
+</head>
+
+<body>
+	<center>
+		<h1>我 要 留 言</h1>
+	</center>
+	<hr>
+
+	<div style="margin:auto;width:421px;height:276px;background: #e8e8e8;text-align: center;border: 1px solid darkgrey;">
+
+		<textarea id="txt1" cols="36" rows="10"
+			style="width:100%;height:200px;font-size:16px;border: none;resize: none; border-bottom: 1px solid darkgrey;"></textarea><br><br>
+
+		<input id="txt2" type="text" value="请在此留言"
+			style="width:300px;height:30px;font-size:16px;padding-left: 10px;border-radius: 20px;border: 1px solid darkgrey; outline: none;">
+			
+		<input id="but1" type="button" value="提交留言"
+			style="width:96px;margin-left: -101px;height: 28px;list-style: none;border: none;background: #00c32b;color: white; outline: none;font-size:16px;border-radius: 0 25px 25px 0px;">
+
+	</div>
+
+
+</body>
+
+</html>

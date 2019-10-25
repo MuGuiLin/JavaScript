@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训2017-10JS</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    var set1=new Set(["z","h","u","f","e","n","g"]);
+    console.log(set1);
+    //遍历set数据的实例只能遍历value值
+    set1.forEach((item,index)=>{
+        //item当前项
+        console.log(item, index);
+    });
+
+    for(var key of set1.keys()){
+        console.log(key);
+    }
+    for(var val of set1.values()){
+        console.log(val);
+    }
+    for(var en of set1.entries()){
+        console.log(en);
+    }
+</script>

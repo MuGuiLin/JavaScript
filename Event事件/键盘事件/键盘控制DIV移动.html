@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>键盘控制DIV移动</title>
+	<style type="text/css">
+		* {
+			margin: 0px;
+			padding: 0px;
+		}
+
+		#BOX {
+			margin: auto;
+			width: 800px;
+			height: 520px;
+			border: 5px solid #003;
+			background: url(./img/tkbg.jpg);
+		}
+
+		#tk {
+			position: absolute;
+			top: 500px;
+			left: 300px;
+		}
+	</style>
+</head>
+
+<body>
+	<center>
+		<audio id="myMusic" controls="controls" loop="loop" autoplay="autoplay">
+			<source src="坦克大战 Dj.mp3" type="audio/mpeg"></source>
+		</audio>
+
+		<div id="BOX">
+			<img id="tk" src="img/tk1.png" />
+		</div>
+		上:<span id="T"></span>左:<span id="L"></span>
+	</center>
+
+</body>
+
+<script type="text/javascript">
+	window.onload = function () {
+		var oDiv = document.getElementById('tk'); //坦克
+		var timer = null; //定时器
+		var on_off = true; //定时器开关
+		var speed = 40; //称多速度
+
+		document.onkeydown = function (ev) {
+			var oEvent = ev || event;
+
+			switch (oEvent.keyCode) {
+				case 37://方向键左
+					if (on_off) {
+						timer = setInterval(function () {
+							on_off = false;
+							oDiv.src = "img/tk4.png";
+							oDiv.style.left = oDiv.offsetLeft - 8 + 'px';
+							//if(oDiv.style.left == 10) //这样可以向左向上斜角移动
+						}, speed);
+					}
+					break;
+
+				case 38://方向键上
+					if (on_off) {
+						timer = setInterval(function () {
+							on_off = false;
+							oDiv.src = "img/tk1.png";
+							oDiv.style.top = oDiv.offsetTop - 8 + 'px';
+						}, speed);
+					}
+					break;
+
+				case 39://方向键右
+					if (on_off) {
+						timer = setInterval(function () {
+							on_off = false;
+							oDiv.src = "img/tk2.png";
+							oDiv.style.left = oDiv.offsetLeft + 8 + 'px';
+						}, speed);
+					}
+					break;
+
+				case 40://方向键下
+					if (on_off) {
+						timer = setInterval(function () {
+							on_off = false;
+							oDiv.src = "img/tk3.png";
+							oDiv.style.top = oDiv.offsetTop + 8 + 'px';
+						}, speed);
+					}
+					break;
+
+				//					case 65 ://A键左
+				//					       	oDiv.src = "img/tk4.png";
+				//							oDiv.style.left = oDiv.offsetLeft - 8 + 'px';
+				//					       	break;
+				//					case 87 ://W键上
+				//							oDiv.src = "img/tk1.png";
+				//							oDiv.style.top = oDiv.offsetTop - 8 + 'px';
+				//							break;
+				//					case 68 ://D键右
+				//							oDiv.src = "img/tk2.png";
+				//							oDiv.style.left = oDiv.offsetLeft + 8 + 'px';
+				//							break;
+				//					case 83 ://S键下
+				//							oDiv.src = "img/tk3.png";
+				//							oDiv.style.top = oDiv.offsetTop + 8 + 'px';
+				//							break;
+				default:
+					return false;
+			}
+
+			document.getElementById('T').innerHTML = oDiv.style.top;
+			document.getElementById('L').innerHTML = oDiv.style.left;
+		}
+
+		document.onkeyup = function () {
+			on_off = true;
+			clearInterval(timer);
+		}
+
+	}
+</script>
+
+</html>

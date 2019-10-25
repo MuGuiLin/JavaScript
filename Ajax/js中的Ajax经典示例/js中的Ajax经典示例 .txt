@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ 2 
+ 3 <html xmlns="http://www.w3.org/1999/xhtml">
+ 4 <head>
+ 5     <title>js中的Ajax经典示例</title>
+ 6     <script type="text/javascript" src="Scripts/jquery-1.4.1.js"></script>
+ 7     <script type="text/javascript">
+ 8     
+ 9       function ajax() {
+10 
+11           //先声明一个异步请求对象
+12           var xmlHttpReg = null;
+13           if (window.ActiveXObject) {//如果是IE
+14 
+15               xmlHttpReg = new ActiveXObject("Microsoft.XMLHTTP");
+16 
+17           } else if (window.XMLHttpRequest) {
+18 
+19               xmlHttpReg = new XMLHttpRequest(); //实例化一个xmlHttpReg
+20           }
+21 
+22           //如果实例化成功,就调用open()方法,就开始准备向服务器发送请求
+23           if (xmlHttpReg != null) {
+24               xmlHttpReg.open("get", "About.aspx", true);1
+25                xmlHttpReg.send(null);
+26               xmlHttpReg.onreadystatechange = doResult; //设置回调函数
+27 
+28           }
+29 
+30           //回调函数
+31           //一旦readyState的值改变,将会调用这个函数,readyState=4表示完成相应
+32 
+33           //设定函数doResult()
+34           function doResult() {
+35           
+36               if (xmlHttpReg.readyState == 4) {//4代表执行完成
+37                  
+38                  
+39                   if (xmlHttpReg.status == 200) {//200代表执行成功
+40                       //将xmlHttpReg.responseText的值赋给ID为resText的元素
+41                       document.getElementById("resText").innerHTML = xmlHttpReg.responseText;
+42                       
+43 
+44                   }
+45               }
+46 
+47           }
+48         
+49 
+50       }
+51      </script>
+52 </head>
+53 <body>
+54       
+55       <div id="resText"></div>
+56       <form method=get action="">
+57         <input type="button" value="小胡子"  onclick="ajax();"/>
+58       </form>
+59 </body>
+60 </html>

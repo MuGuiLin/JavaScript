@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style type="text/css">
+		.div{float: left; position: relative; width: 120px; height: 120px; border-radius: 10px;border: 1px solid #ccc; overflow: hidden;}
+		.div img{ display: block; margin-left: -60px; margin-top: -30px; position:absolute; width: 200%; clip: rect(0px 180px 180px 16px);}
+		.img{float: left; margin: 10px;  padding: 31px; width: 120px; height: 120px; color: red; font-size: 50px; text-align: center; line-height: 120px; border-radius: 10px;border: 1px solid #ccc; background-size: 160%; background-repeat: no-repeat; background-position: center;}
+	</style>
+	<body>
+		<div class="div">
+			<img src="img/微信图片_20171026171651.png"/>
+		</div>
+		<div class="div">
+			<img src="img/微信图片_20171026171651.png"/>
+		</div>
+		<div class="div">
+			<img src="img/微信图片_20171026171651.png"/>
+		</div>
+		<div class="div">
+			<img src="img/微信图片_20171026171651.png"/>
+		</div>
+		
+		<br /><br /><br /><br /><br /><br /><br /><br />
+		
+		<div class="img" style="background-image: url(img/作用域链.jpg);">1</div>
+		<div class="img" style="background-image: url(img/作用域链.png);">2</div>
+		<div class="img" style="background-image: url(img/作用域链2.jpg);">3</div>
+		<div class="img" style="background-image: url(img/道格拉斯克罗克福德.jpg);">4</div>
+		<div class="img" style="background-image: url(img/微信图片_20171026171651.png);">5</div>
+		<div class="img">6</div>
+	</body>
+</html>

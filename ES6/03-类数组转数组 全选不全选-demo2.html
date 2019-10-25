@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>类数组转数组</title>
+    <style>
+        * { margin: 0;  padding: 0; }
+        h2{ line-height: 50px; }
+        section { padding: 50px; background: #ccc; }
+        li { list-style: none; line-height: 36px; font-size: 18px; color: blue; }
+        li.active { background: purple; color: white;}
+        input { width: 20px; height: 20px; margin: 10px; vertical-align: middle; }
+        button { font-size: 18px; color: blue; padding: 0px 20px; }
+    </style>
+</head>
+
+<body>
+
+    <section>
+        <h2>请选择您的爱好：</h2>
+        <hr />
+
+        <ul id="Box">
+            <li><label><input type="checkbox" />看书</label></li>
+            <li><label><input type="checkbox" />上网</label></li>
+            <li><label><input type="checkbox" />学习</label></li>
+            <li><label><input type="checkbox" />运动</label></li>
+            <li><label><input type="checkbox" />旅游</label></li>
+            <li><label><input type="checkbox" />网购</label></li>
+        </ul>
+
+        <div>
+            <hr />
+            <label><input id="All" type="checkbox" />全选</label>
+            <button id="Del">删除</button>
+        </div>
+
+    </section>
+
+    <script>
+        let Box = document.querySelector('#Box');
+        let All = document.querySelector('#All');
+        let Del = document.querySelector('#Del');
+
+        //获取ul下面所有的li 并转换为数组 方便用forEach()循环
+        let oLi = [...Box.querySelectorAll('li')];
+
+        //选项列表
+        oLi.forEach((o, i) => {
+            let input = o.querySelector('input');
+            input.onchange = () => {
+
+                // o.className = input.checked ? 'active' : '';
+                input.checked ? o.classList.add('active') : o.classList.remove('active');
+
+                // 所有选项被选中时
+                All.checked = oLi.every(item => item.querySelector('input').checked);
+            };
+        });
+
+        //全选按扭 
+        All.onclick = () => {
+            oLi.forEach(item => {
+
+                // 全选按扭被选中时，让所有的选项被选中
+                item.querySelector('input').checked = All.checked;
+
+                // 让所有的选中添加样式
+                All.checked ? item.classList.add('active') : item.classList.remove('active');
+            });
+        };
+
+        //删除按扭
+        Del.onclick = () => {
+
+            // 当oLi数组中被删除的选项 用 filter过滤后 再重新赋值给 oLi;
+            oLi = oLi.filter(item => {
+
+                // 将被选中的选项删除
+                if (item.querySelector('input').checked) {
+                    item.parentNode.removeChild(item);
+                    return false;
+                } else {
+                    return true;
+                };
+            });
+
+            //如果所有选项都删除后，全选按扭应处于非选中状态
+            All.checked = oLi.every(item => item.querySelector('input').checked) && 0 < oLi.length;
+        };
+    </script>
+
+    
+
+</body>
+
+</html>
+
+

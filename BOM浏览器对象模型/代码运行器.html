@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>BOM基础</title>
+	<script type="text/javascript">
+		window.onload = function () {
+			alert('当前浏览器的版本：' + window.navigator.userAgent);//弹出查看当前浏览器的版本！
+
+			/**********************在文本框输HTML代码在新的一个页面上运行***********************/
+			var oBut = window.document.getElementById('but1');
+			var oTxt = document.getElementById('txt1');
+
+			oBut.onclick = function () {
+				var oNewWin;
+				oNewWin = window.open('about:blank');//about:blank打开一个新的空白页
+				oNewWin.document.write(oTxt.value);
+			}
+
+			/******************************在新的窗口打开一个页面******************************/
+			var oBut = document.getElementById('but2');
+
+			oBut.onclick = function () {
+				window.open('http://www.baidu.com/', '_top');//_top当前页打开
+			}
+
+			/******************************在新的窗口打开一个页面******************************/
+			var oBut = document.getElementById('but3');
+
+			oBut.onclick = function () {
+				window.close();
+			}
+
+		}
+	</script>
+</head>
+
+<body>
+	<center>
+		<h1>代码运行器</h1>
+		<hr />
+		<textarea style="resize: none;" id="txt1" rows="20" cols="100"></textarea><br /><br />
+		<input type="button" id="but1" value="运行代码" />
+		<input type="button" id="but2" value="打开窗口:百度" />
+		<input type="button" id="but3" value="关闭窗口" />
+	</center>
+</body>
+
+</html>

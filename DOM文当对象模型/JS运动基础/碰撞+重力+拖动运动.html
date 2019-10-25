@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+
+		<title>碰撞+重力+拖拽运动</title>
+		<style type="text/css">
+			* {
+				margin: 0px;
+				padding: 0px;
+			}
+			
+			#mupiao {
+				width: 100px;
+				height: 100px;
+				cursor: pointer;
+				background: blue;
+				position: absolute;
+				border-radius: 100px
+			}
+			
+			div {
+				width: 3px;
+				height: 3px;
+				background: red;
+				position: absolute;
+			}
+		</style>
+		<script type="text/javascript">
+			window.onload = function() {
+				var oBut = document.getElementById('but1');
+				var oDiv = document.getElementById('mupiao');
+
+				var lastX = 0;
+				var lastY = 0;
+
+				oBut.onclick = function() {
+					starMove();
+				}
+
+				oDiv.onmousedown = function(ev) //鼠标按下时
+				{
+					var oEvent = ev || event; //事件对象
+
+					var DisX = oEvent.clientX - oDiv.offsetLeft; //获取DIV的左边距离，赋给DISX
+					var DisY = oEvent.clientY - oDiv.offsetTop; //获取DIV的上边距离，赋给DISY
+
+					document.onmousemove = function(ev) //鼠标拖动时
+					{
+						var oEvent = ev || event; //事件对象
+
+						var L = oEvent.clientX - DisX; //计算DIV的位置
+						var T = oEvent.clientY - DisY; //计算DIV的位置
+
+						oDiv.style.left = L + 'px';
+						oDiv.style.top = T + 'px';
+
+						/*var oBox=document.createElement('div');//拖动时创建一个DIV
+						oBox.style.left=L+'px';
+						oBox.style.top=T+'px';
+			
+						document.body.appendChild(oBox);//把创建的DIV加载到body中*/
+
+						iSpeedX = L - lastX;
+						iSpeedY = T - lastY;
+
+						lastX = L;
+						lastY = T;
+
+						document.title = 'X:' + iSpeedX + '，Y:' + iSpeedY;
+
+					}
+					document.onmouseup = function() //鼠标抬起时
+					{
+						document.onmousemove = null; //清除移动
+						document.onmouseup = null; //清除自己
+
+						starMove()
+					}
+				}
+			}
+
+			var iSpeedX = 0;
+			var iSpeedY = 0;
+			var DSQ = null;
+
+			function starMove() {
+
+				clearInterval(DSQ);
+
+				DSQ = setInterval(function() {
+					var oDiv = document.getElementById('mupiao');
+					iSpeedY += 3;
+					var L = oDiv.offsetLeft + iSpeedX;
+					var T = oDiv.offsetTop + iSpeedY;
+
+					if(T >= document.documentElement.clientHeight - oDiv.offsetHeight) {
+						iSpeedY *= -0.8;
+						iSpeedX *= 0.8;
+						T = document.documentElement.clientHeight - oDiv.offsetHeight
+					} else if(T <= 0) {
+						iSpeedY *= -1;
+						iSpeedX *= 0.8;
+						T = 0; //解决负数出现的问题(负数的时候会出现滚动条)
+					}
+					if(L >= document.documentElement.clientWidth - oDiv.offsetWidth) {
+						iSpeedX *= -0.8;
+						L = document.documentElement.clientWidth - oDiv.offsetWidth
+					} else if(L <= 0) {
+						iSpeedX *= -0.8;
+						L = 0; //解决负数出现的问题(负数的时候会出现滚动条)
+					}
+
+					if(Math.abs(iSpeedX) < 1) //解决小数出现的问题
+					{
+						iSpeedX = 0;
+					}
+					if(Math.abs(iSpeedY) < 1) //解决小数出现的问题
+					{
+						iSpeedY = 0;
+					}
+
+					if(iSpeedX == 0 && iSpeedY == 0 && T == document.documentElement.clientHeight - oDiv.offsetHeight) {
+						clearInterval(DSQ);
+					} else {
+						oDiv.style.left = L + 'px';
+						oDiv.style.top = T + 'px';
+					}
+
+				}, 30)
+
+			}
+		</script>
+	</head>
+
+	<body>
+		<input id="but1" type="button" value="开始运动" style="width:100px;height:40px;" />
+		<div id="mupiao"><br/><br/> &nbsp;拖动我吧!</div>
+	</body>
+
+</html>

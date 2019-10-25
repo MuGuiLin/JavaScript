@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>侧边栏广告效果</title>
+
+	<script type="text/javascript" src="move.js"></script>
+
+	<style>
+		#div1 {
+			width: 150px;
+			height: 250px;
+			position: absolute;
+			right: 0;
+			top: 0;
+		}
+
+		#div2 {
+			width: 150px;
+			height: 250px;
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+	</style>
+
+	<script type="text/javascript">
+		//window.onload当页面加载完成的时候
+		//window.onscroll当页面滚动的时候
+		//window.onresize当页面重定大小的时候
+		window.onresize = window.onload = window.onscroll = function () {
+
+			/****************************右 边**********************************/
+			var oDiv1 = document.getElementById('div1');
+			//documentElement.scrollTop,document.body.scrollTop;滚动距离
+			var mupiao = document.documentElement.scrollTop || document.body.scrollTop;
+
+			var t = (document.documentElement.clientHeight - oDiv1.offsetHeight) / 2;
+			//documentElement.clientHeight窗口可视区的尺寸：高度
+
+			startMove(oDiv1, { top: mupiao + t });//startMove调用外面的JS运动文件函数，
+
+
+			/****************************左 边**********************************/
+			var oDiv2 = document.getElementById('div2');
+			//documentElement.scrollTop,document.body.scrollTop;滚动距离
+			var mupiao = document.documentElement.scrollTop || document.body.scrollTop;
+
+			var t = (document.documentElement.clientHeight - oDiv2.offsetHeight) / 2;
+			//documentElement.clientHeight窗口可视区的尺寸：高度
+
+			startMove(oDiv2, { top: mupiao + t });//startMove调用外面的JS运动文件函数，
+		};
+	</script>
+</head>
+
+<body style="height:2000px;">
+
+	<div id="div1"><a href="#"><img src="MUPIAO.gif" style="width:150px;height:250px" /></a></div>
+	<div id="div2"><a href="#"><img src="MUPIAO.gif" style="width:150px;height:250px" /></a></div>
+
+</body>
+
+</html>

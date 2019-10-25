@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .advertising-two { width: 730px; height: 175px; background-image: url(img/img-two1.png); }
+
+        .advertising { display: block; background-position: center center; background-size: cover; border-radius:4px; position: relative;}
+        
+        .advertising-img1 { position: absolute; right: 20px; top: 20px; width: 100px; height: 100px; background: url(img/img1.png)
+            no-repeat center center; background-size: cover; -webkit-transition: all 0.3s; -moz-transition: all 0.3s; -ms-transition:
+            all 0.3s; -o-transition: all 0.3s; transition: all 0.3s;}
+
+        .advertising-img2 { position: absolute; right: 20px; top: 20px; width: 100px; height: 100px; background: url(img/img2.png)
+            no-repeat center center; background-size: cover; }
+
+        .advertising-img3 { position: absolute; right: 20px; top: 20px; width: 100px; height: 100px; background: url(img/img3.png)
+            no-repeat center center; background-size: cover; }
+
+        .advertising-text { position: absolute; right: 20px; top: 20px; width: 100px; height: 100px; display: flex; flex-direction:
+            column; justify-content: center; align-items: center; color: red; }
+
+        
+        .move1 {
+        animation: myMove1 2.5s ease-in 2 alternate;
+ -webkit-animation: myMove1 2.5s ease-in infinite alternate;
+        }
+        .move2 {
+        animation: myMove2 1.5s ease 2 alternate;
+ -webkit-animation: myMove1 1.5s ease infinite alternate;
+        }
+        .move3 {
+        animation: myMove3 1s ease-in 2 alternate;
+ -webkit-animation: myMove1 1s ease-in infinite alternate;
+        }
+
+        .move1-all{
+        animation: myMove1 2.5s ease-in infinite alternate;
+        -webkit-animation: myMove1 2.5s ease-in infinite alternate;
+        }
+        .move2-all{
+        animation: myMove2 1.5s ease infinite alternate;
+        -webkit-animation: myMove1 1.5s ease infinite alternate;
+        }
+        .move3-all{
+        animation: myMove3 1s ease-in infinite alternate;
+        -webkit-animation: myMove1 1s ease-in infinite alternate;
+        }
+        @keyframes myMove1 {
+        from {transform: rotate(0deg);}
+        to {transform: rotate(360deg);}
+        }
+        @-webkit-keyframes myMove1 {
+        from {transform: rotate(0deg);}
+        to {transform: rotate(360deg);}
+        }
+        @keyframes myMove2 {
+        from {transform: rotate(0deg);}
+        to {transform: rotate(360deg);}
+        }
+        @-webkit-keyframes myMove2 {
+        from {transform: rotate(0deg);}
+        to {transform: rotate(360deg);}
+        }
+        @keyframes myMove3 {
+        from {transform: rotate(0deg);}
+        to {transform: rotate(360deg);}
+        }
+        @-webkit-keyframes myMove3 {
+        from {transform: rotate(0deg);}
+        to {transform: rotate(360deg);}
+        }
+
+    </style>
+</head>
+<body>
+    <div class="advertising hover-advertising advertising-two">
+        <div class="advertising-img1 move1"></div>
+        <div class="advertising-img2 move2"></div>
+        <div class="advertising-img3 move3"></div>
+        <div class="advertising-text">
+            <span>点击</span>
+            <span>进入</span>
+        </div>
+    </div>
+</body>
+<script>
+    	/**
+	 * @author Cai  百度编辑器 粘微信过来的图片 本地化
+	 */
+	UE.plugins.wximage = function() {
+		
+		var u = baidu;
+		var a = this
+		, c = u.editor.ui
+		, b = u.editor.dom.domUtils;
+		
+		function strip_stack_span(html) {
+			var docObj = $('<div>' + html + '</div>');
+			docObj.find('li,colgroup,a').each(function() {
+				if ($.trim($(this).text()) == "" && $(this).find('img').size() == 0) {
+					$(this).remove();
+				}
+			}
+			);
+			var has_secspan = false;
+			do 
+			{
+				has_secspan = false;
+				docObj.find('span:has(span)').each(function(i) {
+					var innerobj = $(this).find('> span');
+					if (innerobj.size() > 1) {
+						$(this).find('span').each(function() {
+							if ($.trim($(this).text()) == "") {
+								$(this).replaceWith($(this).html());
+							}
+						}
+						)
+						return;
+					} 
+					else if (innerobj.size() == 0) {
+						return;
+					}
+					if ($.trim($(this).text()) == $.trim(innerobj.text())) {
+						has_secspan = true;
+						var style = $(this).attr('style');
+						var innserstyle = innerobj.attr('style');
+						var newStyle = '';
+						if (style && style != "") {
+							newStyle += ';' + style;
+						}
+						if (innserstyle && innserstyle != "") {
+							newStyle += ';' + innserstyle;
+						}
+						var new_html = '';
+						$(this).find('> *').each(function() {
+							if (this.tagName == "SPAN") {
+								new_html += $(innerobj).html();
+							} 
+							else {
+								new_html += $(this).prop('outerHTML');
+							}
+						}
+						);
+						$(this).attr('style', newStyle).html(new_html);
+					}
+				}
+				);
+			} while (has_secspan);return docObj.html();
+		}
+		
+		a.addListener("beforepaste", function(b, c, g) {
+			b = c.html;
+			"function" == typeof strip_stack_span && (b = strip_stack_span(b));
+			b = $("<div>" + b + "</div>");
+			b.find("img").each(function() {
+				var a = ""
+				, a = this.src && "" != this.src ? this.src : 
+				$(this).attr("data-src");
+				$(this).removeAttr("data-src");
+				"undefined" == typeof a || "" == a ? $(this).remove() : (a = a.replace(/http:\/\/mmbiz.qpic.cn/g, "https://mmbiz.qlogo.cn"),
+				a = a.replace(/https:\/\/mmbiz.qpic.cn/g, "https://mmbiz.qlogo.cn"),
+				a = a.replace(/http:\/\/mmbiz.qlogo.cn/g, "https://mmbiz.qlogo.cn"),
+				a = a.replace(/&wxfrom=\d+/g, ""),
+				a = a.replace(/wxfrom=\d+/g, ""),
+				a = a.replace(/&wx_lazy=\d+/g, ""),
+				a = a.replace(/wx_lazy=\d+/g, ""),
+				a = a.replace(/&tp=[a-z]+/g, ""),
+				a = a.replace(/tp=[a-z]+/g, ""),
+				a = a.replace(/\?&/g, "?"),
+				a = a.replace(/\?&/g, ""),
+				$(this).attr("src", a),
+				$(this).attr("_src", a))
+			}
+			);
+			c.html = b.html()
+		}
+		);
+		
+	};
+</script>
+</html>

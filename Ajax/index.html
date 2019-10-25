@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        h1{ text-align: center;}
+        pre{ font-size: 16px;}
+        .box{ display: table; margin: auto; font-size: 15px; }
+        .box input{ padding-left: 6px; width: 380px; height: 30px; vertical-align: top;}
+        .box button{ width: 100px; height: 36px; }
+        .box ul{position: relative; top: -10px; width: 348px; border: 1px solid gray; }
+        .box ul li{ padding: 6px;}
+        .box ul li:hover{background:dodgerblue;}
+    </style>
+</head>
+<body>
+    <h1>Ajax,jQuery ajax,axios和fetch的区别</h1><hr>
+    <pre>
+        <b>Ajax：(XMLHttpRequest)</b>
+        ajax自然不必说，最早出现的发送后端请求技术，隶属于原始js中，核心使用XMLHttpRequest对象，多个请求之间如果有先后关系的话，就会出现回调地狱。
+
+        <b>Jquery Ajax：(XMLHttpRequest)</b>
+            是jQuery框架中的发送后端请求技术，由于jQuery是基于原始的基础上做的封装，所以，jquery Ajax自然也是原始ajax的封装。
+
+        <b>Fetch：</b>
+            fetch号称是AJAX的替代品，是在ES6出现的，使用了ES6中的promise对象。Fetch是基于promise设计的。Fetch的代码结构比起ajax简单多了，
+            参数有点像jQuery ajax。但是，一定记住fetch不是ajax的进一步封装，而是原生js。Fetch函数就是原生js，没有使用XMLHttpRequest对象。
+        
+        <b>axios：</b>
+            axios不是原生JS的，需要进行安装，它不带可以在客户端使用，也可以在nodejs端使用。Axios也可以在请求和响应阶段进行拦截。同样也是基于promise对象的。具体参照axios的概念
+    </pre>
+
+    <div class="box">
+        <div>
+            <input type="text" id="text" >
+            <button>百度一下</button>
+        </div>
+        <ul id="ol"></ul>
+    </div>
+</body>
+<script src="js/axios.js"></script>
+<script>
+
+    (function() {
+        class jsonp {
+            constructor(pre) {
+                this.id = 123;
+            };
+            
+            //访问跨域src并将数据填入到script标签中的函数
+            CreateScript(src) {
+                let script = document.createElement('scripe');
+                    script.setAttribute('src', src);
+                    script.setAttribute('type', 'text/javascript');
+                document.body.appendChild(script);
+                alert(src)
+            };
+
+            GetData(src, cb) {
+                this.CreateScript(src);
+                window.setTimeout(() => {
+                    //回调函数的参数默认是返回的数据
+                    function CallBack(data) {
+                        cb(data);
+                        console.log('返回的数据：================', data);
+                    };
+                }, 1000);
+            };
+
+        };
+
+        window.jsonp = new jsonp();
+    }());
+    
+   let CreateScript = (src) => {
+                let script = document.createElement('scripe');
+                    script.setAttribute('src', src);
+                    script.setAttribute('type', 'text/javascript');
+                document.body.appendChild(script);
+                alert(src)
+            };
+
+
+    //网页动态插入<script>元素，由它向跨源网址src发出请求，src中包含回调函数
+    window.onload = function () {
+        //http://example.com/ip?callback=foo
+       CreateScript('https://iniditor.smgtech.net/Public/scripts/iditor.config.js?kmupiao&cb=CallBack')
+    }
+
+
+
+
+
+    //let xhr = new XMLHttpRequest();
+    // xhr.open('get', 'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd='+this.value, true);
+    // xhr.send(null);
+    document.querySelector('#text').addEventListener('input', function(){
+        console.log(this.value)
+        if(this.value) {
+
+            // axios.post('http://127.0.0.1:666/postapi')
+            // .then(function (response) {
+            //     if(0 < response.data.length) {
+            //         for(let i in response.data) {
+            //             let li = document.createElement('li');
+            //             li.textContent = response.data[i];
+            //             document.querySelector('#ol').appendChild(li);
+            //         }
+                    
+            //         console.log(response);
+            //     }
+                
+            // })
+            // .catch(function (error) {
+            //     console.log(error);
+            // });
+
+            jsonp.GetData('https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd='+this.value+'&callback=CallBack', function(data) {
+                alert(data);
+            });
+
+        } else {
+            this.value = '';
+            document.querySelector('#ol').innerHTML = '';
+        }
+
+        
+        
+        //  addScriptTag('https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd='+this.value+'&callback=callback');
+        
+    }, false);
+</script>
+</html>

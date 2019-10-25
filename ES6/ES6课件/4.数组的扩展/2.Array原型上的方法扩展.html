@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训2017-10JS</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    //copyWithin(target,start,end)
+    //target:必填,从该位置开始替换数据
+    //start:选填,默认值0,从该位置开始读取数据
+    //end:选填,默认值是数组的长度,到该位置前停止读取数据
+    let ary = [1, 2, 3, 4, 5, 6, 7, 8];
+    console.log(ary.copyWithin(5, 2, 6));
+
+    //find findIndex
+
+    //find 先遍历数组,一项一项的执行,一旦函数返回值是true,停止查找,返回当前项,一直到最后一项还没有返回true,最终结果就是undefined
+    console.log(ary.find(function (item, index, input) {
+        //item:当前项,index:索引,input:原数组
+        return item == 4;
+    }));
+    //findIndex返回值是当前项的索引,一直到最后都没有返回true的最终结果就是undefined
+
+    //fill(value,start,end):填充数组的
+    //value:必填的,填充的值
+    //start:开始填充的位置,默认值0,可选的
+    //end:停止填空的位置,可选的,不包括的
+    let arr = [1, 2, 3, 4, 5];
+    arr.fill(1, 3, 4);
+    console.log(arr);
+
+    //得到有7个1的数组
+    console.log(Array(7).fill(1));
+
+    //includes:判断数组中有没有某一项,返回值是true/false
+    //indexOf lastIndexOf
+    //if(indexOf)
+
+    console.log(arr.includes(1));
+
+
+</script>

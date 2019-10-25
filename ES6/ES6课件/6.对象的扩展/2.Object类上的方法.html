@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训2017-10JS</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    //Object.is
+    //=== 绝对相等
+    let ary=[1,2,0,NaN,NaN,1,2,2,1,0];
+    console.log(NaN === NaN);//false
+    console.log(Object.is(NaN, NaN));//true
+    let arr=[];
+    ary.forEach((item)=>{
+        var f=true;
+        for(var i=0;i<arr.length;i++){
+            if(Object.is(item,arr[i])){
+                f=false
+            }
+        };
+        if(f){
+            arr.push(item);
+        }
+    });
+    console.log(arr);
+
+    //Object.assign(obj1,obj2)
+    //合并对象,将obj2合并到obj1上,将obj1返回
+
+    //获取一个私有属性的描述
+    let str1="1";
+    console.log(Object.getOwnPropertyDescriptor(str1, "length"));
+    console.log(Object.getOwnPropertyDescriptor(arr, "length"));
+
+    //属性的遍历
+    //for in
+    //Object.keys():返回值是个数组,包括对象自身的(不包含继承的)的所有的可枚举属性
+    //Object.getOwnPropertyNames(),返回值是个数组,包括对象自身的所属性(包括不可枚举属性)
+   // Object.getOwnPropertySymbols(),返回值是个数组,包括对象自身的所有的Symbols属性
+
+
+</script>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>JS节点的操作</title>
+
+	<style type="text/css">
+		h1 {
+			text-align: center;
+		}
+
+		input {
+			padding: 10px;
+			width: 300px;
+		}
+
+		button {
+			font-size: 16px;
+			margin: 20px;
+		}
+
+		ul {
+			background: yellowgreen;
+			font-size: 18px;
+			line-height: 32px;
+			color: white;
+		}
+
+		.box {
+			position: relative;
+			margin-bottom: 30px;
+			padding: 10px;
+			border-radius: 10px;
+			border: 1px solid green;
+		}
+
+		.del {
+			display: block;
+			position: absolute;
+			top: 10px;
+			right: 20px;
+			color: red;
+			font-size: 24px;
+			font-weight: bold;
+			cursor: pointer;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>JS节点的操作</h1>
+	<hr />
+	<pre>
+		在HTML文档中， Document.createElement() 方法创建由tagName 指定的HTML元素，或一个HTMLUnknownElement。
+		
+			
+	<h3>创建节点:</h3>
+		语法：document.createElement('tagName');
+			var oDiv = document.createElement('div'); 这样就创建了一个div标签。
+			
+
+	<h3>插入/移动节点：</h3>
+		语法： 
+			1、parent.appendChild(newNode);  在父级的尾部插入
+
+			2、parent.insertBefore(newNode, oldNode) 在父级中某个子级的前面插入（也就是将节点插入到父节点里面的某个子节点的前面）
+				* insertBefore()方法有两个参数，
+					- newNode是要插入新节点，
+					- oldNode是已以在DOM中存在的某个节点，
+				* insertBefore()方法的两个参数一个都不能少
+
+		appendChild()方法和insertBefore()方法不仅能插入节点还能移动节点：
+
+		注：
+			1、如果插入的是一个新节点那就是插入
+			2、如果插入的是一个已存在的节点那就是移动（移动DOM节点也就是把这个节点插入到html文档中的某个地方，先从原先位置删除，然后再放入新的位置）
+
+
+	<h3>替换节点：</h3>
+		语法：
+			parent.replaceChild(newNode/oldNode, newNode/oldNode);
+
+		注：
+			1、如果替换的是一个新节点那就是将之前的旧节点删除，再将新的节点添加到该位置
+			2、如果插入的是一个已存在的节点那就是移动（移动DOM节点也就是把这个节点插入到html文档中的某个地方，先从原先位置删除，然后再放入新的位置）
+			
+
+	<h3>删除节点：</h3> 
+		语法：
+			1、dom.remove();
+				* el.remove() 是一个新方法，和jQuery中的remove()方法类似 如：div.remove(); 这样就把div删除了
+				* el.remove() 是删除自已本身节点的！！！
+
+			2、parent.removeChild(child)
+				* document.body.removeChild(child);  
+                * parent.removeChild()是通过父节点来删除子节点，子节点本身不能自已删除！！！
+			
+
+	<h3>克隆节点：</h3>		
+		语法:
+			dom.cloneNode(deep);
+				* deep 为 false【默认为fasle】时只克隆元素本身及属性，不包括该元素下的内容和后代
+				* deep 为 true 克隆元素本身及属性，以及元素的内容和后代
+				* 注：deep不论是true还是false都不会克隆元素之前已绑定好的事件！！！
+			
+	</pre>
+
+	<section>
+		<ul id="ul">
+			我是ul
+			<li>我是第1个li <a>删除</a></li>
+			<li>我是第2个li <a>删除</a></li>
+			<li>我是第3个li <a>删除</a></li>
+		</ul>
+
+		<button>创建1个h2标签，插入到.box里面的p标签的前面去</button>
+		<button>把ul移动到id为box的div中去</button>
+		<button>替换节点</button>
+		<button>删除ul节点</button>
+		<button>浅克隆节点</button>
+		<button>深克隆节点</button>
+
+		<div id="box" class="box">
+			<i class="del" title="删除">╳</i>
+			<span>我是div里的span</span>
+			<p>我是div里的<b>p标签</b>的文本内容</p>
+		</div>
+
+		<div id="box2" class="box"></div>
+	</section>
+
+	<script>
+
+		{
+			//创建节点
+			const btn = document.querySelectorAll('button');
+			const box = document.querySelector('#box');
+
+			let div = document.createElement('div');
+			div.id = 'myDiv';
+			div.className = 'myClass'
+			div.innerHTML = '<b>我是JS动态创建出来的<h2>顺便用innerHTML添加了1个h2的标签</b>';
+
+			//插入节点（在指父级节点中的尾部插入）
+			box.appendChild(div);
+
+
+			//创建节点
+			btn[0]['onclick'] = () => {
+				const p = box.querySelector('p');
+				let h2 = document.createElement('h2');
+				h2.textContent = '我是JS动态创建出来的<h2>标签';
+				h2.style['color'] = 'red';
+
+				//插入节点（在父级中某个子级的前面插入）
+				box.insertBefore(h2, p);
+			};
+
+			//移动节点
+			btn[1]['onclick'] = () => {
+				const ul = document.querySelector('ul');
+				box.appendChild(ul);
+
+				// document.body.insertBefore(ul, box);
+			};
+
+
+			//替换节点
+			btn[2]['onclick'] = () => {
+				const div = document.querySelector('#myDiv');
+				b = div.querySelector('b');
+				const i = document.createElement('i');
+				i.textContent = '我是新创建的i标签，我替换了-> 我是JS动态创建出来的<h2>标签'
+				i.style.cssText = 'color: red; font-size: 16px;';
+
+				div.replaceChild(i, b);
+			};
+
+
+			//删除节点
+			btn[3]['onclick'] = () => {
+				const ul = document.querySelector('ul');
+				// ul.remove();
+				box.removeChild(ul);
+			};
+
+			let li = document.querySelectorAll('ul li');
+			li.forEach(item => {
+				item['onclick'] = function (params) {
+					ul.removeChild(this);
+				};
+			});
+
+
+			//浅克隆节点
+			btn[4]['onclick'] = () => {
+				const box2 = document.querySelector('#box2');
+				let copyBox = box.cloneNode();
+
+				box2.appendChild(copyBox);
+			};
+
+
+			//浅克隆节点
+			btn[5]['onclick'] = () => {
+				const box2 = document.querySelector('#box2');
+				box2.appendChild(box.cloneNode(true));
+
+				cloneEvent();
+			};
+
+			//克隆重新绑定下事件
+			function cloneEvent(params) {
+				let del = document.querySelectorAll('.del');
+				del.forEach(item => {
+					item.onclick = function (params) {
+						this.parentNode.remove();
+					};
+				});
+			};
+
+			cloneEvent();
+
+		};
+	</script>
+</body>
+
+</html>

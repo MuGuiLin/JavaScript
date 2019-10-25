@@ -1,0 +1,26 @@
+@charset "utf-8";
+*{ margin: 0; padding: 0;}
+html, body{font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;}
+ul, li, input{ list-style: none; outline: none; border: none;}
+.login header{ position: relative; width: 100%; height: 50px; background: #F6F6F6;}
+.login header .logo{width: 240px; height: 50px; background: url(../img/login.png) no-repeat 58px -214px;}
+.login nav { position: absolute; top: 0; right: 8%; font-size: 16px; }
+.login nav li{ display: inline-block; line-height: 50px; color: #0091f2; cursor: pointer; }
+.login nav li:hover{ color: #1960d3; font-weight: bold;}
+.login nav li.attention::after { content: ""; position: absolute; top: 50px; left: -60px; display: none; width: 180px; height: 180px; background:white url(../img/qr-code.jpg) no-repeat center center; background-size: 168px; border-radius: 8px; border: 1px solid #129AEE; box-shadow: 0px 0px 8px 1px #E9F6FF;  z-index: 666;}
+.login nav li.attention:hover:after {display: block; transition: all 1s;}
+.login section .bg-icon{ position: absolute; top: 50px; right: 0px; bottom: 0px; left: 0px; background: white url(../img/bg-icon.png) no-repeat 16% center; background-size: 40%;}
+.login form{ position: absolute; top: 20%; right: 8%; padding: 30px; padding-bottom: 10px; width: 380px; background: white;  border: 1px solid #129AEE; transition: all 0.3s; -webkit-transition: all 0.3s; border-radius: 8px; box-shadow: 0px 0px 8px 1px #E9F6FF;}
+.login form .login-icon { width: 100%; height: 168px; background: url(../img/login.png) no-repeat top center; }
+.login form .user-pswd li{ padding: 12px 0;}
+.login form .user-pswd label{cursor: pointer;}
+.login form .user-pswd .error{ padding: 0; height: 20px; font-size: 15px; color: red; text-align: center;}
+.login form .user-pswd .entry{ padding-left: 18%; width:82%; height: 44px;; line-height: 44px; color: #0091F2; font-size: 18px; background: url(../img/login.png) no-repeat no-repeat -396px -214px; border: 1px solid #43B7FF; border-radius: 2px; -webkit-appearance: none;}
+.login form .user-pswd .pswd{ background-position: -396px -254px;}
+.login form .user-pswd .entry:focus{ border-color:#0091f2; box-shadow: 0px 0px 2px 0px #0091F2;}
+.login form .user-pswd .verify{background-position: -396px -296px; width: 40%;}
+.login form .user-pswd .sncode{ float: right; padding: 0 34px; line-height: 44px; font-size: 28px; font-weight: bold; font-style: italic; background: #F6F6F6; border: 1px solid #43B7FF; border-radius: 2px; vertical-align: top; cursor: pointer;}
+.login form .user-pswd .login-btn{ display: block; width: 100%; line-height: 44px; font-size: 18px;  color: white; text-align: center; background: #129AEE; border-radius: 2px; letter-spacing: 6px; cursor: pointer;}
+
+.login form .user-pswd .keep{ width: 18px; height: 18px; vertical-align: text-bottom;}
+.login form .copyright{ padding: 12px 0; text-align: center; color: #8f8f8f;}

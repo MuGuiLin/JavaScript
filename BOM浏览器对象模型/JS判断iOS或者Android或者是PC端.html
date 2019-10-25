@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>JS判断iOS或者Android或者是PC端.html</title>
+	</head>
+
+	<body>
+	</body>
+	<script type="text/javascript">
+		if(/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+			alert(navigator.userAgent);  
+			//window.location.href = "iPhone.html";
+		} else if(/(Android)/i.test(navigator.userAgent)) {
+			alert(navigator.userAgent); 
+			//window.location.href = "Android.html";
+		} else {
+			alert(navigator.userAgent); 
+			//window.location.href = "pc.html";
+		};
+	</script>
+
+</html>

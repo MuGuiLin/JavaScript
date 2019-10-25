@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>可视区绝对位置</title>
+
+	<style type="text/css">
+		h1 {
+			text-align: center;
+		}
+
+		div {
+			height: 200px;
+			border: 1px solid blue;
+		}
+
+		.box {
+			height: 300px;
+			background: red;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>元素相对可视区位置距离</h1>
+	<hr />
+
+	<pre>
+
+	<h3>getBoundingClientRect():</h3>
+		Element.getBoundingClientRect() 方法返回元素的大小及其相对于视口的位置。
+		返回值是一个 DOMRect 对象，这个对象是由该元素的 getClientRects() 方法返回的一组矩形的集合, 即：是与该元素相关的CSS 边框集合 。
+
+		返回值如下：
+			x 元素的左边距， 相对于， 可视区左边的距离 x === left
+			y 元素顶部，相对于， 可视区顶部的距离 y === top
+
+			top 元素顶部，相对于， 可视区顶部的距离 y === top
+			bottom 元素底部，相对于， 可视区顶部的距离
+			left 元素的左边距， 相对于， 可视区左边的距离 x === left
+			right 元素的右边距， 相对于， 可视区左边的距离
+
+			width 元素的可视宽度
+			height 元素的可视高度
+
+	</pre>
+
+	<section>
+		<div class="div"></div>
+		<div class="div"></div>
+		<div class="div"></div>
+		<div class="box">
+			<h1>打开调试器，滚动页面后，再点击我试试！</h1>
+		</div>
+		<div class="div"></div>
+		<div class="div"></div>
+		<div class="div"></div>
+	</section>
+
+
+
+	<script>
+
+		{
+			let box = document.querySelector('.box');
+
+			box.onclick = () => {
+				console.log('相对于可视区的距离：', box.getBoundingClientRect());
+
+				let {x, y, top, left, bottom, right, width, height} = box.getBoundingClientRect();
+
+				console.log('对象解构：', x, y, top, left, bottom, right, width, height);
+
+				console.log('相对于页面的距离：', getPageOffset(box));
+
+			};
+
+			//获取相对于 页面的 距离
+			function getPageOffset(el) {
+				let top = el.offsetTop;
+				let left = el.offsetLeft;
+
+				//当有多个父元素时，就一直向上找
+				while (el.offsetParent) {
+					el = el.offsetParent;
+					top += el.offsetTop + el.clientTop;
+					left += el.offsetLeft + el.clientLeft;
+				};
+
+				return {top, left};
+			};
+		};
+
+	</script>
+</body>
+
+</html>

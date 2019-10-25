@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>scroll</title>
+
+	<style type="text/css">
+		h1 {
+			text-align: center;
+		}
+
+		.box {
+			width: 300px;
+			height: 300px;
+			border: 1px solid blue;
+			overflow: auto;
+		}
+
+		.div {
+			padding: 10px;
+			width: 200px;
+			height: 200px;
+			background: red;
+			/* overflow: auto; */
+		}
+	</style>
+</head>
+
+<body>
+	<h1>scroll</h1>
+	<hr />
+
+	<pre>
+
+	<h3>scroll:</h3>
+		左上：
+			1、scrollTop 【只读属性】返回元素上边缘与视图之间的距离（也就是上下滚动条的位置）。
+			2、scrollLeft 【只读属性】返回元素左边缘与视图之间的距离（也就是左右滚动条的位置）。
+
+		宽高：
+			3、scrollWidth 【只读属性】返回元素的整体宽度（也就是内容的宽度，如果内容的宽度小于box的宽度，那scrollWidth就是box的宽度）。
+			4、scrollHeight 【只读属性】返回元素的整体高度（也就是内容的高度，如果内容高度比玩素高度要高，scrollHeight就是内容的高度，否则就是元素的高度）。
+
+			* 只读属性：只能查看、获取，不能修改
+
+	</pre>
+
+	<section>
+		<div class="box">
+			<div class="div">每一个事件处理函数都有一个 隐藏的event 事件参数对象，但是IE8之前是没有的 window.event代替每一个事件处理函数都有一个 隐藏的event
+				事件参数对象，但是IE8之前是没有的 window.event代替每一个事件处理函数都有一个 隐藏的event 事件参数对象，但是IE8之前是没有的 window.event代替每一个事件处理函数都有一个
+				隐藏的event 事件参数对象，但是IE8之前是没有的 window.event代替每一个事件处理函数都有一个 隐藏的event 事件参数对象，但是IE8之前是没有的
+				window.event代替每一个事件处理函数都有一个 隐藏的event 事件参数对象，但是IE8之前是没有的 window.event代替每一个事件处理函数都有一个 隐藏的event
+				事件参数对象，但是IE8之前是没有的 window.event代替每一个事件处理函数都有一个 隐藏的event 事件参数对象，但是IE8之前是没有的 window.event代替每一个事件处理函数都有一个
+				隐藏的event 事件参数对象，但是IE8之前是没有的 window.event代替每一个事件处理函数都有一个 隐藏的event 事件参数对象，但是IE8之前是没有的 window.event代替</div>
+		</div>
+	</section>
+
+
+
+	<script>
+
+		{
+			let box = document.querySelector('.box');
+			let div = document.querySelector('.div');
+
+			console.log(box.scrollWidth, box.scrollHeight);
+			console.log(div.scrollWidth, div.scrollHeight);
+
+			box.onscroll = () => {
+				console.log(box.scrollTop, box.scrollLeft);
+			};
+
+
+		};
+
+	</script>
+</body>
+
+</html>

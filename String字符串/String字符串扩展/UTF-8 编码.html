@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-32">
+		<title>UTF-16 编码</title>
+		<style type="text/css">
+			h1 { text-align: center; }
+		</style>
+	</head>
+	<body>
+		<h1>UTF-16 编码</h1><hr />
+		<pre>
+		
+		</pre>
+		编码:<div id="code"></div>
+		字符:<div id="star"></div>
+	</body>
+	
+	<script type="text/javascript">
+		let code = star = '';
+		for(let i = 0x4e00; i < 0x9fa5; i++) {
+			code += i +'，';
+			star += i +'：'+ String.fromCharCode(i)+'，';
+			//star += i +'：'+ String.fromCharCode(i);
+		}
+		document.querySelector('#code').innerHTML = `共计：${code.length}个, 从19968 到 40868之间<hr><p>${code}</p>`;
+		document.querySelector('#star').innerHTML = `共计：${star.length}个<hr><p>${star}</p>`;
+	</script>
+</html>

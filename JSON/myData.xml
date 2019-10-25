@@ -1,0 +1,10 @@
+<root>
+  <name>小穆</name>
+  <age>24</age>
+  <sex>男</sex>
+  <heigth>168cm</heigth>
+  <job>web程序员</job>
+  <friends>小正</friends>
+  <friends>小张</friends>
+  <friends>小红</friends>
+</root>

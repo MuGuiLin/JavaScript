@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>对象与数组的解构赋值</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>对象与数组的解构赋值</h1>
+    <hr>
+    <pre>
+        {} ：对象 左边变量名字和对象中的key要保持一致
+        [] ：数组 左边就量的顺序和数组中值的顺序要保持一致
+    </pre>
+    <script>
+        /*
+            {} ：对象 左边变量名字和对象中的key要保持一致
+            [] ：数组 左边就量的顺序和数组中值的顺序要保持一致
+        */
+
+        //对象的解构赋值
+        let obj = { name: 'mupiao', age: 28, sex: '男' };
+
+        //注：在再解构时左边的变量名一定要和对象中的key相同，否则就是undefined;
+        let { name, age, sex } = obj;
+        console.log(sex, name, obj.age, obj.sex, obj.name); //男 mupiao 28 男 mupiao
+
+        //对象的解构赋值 的默认值
+        let { mz = 'muguilin', job = 'Web前端', ...all } = { mz: 'mupiao', age: 28, sex: '男' };
+        console.log(mz, job, all); //mupiao Web前端 { age: 28, sex: "男" }
+
+        //对象的解构赋值 的起别名
+        let { one: yi = 'muguilin', four: si, two, ...alls } = { one: '一', two: '二', shtree: '三', four: '四' };
+        console.log(yi, si, alls); //一 四 {shtree: "三"}
+
+
+        //数组的解构赋值
+        let arr = ['H5', 'css3', 'ES6'];
+        let [html, css, js] = arr;
+        console.log(html, css, js); //H5 css3 ES6
+
+        let [h5, cs, es] = ['Canvas', 'Class', 'Context'];
+        console.log(h5, cs, es); //Canvas Class Context
+
+
+        //字符串的解构赋值
+        let str = 'Mu Piao';
+
+        // 用[...str] 或者用 Array.from(str) 可以将类数组转为数组
+        // [...str].forEach(element => {
+        Array.from(str).forEach(element => {
+            console.log(element)
+        });
+        let [a, b, c, ...sy] = str;
+        console.log(a, b, c, '------------', ...sy); //H e l ------------ l o   W l o r d !
+
+        let { d, e, ...qb } = str;
+        console.log(d, e, qb); //undefined undefined {0: "M", 1: "u", 2: " ", 3: "P", 4: "i", 5: "a", 6: "o"} //注：qd 变成了一个类数组
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,14 @@
+// 去掉左右空格
+function String.prototype.Trim() { 
+	return this.replace(/(^/s*)|(/s*$)/g, ""); 
+}
+
+// 去掉左空格
+function String.prototype.Ltrim() { 
+	return this.replace(/(^/s*)/g, ""); 
+}
+
+// 去掉右空格
+function String.prototype.Rtrim() { 
+	return this.replace(/(/s*$)/g, ""); 
+}

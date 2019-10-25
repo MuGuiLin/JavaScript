@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<div id="mupiao"></div>
+	</body>
+	
+	<script src="https://google.github.io/traceur-compiler/bin/traceur.js" type="text/ecmascript-6"></script>
+	<script src="https://google.github.io/traceur-compiler/bin/BrowserSystem.js" type="text/ecmascript-6"></script>
+	<script src="https://google.github.io/traceur-compiler/src/bootstrap.js" type="text/ecmascript-6"></script>
+	
+	<script type="text/javascript">
+		var onload = function() {
+			var oDiv = document.querySelector('#mupiao');
+				oDiv.innerHTML = `Hello Word ${123 + 456}`;
+		}
+		onload``;
+	</script>
+	
+	<script type="module">
+		"use strict";
+		import a from 'js/a.js';
+		
+		window.onload = function() {
+			let oDiv = document.querySelector('#mupiao');
+				oDiv.innerHTML = 456;
+		}
+	</script>
+
+</html>

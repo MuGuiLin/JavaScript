@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>offset</title>
+
+	<style type="text/css">
+		h1 {
+			text-align: center;
+		}
+
+		section {
+			position: relative;
+			margin: 20px;
+			padding: 20px;
+			height: 300px;
+			font-size: 16px;
+			border: 1px solid green;
+			border-radius: 10px;
+		}
+
+		section div {
+			width: 200px;
+			height: 200px;
+		}
+
+		.offset-parent {
+			position: absolute;
+			border: 5px solid blue;
+		}
+
+		.offset-top {
+			position: absolute;
+			top: 40px;
+			margin-top: 20px;
+			border: 1px solid blue;
+		}
+
+		.offset-left {
+			position: absolute;
+			top: 60px;
+			left: 50px;
+			margin-left: 30px;
+			border: 1px solid blue;
+		}
+
+		.offset-width {
+			padding: 10px;
+			border: 5px solid blue;
+		}
+
+		.offset-height {
+			padding: 10px;
+			border: 10px solid green;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>offset</h1>
+	<hr />
+
+	<pre>
+		偏移量(offset dimension)是javascript中的一个重要的概念。涉及到偏移量的主要是offsetTop、offsetLeft、offsetWidth、offsetHeight这四个属性。当然，还有一个偏移参照定位父级offsetParent。
+			
+	<h3>元素的offset偏移量属性:</h3>
+		计算外边距：
+			1、offsetParent 与当前元素最近的经过定位(position不等于static)的父级元素主要分为下列几种情况（作为偏移参照点的父级元素）
+				* 当元素自身有fixed固定定位时，我们知道固定定位的元素相对于视口进行定位，此时没有定位父级，offsetParent的结果为null
+				* 元素自身无fixed定位，且父级元素都未经过定位，offsetParent的结果为&lt;body>
+				* 元素自身无fixed定位，且父级元素存在经过定位的元素，offsetParent的结果为离自身元素最近的经过定位的父级元素
+
+			2、offsetTop 元素的上外边框至offsetParent元素的上内边框之间的像素距离
+			3、offsetLeft 元素的左外边框至offsetParent元素的左内边框之间的像素距离
+
+
+		计算内边距：
+			4、offsetWidth 元素在水平方向上占用的空间大小，无单位(以像素px计)
+			5、offsetHeigth 元素在垂直方向上占用的空间大小，无单位(以像素px计)
+
+		
+		注：如果存在水平滚动条，offsetHeight也包括水平滚动条的高度，如果存在垂直滚动条，offsetWidth也包括垂直滚动条的宽度；
+		
+		其他需要注意的是:
+		    1、offsetTop和offsetLeft都是相对父元素的边框内部的偏移量。也即是元素边框外部到父元素边框内部的距离。
+			2、offsetParent通常并不是元素的直接上级元素，而是指的离元素最近的设置过position（即position不为static）的父级元素，最多查询到body。即父级元素中不存在设置过position的元素时，其offsetParent为body；position=fixed元素的offsetParent为null；body元素的offsetParent为null。
+		    3、position为fixed的元素，其offsetParent为null，但是计算offsetTop和offsetLeft时，可将其认为是浏览器视口。
+		    4、但对于offsetParent同样为null的body，其offsetTop和offsetLeft永远为0。
+		    5、所有的值都不带单位px，可以直接使用。
+		    6、原生js中有个跟offset作用很类似的函数就是getBoundingClientRect(),它也可以获取元素偏移量和宽高，其中宽高的计算方式相同，但是在计算便宜量时，经过测试此函数永远是相对浏览器视口进行计算的。
+
+	</pre>
+
+	<img src="./offset.jpg" alt="" srcset=""/>
+
+	<section>
+		<div class="offset-parent">offsetParent</div>
+	</section>
+
+	<section>
+		<div class="offset-top">offsetTop</div>
+		offsetTop = top + margin-top
+	</section>
+
+	<section>
+		<div class="offset-left">offsetLeft</div>
+		offsetLeft = left + margin-left
+	</section>
+
+	<section>
+		<div class="offset-width">offsetWidth</div>
+		offsetWidth = border-left-width + padding-left + width + padding-right + border-right-width + 垂直滚动条的宽度;
+	</section>
+
+	<section>
+		<div class="offset-height">offsetHeight</div>
+		offsetHeight = border-top-width + padding-top + height + padding-bottom + border-bottom-width + 水平滚动条的高度;
+	</section>
+
+
+
+
+	<script>
+
+		//offsetParent
+		{
+			let div = document.querySelector('.offset-parent');
+
+			//获取元素距离父元素左上角的位置开始，
+			div.innerHTML = 'offsetParent：' + div.offsetParent + '';
+			console.log(div.offsetParent);
+
+		};
+
+		//offsetTop
+		{
+			let div = document.querySelector('.offset-top');
+
+			//获取元素距离父元素左上角的位置开始， 父元素上边，到元素上边的距离
+			div.innerHTML = 'offseTop：' + div.offsetTop;
+
+		};
+
+		//offsetLeft
+		{
+			let div = document.querySelector('.offset-left');
+
+			//获取元素距离父元素左上角的位置开始，父元素左边，到元素左边的距离
+			div.innerHTML = 'offsetLeft：' + div.offsetLeft;
+
+		};
+
+		//offsetWidth
+		{
+			let div = document.querySelector('.offset-width');
+
+			//获取元素的宽度
+			div.innerHTML = 'offsetWidth：' + div.offsetWidth;
+
+		};
+
+		//offsetHeight
+		{
+			let div = document.querySelector('.offset-height');
+
+			//获取元素的高度
+			div.innerHTML = 'offsetHeight：' + div.offsetHeight;
+
+		};
+	</script>
+</body>
+
+</html>

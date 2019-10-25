@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>RegExp正则表达式</title>
+		<style type="text/css">
+			div#maincontent	div {
+			    width: 810px;
+			    margin: 0 0 0 25px;
+			    padding: 30px 0 30px 0;
+			    border: 0;
+			    border-bottom: 1px solid #aaa;
+			}
+			table.dataintable {
+			    margin-top: 15px;
+			    border-collapse: collapse;
+			    border: 1px solid #aaa;
+			    width: 100%;
+			}
+			table.dataintable th {
+			    vertical-align: baseline;
+			    padding: 5px 15px 5px 6px;
+			    background-color: #3F3F3F;
+			    border: 1px solid #3F3F3F;
+			    text-align: left;
+			    color: #fff;
+			}
+			table.dataintable td {
+			    vertical-align: text-top;
+			    padding: 6px 15px 6px 6px;
+			    border: 1px solid #aaa;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="maincontent">
+			<h1>JavaScript RegExp 对象</h1>
+			<div>
+				<h2>RegExp 对象</h2>
+
+				<p>RegExp 对象表示正则表达式，它是对字符串执行模式匹配的强大工具。</p>
+
+				<h3>直接量语法</h3>
+
+				<pre>/pattern/attributes</pre>
+
+				<h3>创建 RegExp 对象的语法：</h3>
+
+				<pre>new RegExp(<i>pattern</i>, <i>attributes</i>);</pre>
+
+				<h3>参数</h3>
+
+				<p>参数 <i>pattern</i> 是一个字符串，指定了正则表达式的模式或其他正则表达式。</p>
+
+				<p>参数 <i>attributes</i> 是一个可选的字符串，包含属性 "g"、"i" 和 "m"，分别用于指定全局匹配、区分大小写的匹配和多行匹配。ECMAScript 标准化之前，不支持 m 属性。如果 <i>pattern</i> 是正则表达式，而不是字符串，则必须省略该参数。</p>
+
+				<h3>返回值</h3>
+
+				<p>一个新的 RegExp 对象，具有指定的模式和标志。如果参数 <i>pattern</i> 是正则表达式而不是字符串，那么 RegExp() 构造函数将用与指定的 RegExp 相同的模式和标志创建一个新的 RegExp 对象。</p>
+
+				<p>如果不用 new 运算符，而将 RegExp() 作为函数调用，那么它的行为与用 new 运算符调用时一样，只是当 <i>pattern</i> 是正则表达式时，它只返回 <i>pattern</i>，而不再创建一个新的 RegExp 对象。</p>
+
+				<h3>抛出</h3>
+
+				<p>SyntaxError - 如果 <i>pattern</i> 不是合法的正则表达式，或 <i>attributes</i> 含有 "g"、"i" 和 "m" 之外的字符，抛出该异常。</p>
+
+				<p>TypeError - 如果 <i>pattern</i> 是 RegExp 对象，但没有省略 <i>attributes</i> 参数，抛出该异常。</p>
+			</div>
+
+			<div>
+				<h2>修饰符</h2>
+
+				<table class="dataintable">
+					<tbody>
+						<tr>
+							<th style="width:20%">修饰符</th>
+							<th>描述</th>
+						</tr>
+						<tr>
+							<td>
+								<a href="/jsref/jsref_regexp_i.asp">i</a>
+							</td>
+							<td>执行对大小写不敏感的匹配。</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="/jsref/jsref_regexp_g.asp">g</a>
+							</td>
+							<td>执行全局匹配（查找所有匹配而非在找到第一个匹配后停止）。</td>
+						</tr>
+						<tr>
+							<td>m</td>
+							<td>执行多行匹配。</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div>
+				<h2>方括号</h2>
+
+				<p>方括号用于查找某个范围内的字符：</p>
+
+				<table class="dataintable">
+					<tbody>
+						<tr>
+							<th style="width:20%">表达式</th>
+							<th>描述</th>
+						</tr>
+
+						<tr>
+							<td>
+								<a href="jsref_regexp_charset.asp">[abc]</a>
+							</td>
+							<td>查找方括号之间的任何字符。</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_regexp_charset_not.asp">[^abc]</a>
+							</td>
+							<td>查找任何不在方括号之间的字符。</td>
+						</tr>
+						<tr>
+							<td>[0-9]</td>
+							<td>查找任何从 0 至 9 的数字。</td>
+						</tr>
+						<tr>
+							<td>[a-z]</td>
+							<td>查找任何从小写 a 到小写 z 的字符。</td>
+						</tr>
+						<tr>
+							<td>[A-Z]</td>
+							<td>查找任何从大写 A 到大写 Z 的字符。</td>
+						</tr>
+						<tr>
+							<td>[A-z]</td>
+							<td>查找任何从大写 A 到小写 z 的字符。</td>
+						</tr>
+						<tr>
+							<td>[adgk]</td>
+							<td>查找给定集合内的任何字符。</td>
+						</tr>
+						<tr>
+							<td>[^adgk]</td>
+							<td>查找给定集合外的任何字符。</td>
+						</tr>
+						<tr>
+							<td>(red|blue|green)</td>
+							<td>查找任何指定的选项。</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div>
+				<h2>元字符</h2>
+
+				<p>元字符（Metacharacter）是拥有特殊含义的字符：</p>
+
+				<table class="dataintable">
+					<tbody>
+						<tr>
+							<th style="width:20%">元字符</th>
+							<th>描述</th>
+						</tr>
+
+						<tr>
+							<td>
+								<a href="jsref_regexp_dot.asp">.</a>
+							</td>
+							<td>查找单个字符，除了换行和行结束符。</td>
+						</tr>
+
+						<tr>
+							<td>
+								<a href="jsref_regexp_wordchar.asp">\w</a>
+							</td>
+							<td>查找单词字符。</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_regexp_wordchar_non.asp">\W</a>
+							</td>
+							<td>查找非单词字符。</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_regexp_digit.asp">\d</a>
+							</td>
+							<td>查找数字。</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_regexp_digit_non.asp">\D</a>
+							</td>
+							<td>查找非数字字符。</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_regexp_whitespace.asp">\s</a>
+							</td>
+							<td>查找空白字符。</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_regexp_whitespace_non.asp">\S</a>
+							</td>
+							<td>查找非空白字符。</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_regexp_begin.asp">\b</a>
+							</td>
+							<td>匹配单词边界。</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_regexp_begin_not.asp">\B</a>
+							</td>
+							<td>匹配非单词边界。</td>
+						</tr>
+						<tr>
+							<td>\0</td>
+							<td>查找 NUL 字符。</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_regexp_newline.asp">\n</a>
+							</td>
+							<td>查找换行符。</td>
+						</tr>
+						<tr>
+							<td>\f</td>
+							<td>查找换页符。</td>
+						</tr>
+						<tr>
+							<td>\r</td>
+							<td>查找回车符。</td>
+						</tr>
+						<tr>
+							<td>\t</td>
+							<td>查找制表符。</td>
+						</tr>
+						<tr>
+							<td>\v</td>
+							<td>查找垂直制表符。</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_regexp_octal.asp">\xxx</a>
+							</td>
+							<td>查找以八进制数 xxx 规定的字符。</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_regexp_hex.asp">\xdd</a>
+							</td>
+							<td>查找以十六进制数 dd 规定的字符。</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_regexp_unicode_hex.asp">\uxxxx</a>
+							</td>
+							<td>查找以十六进制数 xxxx 规定的 Unicode 字符。</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div>
+				<h2>量词</h2>
+
+				<table class="dataintable">
+					<tbody>
+						<tr>
+							<th style="width:20%">量词</th>
+							<th>描述</th>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_regexp_onemore.asp">n+</a>
+							</td>
+							<td>匹配任何包含至少一个 n 的字符串。</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_regexp_zeromore.asp">n*</a>
+							</td>
+							<td>匹配任何包含零个或多个 n 的字符串。</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_regexp_zeroone.asp">n?</a>
+							</td>
+							<td>匹配任何包含零个或一个 n 的字符串。</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_regexp_nx.asp">n{X}</a>
+							</td>
+							<td>匹配包含 X 个 n 的序列的字符串。</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_regexp_nxy.asp">n{X,Y}</a>
+							</td>
+							<td>匹配包含 X 至 Y 个 n 的序列的字符串。</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_regexp_nxcomma.asp">n{X,}</a>
+							</td>
+							<td>匹配包含至少 X 个 n 的序列的字符串。</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_regexp_ndollar.asp">n$</a>
+							</td>
+							<td>匹配任何结尾为 n 的字符串。</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_regexp_ncaret.asp">^n</a>
+							</td>
+							<td>匹配任何开头为 n 的字符串。</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_regexp_nfollow.asp">?=n</a>
+							</td>
+							<td>匹配任何其后紧接指定字符串 n 的字符串。</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_regexp_nfollow_not.asp">?!n</a>
+							</td>
+							<td>匹配任何其后没有紧接指定字符串 n 的字符串。</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div>
+				<h2>RegExp 对象属性</h2>
+
+				<table class="dataintable">
+					<tbody>
+						<tr>
+							<th style="width:20%">属性</th>
+							<th style="width:66%">描述</th>
+							<th style="width:7%">FF</th>
+							<th style="width:7%">IE</th>
+						</tr>
+						<tr>
+							<td>
+								<a href="/jsref/jsref_regexp_global.asp">global</a>
+							</td>
+							<td>RegExp 对象是否具有标志 g。</td>
+							<td>1</td>
+							<td>4</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="/jsref/jsref_regexp_ignorecase.asp">ignoreCase</a>
+							</td>
+							<td>RegExp 对象是否具有标志 i。</td>
+							<td>1</td>
+							<td>4</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="/jsref/jsref_lastindex_regexp.asp">lastIndex</a>
+							</td>
+							<td>一个整数，标示开始下一次匹配的字符位置。</td>
+							<td>1</td>
+							<td>4</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="/jsref/jsref_multiline_regexp.asp">multiline</a>
+							</td>
+							<td>RegExp 对象是否具有标志 m。</td>
+							<td>1</td>
+							<td>4</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="/jsref/jsref_source_regexp.asp">source</a>
+							</td>
+							<td>正则表达式的源文本。</td>
+							<td>1</td>
+							<td>4</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div>
+				<h2>RegExp 对象方法</h2>
+
+				<table class="dataintable">
+					<tbody>
+						<tr>
+							<th style="width:20%">方法</th>
+							<th style="width:66%">描述</th>
+							<th style="width:7%">FF</th>
+							<th style="width:7%">IE</th>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_regexp_compile.asp">compile</a>
+							</td>
+							<td>编译正则表达式。</td>
+							<td>1</td>
+							<td>4</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_exec_regexp.asp">exec</a>
+							</td>
+							<td>检索字符串中指定的值。返回找到的值，并确定其位置。</td>
+							<td>1</td>
+							<td>4</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="jsref_test_regexp.asp">test</a>
+							</td>
+							<td>检索字符串中指定的值。返回 true 或 false。</td>
+							<td>1</td>
+							<td>4</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div>
+				<h2>支持正则表达式的 String 对象的方法</h2>
+
+				<table class="dataintable">
+					<tbody>
+						<tr>
+							<th style="width:20%">方法</th>
+							<th style="width:66%">描述</th>
+							<th style="width:7%">FF</th>
+							<th style="width:7%">IE</th>
+						</tr>
+						<tr>
+							<td>
+								<a href="/jsref/jsref_search.asp">search</a>
+							</td>
+							<td>检索与正则表达式相匹配的值。</td>
+							<td>1</td>
+							<td>4</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="/jsref/jsref_match.asp">match</a>
+							</td>
+							<td>找到一个或多个正则表达式的匹配。</td>
+							<td>1</td>
+							<td>4</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="/jsref/jsref_replace.asp">replace</a>
+							</td>
+							<td>替换与正则表达式匹配的子串。</td>
+							<td>1</td>
+							<td>4</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="/jsref/jsref_split.asp">split</a>
+							</td>
+							<td>把字符串分割为字符串数组。</td>
+							<td>1</td>
+							<td>4</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</body>
+
+	<script type="text/javascript">
+
+		//var reg = /src="/g;
+		//var reg = new RegExp('\\bsrc="\\b' , 'gim');
+		//var reg = /src="/g;
+
+		//str = str.replace(reg, 'SRC="');
+		//str = reg.exec(str);
+
+		// str = str.replace(/src=\"([^\"]*?)\">/gi);
+
+		//console.log(str)
+		var urls = [];
+		var str = '<div id="Cnt-Main-Article-QQ" bosszone="content"><p class="titdd-Article">[<strong>摘要</strong>]喜欢看电影的朋友一定记得《让子弹飞》，开平自力村是这部电影的取景地之一。这条村落以房舍形似军事碉堡著称，这些“碉堡”在本地被称为碉楼。</p><p style="TEXT-ALIGN: center" undefined?=""><div class="mbArticleSharePic         " r="1" style="width: 640px;"><div class="mbArticleShareBtn"><span>转播到腾讯微博</span></div><img alt="图片" src="http://inews.gtimg.com/newsapp_bt/0/2458305926/641"></div></p><p style="TEXT-INDENT: 2em">喜欢看电影的朋友一定记得《让子弹飞》，开平自力村是这部电影的取景地之一。这条村落以房舍形似军事碉堡著称，这些“碉堡”在本地被称为碉楼。碉楼中西合壁的建筑风格堪称世界奇观。 (来自:一路南风)</p><p style="TEXT-INDENT: 2em"></p><div><div undefined?=""><p style="TEXT-ALIGN: center"><div class="mbArticleSharePic    " r="1" style="width: 640px;"><div class="mbArticleShareBtn"><span>转播到腾讯微博</span></div><img alt="图片" src="http://inews.gtimg.com/newsapp_bt/0/2458305920/641"></div></p><p>        自力村位于开平塘口镇，清末民初，受鸦片的影响，开平一带人民生活普遍困顿，恰逢西方国家发展经济，来华招募劳工，自力村民成为远渡重洋的劳工群体之一。 (来自:一路南风)</p></div></div><p style="TEXT-INDENT: 2em"></p><div><div undefined?=""><p style="TEXT-ALIGN: center"><div class="mbArticleSharePic " r="1" style="width: 640px;"><div class="mbArticleShareBtn"><span>转播到腾讯微博</span></div><img alt="图片" src="http://inews.gtimg.com/newsapp_bt/0/2458305914/641"></div></p><p>        发了达的村民陆续返乡买田置地、兴建房舍，并带身边的亲友到海外打拼，一时间海外人口超过了本地常住人口。 (来自:一路南风)</p></div></div><p style="TEXT-INDENT: 2em"></p><div><div undefined?=""><p style="TEXT-ALIGN: center"><div class="mbArticleSharePic"><div class="mbArticleShareBtn"><span>转播到腾讯微博</span></div><img alt="图片" src="http://inews.gtimg.com/newsapp_bt/0/2458306310/641"></div></p><p>        因为地势低洼，开平一带极易发生洪涝灾害，又因为村里留守男人稀少，导致土匪横行。开平各村的村民或独力、或集资兴建了大量碉楼式建筑。自力村是碉楼建筑数量最多且最集中的村落。 (来自:一路南风)</p></div></div><p style="TEXT-INDENT: 2em"></p><div><div undefined?=""><p style="TEXT-ALIGN: center"><div class="mbArticleSharePic"><div class="mbArticleShareBtn"><span>转播到腾讯微博</span></div><img alt="图片" src="http://inews.gtimg.com/newsapp_bt/0/2458306589/641"></div></p><p>        受海外思潮的影响，这些建筑的风格有别于传统岭南建筑，除了居住功能，还兼带防缷功能，如每栋楼都保留了枪眼，只要盗贼或敌人靠近碉楼便发射各种防缷物。 (来自:一路南风)</p></div></div><p style="TEXT-INDENT: 2em"></p><div><div undefined?=""><p style="TEXT-ALIGN: center"><div class="mbArticleSharePic " r="1" style="width: 640px;"><div class="mbArticleShareBtn"><span>转播到腾讯微博</span></div><img alt="图片" src="http://inews.gtimg.com/newsapp_bt/0/2458306935/641"></div></p><p>        自力村各栋碉楼的主人几乎都有海外背景，碉楼内的陈设物尽是西洋物件，每一件都藏着一段故事，等待有心人去了解…… (来自:一路南风)</p></div></div></div>'
+		//var content = '过儿，我西毒欧阳锋一生纵横西域，今日能与七公切磋武艺，<img src="http://iw3c.com/themes/white/style/logo.png" />共葬于这雪山之颠，也算不枉此生！死前我要将毕<img src="http://iw3c.com/themes/white/style/rss.png" />生所学尽相传授与你。';
+		
+		//提取文本中所以img图片
+		str.replace(/<img.*?src="(.*?)"[^>]*>/g, function(a, b) {
+			urls.push(a);
+			console.log(b)
+			document.write(a)
+		});
+		alert(urls);
+
+		function getImgSrcFromStr($str) {
+			preg_match_all('/<img[^>]*src\s*=\s*([\'"]?)([^\'" >]*)\1/isu', $str, $src);
+			return $src[2];
+		}
+
+		/*
+		 JavaScript中，RegExp内置对象支持正则表达式
+		 有两种方法实例化EegExp对象
+		 一、字面量：
+		 var mupiao = /src="/gim;
+
+		 
+		 
+		 
+		 二、构造函数：
+		 var mupiao = new RegExp('\\bsrc="\\b' , 'g');
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 RegExp正则表达式特殊含义元字符：
+		 
+		 ^ 表示 以xxx开始
+		 $ 表示 以xxx结束
+		 * 表示 任意个，所有个
+		 . 表示 任意字符法
+		 | 表示 或
+		 \ 表示
+		 ? 表示 0个或1个
+		 + 表示 循环
+		 () 表示 分组
+		 [] 表示 归类 如范围[a-z],[A-Z],[0-9] 或者连续的[a-zA-Z0-9]
+		 {} 表示
+		 
+		 \b 表示 单词边界
+		 \B 表示 非单词边界
+		 \t 表示 水平制表符
+		 \v 表示 垂直制表符
+		 \n 表示 换行符
+		 \r 表示 回车符
+		 \0  表示 空字符
+		 \f 表示 换页符
+		 \cX 表示 与X对应的控制字符（Ctrl+X, \cC == Ctrl+C）
+		 
+		 预定义类：
+		 \d 表示 数类型  == [0-9]
+		 \D 表示 非数字字符  == [^0-9]
+		 \s 表示 空白符[\t\n\x0B\f\r]
+		 \S 表示 非空白符[^\t\n\x0B\f\r]
+		 \w 表示 单词字符[a-zA-Z_0-9]
+		 \W 表示 非单词字符[^a-zA-Z_0-9]
+		 
+		 
+		 g 表示 全文搜索，（如不添加则搜索一个匹配）
+		 i 表示 忽略大小写，（默认大小写敏感）
+		 m 表示 多行搜索
+		 
+		 
+		 */
+	</script>
+
+</html>

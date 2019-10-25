@@ -1,0 +1,259 @@
+﻿什么是 AJAX？
+
+ajax的作用:ajax是一种网页开发技术,
+1、从服务器读取文件（数据）;如（请求静态的TXT文件，动态数据,json,DOM创建元素，等）
+2、无刷新数据读取，(减少服务器压力,)
+3、它只能在服务器上去读取数据，
+4、局部刷新(异步交互)：请求前显示部分网页文件,(传统的网页的区别是整体刷新)
+5、提高用户体验，
+XMLHttpRequest：(IE6不支持)用于在后台与服务器交换数据，在不重新加载整个网页的情况下，对网页的某部分进行更新，
+ajax用领域范围 web前端开发
+
+ 
+AJAX即“Asynchronous Javascript And XML”（异步JavaScript和XML），是指一种创建交互式网页应用的网页开发技术。
+AJAX = 异步 JavaScript和XML（标准通用标记语言的子集）。
+AJAX 是一种用于创建快速动态网页的技术。
+通过在后台与服务器进行少量数据交换，AJAX 可以使网页实现异步更新。这意味着可以在不重新加载整个网页的情况下，对网页的某部分进行更新。
+传统的网页（不使用 AJAX）如果需要更新内容，必须重载整个网页页面。
+
+jQuery中的ajax; == $ajax
+
+
+$.get, $.post 等。$.ajax() =等于= XMLHttpRequest 对象
+
+AJAX = 异步 JavaScript 和 XML（Asynchronous JavaScript and XML）。
+简短地说，在不重载整个网页的情况下，AJAX 通过后台加载数据，并在网页上进行显示。
+使用 AJAX 的应用程序案例：谷歌地图、腾讯微博、优酷视频、人人网等等。
+
+通过 jQuery AJAX 方法，您能够使用 HTTP Get 和 HTTP Post 从远程服务器上请求文本、HTML、XML 或 JSON - 同时您能够把这些外部数据直接载入网页的被选元素中。
+提示：如果没有 jQuery，AJAX 编程还是有些难度的。
+编写常规的 AJAX 代码并不容易，因为不同的浏览器对 AJAX 的实现并不相同。这意味着您必须编写额外的代码对浏览器进行测试。不过，jQuery 团队为我们解决了这个难题，我们只需要一行简单的代码，就可以实现 AJAX 功能。
+
+
+你向ajax后台的程序发送xmlhttp请求的时候, 后台程序接到请求会进行处理,处理结束后,可以返回一串数据给前台,这个就是responseText. 
+
+
+1、$.get
+$.get()方法使用GET方式来进行异步请求，它的语法结构为：
+$.get( url [, data] [, callback] )
+解释一下这个函数的各个参数：
+url：string类型，ajax请求的地址。
+data：可选参数，object类型，发送至服务器的key/value数据会作为QueryString附加到请求URL中。
+callback：可选参数，function类型，当ajax返回成功时自动调用该函数。
+最后写一个$.get()的实例供大家参考：
+
+$.get(
+    "http://www.xxx.com/submit.aspx",{
+        id:     '123',
+        name:   '青藤园',
+    },function(data,state){
+        //这里显示从服务器返回的数据
+        alert(data);
+        //这里显示返回的状态
+        alert(state);
+    }
+)
+
+
+
+
+
+2、$.post()
+$.post()方法使用POST方式来进行异步请求，它的语法结构为：
+
+$.post(url,[data],[callback],[type])
+
+这个方法和$.get()用法差不多，唯独多了一个type参数，那么这里就只介绍type参数吧，其他的参考上面$.get()的。
+type：type为请求的数据类型，可以是html,xml,json等类型，如果我们设置这个参数为：json，那么返回的格式则是json格式的，如果没有设置，就和$.get()返回的格式一样，都是字符串的。
+最后写一个$.post()的实例供大家参考：
+
+$.post(
+    "http://www.xxx.com/submit.aspx",{
+        id:     '123',
+        name:   '青藤园',
+    },function(data,state){
+        //这里显示从服务器返回的数据
+        alert(data);
+        //这里显示返回的状态
+        alert(state);
+    },
+    "json"
+)
+
+
+
+
+
+3、$.getJSON()
+$.getJSON()是专门为ajax获取json数据而设置的，并且支持跨域调用，其语法的格式为：
+
+getJSON(url,[data],[callback])
+
+url：string类型， 发送请求地址 
+data ：可选参数， 待发送 Key/value 参数 ，同get，post类型的data
+callback ：可选参数，载入成功时回调函数，同get，post类型的callback
+JSON是一种理想的数据传输格式，它能够很好的融合与JavaScript或其他宿主语言，并且可以被JS直接使用。使用JSON相比传统的通过 GET、POST直接发送“裸体”数据，在结构上更为合理，也更为安全。至于jQuery的getJSON()函数，只是设置了JSON参数的 ajax()函数的一个简化版本。这个函数也是可以跨域使用的，相比get()、post()有一定优势。另外这个函数可以通过把请求url写 成"myurl?callback=X"这种格式，让程序执行回调函数X。
+
+
+
+
+
+
+
+4、$.ajax()
+$.ajax()是jquery中通用的一个ajax封装，其语法的格式为：
+
+$.ajax(options)
+
+其中options是一个object类型，它指明了本次ajax调用的具体参数，这里我把最常用的几个参数附上
+
+$.ajax({
+        url: 'http://www.xxxx.com/submit.aspx.php)',
+        datatype: "json",
+        type: 'post',
+        success: function (e) {   //成功后回调
+            alert(e);
+        },
+        error: function(e){    //失败后回调
+            alert(e);
+        },
+        beforeSend: function(){  /发送请求前调用，可以放一些"正在加载"之类额话
+            alert("正在加载");
+        }
+})
+
+
+
+/*************************************************** $.ajax **********************************************************/
+Jquery在异步提交方面封装的很好，直接用AJAX非常麻烦，Jquery大大简化了我们的操作，不用考虑浏览器的诧异了。
+
+推荐一篇不错的jQuery Ajax 实例文章，忘记了可以去看看，
+
+地址为：http://www.cnblogs.com/yeer/archive/2009/07/23/1529460.html 和 http://www.w3school.com.cn/jquery/
+
+ 
+
+$.post、$.get是一些简单的方法，如果要处理复杂的逻辑，还是需要用到jQuery.ajax()
+
+ 
+
+一、$.ajax的一般格式
+
+$.ajax({
+
+     type: 'POST',
+
+     url: url ,
+
+    data: data ,
+
+    success: success ,
+
+    dataType: dataType
+
+});
+
+ 
+
+二、$.ajax的参数描述
+
+	参数 					描述
+
+	url 					必需。规定把请求发送到哪个 URL。 
+	data 					可选。映射或字符串值。规定连同请求发送到服务器的数据。 
+	success(data, textStatus, jqXHR) 可选。请求成功时执行的回调函数。 
+	dataType 				可选。规定预期的服务器响应的数据类型。
+
+	默认执行智能判断（xml、json、script 或 html）。
+ 
+三、$.ajax需要注意的一些地方：
+
+1.
+ dataType
+类型：String
+预期服务器返回的数据类型。如果不指定，jQuery 将自动根据 HTTP 包 MIME 信息来智能判断，比如 XML MIME 类型就被识别为 XML。在 1.4 中，JSON 就会生成一个 JavaScript 对象，而 script 则会执行这个脚本。随后服务器端返回的数据会根据这个值解析后，传递给回调函数。。可用值:
+"xml": 返回 XML 文档，可用 jQuery 处理。
+"html": 返回纯文本 HTML 信息；包含的 script 标签会在插入 dom 时执行。
+"script": 返回纯文本 JavaScript 代码。不会自动缓存结果。除非设置了 "cache" 参数。注意：在远程请求时(不在同一个域下)，所有 POST 请求都将转为 GET 请求。（因为将使用 DOM 的 script标签来加载）
+"json": 返回 JSON 数据 。
+"jsonp": JSONP 格式。使用 JSONP 形式调用函数时，如 "myurl?callback=?" jQuery 将自动替换 ? 为正确的函数名，以执行回调函数。
+"text": 返回纯文本字符串
+
+2.$.ajax只提交form以文本方式，如果异步提交包含<file>上传是传过不过去,需要使用jquery.form.js的$.ajaxSubmit
+
+1 //1.$.ajax带json数据的异步请求
+ 2 var aj = $.ajax( {  
+ 3     url:'productManager_reverseUpdate',// 跳转到 action  
+ 4     data:{  
+ 5              selRollBack : selRollBack,  
+ 6              selOperatorsCode : selOperatorsCode,  
+ 7              PROVINCECODE : PROVINCECODE,  
+ 8              pass2 : pass2  
+ 9     },  
+10     type:'post',  
+11     cache:false,  
+12     dataType:'json',  
+13     success:function(data) {  
+14         if(data.msg =="true" ){  
+15             // view("修改成功！");  
+16             alert("修改成功！");  
+17             window.location.reload();  
+18         }else{  
+19             view(data.msg);  
+20         }  
+21      },  
+22      error : function() {  
+23           // view("异常！");  
+24           alert("异常！");  
+25      }  
+26 });
+27 
+28 
+29 //2.$.ajax序列化表格内容为字符串的异步请求
+30 function noTips(){  
+31     var formParam = $("#form1").serialize();//序列化表格内容为字符串  
+32     $.ajax({  
+33         type:'post',      
+34         url:'Notice_noTipsNotice',  
+35         data:formParam,  
+36         cache:false,  
+37         dataType:'json',  
+38         success:function(data){  
+39         }  
+40     });  
+41 }  
+42 
+43 
+44 //3.$.ajax拼接url的异步请求
+45 var yz=$.ajax({  
+46      type:'post',  
+47      url:'validatePwd2_checkPwd2?password2='+password2,  
+48      data:{},  
+49      cache:false,  
+50      dataType:'json',  
+51      success:function(data){  
+52           if( data.msg =="false" ) //服务器返回false，就将validatePassword2的值改为pwd2Error，这是异步，需要考虑返回时间  
+53           {  
+54                textPassword2.html("<font color='red'>业务密码不正确！</font>");  
+55                $("#validatePassword2").val("pwd2Error");  
+56                checkPassword2 = false;  
+57                return;  
+58            }  
+59       },  
+60       error:function(){}  
+61 }); 
+62 
+63 
+64 //4.$.ajax拼接data的异步请求
+65 $.ajax({   
+66     url:'<%=request.getContextPath()%>/kc/kc_checkMerNameUnique.action',   
+67     type:'post',   
+68     data:'merName='+values,   
+69     async : false, //默认为true 异步   
+70     error:function(){   
+71        alert('error');   
+72     },   
+73     success:function(data){   
+74        $("#"+divs).html(data);   
+75     }
+76 });

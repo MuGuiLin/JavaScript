@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训2017-10JS</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    //函数的参数可以加默认值,只有不传实参的时候才会走默认值
+    function fn1(x="x",y) {
+        console.log(x,y);
+    }
+    fn1(1,2);
+
+    function fn2({x=0,y=0}={}) {
+        return{x,y}
+    }
+
+    console.log(fn2({x: 1}));
+    function fn3({x,y}={x:0,y:0}) {
+        return{x,y}
+    }
+    fn3({x:1});
+
+    //一般都会把默认值放后面
+    function fn4(x,y=1,z) {
+
+    }
+    fn4(1,2,3);
+
+    //参数集合
+    function fn5() {
+        //arguments.length:实参的长度
+        console.log(arguments.length);
+    }
+    fn5(1,2,3,4,5);
+
+    function fn6(x=0,y,z) {};
+    fn6();
+    //没有默认值的情况下,形参的长度
+    //如果有默认值,默认值的参数的位置
+    console.log(fn6.length);
+</script>

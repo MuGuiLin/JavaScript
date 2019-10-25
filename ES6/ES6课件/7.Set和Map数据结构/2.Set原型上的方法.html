@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训2017-10JS</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    //size:表示长度
+
+    var set1=new Set([1,2,3,4]);
+    //1.add(),增加,之前没有才可以加速,(加在后面)
+    //返回值是当前实例,说明可以实现链式写法
+    console.log(set1.add(5).add(6));
+
+    //2.has(),判断当前实例中有没有某一项
+    //返回值true/false
+    console.log(set1.has(1));
+    console.log(set1.has(10));
+
+    //3.delete(),删除实例中的某一项
+    //返回值true:删除成功,false:删除失败
+    console.log(set1.delete(2));
+    console.log(set1);
+
+    //clear(),清空
+    //没有返回值,undefined
+    set1.clear();
+    console.log(set1);
+
+    var arr1=[1,2,3,4,5,6];
+    var arr2=[2,4,6,8,10];
+
+    //1.并集[1,2,3,4,5,6,8,10]
+    function bj(ary1,ary2) {
+        //合并,[...ary1,...ary2]
+        //去重 new Set([...ary1,...ary2])
+        //变成数组 [...new Set([...ary1,...ary2])];
+        return [...new Set([...ary1,...ary2])];
+    }
+    bj(arr1,arr2);
+
+    //交集(相同的部分)
+    function jj(ary1,ary2) {
+        return ary1.filter((item)=>{
+            return ary2.includes(item);
+        })
+    }
+
+    console.log(jj(arr1, arr2));
+
+    //差集() 去除并集中交集部分
+    function cj(ary1,ary2) {
+        return bj(ary1,ary2).filter((item)=>{
+            return !jj(ary1,ary2).includes(item);
+        })
+    }
+
+    console.log(cj(arr1, arr2));
+</script>

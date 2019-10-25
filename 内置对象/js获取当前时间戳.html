@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body><input name="timesj" value="" type="text" id="timesj" class="intxt">
+	</body>
+
+	<script type="text/javascript">
+		var nowDate = new Date().getTime();
+		document.getElementById("timesj").value = new Date().getTime();
+	</script>
+
+	时间与时间戳之间的转换 [javascript] view plain copy
+	<script type="text/javascript">
+		// 获取当前时间戳(以s为单位)  
+		var timestamp = Date.parse(new Date());
+		timestamp = timestamp / 1000;
+		//当前时间戳为：1403149534  
+		console.log("当前时间戳为：" + timestamp);
+
+		// 获取某个时间格式的时间戳  
+		var stringTime = "2014-07-10 10:21:12";
+		var timestamp2 = Date.parse(new Date(stringTime));
+		timestamp2 = timestamp2 / 1000;
+		//2014-07-10 10:21:12的时间戳为：1404958872   
+		console.log(stringTime + "的时间戳为：" + timestamp2);
+
+		// 将当前时间换成时间格式字符串  
+		var timestamp3 = 1403058804;
+		var newDate = new Date();
+		newDate.setTime(timestamp3 * 1000);
+		// Wed Jun 18 2014   
+		console.log(newDate.toDateString());
+		// Wed, 18 Jun 2014 02:33:24 GMT   
+		console.log(newDate.toGMTString());
+		// 2014-06-18T02:33:24.000Z  
+		console.log(newDate.toISOString());
+		// 2014-06-18T02:33:24.000Z   
+		console.log(newDate.toJSON());
+		// 2014年6月18日   
+		console.log(newDate.toLocaleDateString());
+		// 2014年6月18日 上午10:33:24   
+		console.log(newDate.toLocaleString());
+		// 上午10:33:24   
+		console.log(newDate.toLocaleTimeString());
+		// Wed Jun 18 2014 10:33:24 GMT+0800 (中国标准时间)  
+		console.log(newDate.toString());
+		// 10:33:24 GMT+0800 (中国标准时间)   
+		console.log(newDate.toTimeString());
+		// Wed, 18 Jun 2014 02:33:24 GMT  
+		console.log(newDate.toUTCString());
+
+		Date.prototype.format = function(format) {
+			var date = {
+				"M+": this.getMonth() + 1,
+				"d+": this.getDate(),
+				"h+": this.getHours(),
+				"m+": this.getMinutes(),
+				"s+": this.getSeconds(),
+				"q+": Math.floor((this.getMonth() + 3) / 3),
+				"S+": this.getMilliseconds()
+			};
+			if(/(y+)/i.test(format)) {
+				format = format.replace(RegExp.$1, (this.getFullYear() + '').substr(4 - RegExp.$1.length));
+			}
+			for(var k in date) {
+				if(new RegExp("(" + k + ")").test(format)) {
+					format = format.replace(RegExp.$1, RegExp.$1.length == 1 ?
+						date[k] : ("00" + date[k]).substr(("" + date[k]).length));
+				}
+			}
+			return format;
+		}
+		console.log(newDate.format('yyyy-MM-dd h:m:s'));
+	</script>
+
+	<script>
+		var now = new Date();
+		var lw = new Date(now.getTime() + 1000 * 60 * 60 * 24 * 7);
+		console.log(now);
+		console.log(lw);
+
+		//设置日期，当前日期的前七天
+		var myDate = new Date(); //获取今天日期
+		//myDate.setDate(myDate.getDate() - 7); //前7天
+		myDate.setDate(myDate.getDate());
+		//myDate.setDate(myDate.getDate() + 7); //7天后
+
+		var dateArray = [];
+		var dateTemp;
+		var flag = 1;
+		for(var i = 0; i < 10; i++) {
+			dateTemp = (myDate.getMonth() + 1) + "-" + myDate.getDate();
+			dateArray.push(dateTemp);
+			myDate.setDate(myDate.getDate() + flag);
+		}
+		console.log(dateArray)
+	</script>
+
+	<script type="text/javascript">
+		function getNowFormatDate() {
+			var day = new Date();
+			var Year = 0;
+			var Month = 0;
+			var Day = 0;
+			var CurrentDate = "";
+			//初始化时间 
+			//Year       = day.getYear();//有火狐下2008年显示108的bug 
+			Year = day.getFullYear(); //ie火狐下都可以 
+			Month = day.getMonth() + 1;
+			Day = day.getDate();
+			CurrentDate += Year + "-";
+			if(Month >= 10) {
+				CurrentDate += Month + "-";
+			} else {
+				CurrentDate += "0" + Month + "-";
+			}
+			if(Day >= 10) {
+				CurrentDate += Day;
+			} else {
+				CurrentDate += "0" + Day;
+			}
+
+			return CurrentDate;
+		}
+
+		//获取的时间就会补零 
+		var nowdate = getNowFormatDate();
+		console.log(nowdate)
+	</script>
+
+	<script type="text/javascript">
+		function getSendDate(){
+			var myDate = new Date(),
+				Week = new Array(),
+				dateArray = [],
+			 	plus = 1;
+			myDate.setDate(myDate.getDate());
+			Week[0] = "日 "; Week[1] = "一 "; Week[2] = "二 "; Week[3] = "三 "; Week[4] = "四 ";Week[5] = "五 "; Week[6] = "六 ";
+			
+			for(var i = 0; i < 7; i++) {
+				var Year = myDate.getFullYear(),
+					Month = myDate.getMonth() + 1,
+					Day = myDate.getDate();
+				if(Month < 10) {
+					Month = "0"+ Month;
+				}
+				if(Day < 10) {
+					Day = "0"+ Day;
+				}
+				dateArray.push(Year +"年"+ Month + "月" + Day +"日 星期"+ Week[myDate.getDay()]);
+				myDate.setDate(myDate.getDate() + plus);
+			}
+			return dateArray;
+		}
+		//console.log(getSendDate());
+	</script>
+	
+	<script type="text/javascript">
+		function getSendDate(num){
+			var myDate = new Date(),
+				Week = new Array(),
+				dateArray = [],
+			 	plus = 1;
+			myDate.setDate(myDate.getDate());
+			Week[0] = "日 "; Week[1] = "一 "; Week[2] = "二 "; Week[3] = "三 "; Week[4] = "四 ";Week[5] = "五 "; Week[6] = "六 ";
+
+			if(num){
+				for(var i = 0; i < 7; i++) {
+					var Year = myDate.getFullYear(),
+						Month = myDate.getMonth() + 1,
+						Day = myDate.getDate();
+					if(Month < 10) {
+						Month = "0"+ Month;
+					}
+					if(Day < 10) {
+						Day = "0"+ Day;
+					}
+					dateArray.push(Month +"月"+ Day +"日  "+ Week[myDate.getDay()]);
+					myDate.setDate(myDate.getDate() + plus);
+				}
+			}else{	
+				for(var i = 0; i < 7; i++) {
+					var Month = myDate.getMonth() + 1,
+						Day = myDate.getDate();
+					if(Month < 10) {
+						Month = "0"+ Month;
+					}
+					if(Day < 10) {
+						Day = "0"+ Day;
+					}
+					dateArray.push(Month + Day);
+					myDate.setDate(myDate.getDate() + plus);
+				}
+			}
+			return dateArray;
+		}
+			
+			console.log(getSendDate(true));
+			console.log(getSendDate());
+	</script>
+
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>展开运算符</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        h2,
+        h4 {
+            line-height: 50px;
+            text-align: center;
+        }
+
+        section {
+            padding: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>展开运算符 ... </h1>
+    <hr>
+
+    <section>
+        <h2>展开运算符 ... ,可将一个数组，或 对象 进行合并</h2>
+
+
+
+    </section>
+
+    <script>
+        {
+            // ... 根据位置不同，作用也不一样 ...放在右边就是展开，放在左边就是剩余解构赋值，放在函数的(...par)就是展开
+
+
+            // 一、对象展开：
+            let obj1 = { name: 'mupiao', age: 28 };
+            let obj2 = { job: 'Web前端' }
+
+            let obj3 = { ...obj1, ...obj2, key: 'value' };
+            console.log(obj3) //{name: "mupiao", age: 28, job: "Web前端", key: "value"}
+
+
+
+
+            // 二、数组展开：
+            let arr1 = ['H5', 28, 'CSS3'];
+            let arr2 = ['ES6', 'Angular', 'React', 'Vue'];
+
+            let arr3 = [...arr1, '666', ...arr2];
+            console.log(arr3) //["H5", 28, "CSS3", "666", "ES6", "Angular", "React", "Vue"]
+
+
+            // 三、剩余参数：
+            let obj = { h5: 'html5', css: 'css3', js: 'ES6', img: 'images' };
+
+            let { js, h5, ...all } = obj; //将js 和 css 提出来，剩下全部赋给all
+
+            // let {css, ...all, js} = obj;  //注：不能在 ...之在在提取，不然报错
+
+            console.log(h5, js, all);  //html5 ES6 {css: "css3", img: "images"}
+
+            //数组也一样
+            let arr = [1, 2, 3, 4, 5, 6];
+            let {yi, er, san, ...alls} = arr;
+            console.log(yi, er, san, alls)
+
+
+            // 四、解构赋值：
+
+
+            // 五、函数参数展开
+            let fn = (id = 1000, ...par) => {
+                //此时：这里的par将是一个数组
+                console.log(id, par);  //1008 (2) [{…}, Array(6)]
+
+                console.log(par[0], par[0].img) //{h5: "html5", css: "css3", js: "ES6", img: "images"} "images"
+            };
+
+            fn(1008, obj, arr);
+
+
+        };
+    </script>
+</body>
+
+</html>

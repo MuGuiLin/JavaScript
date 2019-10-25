@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>ES6数组操作</title>
+		<style type="text/css">
+			h1 {
+				text-align: center;
+			}
+		</style>
+	</head>
+
+	<body>
+		<h1>ES6数组操作</h1>
+		<hr />
+	</body>
+	
+	<script type="text/javascript">
+		'use strict';
+	//复制数组
+		var arr1 = [222, 666, 888];
+		var arr2 = arr1;
+		document.write('初始数组：'+arr1, arr2+'<br/>');
+		arr1.pop(); //删除arr1后arr2以会受到影响
+		document.write('删除数组1后：'+arr1, arr2+'<br/>');
+	
+	//解决方法1:
+		var arr1 = [222, 666, 888];
+		var arr2 = [];
+		for(var i = 0; i < arr1.length; i++){
+			arr2[i] = arr1[i];
+		}
+		arr1.pop(); //此时就没影响了
+		document.write('解决方法1：'+arr1, arr2+'<br/>');
+		
+	//解决方法2(ES6):
+		var arr1 = [222, 666, 888];
+		//var arr2 = Array.form(arr1);
+		arr1.pop(); //此时就没影响了
+		document.write('解决方法2：'+arr1, arr2+'<br/>');
+		
+	//解决方法3(ES6):
+		var arr1 = [222, 666, 888];
+		var arr2 = [...arr1];  // ...参数超引用（3个点）
+		arr2.pop(); //此时就没影响了
+		document.write('解决方法3：'+arr1, arr2+'<br/>');
+	
+	//参数超引用的其他用途：
+		function show(...mupiao){
+			document.write(mupiao); //此时传过的来参数已变成数组了！！！
+			
+			document.write(mupiao[1]); //如：取第2个参数
+			
+		}
+		show(1, '你好', 1024, [1,2,3]);
+	</script>
+
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        @keyframes mover{
+            40%{opacity:1;color:#ffed00}
+            60%{color:#00fdbe}
+        }
+        @-moz-keyframes mover{
+            40%{opacity:1;color:#ee9a40}
+            60%{color:#37af91}
+            80%{opacity:.8}
+            100%{opacity:1}
+        }
+        @-webkit-keyframes mover{
+            40%{opacity:1;color:#ee9a40}
+            60%{color:#37af91}
+            80%{opacity:.8}
+            100%{opacity:1}
+        }
+        @-o-keyframes mover{
+            40%{opacity:1;color:#ee9a40}
+            60%{color:#37af91}
+            80%{opacity:.8}
+            100%{opacity:1}
+        }
+        .alltit{text-align:center;font-size:40px;color:#333;text-transform:uppercase;height:40px;line-height:40px}
+        .alltit span{position:relative;letter-spacing:2px;display:inline-block;position:relative;font-weight:700}
+        .alltit span b{display:inline-block;width:154px;height:13px;position:absolute;top:15px}
+        .alltit span .bl{background:url(../images/b1.png) no-repeat center top;left:-185px}
+        .alltit span .br{background:url(../images/b2.png) no-repeat center top;right:-185px}
+        .alltit em{font-style:normal}
+        .alltit i:nth-of-type(2){animation-delay:.05s}
+        .alltit i:nth-of-type(3){animation-delay:.1s}
+        .alltit i:nth-of-type(4){animation-delay:.15s}
+        .alltit i:nth-of-type(5){animation-delay:.2s}
+        .alltit i:nth-of-type(6){animation-delay:.25s}
+        .alltit i:nth-of-type(7){animation-delay:.3s}
+        .alltit i:nth-of-type(8){animation-delay:.35s}
+        .alltit i:nth-of-type(9){animation-delay:.4s}
+        .alltit i:nth-of-type(10){animation-delay:.45s}
+        .alltit i:nth-of-type(11){animation-delay:.5s}
+        .alltit i:nth-of-type(12){animation-delay:.55s}
+        .alltit i:nth-of-type(13){animation-delay:.6s}
+        .alltit i:nth-of-type(14){animation-delay:.65s}
+        .alltit i:nth-of-type(15){animation-delay:.7s}
+        .alltit i:nth-of-type(16){animation-delay:.75s}
+        .alltit i:nth-of-type(17){animation-delay:.8s}
+        .alltit i:nth-of-type(18){animation-delay:.85s}
+        .alltit i{font-style:normal;animation:mover 2s ease-in-out infinite;-moz-animation:mover 2s forwards;animation:mover 2s ease-in-out infinite;-webkit-animation:mover 2s ease-in-out infinite;-o-animation:mover 2s ease-in-out infinite}
+    
+    </style>
+</head>
+<body>
+<div class="alltit">
+    <span>
+        <b class="bl">***</b>
+        <b class="br">***</b>
+        <i>C</i>
+        <i>S</i>
+        <i>S</i>
+        <i>文</i>
+        <i>字</i>
+        <i>渐</i>
+        <i>变</i>
+        <i>动</i>
+        <i>画</i>
+        <i>效</i>
+        <i>果</i>
+    </span>
+</div>
+</body>
+</html>
