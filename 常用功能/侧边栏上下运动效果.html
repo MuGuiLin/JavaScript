@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>侧边栏上下运动效果</title>
+<style type="text/css">
+div{width:150px;height:250px;background:yellow;position:absolute;right:0px;}
+</style>
+<script type="text/javascript">
+window.onscroll=function()
+{
+	var oDiv=document.getElementById('div1');
+	
+	var scrollTop=document.documentElement.scrollTop||document.body.scrollTop;
+	
+	//oDiv.style.top=scrollTop+(document.documentElement.clientHeight-oDiv.offsetHeight)/2+'px';
+	
+	var SeT=scrollTop+(document.documentElement.clientHeight-oDiv.offsetHeight)/2;
+
+	startMove(parseInt(SeT));//parseInt取整
+}
+
+var timer=null;
+function startMove(mupiao)
+{
+	var oDiv=document.getElementById('div1');
+	
+	clearInterval(timer);
+	
+	timer=setInterval(function()
+	{
+		var iSpeed=(mupiao-oDiv.offsetTop)/8;
+		
+		iSpeed=iSpeed>0?Math.ceil(iSpeed):Math.floor(iSpeed);//速度取整
+		
+		if(oDiv.offsetTop==mupiao)
+		{
+			clearInterval(timer);
+		}
+		else
+		{
+			oDiv.style.top=oDiv.offsetTop+iSpeed+'px';
+		}
+	},30)
+}
+</script>
+</head>
+
+<body style="height:2000px;">
+<div id="div1"></div>
+</body>
+</html>

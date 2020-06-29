@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            position: absolute;
+            left: 0;
+            top: 100px;
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<button id="run">跑</button>
+<button id="stop">停</button>
+<div id="box"></div>  
+<script>
+/*
+定时器:
+    setTimeout(fn,delay) 延迟型定时器
+    setInterval(fn,interval) 间隔型定时器
+    
+    返回值：index 定时器编号
+
+清除(关闭)定时器:
+    clearInterval(index);
+    clearTimeout(index);
+
+*/    
+function $(cssSelector){
+    var els = document.querySelectorAll(cssSelector);
+    return els.length > 1?els:els[0];
+};    
+(function(){
+    var run = $("#run");
+    var stop = $("#stop");
+    var box = $("#box");
+    var l = 0;
+    var timer = 0;
+    run.onclick = function(){
+        timer = setInterval(function(){
+            l += 2;
+            box.style.left = l + "px";
+        },16);
+        console.log(timer);
+    };
+    stop.onclick = function(){
+        clearInterval(timer);
+    };
+})();    
+</script>  
+</body>
+</html>

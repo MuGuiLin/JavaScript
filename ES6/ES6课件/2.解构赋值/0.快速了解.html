@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script> 
+{
+    // let a = 10;
+    // var b = 10;
+    let obj = {
+        a: 0,
+        b: 1,
+        c: 2
+    };
+    // let {a} = obj;
+    // let [b,c] = [1,2,3];
+    let [{a:newA,c="C"}] = [{...obj}];
+    console.log(newA,c);
+} 
+</script>    
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// 对象：数组
+// var arr = [];
+// console.log(typeof arr);
+// var d = document;
+// console.log(typeof d);
+// var obj = {};
+// console.log(typeof obj);
+// var body = document.body;
+// console.log(typeof body);
+/*
+    this 指向：
+        1. 函数外 this 指向 window
+        2. 函数内的 this 主要看这个函数是怎么被调用
+            1) 作为对象的属性（方法）调用 - 指向当前对象
+            2) 其余情况都指向 window
+*/
+function fn(){
+    console.log(this);
+}
+var obj = {
+    name: "KKB",
+    say: fn
+};
+obj.say();
+fn();
+
+// document.onclick = fn;
+// document.onclick();
+
+    // var out = 35, 
+    // obj = { out: 20, 
+    // func: function () { 
+    //         var out = 30; 
+    //         return this.out; 
+    //     } 
+    // }; 
+    // console.log((obj.func, obj.func)()); 
+    // console.log(obj.func());
+    // console.log((obj.func)());
+    // console.log((obj.func = obj.func)());
+
+</script>    
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>鼠标拖放</title>
+
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        .move {
+            position: relative;
+            margin: 100px;
+            width: 100px;
+            height: 100px;
+            background: rgba(0, 0, 255, 0.5);
+            border: 1px solid red;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>鼠标事件</h1>
+    <hr>
+
+    <pre>
+
+    鼠标事件：MouseEvent
+        onclick 鼠标单击时触发 当用户点击某个对象时调用的事件句柄。
+        ondblclick 鼠标双击时触发 当用户双击某个对象时调用的事件句柄。
+
+        onmousedown: 鼠标按下时触发
+        onmouseup: 鼠标抬起时触发 按键被松开。
+
+        onmouseenter: 鼠标移入时触发（要冒泡） 当鼠标指针移动到元素上时触发。
+        onmouseleave: 鼠标移出时触发（要冒泡）当鼠标指针移出元素时触发
+
+        onmouseover: 鼠标移入时触发（不冒泡） 当鼠标指针移动到元素上时触发。
+        onmouseout: 鼠标移出时触发（不冒泡）当鼠标指针移出元素时触发
+
+        onmousemove: 鼠标移动时触发
+
+        oncontextmenu: 事件在元素中用户右击鼠标时触发并打开上下文菜单。
+
+    滚轮事件：WheelEvent
+        onmousewheel: 鼠标滚轮滚动时触发
+    </pre>
+
+
+
+    <div class="move"></div>
+    <div class="move"></div>
+    <div class="move"></div>
+    <div class="move"></div>
+
+
+    <script>
+
+        {
+            const dom = document.querySelector('.move');
+            let oldxy = {};
+
+            let moveFn = (e) => {
+                let newxy = {
+                    x: e.clientX - oldxy.x,
+                    y: e.clientY - oldxy.y
+                };
+
+                dom.style.left = newxy.x + 'px';
+                dom.style.top = newxy.y + 'px';
+            };
+
+            //鼠标在元素上按下时
+            dom.addEventListener('mousedown', (e) => {
+                // console.log(e);
+                oldxy = {
+                    x: e.clientX,
+                    y: e.clientY
+                };
+
+
+                console.log(e.srcElement.offsetLeft, getComputedStyle(e.srcElement)['left']);
+
+                //鼠标在元素上按下时 不放开 并 拖动时,
+                // e.srcElement.addEventListener('mousemove', moveFn);
+                document.addEventListener('mousemove', moveFn);
+
+                //鼠标松开时，删除移动事件
+                // e.target.addEventListener('mouseup', () => {
+                document.addEventListener('mouseup', () => {
+                    document.removeEventListener('mousemove', moveFn);
+                }, { once: true });
+
+                e.preventDefault();
+
+            });
+
+
+        };
+    </script>
+</body>
+
+</html>

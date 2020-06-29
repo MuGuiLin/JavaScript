@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="box" class="box" kkb="DOM">div标签</div>
+    <script>
+        // . []，ECMAScript 的属性操作
+
+        /*
+            - el.attributes 元素所有属性的集合
+            - el.getAttribute("attr") 获取属性
+            - el.setAttribute("attr","val") 设置属性
+            - el.removeAttribute("attr") 移出属性
+            - el.hasAttribute("attr") 判断是否有这个属性
+        */
+        {
+            let box = document.querySelector("#box");
+            // 合法属性：w3c 规定的元素的属性,都存到这个对象中
+            //console.dir(box);
+            //console.log(box.attributes);
+            console.log(box.getAttribute("class"));
+            console.log(box.setAttribute("miaov","开课吧"));
+            box.removeAttribute("class");
+            console.log(box.hasAttribute("miaov"));
+        }
+    </script>    
+</body>
+</html>

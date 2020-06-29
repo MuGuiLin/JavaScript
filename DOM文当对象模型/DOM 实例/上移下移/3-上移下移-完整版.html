@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>上移下移</title>
+    <style>
+        body {
+            margin: 0;
+            width: 100vw;
+            height: 100vh;
+            background: url(./imgs/bg.png) no-repeat;
+            background-size: 100% 100%;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .wrap {
+            width: 400px;
+            margin: 250px auto;
+        }
+
+        li {
+            width: 400px;
+            height: 52px;
+            line-height: 52px;
+            background-color: #fff;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        li .line {
+            width: 3px;
+            height: 20px;
+            float: left;
+            background-color: #fd8e9f;
+            margin-left: 25px;
+            margin-top: 17px;
+        }
+
+        li .name {
+            float: left;
+            margin-left: 10px;
+        }
+
+        li .ctrl {
+            width: 110px;
+            float: right;
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row;
+            text-align: center;
+            margin-top: 12px;
+            color: #fd8e9f;
+            margin-right: 10px;
+        }
+
+        li .ctrl span {
+            width: 48px;
+            height: 26px;
+            line-height: 26px;
+            border: 1px solid #fd8e9f;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+<div class="wrap">
+    <ul>
+        <li>
+            <span class="line"></span>
+            <span class="name">jQuery</span>
+            <div class="ctrl">
+                <span class="up">上移</span>
+                <span class="down">下移</span>
+            </div>
+        </li>
+        <li>
+            <span class="line"></span>
+            <span class="name">AJAX</span>
+            <div class="ctrl">
+                <span class="up">上移</span>
+                <span class="down">下移</span>
+            </div>
+        </li>
+        <li>
+            <span class="line"></span>
+            <span class="name">JS基础</span>
+            <div class="ctrl">
+                <span class="up">上移</span>
+                <span class="down">下移</span>
+            </div>
+        </li>
+        <li>
+            <span class="line"></span>
+            <span class="name">移动端实战</span>
+            <div class="ctrl">
+                <span class="up">上移</span>
+                <span class="down">下移</span>
+            </div>
+        </li>
+        <li>
+            <span class="line"></span>
+            <span class="name">canvas游戏</span>
+            <div class="ctrl">
+                <span class="up">上移</span>
+                <span class="down">下移</span>
+            </div>
+        </li>
+    </ul>
+</div>
+<script src="../mTween.js"></script>
+<script>
+{
+    let lists = document.querySelectorAll(".wrap li");
+    let list = lists[0].parentNode;
+    let translate = lists[1].offsetTop - list.offsetTop;
+    lists.forEach(li=>{
+        let upBtn = li.querySelector(".up");
+        let downBtn = li.querySelector(".down");
+        css(li,"translateY",0);
+        upBtn.onclick = ()=>{
+            let prevEl = li.previousElementSibling;
+            if(prevEl){ // 如果当前不是第0个子元素了
+                mTween({
+                    el: li,
+                    attr:{
+                        translateY: -translate
+                    }
+                });
+                mTween({
+                    el: prevEl,
+                    attr:{
+                        translateY: translate
+                    },
+                    cb(){
+                        list.insertBefore(li,prevEl);
+                        css(li,"translateY",0);
+                        css(prevEl,"translateY",0);
+                    }
+                });
+            } else {
+                for(let i = 1; i< list.children.length; i++){
+                    mTween({
+                        el: list.children[i],
+                        attr:{
+                            translateY: -translate
+                        }
+                    });
+                }
+                mTween({
+                    el: li,
+                    attr:{
+                        translateY: translate*(lists.length-1)
+                    },
+                    cb(){
+                        list.insertBefore(li,prevEl);
+                        lists.forEach(item=>css(item,"translateY",0))
+                    }
+                });
+            }
+           
+        };
+        downBtn.onclick = ()=>{
+            console.log(lists);
+            let nextEl = li.nextElementSibling;
+            if(nextEl){
+                mTween({
+                    el: nextEl,
+                    attr:{
+                        translateY: -translate
+                    }
+                });
+                mTween({
+                    el: li,
+                    attr:{
+                        translateY: translate
+                    },
+                    cb(){
+                        list.insertBefore(nextEl,li);
+                        css(li,"translateY",0);
+                        css(nextEl,"translateY",0);
+                    }
+                });
+            } else {
+                for(let i = 0; i< list.children.length - 1; i++){
+                    mTween({
+                        el: list.children[i],
+                        attr:{
+                            translateY: translate
+                        }
+                    });
+                }
+                mTween({
+                    el: li,
+                    attr:{
+                        translateY: -translate*(lists.length-1)
+                    },
+                    cb(){
+                        list.insertBefore(li,list.children[0]);
+                        lists.forEach(item=>css(item,"translateY",0))
+                    }
+                });
+
+            }
+        };
+    });
+}    
+</script>
+</body>
+
+</html>

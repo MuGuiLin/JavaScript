@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>对象的深拷贝</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>对象的深拷贝</h1>
+    <hr>
+    <script>
+        'use strict';
+
+        let xhr = new XMLHttpRequest();
+
+            
+
+            xhr.onreadystatechange = (res) => {
+                // if(res.response)
+                console.log(res, res.responseText);
+            };
+
+            xhr.onload = (res) => {
+                console.log(res);
+            };
+
+            xhr.onerror = (err) => {
+                console.log(err);
+            };
+            
+            // xhr.open('PUT', 'http://127.0.0.1:3000/put', true);
+            xhr.open('POST', 'http://127.0.0.1:3000/api', true);
+            // xhr.open('POST', 'http://127.0.0.1:3000/set', true);
+
+            //如查：设置了自定义请求头，只要设置了请求头就是非简间请求了，那么就会请求两次（1、预检请求(OPTIONS)，2正式请求 ）
+            //xhr.setRequestHeader('xhr-mupiao', 'ok666');
+            //xhr.setRequestHeader('Content-Type', 'Application/json');
+
+            xhr.withCredentials = true; //跨域请求设置withCredentials 
+
+            xhr.send();
+    </script>
+</body>
+
+</html>

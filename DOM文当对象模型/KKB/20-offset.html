@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            margin: 50px auto;
+            position: relative;
+            width: 500px;
+            height: 500px;
+            border: 1px solid #000;
+        }
+        #div {
+            position: absolute;
+            left: 100px;
+            top: 100px;
+            margin: 50px 0 0 -100px;
+            width: 100px;
+            height: 100px;
+            padding: 30px;
+            border: 5px solid #000;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+ <div id="box">
+     <div id="div"></div>
+ </div>   
+<script>
+// offset
+/*
+    offsetWidth
+    offsetHeight
+    offsetTop
+    offsetLeft
+*/
+{
+    let div = document.querySelector("#div");
+    // 可视宽高 =  width(height) + padding + border
+    console.log(div.offsetWidth,div.offsetHeight);
+    // offsetTop/offsetLeft: 元素距离定位父级左上角的距离
+    console.log(div.offsetLeft,div.offsetTop);
+
+    let box = document.querySelector("#box");
+    console.log(box.offsetLeft,box.offsetTop);
+}
+
+</script>    
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+    <div id="box1" draggable="true" style="width: 100px;height: 100px;background: red"></div>
+
+    <div id="box2" draggable="true" style="width: 200px;height: 200px;background: green; position: absolute; left: 400px;top: 200px;"></div>
+
+    <img src="./images/logo-new.png" />
+
+    <script>
+    
+        let box1 = document.querySelector('#box1');
+        let box2 = document.querySelector('#box2');
+
+        box1.ondragstart = function(e) {
+
+            // 如果在这里设置了拖拽的数据，则会触发浏览器的默认行为
+            e.dataTransfer.setData('text', 'http://kaikeba.com');
+
+            console.log('dragstart');
+        }
+
+        box1.ondrag = function() {
+            console.log('drag');
+        }
+
+        box1.ondragend = function() {
+            console.log('dragend');
+        }
+
+        box2.ondragenter = function() {
+            console.log('dragenter');
+        }
+
+        box2.ondragleave = function() {
+            console.log('dragleave');
+        }
+
+        /*
+            默认情况下，不是所有元素都能成为放置元素的
+            我们需要在dragover事件中阻止默认的行为：不允许放置
+        */
+        box2.ondragover = function(e) {
+            // 该事件每次触发的时候都会重置默认行为
+            e.preventDefault();
+            console.log('dragover');
+        }
+
+        box2.ondrop = function(e) {
+            // 当drop事件触发的时候，还有会有其它的一些默认的行为
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('drop');
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            margin: 50px auto;
+            position: relative;
+            width: 300px;
+            height: 300px;
+            border: 1px solid #000;
+            overflow: auto;
+        }
+        #div {
+            width: 100px;
+            padding: 30px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+ <div id="box">
+     <div id="div">
+            元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离元素左侧距离可视区左侧距离
+     </div>
+ </div>   
+<script>
+{
+    let box = document.querySelector("#box");
+    // scrollHeight 内容高度，如果内容高度比元素高度要高，scrollHeight 就是内容，否则就是元素高度
+    console.log(box.scrollHeight);// 内容高度
+
+    // scrollWidth 元素的内容宽度，如果内容宽度小于box宽度，就是box宽度
+    console.log(box.scrollWidth);
+
+    // setTimeout(()=>{
+    //     // 上下滚动条位置
+    //     console.log(box.scrollTop);
+    // },2000);
+
+    // setTimeout(()=>{
+    //     // 左右滚动条位置
+    //     console.log(box.scrollLeft);
+    // },2000);
+    // box.onscroll = function(){
+    //     console.log(box.scrollTop);
+    // };
+}
+
+</script>    
+</body>
+</html>

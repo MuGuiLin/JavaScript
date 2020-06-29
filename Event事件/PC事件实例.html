@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>PC事件实例</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        .box {
+            margin: 50px auto;
+            width: 500px;
+            height: 200px;
+            padding: 20px;
+            border: 2px solid gray;
+        }
+
+        .box ul {
+            margin: 0;
+            padding: 0;
+        }
+
+        .box ul li {
+            position: absolute;
+            list-style: none;
+            width: 500px;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .box ul li img {
+            box-sizing: border-box;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: 1px solid red;
+            user-select: none;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1>PC事件实例</h1>
+    <hr>
+    <section class="box">
+        <ul>
+            <li><img src="./form表单，keyboard键盘事件.jpg" /></li>
+            <li><img src="./media媒体事件.jpg" /></li>
+            <li><img src="./window事件.jpg" /></li>
+            <li><img src="./事件冒泡.jpg" /></li>
+            <li><img src="./事件对象.jpg" /></li>
+        </ul>
+    </section>
+
+    <script src="./mTween.js"></script>
+    <script>
+        const box = window.document.documentElement.querySelector('.box');
+
+        // const moveTop = () => {
+        //     css({
+        //         el: a,
+        //         attr:d,
+        //         cb:
+        //     })
+        // };
+
+        document.addEventListener('keydown', function (e) {
+            console.log('键盘按下！', e);
+            switch (e.keyCode) {
+                case 38:
+                    console.log('上');
+                    break;
+                case 40:
+                    console.log('下');
+                    break;
+                case 37:
+                    console.log('左');
+                    break;
+                case 39:
+                    console.log('右');
+                    break;
+
+                default:
+                    break;
+            }
+        });
+
+
+        document.addEventListener('keyup', function (e) {
+            console.log('键盘抬起！');
+        });
+
+
+        let initxy = {};
+        let nowxy = {};
+        document.addEventListener('mousedown', function (e) {
+            console.log('鼠标按下！');
+            initxy = {
+                x: e.clientX,
+                y: e.clientY
+            }
+
+            box.addEventListener('mousemove', function (e) {
+                nowxy = {
+                    x: e.clientX,
+                    y: e.clientY
+                }
+                console.log('鼠标移动！', nowxy);
+            });
+        });
+
+
+
+        document.addEventListener('mouseup', function (e) {
+            console.log('鼠标抬起！');
+        });
+
+
+    </script>
+</body>
+
+</html>

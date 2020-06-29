@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>智能社——http://www.zhinengshe.com</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <style>
+    </style>
+    <script>
+        class Queue{
+            constructor(content=[]){
+                this._queue=[...content];
+            }
+            shift(){
+                const value=this._queue[0];
+                this._queue.shift();
+                return value;
+            }
+            push(n){
+                this._queue.push(n);
+                return this._queue.length;
+            }
+        }
+
+        var q=new Queue([1,2,3,4]);
+
+        q.shift();
+        q.push(5);
+        console.log(q._queue);
+    </script>
+</head>
+<body>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

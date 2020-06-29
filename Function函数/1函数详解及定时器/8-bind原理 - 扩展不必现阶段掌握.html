@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+/*
+    Bind(fn, this指向) 返回一个 跟 fn 功能一样的函数，并且 this 被绑定成我们要求的指向
+*/ 
+function Bind(fn,_this,...arg2){
+    return function(...arg){ // 每次调用 bind，就会返回一个新函数
+        // 这个函数执行的时候，要跟 fn 的功能完全一样
+        fn.call(_this,...arg2,...arg); // 要求 this 指向必须 是我们要求的 _this
+    }
+}
+
+function fn(){
+    console.log(this);
+}
+
+var fn2 = Bind(fn,document);
+fn2();
+</script>        
+</body>
+</html>

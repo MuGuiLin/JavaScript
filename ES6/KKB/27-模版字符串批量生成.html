@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<ul id="list">
+    
+</ul>
+<script>
+{
+    let list = document.querySelector("#list");
+    let inner = [...(".".repeat(12))].map((item,index)=>(`<li style="transform:rotate(${30*index}deg)">${index}</li>`));
+    list.innerHTML = inner.join("");
+}
+</script>    
+</body>
+</html>

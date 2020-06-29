@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div{
+            height: 200px;
+            width: 200px;
+            background: red;
+        }
+        p{
+            width: 100px;
+            height: 100px;
+            background: blue;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <p></p>
+    </div>
+    <script>
+        var div=document.querySelector('div');
+        var p=document.querySelector('p');
+
+        // js当中有一个特性： 事件会冒泡
+        //  DOM树 
+        // html > body > div > p 
+        // p标签 包含在 div/body/html
+        // 执行子元素事件同时，父元素如有同样事件，也会执行
+        // 事件冒泡的执行顺序  ： 由小到大  p > div > body > html 
+
+        // addEventListener('ev',fn,[Boolean,{}])  默认冒泡执行的
+        // 默认第三个参数是 false （不捕获）
+        // 第三个参数：如果是布尔值：true 是进行捕获执行， false 不捕获
+        // 事件捕获： 由大到小  html > body > div > p 
+
+        // 第三个参数 还可以 传递对象：{}
+        // capture:true/false 是否在捕获阶段执行
+        // once:true/false 只执行一次事件
+        // 
+        div.addEventListener('click',function(){
+            alert('div');
+        },{
+            once:true
+        });
+
+        p.addEventListener('click',function(){
+            alert('p');
+        });
+
+      
+    </script>
+</body>
+</html>

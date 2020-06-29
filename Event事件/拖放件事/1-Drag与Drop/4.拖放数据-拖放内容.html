@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+    <div id="box1" draggable="true" style="width: 100px;height: 100px;background: red"></div>
+
+    <div id="box2" draggable="true" style="width: 200px;height: 200px;background: green; position: absolute; left: 400px;top: 200px;"></div>
+
+    <img src="./images/logo-new.png" />
+
+    <script>
+    
+        let box1 = document.querySelector('#box1');
+        let box2 = document.querySelector('#box2');
+
+        box1.ondragstart = function(e) {
+            // e.dataTransfer.setData('text/html', 'http://kaikeba.com');
+            // e.dataTransfer.setData('text/plain', 'abc');
+            // e.dataTransfer.setData('text', box1);
+
+            e.dataTransfer.setData('text', '#box1');
+        }
+
+        box2.ondragover = function(e) {
+            e.preventDefault();
+        }
+
+        box2.ondrop = function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            // console.log('drop', e.dataTransfer.getData('text/html'));
+            // console.log('drop', e.dataTransfer.getData('text/plain'));
+
+            // console.log(e.dataTransfer.getData('text'));
+
+            let id = e.dataTransfer.getData('text');
+            let el = document.querySelector(id);
+
+            this.appendChild( el );
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    body {
+        margin: 0;
+        font-size: 0;
+    }
+    
+ 
+    
+    .black {
+		width:100px;
+        background: greenyellow;
+        font-size: 18px;
+        margin-left: 5px;
+        margin-top: 5px;
+        padding: 4px;
+		font-weight:600;
+        display: inline-block;
+    }
+</style>
+
+<body>
+    <div class="box"></div>
+    <script>
+        // for(var i = 0; i < 5; i++){
+        //     for(var j = 0; j < 5; j++){
+        //         console.log(i,j);
+        //     }
+        // }
+        var content = document.querySelector(".box");
+        var str = '';
+        var color = ['green', 'blue', 'white', 'yellow', 'red', 'grey', 'blue', 'purple', 'greenyellow'];
+        for (var i = 1; i < 10; i++) {
+            for (var j = 1; j <= i; j++) {
+
+                str += '<div class="black"style="background:' + color[i - 1] + '">' + j + '*' + i + '=' + (i * j) + '</div>';
+                // content.innerHTML += '<div class="black" style="background:'+color[i-1]+'">' + i + '*' + j + '=' + (i * j) + '</div>'; //有性能问题
+            }
+            str += '<br/>';
+
+        }
+        content.innerHTML = str;
+
+
+        // 当循环有多个循环变量时，结束要看最后一个
+        // for(var i= 0,j = 0; i < 6,j < 10;i++,j++){
+        //     console.log("i:"+i,"j:"+j);
+        // }
+        // console.log(i+j);
+
+        /*
+            初始值 --> 判断 --> 执行 --> 自增 --> 判断 --> 执行 …… 自增--> 判断(不成立) --> 跳出
+        */
+    </script>
+</body>
+
+</html>

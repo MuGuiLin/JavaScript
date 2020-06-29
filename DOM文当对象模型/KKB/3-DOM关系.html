@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div id="div">
+    <p>p1</p>
+    <h3>h1</h3>
+    <p>p2</p>
+    <!-- 注释 -->
+    <p>p3</p>
+    <h3>h2</h3>
+    <p>p4</p>
+    <h3>h3</h3>
+    <p>p5</p>
+    <p>p6</p>
+</div>    
+<script>
+// 父子之间
+// 兄弟级之间
+
+/* 
+查找子级 
+    childNodes 子节点 (包含所有节点: 文本节点、注释节点、元素节点……)
+    children 子元素 (只包含元素节点)
+*/
+{
+    let div = document.querySelector("#div");
+    //let children = div.childNodes;
+    //children = [...children].filter(item=>item.nodeType == 1);
+    //console.log(div.childNodes,children);
+    console.log(div.childNodes);
+    console.log(div.children);
+}
+
+</script>    
+</body>
+</html>

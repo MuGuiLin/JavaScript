@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div{
+            width: 200px;
+            height: 200px;
+            background: red;
+            margin: 100px auto;
+        }
+        p{
+            width: 100px;
+            height: 100px;
+            background: blue;
+            margin: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <p></p>
+    </div>
+    <script>
+        // 元素本身有事件，不想执行父级身上的事件
+        // 取消事件冒泡
+        var div=document.querySelector('div');
+        var p=document.querySelector('p');
+
+        div.addEventListener('click',function(){
+            alert('div')
+        })
+
+        p.addEventListener('click',function(e){
+            // 取消事件冒泡
+            e.stopPropagation()
+            alert('p')
+        })
+
+    </script>
+</body>
+</html>

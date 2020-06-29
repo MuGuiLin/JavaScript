@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body,
+        p {
+            margin: 0;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        img {
+            border: none;
+            vertical-align: top;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        section {
+            width: 750px;
+            height: 1290px;
+            margin: 0 auto;
+            position: relative;
+            padding-bottom: 93px;
+        }
+
+        .header {
+            width: 100%;
+            height: 84px;
+            display: flex;
+            box-shadow: 0px 11px 21px 0px rgba(153, 174, 223, 0.2);
+            justify-content: space-between;
+        }
+
+        .header a {
+            display: block;
+        }
+
+        .header .menu-btn {
+            width: 95px;
+            height: 100%;
+            background: url(./img/menu-btn.png) no-repeat center center;
+        }
+
+        .header .title {
+            font-size: 36px;
+            color: #4a515e;
+            line-height: 84px;
+        }
+
+        .header .more-btn {
+            width: 84px;
+            height: 100%;
+            background: url(./img/more-btn.png) no-repeat center center;
+        }
+
+        .goods-list li {
+            display: flex;
+            width: 698px;
+            height: 196px;
+            background-color: #ffffff;
+            box-shadow: 0px 10px 24px 0px rgba(153, 174, 223, 0.2);
+            border-radius: 10px;
+            margin-top: 20px;
+            margin-left: 25px;
+        }
+
+        
+
+        .goods-list .checkbox {
+            width: 34px;
+            height: 34px;
+            background-color: #ff8db7;
+            border-radius: 50%;
+            margin-top: 94px;
+            margin-left: 11px;
+            cursor: pointer;
+            display: none;
+        }
+        .goods-list .checkbox.checked {
+            background: url(./img/checked.png) no-repeat;
+        }
+        .goods-list.operate .checkbox {
+            display: block;
+        }
+
+        .goods-list .goods-img {
+            margin-left: 13px;
+            margin-top: 38px;
+        }
+
+        .goods-list .goods-info {
+            width: 280px;
+            margin-top: 38px;
+            margin-left: 36px;
+        }
+
+        .goods-list .goods-name {
+            font-size: 30px;
+            line-height: 54px;
+            color: #3d3237;
+        }
+
+        .goods-list .goods-type {
+            width: 180px;
+            color: #cccccc;
+            font-size: 26px;
+            display: flex;
+            line-height: 46px;
+        }
+
+        .goods-list .goods-type span {
+            width: 86px;
+        }
+
+        .goods-list .goods-price {
+            font-size: 28px;
+            color: #ff67aa;
+            line-height: 46px;
+        }
+
+        .goods-list .goods-count {
+            width: 146px;
+            height: 48px;
+            line-height: 48px;
+            background-color: #fff1f6;
+            border-radius: 24px;
+            margin-top: 83px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 32px;
+            cursor: pointer;
+        }
+
+        .goods-list .goods-count .reduce-btn {
+            width: 48px;
+            height: 48px;
+            text-align: center;
+            border-radius: 50%;
+            background-color: #ffd4e4;
+            color: #fff;
+        }
+
+        .goods-list .goods-count .number {
+            color: #ff8db7;
+            color: #ff8db7;
+        }
+
+        .goods-list .goods-count .add-btn {
+            width: 48px;
+            height: 48px;
+            text-align: center;
+            border-radius: 50%;
+            background-color: #ff8db7;
+            color: #fff;
+        }
+
+        .sub-title {
+            line-height: 42px;
+            font-size: 32px;
+            color: #3d3237;
+            margin-left: 25px;
+            margin-top: 28px;
+        }
+
+        .commend-list {
+            display: flex;
+        }
+
+        .commend-list li {
+            width: 338px;
+            height: 420px;
+            box-shadow: 0px 10px 24px 0px rgba(153, 174, 223, 0.2);
+            border-radius: 10px;
+            margin-left: 25px;
+            cursor: pointer;
+            display: flex;
+        }
+
+        .commend-list .goods-img img {
+            width: 266px;
+            height: 266px;
+            margin: 30px 35px 0 37px;
+        }
+
+        .commend-list .goods-price {
+            font-size: 28px;
+            color: #ff67aa;
+            line-height: 62px;
+            text-align: center;
+            display: block;
+        }
+
+        .commend-list .goods-name {
+            text-align: center;
+            font-size: 28px;
+            color: #3d3237;
+            display: block;
+        }
+
+        .bottom-info div {
+            width: 694px;
+            height: 93px;
+            line-height: 93px;
+            background-color: #ff8db7;
+            border-radius: 21px;
+            color: #fff;
+            position: fixed;
+            left: 50%;
+            bottom: 13px;
+            display: flex;
+            justify-content: space-around;
+            font-size: 28px;
+            transform: translate(-50%);
+        }
+
+        .bottom-info .total {
+            display: none;
+        }
+        .bottom-info .total.show {
+            display: flex;
+        }
+
+        .bottom-info .goods-ctrl {
+            display: none;
+            justify-content: space-between;
+        }
+        .bottom-info .goods-ctrl.show {
+            display: flex;
+        }
+
+        
+        .bottom-info .all-goods{
+            display: flex;
+            width: 130px;
+        }
+        .bottom-info .all-checked {
+            width: 34px;
+            height: 34px;
+            background-color: #fff;
+            border-radius: 50%;
+            margin: 31px 13px 0 20px;
+        }
+        .bottom-info .all-checked.checked {       
+            background: url(./img/all-btn.png);
+        }
+        .bottom-info .remove{
+            width: 166px;
+            height: 56px;
+            line-height: 56px;
+            background-color: #fff;
+            color: #ff8db7;
+            border-radius: 10px;
+            text-align: center;
+            margin-right: 20px;
+            margin-top: 20px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <section>
+        <div class="header">
+            <a class="menu-btn" href="javascript:;"></a>
+            <div class="title">购物车</div>
+            <a class="more-btn" href="javascript:;" title="管理"></a>
+        </div>
+        <ul class="goods-list"> <!--operate-->
+            <li>
+                <a class="checkbox"></a>
+                <div class="goods-img">
+                    <img src="./img/goods-img.png" alt="">
+                </div>
+                <div class="goods-info">
+                    <a href="javascript:;" class="goods-name">新款耐克女鞋</a>
+                    <p class="goods-type">
+                        <span>蓝色</span>
+                        <span>36码</span>
+                    </p>
+                    <p class="goods-price">￥688</p>
+                </div>
+                <div class="goods-count">
+                    <a class="reduce-btn">-</a>
+                    <span class="number">1</span>
+                    <a class="add-btn">+</a>
+                </div>
+            </li>
+            <li>
+                <a class="checkbox"></a>
+                <div class="goods-img">
+                    <img src="./img/goods-img.png" alt="">
+                </div>
+                <div class="goods-info">
+                    <a href="javascript:;" class="goods-name">新款耐克女鞋</a>
+                    <p class="goods-type">
+                        <span>蓝色</span>
+                        <span>36码</span>
+                    </p>
+                    <p class="goods-price">￥388</p>
+                </div>
+                <div class="goods-count">
+                    <a class="reduce-btn">-</a>
+                    <span class="number">1</span>
+                    <a class="add-btn">+</a>
+                </div>
+            </li>
+            <li>
+                <a class="checkbox"></a>
+                <div class="goods-img">
+                    <img src="./img/goods-img.png" alt="">
+                </div>
+                <div class="goods-info">
+                    <a href="javascript:;" class="goods-name">新款耐克女鞋</a>
+                    <p class="goods-type">
+                        <span>蓝色</span>
+                        <span>36码</span>
+                    </p>
+                    <p class="goods-price">￥588</p>
+                </div>
+                <div class="goods-count">
+                    <a class="reduce-btn">-</a>
+                    <span class="number">1</span>
+                    <a class="add-btn">+</a>
+                </div>
+            </li>
+        </ul>
+        <div class="sub-title">推荐</div>
+        <ul class="commend-list">
+            <li>
+                <a href="javascript:;">
+                    <span class="goods-img">
+                        <img src="./img/goods-img.png" alt="">
+                    </span>
+                    <span class="goods-price">￥588</span>
+                    <span class="goods-name">新款耐克女鞋</span>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <span class="goods-img">
+                        <img src="./img/goods-img.png" alt="">
+                    </span>
+                    <span class="goods-price">￥588</span>
+                    <span class="goods-name">新款耐克女鞋</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bottom-info">
+            <div class="total show">
+                <span>最高单价：¥588</span>
+                <span>件数：3</span>
+                <span>总价：¥1212.00</span>
+            </div>
+            <div class="goods-ctrl">
+                <span class="all-goods">
+                    <a href="javascript:;" class="all-checked"></a>
+                    <span>全选</span>
+                </span>
+                <a href="javascript:;" class="remove">删除</a>
+            </div>
+        </div>
+    </section>
+<script>
+{
+    let moreBtn = document.querySelector(".more-btn");
+    let goodList = document.querySelector(".goods-list");
+    let goodLists = [...goodList.querySelectorAll("li")];
+    let total =document.querySelector(".total");
+    let goodsCtrl = document.querySelector(".goods-ctrl");
+    let allChecked = document.querySelector(".all-checked");
+    let remove = document.querySelector(".remove")
+    // 操作面板的显示隐藏
+    moreBtn.onclick = ()=>{
+        goodList.classList.toggle("operate");
+        total.classList.toggle("show");
+        goodsCtrl.classList.toggle("show");
+    };
+    goodLists.forEach(item=>{
+        let checkbox = item.querySelector(".checkbox");
+        let reduceBtn = item.querySelector(".reduce-btn");
+        let addBtn = item.querySelector(".add-btn");
+        let number = item.querySelector(".number");
+        let nub = Number(number.innerHTML);
+        // 选中商品
+        checkbox.onclick = ()=>{
+            checkbox.classList.toggle("checked");
+            if(goodLists.every(item=>item.querySelector(".checkbox").classList.contains("checked"))){
+                allChecked.classList.add("checked");
+            } else {
+                allChecked.classList.remove("checked");
+            }
+        };
+        // 减少商品数量
+        reduceBtn.onclick = ()=>{
+            nub--;
+            if(nub < 0){
+                alert("您的意思是再卖几件吗");
+                nub=0;
+                return ;
+            }
+            number.innerHTML = nub;
+            toTotal();
+        };
+        // 添加商品数量
+        addBtn.onclick = ()=>{
+            nub++;
+            number.innerHTML = nub;
+            toTotal();
+        };
+    });
+    allChecked.onclick = ()=>{
+        allChecked.classList.toggle("checked");
+        goodLists.forEach(item=>{
+            let checkbox = item.querySelector(".checkbox");
+            if(allChecked.classList.contains("checked")){
+                checkbox.classList.add("checked");
+            } else {
+                checkbox.classList.remove("checked"); 
+            }
+        }) 
+    };
+
+    // 删除
+    remove.onclick = ()=>{
+        goodLists = goodLists.filter(item=>{
+            let checkbox = item.querySelector(".checkbox");
+            if(checkbox.classList.contains("checked")){
+                item.remove();
+                return false;
+            }
+            return true;
+        });
+        toTotal();
+    };
+
+    // 汇总
+    toTotal();
+    function toTotal(){
+        let maxPrice = 0;
+        let nubTotal = 0;
+        let priceTotal = 0;
+        goodLists.forEach(item=>{
+            let number = item.querySelector(".number");
+            let nub = Number(number.innerHTML);
+            if(nub > 0){
+                let price = item.querySelector(".goods-price").innerHTML;
+                price = Number(price.substr(1));
+                nubTotal += nub;
+                priceTotal += nub * price;
+                maxPrice = Math.max(price,maxPrice);
+            }
+        });
+        total.innerHTML = `
+                <span>最高单价：¥${maxPrice}</span>
+                <span>件数：${nubTotal}</span>
+                <span>总价：¥${priceTotal}</span>
+            `;
+    }
+}
+</script>      
+</body>
+</html>

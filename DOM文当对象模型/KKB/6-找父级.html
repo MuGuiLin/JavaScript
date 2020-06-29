@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            position: relative;
+        }
+        span {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<div id="box">
+    <div id="box2">
+        <span></span>
+    </div>
+</div>    
+<script>
+/*
+查找父级
+    parentNode 父节点
+    parentElement 父元素
+    offsetParent 定位父级 (元素根据定位的这个父级)
+*/    
+{
+    let box2 = document.querySelector("#box2");
+    let span = document.querySelector("span");
+    console.log(span.parentNode);
+    //console.log(span.parentElement);
+    console.log(span.offsetParent);
+    console.log(box2.offsetParent);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>自动选项卡</title>
+    <style>
+        li {
+            list-style: none;
+            cursor: pointer;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+        }
+
+        .wrap {
+            height: 800px;
+            width: 1200px;
+            overflow: hidden;
+            margin: 0 auto;
+            background-image: url(./images/bg.png);
+            background-repeat: no-repeat;
+        }
+
+        #box {
+            height: 397px;
+            width: 800px;
+            overflow: hidden;
+            margin: 0 auto;
+            margin-top: 228px;
+            background: #ffb746;
+        }
+
+        #box>ul {
+            width: 100%;
+            height: 60px;
+            display: flex;
+        }
+
+        #box>ul li {
+            line-height: 60px;
+            flex: 1;
+            text-align: center;
+            background-color: #fff;
+            color: #000;
+        }
+
+        #box>ul .active {
+            background-color: #ffb746;
+            color: #fff;
+        }
+
+        #box div {
+            width: 70%;
+            height: 60%;
+            margin: 40px auto;
+            display: none;
+            position: relative;
+        }
+
+        #box img {
+            width: 250px;
+            height: auto;
+        }
+
+        #box div ul {
+            position: absolute;
+            top: 0;
+            left: 250px;
+        }
+
+        #box div li {
+            color: white;
+            text-align: left;
+            padding: 20px 40px;
+        }
+
+        #box div .active {
+            background-color: #fff;
+            color: #000;
+        }
+    </style>
+
+</head>
+
+<body>
+<div class="wrap">
+    <div id="box">
+        <ul class="navs">
+            <li class="active">暖色调</li>
+            <li>金色夕阳</li>
+            <li>灰色格调</li>
+            <li>baby</li>
+        </ul>
+        <div style="display: block;">
+            <img src="images/1.png">
+        </div>
+        <div>
+            <img src="images/5.png">
+        </div>
+        <div>
+            <img src="images/2.png">
+        </div>
+        <div>
+            <img src="images/1.png">
+        </div>
+    </div>
+</div>
+<script>
+function $(cssSelector){
+    var els = document.querySelectorAll(cssSelector);
+    return els.length > 1?els:els[0];
+};  
+function css(el,attr,val){
+    if(val === undefined){
+        return getComputedStyle(el)[attr]
+    }
+    el.style[attr] = val;
+}     
+(function(){
+    var navs = $(".navs li");
+    var imgs = $("#box div");
+    var now = 0;
+    for(var i = 0; i < navs.length; i++){
+        (function(index){
+            navs[index].onmouseover = function(){
+                now = index;
+                tab();
+                // for(var i = 0; i < navs.length; i++){
+                //     navs[i].classList.remove("active");
+                //     css(imgs[i],"display","none");
+                // }
+                // navs[index].classList.add("active");
+                // css(imgs[index],"display","block");
+            };
+        })(i);
+    }
+
+    // 自动播放，间隔一定时间，调用 next 下一张
+
+    function toNext(){
+        now++;
+        now = now%navs.length;
+        tab();
+    }
+    function tab(){
+        for(var i = 0; i < navs.length; i++){
+            navs[i].classList.remove("active");
+            css(imgs[i],"display","none");
+        }
+        navs[now].classList.add("active");
+        css(imgs[now],"display","block");
+    }
+    document.onclick = toNext;
+})();
+</script>
+</body>
+</html>

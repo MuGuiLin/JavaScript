@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style class="css">
+        .time {
+
+            margin: 100px auto;
+            width: 400px;
+            height: 400px;
+            border: 2px solid gray;
+            border-radius: 50%;
+        }
+
+        .time ul,
+        .time ol {
+            position: relative;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            color: white;
+        }
+
+        /*.time ul li{ position: absolute; width: 6px; height: 6px; border-radius: 6px; background: blue;transform-origin: 198px 198px; transition: 1s;}
+        .time ul li:nth-child(5n + 1) { width: 6px; height: 20px;}
+        .time ul li:nth-child(1){transform:rotate(0deg) translateX(200px);}
+        .time ul li:nth-child(2){transform:rotate(6deg) translateX(200px);}
+        .time ul li:nth-child(3){transform:rotate(12deg) translateX(200px);}
+        .time ul li:nth-child(4){transform:rotate(18deg) translateX(200px);}
+        .time ul li:nth-child(5){transform:rotate(24deg) translateX(200px);}
+        .time ul li:nth-child(6){transform:rotate(30deg) translateX(200px);}
+        .time ul li:nth-child(7){transform:rotate(36deg) translateX(200px);} 
+        .time:hover ul li{transform: rotate(360deg) translateX(200px)} */
+
+
+        .time ul li {
+            position: absolute;
+            top: 0;
+            left: 198px;
+            width: 2px;
+            height: 10px;
+            border-radius: 2px;
+            background: gray;
+            transition: 10s;
+            transform-origin: center 200px;
+        }
+
+        .time ul li:nth-child(5n + 1) {
+            left: 193px;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+        }
+
+        .time ol li {
+            position: absolute;
+            left: 197px;
+            transform-origin: center bottom;
+        }
+
+        .time ol li.hours {
+            top: 80px;
+            width: 6px;
+            height: 120px;
+            background: blue;
+        }
+
+        .time ol li.minutes {
+            top: 40px;
+            width: 4px;
+            height: 160px;
+            background: rebeccapurple;
+        }
+
+        .time ol li.seconds {
+            top: 10px;
+            width: 2px;
+            height: 190px;
+            background: purple;
+        }
+
+        .time ol li.meakbos {
+            width: 20px;
+            height: 20px;
+            top: 187px;
+            left: 187px;
+            border-radius: 50%;
+            background: gray;
+            border: 1px solid white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="time">
+        <ul class="box"></ul>
+        <ol clais="pin">
+            <li class="hours"></li>
+            <li class="minutes"></li>
+            <li class="seconds"></li>
+            <li class="meakbos"></li>
+        </ol>
+
+        <div class="mupaio"></div>
+    </div>
+    <script>
+        let box = document.querySelector('.box');
+        let dom = '', css = '', hh = 0;
+        for (let i = 0; i < 60; i++) {
+            dom += (i % 5 == 0) ? `<li>${hh++}</li>` : `<li></li>`;
+            // dom += `<li></li>`;
+            // css += `.time ul li:nth-child(${i + 1}){transform:rotate(${i * 6}deg) translateX(200px)}`;
+            css += `.time ul li:nth-child(${i + 1}){transform:rotate(${i * 6}deg)}`;
+        }
+        box.innerHTML = dom;
+        document.querySelector('.css').innerHTML += css;
+
+        let setTime = () => {
+            
+            const date = new Date();
+            let hours = document.querySelector('.hours');
+            let minutes = document.querySelector('.minutes');
+            let seconds = document.querySelector('.seconds');
+
+            window.requestAnimationFrame(() => {
+                let ss = date.getSeconds();
+                let mm = date.getMinutes() + ss / 60;
+                let hh = date.getHours() + mm / 60;
+                hours.style['transform'] = `rotate(${hh * 30}deg)`;
+                minutes.style['transform'] = `rotate(${mm * 6}deg)`;
+                seconds.style['transform'] = `rotate(${ss * 6}deg)`;
+                setTime();
+            });
+        };
+        setTime();
+    </script>
+</body>
+
+</html>

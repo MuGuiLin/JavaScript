@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Document</title>
+<style>
+    .inner {
+        height: 200px;
+        border: 2px solid #000;
+    }
+    #banner {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 200px;
+        height: 200px;
+        background: #000;
+        font: 20px/50px "宋体";
+        color:#fff;
+    }
+</style>
+<script>
+window.onload = function(){
+    var banner = document.querySelector("#banner");
+    var resizeBanner = function(){
+        var l = (window.innerWidth - banner.offsetWidth)/2;
+        var t = (window.innerHeight - banner.offsetHeight)/2;
+        var scrollL = document.body.scrollLeft||document.documentElement.scrollLeft;
+        var scrollT = document.body.scrollTop||document.documentElement.scrollTop;
+        banner.style.left = l + scrollL + "px";
+        banner.style.top = t + scrollT + "px";
+    };
+    resizeBanner();
+    // window resize: 监听窗口大小发生改变 
+    window.onresize = function(){
+        banner.style.transition = "1s";
+        resizeBanner();
+    };
+    window.onscroll = function(){
+        banner.style.transition = "1s";
+        resizeBanner();
+    }
+};
+</script>
+</head>
+<body>
+   <div id="banner">广告弹窗</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div> 
+</body>
+</html>

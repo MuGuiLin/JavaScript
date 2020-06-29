@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+    <div id="box1" draggable="true" style="width: 100px;height: 100px;background: red"></div>
+
+    <div id="box2" draggable="true" style="width: 200px;height: 200px;background: green; position: absolute; left: 400px;top: 200px;"></div>
+
+    <!-- <img src="./images/logo-new.png" /> -->
+
+    <script>
+    
+        let box1 = document.querySelector('#box1');
+        let box2 = document.querySelector('#box2');
+
+        let img = new Image();  // document.createElement('img');
+        img.src = './images/logo-new.png';
+
+        box1.ondragstart = function(e) {
+            e.dataTransfer.setData('text', '开课吧');
+
+            // 后续 dropEffect 值的白名单
+            e.dataTransfer.effectAllowed = 'copyLink';
+
+            // 设置拖放图片
+            e.dataTransfer.setDragImage(img, 100, 100);
+        }
+
+        box2.ondragover = function(e) {
+            // 禁止放置
+            // e.dataTransfer.dropEffect = 'none';
+
+            // console.log( e.dataTransfer.dropEffect );
+
+            e.dataTransfer.dropEffect = 'move';
+
+            e.preventDefault();
+        }
+
+        box2.ondrop = function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('drop');
+        }
+
+    </script>
+</body>
+</html>

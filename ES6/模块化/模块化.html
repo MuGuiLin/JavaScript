@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>模块化</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+        pre{ font-size: 18px; line-height: 36px;}
+        code{
+            padding: 0px;
+            display: block;
+            border-radius: 8px;
+            background: gray;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>模块化</h1>
+    <hr>
+    <pre>
+        模块化作用：
+            主要是现实代码可复用，拥有独立的作用域，防止全局污染，提高开发效率、降低维护成本等等
+        
+       
+
+        ES5模块化：
+            以前是用: 第三方库 RequireJS、SeaJS等
+               
+                * RequireJS 是一个遵循【AMD规范】JavaScript模块加载器，使用RequireJS加载模块化脚本将提高代码的加载速度和质量
+                  RequireJS 是一个 JavaScript 文件和模块载入工具。
+                  它针对浏览器使用场景进行了优化，并且也可以应用到其他 JavaScript 环境中，例如 Rhino 和 Node.js。
+                  <a target="_blank" href="https://requirejs.org">RequireJS官网</a>
+                  <a target="_blank" href="https://www.bootcdn.cn/require.js">require.js下载</a>
+
+                * SeaJS是一个遵循【CMD规范】的JavaScript模块加载框架，可以实现JavaScript的模块化开发及加载机制。
+                
+            <a target="_blank" href="https://www.cnblogs.com/chenguangliang/p/5856701.html">js模块化编程之彻底弄懂CommonJS和AMD/CMD！</a>
+        
+        模块规范：
+            有了模块后，我们就可以更方便地使用别人的代码，想要什么功能，就加载什么模块。
+            但是，这样做有一个前提，那就是大家必须以同样的方式编写模块，否则你有你的写法，我有我的写法，岂不是乱了套！。
+            
+            node的module遵循CommonJS规范，requirejs遵循AMD，seajs遵循CMD，
+        
+        ES6模块化：
+            现在是：ES6自带模块化 
+                * export 向外暴露或导出模块 export default xxx;
+                * import 引入暴露或导出的模块 import {xx, xx} from './xxx.js';
+
+        模块化 只要搞懂：如何定义(导出)模块 和 如何使用(引用)模块 就OK了！！！ 
+
+
+
+
+        <b>如果在Node中没搞明白require和import，你会被坑的很惨</b>
+        ES6标准发布后，module成为标准，标准的使用是以export指令导出接口，以import引入模块，但是在我们一贯的node模块中，我们采用的是CommonJS规范，使用require引入模块，使用module.exports导出接口。
+        
+        不把require和import整清楚，会在未来的标准编程中死的很难看。
+        
+        require时代的模块
+        node编程中最重要的思想之一就是模块，而正是这个思想，让JavaScript的大规模工程成为可能。模块化编程在js界流行，也是基于此，随后在浏览器端，requirejs和seajs之类的工具包也出现了，可以说在对应规范下，require统治了ES6之前的所有模块化编程，即使现在，在ES6
+        module被完全实现之前，还是这样。
+        
+        node的module遵循CommonJS规范，
+        requirejs遵循AMD，
+        seajs遵循CMD，
+        以上三个虽各有不同，但总之还是希望保持较为统一的代码风格。
+        
+        <code>
+        // a.js
+        
+        // -------- node -----------
+        module.exports = {
+        a : function() {},
+        b : 'xxx'
+        };
+        
+        // ----------- AMD or CMD ----------------
+        define(function(require, exports, module){
+        module.exports = {
+        a : function() {},
+        b : 'xxx'
+        };
+        });
+        </code>
+        可以看出，为了保持风格的高度统一，除了在浏览器端的模块中要使用一个define函数来提供模块的闭包以外，其他代码可以完全一致。
+        
+        <code>
+        // b.js
+        
+        // ------------ node ---------
+        var m = require('./a');
+        m.a();
+        
+        // ------------ AMD or CMD -------------
+        define(function(require, exports, module){
+        var m = require('./a');
+        m.a();
+        });
+        在使用上，也非常相似。虽然AMD or CMD提供了更加丰富的风格，但是我们本文主要是讨论node环境下，所以不做扩展。
+        </code>
+
+        
+        <b>ES6中的module</b>
+            ES6发布的module并没有直接采用CommonJS，甚至连require都没有采用，
+            也就是说require仍然只是node的一个私有的全局方法，module.exports也只是node私有的一个全局变量属性，跟标准半毛钱关系都没有。
+            
+
+            
+        【export导出模块接口】
+            export的用法挺复杂的，具体有哪些可以看这里。这里举几个例子：
+            <code>
+            // a.js
+            export default function() {}
+            export function a () {}
+            
+            var b = 'xxx';
+            export {b}; // 这是ES6的写法，实际上就是{b:b}
+            setTimeout(() => b = 'ooo', 1000);
+            export var c = 100;
+            </code>
+
+            在要导出的接口前面，加入export指令。
+            在export之后，b还可以被修改，这和CommonJS有着巨大不同，关于内部机理的东西，本文就无耻的省略了。
+            注意，下面的语法有严重错误：
+            <code>
+            // 错误演示
+            export 1; // 绝对不可以
+            var a = 100;
+            export a;
+            </code>
+            export在导出接口的时候，必须与模块内部的变量具有一一对应的关系。直接导出1没有任何意义，也不可能在import的时候有一个变量与之对应。
+            export a虽然看上去成立，但是a的值是一个数字，根本无法完成解构，因此必须写成export
+            {a}的形式。即使a被赋值为一个function，也是不允许的。而且，大部分风格都建议，模块中最好在末尾用一个export导出所有的接口，
+            例如：
+            <code>
+                export {fun as default,a,b,c};
+            </code>
+
+
+
+        【import导入模块】
+            import的语法跟require不同，而且import必须放在文件的最开始，且前面不允许有其他逻辑代码，这和其他所有编程语言风格一致。
+            import的使用和export一样，也挺复杂，可以在这里大致了解。举几个例子：
+            <code>
+            import $ from 'jquery';
+            import * as _ from '_';
+            import {a,b,c} from './a';
+            import {default as alias, a as a_a, b, c} from './a';
+            </code>
+            这里有一些坑，暂时不透露，下面会讲到。
+            import后面跟上花括号的形式是最基本的用法，花括号里面的变量与export后面的变量一一对应。这里，你必须了解对象的解构赋值的知识，没这知识，你根本没法在这里装逼。了解了解构赋值，这里的“一一对应”的关系就能具体理解了。
+            
+
+
+        【as关键字】
+            编程的同学对as都容易理解，简单的说就是取一个别名。export中可以用，import中其实可以用：
+            <code>
+            // a.js
+            var a = function() {};
+            export {a as fun};
+            
+            // b.js
+            import {fun as a} from './a';
+            a();
+            </code>
+            上面这段代码，export的时候，对外提供的接口是fun，它是a.js内部a这个函数的别名，但是在模块外面，认不到a，只能认到fun。
+            import中的as就很简单，就是你在使用模块里面的方法的时候，给这个方法取一个别名，好在当前的文件里面使用。之所以是这样，是因为有的时候不同的两个模块可能通过相同的接口，比如有一个c.js也通过了fun这个接口：
+            <code>
+            // c.js
+            export function fun() {};
+            </code>
+            如果在b.js中同时使用a和c这两个模块，就必须想办法解决接口重名的问题，as就解决了。
+            
+
+
+        【default关键字】
+            其他人写教程什么的，都把default放到export那个部分，我觉得不利于理解。在export的时候，可能会用到default，说白了，它其实是别名的语法糖：
+            <code>
+            // d.js
+            export default function() {}
+            
+            // 等效于：
+            function a() {};
+            export {a as default};
+            </code>
+            在import的时候，可以这样用：
+            <code>
+            import a from './d';
+            
+            // 等效于，或者说就是下面这种写法的简写，是同一个意思
+            import {default as a} from './d';
+            </code>
+            这个语法糖的好处就是import的时候，可以省去花括号{}。简单的说，如果import的时候，你发现某个变量没有花括号括起来（没有*号），
+            那么你在脑海中应该把它还原成有花括号的as语法，所以，下面这种写法你也应该理解了吧：
+            
+            <code>
+                import $,{each,map} from 'jquery';
+            </code>
+            import后面第一个$是{defalut as $}的替代写法。
+            
+
+
+        【*符号】
+            *就是代表所有，只用在import中，我们看下两个例子：
+            
+            <code>
+                import * as _ from '_';
+            </code>
+
+            在意义上和import _ from '_';是不同的，虽然实际上后面的使用方法是一样的。它表示的是把'_'模块中的所有接口挂载到_这个对象上，
+            所以可以用_.each调用某个接口，另外还可以通过*号直接继承某一个模块的接口：
+            <code>
+            export * from '_';
+            
+            // 等效于：
+            import * as all from '_';
+            export all;
+            </code>
+            *符号尽可能少用，它实际上是使用所有export的接口，但是很有可能你的当前模块并不会用到所有接口，可能仅仅是一个，所以最好的建议是使用花括号，用一个加一个。
+
+
+
+        【该用require还是import】？
+            require的使用非常简单，它相当于module.exports的传送门，module.exports后面的内容是什么，
+            require的结果就是什么，对象、数字、字符串、函数……再把require的结果赋值给某个变量，相当于把require和module.exports进行平行空间的位置重叠。
+            而且require理论上可以运用在代码的任何地方，甚至不需要赋值给某个变量之后再使用，比如：
+            <code>
+            require('./a')(); // a模块是一个函数，立即执行a模块函数
+            var data = require('./a').data; // a模块导出的是一个对象
+            var a = require('./a')[0]; // a模块导出的是一个数组
+            </code>
+            你在使用时，完全可以忽略模块化这个概念来使用require，仅仅把它当做一个node内置的全局函数，它的参数甚至可以是表达式：
+            
+            require(process.cwd() + '/a');
+
+            但是import则不同，它是编译时的（require是运行时的），它必须放在文件开头，而且使用格式也是确定的，不容置疑。它不会将整个模块运行后赋值给某个变量，而是只选择import的接口进行编译，这样在性能上比require好很多。
+            
+            从理解上，require是赋值过程，import是解构过程，当然，require也可以将结果解构赋值给一组变量，但是import在遇到default时，和require则完全不同：var $ =
+            require('jquery');和import $ from 'jquery'是完全不同的两种概念。
+            
+            上面完全没有回答“改用require还是import？”这个问题，因为这个问题就目前而言，根本没法回答，因为目前所有的引擎都还没有实现import，我们在node中使用babel支持ES6，也仅仅是将ES6转码为ES5再执行，import语法会被转码为require。这也是为什么在模块导出时使用module.exports，在引入模块时使用import仍然起效，因为本质上，import会被转码为require去执行。
+            
+            但是，我们要知道这样一个道理，ES7很快也会发布，js引擎们会尽快实现ES6标准的规定，如果一个引擎连标准都实现不了，就会被淘汰，ES6是迟早的事。如果你现在仍然在代码中部署require，那么等到ES6被引擎支持时，你必须升级你的代码，而如果现在开始部署import，那么未来可能只需要做很少的改动。（完）
+    </pre>
+
+    <script src="./Plugin/traceur.js"></script>
+    <script src="./Plugin/bootstrap.js"></script>
+    <script type="module">
+        'use strict';
+
+        import {a, b, c} from './main.js';
+
+        {
+            class Queue {
+                constructor(arr = []) {
+                    this.arr = [...arr];  //复制数组，[...arr]复制一个新的数组并且新数组改变时，不会改变原来的数组
+                    this.init();
+
+                };
+
+                init() {
+
+                };
+
+                shift() {
+                    let arr = this.arr[0];
+                    this.arr.shift(); //删除数组中的第一个元素
+                    return arr;
+                };
+
+                push(i) {
+                    return this.arr.push(i); //向数组中的最后添加一个元素，并返回新数组的长度
+                }
+            };
+
+            const Q = new Queue(['H5', 'CSS3', 'ES6']);
+
+            Q.shift();
+
+            console.log(Q.push(888));
+
+            console.log(Q.push(666));
+
+            console.log(Q.arr);
+
+        };
+
+    </script>
+</body>
+
+</html>

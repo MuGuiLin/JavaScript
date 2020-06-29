@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// document.onclick = function(){
+//     console.log(this);
+// };
+// function 默认情况下谁调用 this 就指向谁
+document.onclick = ()=>{
+    console.log(this);
+};   
+// 箭头函数中的this指向其定义时所在的作用域的this
+</script> 
+</body>
+</html>

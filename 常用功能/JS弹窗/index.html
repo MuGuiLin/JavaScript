@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>弹窗效果</title>
+		<style type="text/css">
+			*{margin:0px; padding:0px; font-family: "微软雅黑";} 
+			.button{ text-align:center; width: 160px; height: 40px; line-height: 40px; background: #DBDBDB; color: #01A455; border-radius:6px ; cursor: pointer; font-weight: bold; border: 2px solid white; box-shadow: 1px 1px 12px 1px gray;}
+			#WinBox{width:516px; height:430px;border:1px solid white; font-family:"微软雅黑"; background: rgba(255,255,255,0.4); border-radius:6px; position:absolute;left:450px; top:80px;  display:none; box-shadow: 1px 1px 8px 0px gray; z-index: 9999;}
+			.WinBox{width:498px; height:412px;border:1px solid white; font-family:"微软雅黑"; border-radius:2px; background:white;position:absolute;left:8px; top:8px;}
+			.BoxTitle{ width:100%; height:40px; background:#F0F0F0;  border-bottom: 1px solid #C1C1C1; color: #575758;}
+			.BoxTitle p{  font-weight:bold; font-size:18px; padding:8px 0px 0px 10px;}
+			#WinBox .close{width:20px; height:20px; font-size: 28px; float:right; margin:0px 8px 0px 0px; cursor: pointer;}
+			
+			.LoginCon{width:400px; height:300px; margin:0px auto; margin-top:8px; border-radius:6px; font-size:18px; padding-top:10px;}
+			.titleBox{ width:100%; height:50px; margin-top:6px; text-align:center;}
+			.titleBox input{ width:120px; height:40px;}
+			
+			#search_auto{ position:absolute; top:98px; left:195px; display:none; opacity:0.9; width:212px; height:240px; overflow: auto; border: 1px solid #D5D5D5;border-radius:2px; z-index: 1000; background:white;}
+			.search_auto_txt{ width:100%; height: 36px; line-height: 36px; cursor:pointer; }
+			.search_auto_txt:hover{ background:cyan;}
+			
+			.titleBT{ float:left; font-size: 16px; width:28%; height:auto; text-align:right; line-height: 30px; }
+			.inputLR{ float:left; width:70%; height:auto;}
+			.inputLR input{ width:210px; height:30px;}
+			.inputLR textarea{ width:210px; height:50px; resize:none;}
+		</style>
+		
+		
+	</head>
+	<body>
+
+		<div class="button" onclick="WinPopUps('WinBox')">弹 窗 效 果</div>
+	    <div id="WinBox">
+	    	<div class="WinBox">
+		    	<div class="BoxTitle">
+		            <div class="close" onclick="CloSemer()">×</div>
+		            <p>页面弹窗效果</p>
+		        </div>
+		        
+		        <div style="clear:both"></div>
+		        <div class="LoginCon">
+		           <form name="myform" method="post" action="">
+		                <div class="titleBox">
+		                    <div class="titleBT">用户姓名：</div>
+		                    <div class="inputLR">
+		                    	<input type="text" name="user_name" id="user_name" placeholder=" 必填！"/>
+		                        <div id="search_auto"></div>
+		                    </div>
+		                </div>
+		                <div class="titleBox">
+		                    <div class="titleBT">用户密码：</div>
+		                    <div class="inputLR"><input type="password" name="t_num" id="t_num" placeholder=" 必填！"/></div>
+		                </div>
+		                <div class="titleBox">
+		                    <div class="titleBT">手机号码：</div>
+		                    <div class="inputLR"><input type="text" name="r_num" id="r_num" placeholder=" 必填！" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')"/></div>
+		                </div>
+		                <div class="titleBox">
+		                    <div class="titleBT">邮箱地址：</div>
+		                    <div class="inputLR"><input type="text" name="action_user" id="action_user" placeholder=" 必填！"/></div>
+		                </div>
+		                <div class="titleBox">
+		                    <div class="titleBT">联系地址：</div>
+		                    <div class="inputLR"><textarea placeholder=" 必填！"></textarea></div>
+		                </div>
+		                <div class="titleBox" style=" margin-top:26px;">
+		                   <input type="button" name="buttoned" value="确 定" onClick="return YesEnter()"/>&nbsp;&nbsp;
+		                   <input type="reset" name="reset" value="重 置"/>&nbsp;&nbsp;
+		                   <input type="button" name="exit" value="取 消" onClick="CloSemer()"/>
+		                </div>
+		        	</form>
+		    	</div>
+	        </div>
+	    </div>
+	</body>
+	<script src="js/jquery-2.1.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		
+		CloSemer = function()
+		{
+			$('#WinBox').hide();
+			$('#layer').remove();
+		}
+	
+		YesEnter = function()
+		{
+			if($('#user_name').val() == "" || $('#r_num').val() == "" || $('#t_num').val() == "" || $('#action_user').val() == "")
+			{
+				alert("请正确填写以上各项！");
+			}
+			else
+			{
+				alert("提交成功！");
+				$('#user_name').val() = ""; 
+				$('#r_num').val() = ""; 
+				$('#t_num').val() = ""; 
+				$('#action_user').val() = "";
+				$('#WinBox').hide();
+				$('#layer').remove();
+			}
+		}
+		
+		WinPopUps = function(idname)
+		{
+			var IE6S = (document.all) ? true : false;
+			var IE6 = IE6S && ([/MSIE (\d)\.0/i.exec(navigator.userAgent)][0][1] == 6);
+			var newbox = document.getElementById(idname);
+			newbox.style.zIndex = "9999999";
+			newbox.style.display = "block"
+			newbox.style.position = !IE6 ? "fixed" : "absolute";
+			newbox.style.top = newbox.style.left = "50%";
+			newbox.style.marginTop = -newbox.offsetHeight / 2 + "px";
+			newbox.style.marginLeft = -newbox.offsetWidth / 2 + "px";
+			var layer = document.createElement("div");
+			layer.id = "layer";
+			layer.style.width = layer.style.height = "100%";
+			layer.style.position = !IE6 ? "fixed" : "absolute";
+			layer.style.top = layer.style.left = 0;
+			layer.style.backgroundColor = "#888";
+			layer.style.zIndex = "9999998";
+			layer.style.opacity = "0.6";
+			document.body.appendChild(layer);
+		
+			LayerStyle = function ()
+			{
+				layer.style.width = Math.max(document.documentElement.scrollWidth, document.documentElement.clientWidth) + "px";
+				layer.style.height = Math.max(document.documentElement.scrollHeight, document.documentElement.clientHeight) + "px";
+			}
+			NewboxStyle = function ()
+			{
+				newbox.style.marginTop = document.documentElement.scrollTop - newbox.offsetHeight / 2 + "px";
+				newbox.style.marginLeft = document.documentElement.scrollLeft - newbox.offsetWidth / 2 + "px";
+			}
+			if (IE6S) {layer.style.filter = "alpha(opacity = 60)";}
+			if (IE6)
+			{
+				LayerStyle();NewboxStyle();
+				window.attachEvent("onscroll", function(){NewboxStyle()});
+				window.attachEvent("onresize", function(){LayerStyle()});
+			}
+		}
+	</script>
+	
+</html>

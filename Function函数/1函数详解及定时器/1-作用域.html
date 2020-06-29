@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+/*
+    JS 作用域:
+        1. 声明在任何函数之外的数据，作用域都是全局的
+            
+        2. 声明在函数的数据，作用域只在该函数中
+            
+*/
+var a = 10;
+function fn(){
+    var b = 10;
+    a = 5;
+}
+fn();
+console.log(a);
+// console.log(window.document);
+</script>    
+</body>
+</html>

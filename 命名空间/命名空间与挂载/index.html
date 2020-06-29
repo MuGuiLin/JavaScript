@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			*{ margin: 0px; padding: 0px;}
+			html,body{ width: 100%; height: 100%;}
+			.LeftBox{ width: 24%; height: 100%; float: left; border: 1px solid green; overflow: scroll;}
+			.LeftBox ul{ list-style: none;}
+			.LeftBox ul li{ display: block; width: 100%; height: 50px; line-height: 50px; text-align: center; border-bottom: 1px solid red; cursor: pointer;}
+			.LeftBox ul li a{display: block;}
+			.LeftBox ul li a:hover{ background: blue; color: white; font-weight: bold;} 
+			.RightBox{ width: 74%; height: 100%; float: right; border: 1px solid green;}
+		</style>
+	</head>
+	<body>
+		<section class="LeftBox">
+			<ul id="menu"></ul>
+		</section>
+		<section class="RightBox">
+			
+		</section>
+	</body>
+	<script src="mupiao.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		alert(mupiao);
+		var list = ""
+		for(var i in mupiao){
+			list += '<a href='+mupiao[i].url+'.html><li>' + mupiao[i].name + '</a></li>';
+		}
+		document.getElementById("menu").innerHTML = list;
+	</script>
+</html>

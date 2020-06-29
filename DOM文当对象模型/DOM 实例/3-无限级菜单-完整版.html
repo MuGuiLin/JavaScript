@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="data.js"></script>
+    <style>
+        li ul {
+            display: none;
+        }
+        li .show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<div id="list">
+    <!-- <ul>
+        <li>
+            <p>第一级菜单</p>
+            <ul>
+                <li>
+                    <p>第二级菜单</p>
+                    <ul>
+                        <li>
+                            <p>第三级菜单</p>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>     -->
+</div>
+<script src="mTween.js"></script>
+<script>
+{
+    let list = document.querySelector("#list");    
+    let topPid = -1;
+
+    // 通过 id 获取到子级数据
+    let getChild = id=>{
+        return data.filter(item=>item.pid == id);
+    };
+
+    // 作用生成整个结构
+    let render = id=>{
+        let childData = getChild(id);
+        if(childData.length < 1)return"";
+        return `<ul>
+                ${childData.map(item=>(`<li>
+                    <p>${item.title}</p>
+                    ${render(item.id)}
+                </li>`)).join("")}
+        </ul>`;
+    };
+    list.innerHTML = render(topPid);
+
+    // 添加事件
+    let lists = list.querySelectorAll("p");
+    lists.forEach(item=>{
+        let nextUl = item.nextElementSibling;
+        item.onclick = ()=>{
+            if(!nextUl)return;
+            let prarent = item.parentNode.parentNode;
+            let uls = prarent.querySelectorAll("ul");
+            // 隐藏掉除nextUl之外所有的
+            uls.forEach(item=>{
+                if(item != nextUl){ // 隐藏其他的
+                    css(item,"display","none");
+                } else {
+                    if(css(item,"display") == "block"){
+                        css(item,"display","none");
+                    } else {
+                        css(item,"display","block");
+                    }
+                   
+                }
+               
+            });
+
+        };
+    })
+
+}    
+</script>
+
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div id="tree">
+    <!-- <ul>
+        <li>
+            <p>微云</p>
+            <ul>
+
+            </ul>
+        </li>
+    </ul> -->
+</div>    
+<script>
+// 扁平化数据结构 
+/*
+    id:  当前数据的 id
+    pid: 当前数据父级的id
+*/
+var data = [
+	{
+		id:0,
+		pid:-1,
+		title:"微云"
+	},
+	{
+		id:1,
+		pid:0,
+		title:"我的文档"
+	},
+	{
+		id:2,
+		pid:0,
+		title:"我的音乐"
+	},
+	{
+		id:2999,
+		pid:1,
+		title:"js程序设计"
+	},
+	{
+		id:29000,
+		pid:1,
+		title:"js权威指南"
+	},
+	{
+		id:23333,
+		pid:2,
+		title:"王杰"
+	},
+	{
+		id:244444,
+		pid:2,
+		title:"张国荣"
+	},
+	{
+		id:3,
+		pid:2,
+		title:"周杰伦"
+	},
+	{
+		id:4000,
+		pid:3,
+		title:"稻香"
+	},
+	{
+		id:4,
+		pid:3,
+		title:"发如雪"
+	},
+	{
+		id:600,
+		pid:3,
+		title:"夜曲"
+	}
+];
+ 
+{
+   // 根据 当前数据的 id 返回子级 
+   let getChild = (id)=>{
+        return data.filter(item=>item.pid == id);
+   };
+   let pid = -1;
+   console.log(getChild(0));
+}
+</script>    
+</body>
+</html>

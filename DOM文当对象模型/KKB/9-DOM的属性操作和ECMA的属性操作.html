@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="box" class="box">div标签</div>
+    <script>
+        {
+            let box = document.querySelector("#box");
+            
+            box.index = 0; // ECMA 的属性操作，操作的是对象，具体的数据存在内存中，可以存储各种类型数据
+            box.setAttribute("kkb",0); // DOM 的属性操作，值是存在文档中,类型只能是字符串，不是字符串的话，也会被转成字符串
+            // console.log(typeof box.index);
+            // console.log(typeof box.getAttribute("kkb"));
+            // console.log(box.kkb);
+            // console.log(box.getAttribute("index"));
+        }
+    </script>    
+</body>
+</html>

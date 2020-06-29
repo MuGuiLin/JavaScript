@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div{
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+    <div></div>
+    <input type="button" value="取消事件">
+    <script>
+       var div=document.querySelector('div');
+       var inp=document.querySelector('input');
+
+       function fn(){
+           alert('开课吧')
+       }
+
+       div.addEventListener('click',fn)
+
+    //    取消div上的click事件
+       inp.addEventListener('click',function(){
+
+            // removeEventListener(event,fn)
+            // 绑定的事件函数-必须是命名函数！
+            div.removeEventListener('click',fn)
+       })
+
+    </script>
+</body>
+</html>

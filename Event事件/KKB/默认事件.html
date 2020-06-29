@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <a href="http://www.kaikeba.com">开课吧</a>
+    <script>
+        // 浏览器给a的功能！
+        // 浏览器给的功能 都是默认事件（默认行为）
+
+        var a=document.querySelector('a');
+        a.addEventListener('click',function(e){
+            // e 事件对象
+            console.log(e);
+
+            // 阻止浏览器默认行为！
+            e.preventDefault();
+        })
+    </script>
+</body>
+</html>

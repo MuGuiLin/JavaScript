@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div id="tree">
+    <!-- <ul>
+        <li>
+            <p>微云</p>
+            <ul>
+
+            </ul>
+        </li>
+    </ul> -->
+</div>    
+<script>
+// 传统多层级结构 
+/*
+    优点：方便找子级
+    缺点：不方便找父级数据 或 同级数据
+*/   
+let data = [{
+    text: "微云",
+    child:[
+        {
+            text: "我的音乐",
+            child: [
+                {
+                    text: "王杰"
+                },{
+                    text: "周杰伦"
+                }
+            ]
+        },{
+            text: "我的文档",
+            child: [
+                {
+                    text: "权威指南"
+                }
+            ]
+        }
+    ]
+}];    
+{
+    function render(data){
+        return (`<ul>${data.map(item=>{
+            return (`<li>
+                <p>${item.text}</p>
+                ${item.child?render(item.child):""}
+            </li>`);
+        }).join("")}</ul>`);
+    }
+    document.body.innerHTML = render(data);
+}
+</script>    
+</body>
+</html>

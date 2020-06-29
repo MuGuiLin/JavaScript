@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+       *{
+           margin: 0;
+           padding: 0;
+           list-style: none;
+       }
+       ul{
+           width: 200px;
+           border: 1px solid #000;
+           position: absolute;
+           top: 0;
+           left: 0;
+           display: none;
+       }
+       li{
+           padding: 10px;
+           border: 1px solid #333;
+       }
+    </style>
+</head>
+<body style="height: 3000px;">
+    <ul>
+        <li>刷新</li>
+        <li>跳转</li>
+        <li>加载</li>
+        <li>首页</li>
+    </ul>
+    <script>
+        var ul=document.querySelector('ul');
+        // 自定义一个右键菜单
+        // contextmenu 鼠标右键事件
+        document.addEventListener('contextmenu',function(e){
+            // 显示列表
+            ul.style.display='block';
+            // 鼠标位置
+            // e.pageX e.pageY
+            var x=e.pageX;
+            var y=e.pageY;
+            ul.style.left=x+'px';
+            ul.style.top=y+'px';
+
+            // 阻止浏览器默认行为
+            e.preventDefault()
+        })
+       
+    </script>
+</body>
+</html>

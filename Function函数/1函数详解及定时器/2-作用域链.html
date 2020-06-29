@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+/*
+    作用域链：
+        1. 数据的查找规则
+        2. 现在当前查找,如果找不到就向上找父作用域，还是找不到就一直向上，知道全局作用域
+*/    
+var a = 10;
+function fn(){
+    var b = 20;
+   function fn2(a){
+        function fn3(){
+            a = 10;
+            console.log(a);
+        }
+        fn3();
+        console.log(a);
+   }
+   fn2(5);
+   console.log(a);
+}
+fn();
+</script>    
+</body>
+</html>

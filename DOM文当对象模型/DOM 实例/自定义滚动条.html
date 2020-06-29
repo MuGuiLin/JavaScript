@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>自定义滚动条</title>
+
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        .wrap {
+            position: relative;
+            margin: 50px auto;
+            width: 500px;
+            height: 500px;
+            background: rgba(0, 0, 255, 0.3);
+            border: 1px solid red;
+            overflow: hidden;
+        }
+
+        .wrap .ul {
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .wrap .ul li{
+            margin: 10px auto;
+            line-height: 32px;
+            border: 1px solid gray;
+            padding-left: 10px;
+        }
+
+        .scroll-box {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 10px;
+            height: 100%;
+            background: gray;
+        }
+
+        .scroll-bar {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 10px;
+            height: 60px;
+            min-height: 20px;
+            background: blue;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>自定义滚动条</h1>
+    <hr>
+
+
+    <div class="wrap">
+        <ul class="ul"></ul>
+        <div class="scroll-box">
+            <div class="scroll-bar"></div>
+        </div>
+
+    </div>
+
+
+
+    <script>
+
+        {
+            //列表内容
+            const ul = document.querySelector('.ul');
+            ul.innerHTML = [...'.'.repeat(100)].map((o, i) => {
+                return `<li>我是第${i + 1} 个li：文本内容</li>`
+            }).join('');
+        };
+
+        {
+            //自定义滚动条
+            const wrap = document.querySelector('.wrap');       //容器
+            const txt = document.querySelector('.ul');           //内容
+            const bar = document.querySelector('.scroll-bar');  //滚动条
+
+            let startDomTop = 0; //滚动条的top位置
+            let startMouseY = 0; //鼠标的Y位置
+
+
+            /* 计算滚动条的高度比例（当内容高度小于容器高度时，不显示滚动条，当内容高度大于容器时，跟据内容高度计算滚动条高度）
+                容器高度 / 内容高度 = 滚动条高度 / 滚动条轨道高度
+                滚动条高度 = 容器高度 / 内容高度 * 滚动条轨道高度
+            */
+            let barHeight = wrap.clientHeight / txt.offsetHeight * wrap.clientHeight;
+            bar['style']['height'] = barHeight + 'px';
+
+
+            /*计算滚动条 滚动时 内容的滚动比例
+                滚动条滚动距离 / 滚动条滚动最大距离 = 内容滚动距离 / 内容滚动最大距离
+                内容滚动距离 = 滚动条滚动距离 / （内容滚动最大距离 / 滚动条滚动最大距离）
+            */
+            let barMax = wrap.clientHeight - bar.offsetHeight;
+            let txtMax = txt.offsetHeight - wrap.offsetHeight;
+            let scales = txtMax / barMax;
+
+
+            const moveY = (e) => {
+                //移动时计算要滚动的位置
+                let newMouseY = e.clientY - startMouseY;
+                let newDomTop = newMouseY + startDomTop;
+
+                //限制滚动条范围
+                newDomTop = Math.max(0, newDomTop);  //最小值  newDomTop < 0 ? 0 : newDomTop
+                newDomTop = Math.min(newDomTop, wrap.clientHeight - bar.offsetHeight); //最大值
+
+                // 滚动条滚动距离
+                bar['style']['top'] = newDomTop + 'px';
+
+                // 内容滚动距离
+                // txt['style']['top'] = -(newDomTop * scales) + 'px';
+                txt['style']['transform'] = `translateY(-${(newDomTop * scales)}px)`;
+            };
+
+            bar.addEventListener('mousedown', (e) => {
+                startMouseY = e.clientY;
+                startDomTop = parseInt(getComputedStyle(e.srcElement).top);
+
+                //移动滚动条
+                document.addEventListener('mousemove', moveY);
+
+                //松开时删除移动事件
+                document.addEventListener('mouseup', (e) => {
+                    document.removeEventListener('mousemove', moveY);
+                }, {
+                    once: true //只执行1次
+                })
+
+                e.preventDefault();
+            });
+
+
+        }
+    </script>
+</body>
+
+</html>

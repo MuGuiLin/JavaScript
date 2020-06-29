@@ -1,0 +1,56 @@
+* {
+margin: 0;
+padding: 0;
+}
+body {
+color: white;
+background: silver;
+font-size: 14px;
+font-family: "Î¢ÈíÑÅºÚ";
+line-height: 20px;
+}
+.wrapper {
+width: 320px;
+margin: 0 auto;
+background: white;
+}
+.header {
+background: url(../images/banner.jpg) no-repeat;
+height: 206px;
+position: relative;
+}
+
+.luck {
+width: 80px;
+height: 17px;
+line-height: 16px;
+cursor: pointer;
+position: absolute;
+right: 46px;
+bottom: 23px;
+text-align: center;
+color: black;
+}
+.myCanvas {
+width: 80px;
+height: 17px;
+cursor: pointer;
+position: absolute;
+right: 46px;
+bottom: 23px;
+}
+.content {
+background: url(../images/content.jpg) no-repeat;
+height: 274px;
+}
+.content ul {
+padding: 40px;
+}
+index.html:20
+ul {
+overflow: hidden;
+}
+li {
+display: list-item;
+text-align: -webkit-match-parent;
+}

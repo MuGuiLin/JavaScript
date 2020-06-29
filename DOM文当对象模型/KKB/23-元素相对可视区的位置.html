@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div {
+            height: 500px;
+            border: 1px solid #000;
+        }
+        #box {
+            margin: 0 auto;
+            width: 500px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<div></div>
+<div></div>  
+<div></div>
+<div id="box"></div>   
+<div></div>
+<div></div>
+<div></div>
+<script>
+{
+    let box = document.querySelector("#box");
+    box.onclick = function(){
+        console.log(this.getBoundingClientRect());
+    };
+    /*
+        bottom: 元素底部，相对可视区顶部的距离
+        height: 元素的可视高度
+        left: 元素的左侧相对于可视区左侧的距离
+        right: 元素的右侧相对于可视区左侧的距离
+        top: 元素顶部相对可视区顶部的距离
+        width: 元素的可视宽度
+    */
+}
+</script>
+</body>
+</html>

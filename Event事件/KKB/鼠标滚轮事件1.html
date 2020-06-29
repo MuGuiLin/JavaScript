@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 谷歌和ie
+        document.addEventListener('mousewheel',function(e){
+            // e.wheelDelta
+            // 滚轮向上 - > 120
+            // 滚轮向下 - >  -120
+            console.log(e.wheelDelta)
+        })
+
+        // firefox
+        document.addEventListener('DOMMouseScroll',function(e){
+            // e.detail
+            // 滚轮向上  ->  -3
+            // 滚轮向下  ->  3
+            console.log(e.detail)
+        })
+    </script>
+</body>
+</html>

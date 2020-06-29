@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+function fn(d){
+    function fn2(){
+        console.log(d);
+    }
+    fn2();
+}
+fn(10);
+/*
+    作用域链: 
+        变量(数据)查找规则
+        当我们调用一条数据时，会现在本作用域查找，如果找不到就向上从父作用域中查找，如果找不到就继续向上，一直查找到全局作用域，如果全局作用域也没有就报错。
+
+        一定注意，只能里边访问外边，外边不能访问里边(没钱只能找老爸借，找儿子拿在中国是会被骂的)
+*/
+</script>    
+</body>
+</html>

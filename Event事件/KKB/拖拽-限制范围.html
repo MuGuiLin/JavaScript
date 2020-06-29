@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div{
+            width: 100px;
+            height: 100px;
+            background: red;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div></div>
+    <script src="mTween.js"></script>
+    <script>
+        // 鼠标按下 mousedown
+        // 鼠标移动 mousemove 不断的改变元素的top/left
+        // 鼠标抬起 mouseup 
+
+        var div=document.querySelector('div');
+
+        // 1. 鼠标点击的位置
+        var startPos={}
+        // 2. 元素的初始位置
+        var boxPos={}
+
+        div.addEventListener('mousedown',function(e){
+            startPos.x=e.clientX;
+            startPos.y=e.clientY;
+            boxPos.x=css(div,'left')
+            boxPos.y=css(div,'top')
+
+            // 鼠标移动过程中改变元素的位置
+            document.addEventListener('mousemove',drag)
+
+             // 清除鼠标移动事件
+            document.addEventListener('mouseup',function(){
+                console.log(1)
+                // 清除事件 - 必须清除的是命名函数！
+                document.removeEventListener('mousemove',drag)
+            },{
+                // 只绑定一次事件
+                once:true
+            })
+
+        })
+
+
+        function drag(e){
+
+            // console.log('move')
+
+            // 当前位置
+            var nowPos={
+                x:e.clientX,
+                y:e.clientY
+            }
+
+            // 当前鼠标位置 - 初始鼠标位置 = 移动距离
+            var dis={
+                x:nowPos.x-startPos.x,
+                y:nowPos.y-startPos.y
+            }
+
+            // 移动距离+元素的初始位置 = 元素最新的位置
+            var newPos={
+                l:dis.x+boxPos.x,
+                t:dis.y+boxPos.y
+            }
+
+            // 限制范围 - 浏览器可视区
+            if(newPos.l<0){
+                newPos.l=0;
+            }
+
+            // 限制右侧
+
+            // 浏览器可视区宽度 - 自身宽度  = 最大left
+            var maxL=document.documentElement.clientWidth - div.offsetWidth;
+            if(newPos.l>maxL){
+                newPos.l=maxL;
+            }
+
+
+            if(newPos.t<0){
+                newPos.t=0;
+            }
+
+            // 限制下侧
+
+            // 浏览器可视区高度 - 自身高度  = 最大top
+            var maxT=document.documentElement.clientHeight - div.offsetHeight;
+            if(newPos.t>maxT){
+                newPos.t=maxT;
+            }
+            
+            // 修改样式
+            css(div,'top',newPos.t)
+            css(div,'left',newPos.l)
+        }
+
+
+    </script>
+</body>
+</html>

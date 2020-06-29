@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+    
+    {
+        const str = 'mu_gui_lin';
+
+        const fun = (par) => {
+
+            // return par.split('').filter((item, index) => {
+            //     return item.indexOf('_');
+            // });
+
+            //方法一
+            let arr = par.split('');
+            let nArr = [];
+            for(let i = 0; i < arr.length; i++) {
+                if(0 == arr[i].indexOf('_')) {
+                    arr.splice(i, 1);
+                    arr.splice(i, 1, arr[i].toUpperCase())
+                };
+                nArr.push(arr[i])
+            };
+            return nArr.join('');
+
+            //方法二
+            // return par.split('_').map((item, index) => {
+            //     return item[0].toUpperCase() + item.substr(1);
+            // }).join('');
+        };
+
+        console.log(str, fun(str));
+        console.log(str, fun('kai_ke_ba'));
+    };
+    </script>
+</body>
+</html>

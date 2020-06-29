@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>上移下移</title>
+    <style>
+        body {
+            margin: 0;
+            width: 100vw;
+            height: 100vh;
+            background: url(./imgs/bg.png) no-repeat;
+            background-size: 100% 100%;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .wrap {
+            width: 400px;
+            margin: 250px auto;
+        }
+
+        li {
+            width: 400px;
+            height: 52px;
+            line-height: 52px;
+            background-color: #fff;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        li .line {
+            width: 3px;
+            height: 20px;
+            float: left;
+            background-color: #fd8e9f;
+            margin-left: 25px;
+            margin-top: 17px;
+        }
+
+        li .name {
+            float: left;
+            margin-left: 10px;
+        }
+
+        li .ctrl {
+            width: 110px;
+            float: right;
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row;
+            text-align: center;
+            margin-top: 12px;
+            color: #fd8e9f;
+            margin-right: 10px;
+        }
+
+        li .ctrl span {
+            width: 48px;
+            height: 26px;
+            line-height: 26px;
+            border: 1px solid #fd8e9f;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <ul>
+            <li>
+                <span class="line"></span>
+                <span class="name">jQuery</span>
+                <div class="ctrl">
+                    <span class="up">上移</span>
+                    <span class="down">下移</span>
+                </div>
+            </li>
+            <li>
+                <span class="line"></span>
+                <span class="name">AJAX</span>
+                <div class="ctrl">
+                    <span class="up">上移</span>
+                    <span class="down">下移</span>
+                </div>
+            </li>
+            <li>
+                <span class="line"></span>
+                <span class="name">JS基础</span>
+                <div class="ctrl">
+                    <span class="up">上移</span>
+                    <span class="down">下移</span>
+                </div>
+            </li>
+            <li>
+                <span class="line"></span>
+                <span class="name">移动端实战</span>
+                <div class="ctrl">
+                    <span class="up">上移</span>
+                    <span class="down">下移</span>
+                </div>
+            </li>
+            <li>
+                <span class="line"></span>
+                <span class="name">canvas游戏</span>
+                <div class="ctrl">
+                    <span class="up">上移</span>
+                    <span class="down">下移</span>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <script src="./fns.js"></script>
+    <script>
+        let ul = document.querySelector('ul');
+        // let lis = document.querySelectorAll('li');
+        let lis = document.getElementsByTagName('li');
+        lis = Array.from(lis);
+        let time = 400;
+        let type = 'easeBoth';
+
+        lis.forEach(li => {
+            css(li, 'translateY', 0)
+        });
+
+        ul.addEventListener('click', (e) => {
+            if (e.target.classList.contains('up')) {
+                if (!e.target.parentNode.parentNode.previousElementSibling) { //如果li是第0个了，移到最下面
+                    lis.forEach(li => {
+                        mTween({
+                            el: li,
+                            attr: {'translateY': -62},
+                            time,
+                        })
+                    });
+                    mTween({
+                        el: e.target.parentNode.parentNode,
+                        attr: {
+                            'translateY': 248
+                        },
+                        time,
+                        type,
+                        cb(){
+                            ul.appendChild(e.target.parentNode.parentNode)
+                            lis.forEach(li => {css(li, 'translateY', 0)});
+                        }
+                    })
+
+                } else { 
+                    mTween({
+                        el: e.target.parentNode.parentNode,
+                        attr: {
+                            'translateY': -62
+                        },
+                        time,
+                        type
+                    })
+                    mTween({
+                        el: e.target.parentNode.parentNode.previousElementSibling,
+                        attr: {
+                            'translateY': 62
+                        },
+                        time,
+                        type,
+                        cb() {
+                            ul.insertBefore(e.target.parentNode.parentNode, e.target.parentNode
+                                .parentNode.previousElementSibling)
+                            lis.forEach(li => {css(li, 'translateY', 0)});
+                        }
+                    })
+                }
+
+            } else if (e.target.classList.contains('down')) {
+                if(!e.target.parentNode.parentNode.nextElementSibling){ //最后一个li，移到最上面
+                    lis.forEach(li => {
+                        mTween({
+                            el: li,
+                            attr: {'translateY': 62},
+                            time,
+                        })
+                    });
+                    mTween({
+                        el: e.target.parentNode.parentNode,
+                        attr: {
+                            'translateY': -248
+                        },
+                        time,
+                        type,
+                        cb(){
+                            let lis = document.querySelectorAll('li');
+                            ul.insertBefore(e.target.parentNode.parentNode,lis[0])
+                            lis.forEach(li => {css(li, 'translateY', 0)});
+                        }
+                    })
+                } else{
+                    mTween({
+                        el: e.target.parentNode.parentNode,
+                        attr: {
+                            'translateY': 62
+                        },
+                        time,
+                        type
+                    })
+                    mTween({
+                        el: e.target.parentNode.parentNode.nextElementSibling,
+                        attr: {
+                            'translateY': -62
+                        },
+                        time,
+                        type,
+                        cb() {
+                            ul.insertBefore(e.target.parentNode.parentNode.nextElementSibling, e.target.parentNode
+                                .parentNode)
+                            lis.forEach(li => {css(li, 'translateY', 0)});
+                        }
+                    })
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

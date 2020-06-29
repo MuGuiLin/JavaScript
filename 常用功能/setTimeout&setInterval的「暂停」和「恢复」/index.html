@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!-- saved from url=(0059)http://jdc.jd.com/fd/promote/leeenx/201709/pixijs/demo.html -->
+<html lang="zh-CN">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+		<title>DEMO: PIXI + timer</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no">
+		<style>
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				width: 100%;
+				height: 100%;
+			}
+			
+			canvas {
+				width: 100%;
+				max-width: 540px;
+				margin: 0 auto;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<script type="text/javascript" src="pixi.js"></script>
+		<script type="text/javascript" src="timer.js"></script>
+		<script type="text/javascript">
+			var app = new PIXI.Application({
+				width: 750,
+				height: 1206,
+				antialias: true
+			});
+			document.body.appendChild(app.view);
+
+			// 文字
+			let text = new PIXI.Text("0s", {
+				fontSize: 48,
+				fill: 0xffffff,
+				align: "center"
+			});
+			text.anchor.set(.5);
+			text.x = 375;
+			text.y = 40;
+			app.stage.addChild(text);
+
+			// 小球
+			let ball = (new PIXI.Graphics()).beginFill(0xFF0000).drawCircle(0, 0, 30);
+			ball.pivot.set(30);
+			ball.x = 375;
+			ball.y = 160;
+			app.stage.addChild(ball);
+
+			// 小球运动
+			let moveDelta = 10;
+
+			function moveBall() {
+				ball.y += moveDelta;
+				(ball.y >= 1000 || ball.y <= 160) && (moveDelta *= -1);
+			}
+
+			// 倒计时
+			let sec = 0;
+			timer.setInterval(() => text.text = sec++ + "s", 1000);
+
+			// 统一 ticker
+			app.ticker.add(() => {
+				timer.update(app.ticker.elapsedMS);
+				// 小球运动
+				moveBall();
+			});
+
+			// 暂停开关
+			let trigger = new PIXI.Text("暂停 ticker", {
+				fontSize: 64,
+				fill: 0xffffff,
+				align: "center"
+			});
+			trigger.anchor.set(.5);
+			trigger.x = 375;
+			trigger.y = 1000;
+
+			trigger.buttonMode = true;
+			trigger.interactive = true;
+									//tap
+			trigger.on("click", () => {
+				if(app.ticker.started) {
+					app.ticker.stop();
+					trigger.text = "恢复 ticker";
+				} else {
+					app.ticker.start();
+					trigger.text = "暂停 ticker";
+				}
+
+			});
+
+			app.stage.addChild(trigger);
+		</script>
+		
+		<canvas width="750" height="1206" style="touch-action: none; cursor: inherit;"></canvas>
+	</body>
+
+</html>

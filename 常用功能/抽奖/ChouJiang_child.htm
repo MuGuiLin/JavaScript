@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>抽奖</title>
+
+<link rel="stylesheet" type="text/css" href="css/number.css"/>
+
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/number.js"></script>
+<script type="text/javascript">
+var isLayBtnOKClick = false;
+$(function() {
+	//初始化数据
+	var num = $("#listSize").val(); //定义要随机的名单的初始长度
+	var speed = 1; //定义速度,每10ms变一次
+	var startnum = 0;
+	//初始化名单
+	var a = new Array(num);
+	for ( var i = 0; i < num; i++) {
+		a[i] = $("#" + (i + 1)).val();
+	}
+	
+
+	//点击开始按钮注册事件
+	$("#b1").toggle(function() {
+		//初次点击随机点名
+			interval = setInterval(function() {
+				
+				startnum = Math.round(Math.random()*num*10);//随机数取整数部分
+				startnum = startnum % num;
+				nu.value = a[startnum];
+			}, speed);
+			$(this).attr("src","img/rrs.png");
+		}, function() {
+			isLayBtnOKClick = true;
+			$(this).attr("src","img/rrr.png");
+			//再次点击停止转动
+			clearInterval(interval);
+			//获取选中的值,将其状态置为1,表示已经被选择过了
+			var name = $("#nu").val();
+			
+			// 获取用户的选择结果
+			Message.config(name, function(isSelectedPerson) {
+				if(isSelectedPerson){
+					
+					//数组中删除值为name的元素,其实就是将其和数组最后一个元素互换,然后数组长度-1
+					for ( var i = 0; i < num - 1; i++) {
+						if (a[i] == name) {
+							var temp = a[num - 1];
+							a[num - 1] = null;
+							a[i] = temp;
+						}
+					}
+					num = num - 1;//数组长度-1
+					$.ajax( {
+						type : "POST",
+						url : "person_updateStatus.do",
+						data : "name=" + name,
+						success : function(msg) {
+							//回调函数
+					}
+					});
+				}
+			});
+		});
+});
+//	function document.onkeydown(){ 
+document.onkeydown = function (event){
+
+	var e=event||window.event;
+	var keyCode=e.keyCode||e.which;//e.which 兼容FF
+	
+	var target=e.srcElement||e.target;
+	
+	if (keyCode ==32) {
+		if (isLayBtnOKClick) {
+			document.getElementById("LayBtnOK").click();
+			isLayBtnOKClick = false;
+		} else {
+			document.getElementById("b1").click();
+		}
+		return false;
+	}
+};
+</script>
+
+</head>
+<body>
+
+	<!-- action中传过来的数据,让js接收 -->
+		<input type="hidden" name="" value="20" id="listSize">		
+			<input type="hidden" name="persons" id="1" value="[1]笔记本">		
+			<input type="hidden" name="persons" id="2" value="[2]花生">		
+			<input type="hidden" name="persons" id="3" value="[3]苹果">		
+			<input type="hidden" name="persons" id="4" value="[4]橘子">		
+			<input type="hidden" name="persons" id="5" value="谢谢惠顾">
+
+			<input type="hidden" name="persons" id="6" value="[6]瓜子">		
+			<input type="hidden" name="persons" id="7" value="[7]大米">		
+			<input type="hidden" name="persons" id="8" value="[8]麦粉">		
+			<input type="hidden" name="persons" id="9" value="[9]面包">		
+			<input type="hidden" name="persons" id="10" value="谢谢惠顾">
+			
+			<input type="hidden" name="persons" id="11" value="[11]杯子">		
+			<input type="hidden" name="persons" id="12" value="[12]暖壶">		
+			<input type="hidden" name="persons" id="13" value="[13]茶叶">		
+			<input type="hidden" name="persons" id="14" value="[14]可乐">		
+			<input type="hidden" name="persons" id="15" value="谢谢惠顾">
+			
+			<input type="hidden" name="persons" id="16" value="[16]芬达">		
+			<input type="hidden" name="persons" id="17" value="[17]加多宝">
+			<input type="hidden" name="persons" id="18" value="[18]音箱">		
+			<input type="hidden" name="persons" id="19" value="[19]奶茶">		
+			<input type="hidden" name="persons" id="20" value="谢谢惠顾">
+		<div class="top">
+
+		</div>
+		<div class="map">
+			<div>
+				<span class="importa">
+					<input class="importaa" type="text" name="textfield" readonly id="nu">
+				</span>
+				<span class="extract"><a href=""><img id="b1" src="img/rrr.png"></a></span>
+			</div>
+		</div>
+		<div class="bottom">
+			<img src="img/bottom.png"/>
+		</div>
+
+<div id="LayMain" class="LayMain LayDashed">
+	<div id="LayMainAll" class="LayMainAll ">
+		<div id="LayMainTop" class="LayMainTop LayDashed">本次奖品
+			<span id="LaySpan" title="关闭" class="LaySpan"><img src="img/close-btn.png"></span>
+		</div>
+			<div id="LayMainMiddle" class="LayMainMiddle">LayMainMiddle</div>
+	</div>
+</div>
+	<div id="LayShade" class="LayShade"></div>
+	
+</body>
+</html>

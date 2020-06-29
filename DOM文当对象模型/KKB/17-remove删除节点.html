@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div id="box">
+    <div id="div1"></div>
+</div>   
+<div id="box2">
+    <div id="div2"></div>
+</div>   
+<script>
+{
+    let box = document.querySelector("#box");
+    let div1 = document.querySelector("#div1");
+    // node.remove() 把 node 从 DOM 中删除
+    //console.log(div1.remove());
+    // parent.removeChild(node) 从 parent 删除掉 node 节点
+    console.log(box.removeChild(div1));
+}  
+</script>
+</body>
+</html>

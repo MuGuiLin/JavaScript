@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        ul,
+        li {
+            padding: 0;
+            list-style: none;
+        }
+
+        header {
+            text-align: right;
+            font-size: 16px;
+            line-height: 50px;
+        }
+
+        .box {
+            margin: auto;
+            padding: 20px;
+            width: 500px;
+            border: 1px solid gray;
+        }
+
+        .box li {
+            display: flex;
+            margin: 10px 0;
+            justify-content: space-around;
+            height: 50px;
+            line-height: 50px;
+            border: 1px solid blue;
+            transition: 1s;
+            transform: translateY(0px);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>DOM操作 之 上下移动</h1>
+    <hr>
+
+
+
+    <section class="box">
+        <header>
+            <label><input type="checkbox" name="" id=""> 全选</label>
+            <button>删除</button>
+        </header>
+        <hr>
+        <footer>
+            <ul id="ul"></ul>
+        </footer>
+
+    </section>
+
+
+    <script>
+        {
+            // document.querySelector('#ul').innerHTML = `<li>
+            //     <label><input type="checkbox"/></label>
+            //     <span>DOM操作 之 上下移动</span>
+            //     <div class="ctrl">
+            //         <button class="top">上移</button>
+            //         <button class="down">下移</button>
+            //         <button class="del">删除</button>
+            //     </div>
+            // </li>`.repeat(10);
+
+            document.querySelector('#ul').innerHTML = [...'.'.repeat(10)].map((item, index) => `<li>
+                <label><input type="checkbox"/></label>
+                <span>${index + 1}、DOM操作 之 上下移动</span>
+                <div class="ctrl">
+                    <button class="top">上移</button>
+                    <button class="down">下移</button>
+                    <button class="del">删除</button>
+                </div>
+            </li>`).join('');
+
+
+            const ul = document.querySelector('#ul');
+            const li = ul.querySelectorAll('li');
+
+            let moveEnd = (ele, fn) => {
+                ele.addEventListener('transitionend', function() {
+                    fn()
+                });
+            };
+
+            li.forEach((item, index) => {
+                let topBtn = item.querySelector('.top');
+                let downBtn = item.querySelector('.down');
+
+                let parent = item.parentElement;
+
+
+                topBtn['onclick'] = () => {
+                    let prevEl = item.previousElementSibling;
+
+                    // parent.replaceChild(prevEl, item);
+                    item['style']['transform'] = 'translateY(-62px)';
+                    prevEl['style']['transform'] = 'translateY(62px)';
+
+                   
+                    // if (prevEl) {
+                    //     parent.insertBefore(item, prevEl);
+                    // } else {
+                    //     parent.insertBefore(item, parent.children[parent.children.length]);
+                    // };
+
+                    moveEnd(prevEl, function () { 
+                        
+                        item['style']['transform'] = 'translateY(0px)';
+                        prevEl['style']['transform'] = 'translateY(0px)';
+                        parent.insertBefore(item, prevEl);
+                    });
+
+                };
+
+                downBtn['onclick'] = () => {
+                    let nextEl = item.nextElementSibling;
+                    if (nextEl) {
+                        parent.insertBefore(nextEl, item);
+                    } else {
+                        parent.insertBefore(item, parent.children[0]);
+                    }
+                };
+            });
+
+        };
+    </script>
+</body>
+
+</html>

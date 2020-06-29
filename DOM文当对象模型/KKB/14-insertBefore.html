@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div id="box">
+    <p>这是box</p>
+</div>
+<script>
+{
+    /*
+       parent.insertBefore(newNode,oldNode); 在 parent 插入 newNode，插入在 oldNode 之前
+    */
+    let box = document.querySelector("#box");
+    let p = document.querySelector("p")
+    let h1 = document.createElement("h1");
+    h1.innerHTML = "hello DOM";
+    //box.appendChild(h1);
+    box.insertBefore(h1,p)
+}
+</script>    
+</body>
+</html>

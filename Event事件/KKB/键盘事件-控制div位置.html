@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div{
+            width: 200px;
+            height: 200px;
+            background: red;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div></div>
+    <script src="mTween.js"></script>
+    <script>
+        var div=document.querySelector('div');
+        // 键盘按下
+        document.addEventListener('keydown',function(e){
+            // 获取按键 
+            //左 上  右 下  
+            //37 38 39  40       
+            // 获取键码
+            // console.log(e.keyCode)
+            if(e.keyCode == 39){
+                var l=css(div,'left');
+
+                css(div,'left',l+5)
+            }
+            if(e.keyCode == 37){
+                var l=css(div,'left');
+
+                css(div,'left',l-5)
+            }
+            if(e.keyCode == 38){
+                var t=css(div,'top');
+
+                css(div,'top',t-5)
+            }
+            if(e.keyCode == 40){
+                var t=css(div,'top');
+
+                css(div,'top',t+5)
+            }
+
+
+        })
+
+       
+    </script>
+</body>
+</html>

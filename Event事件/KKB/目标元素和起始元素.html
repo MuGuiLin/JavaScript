@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div{
+            width: 200px;
+            height: 200px;
+            background: red;
+            margin: 100px auto;
+        }
+        p{
+            width: 100px;
+            height: 100px;
+            background: blue;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <p></p>
+    </div>
+    <script>
+        var div=document.querySelector('div');
+        var p=document.querySelector('p');
+
+        // 事件函数中有一个默认参数ev（事件对象）
+        div.addEventListener('click',function(e){
+            // 事件冒泡
+            // 事件对象 - 存储了许多和这个事件相关的属性！
+            // e.target 事件触发的目标源元素
+            // console.log(e.target);
+
+            // e.currentTarget 事件绑定的元素
+            // console.log(e.currentTarget)
+        })
+
+
+        
+    </script>
+</body>
+</html>

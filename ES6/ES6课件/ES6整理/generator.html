@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>智能社——http://www.zhinengshe.com</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <style>
+
+    </style>
+    <script>
+        function* show(){
+            yield 'Hello';
+            yield 'World';
+            yield 'Es6';
+        }
+
+        var res=show();
+
+        console.log(res.next()); //{value:'Hello', done:false}
+        console.log(res.next()); //{value:'World', done:false}
+        console.log(res.next()); //{value:'Es5', done:false}
+        console.log(res.next()); //{value:'undefined', done:true}
+
+    </script>
+</head>
+<body>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

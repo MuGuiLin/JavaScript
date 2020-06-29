@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<style>
+		html,body {
+			height: 100%;
+			margin: 0;
+		}
+		ul {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+		.drop_dashed {
+			position: fixed;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			border: 5px dashed rgb(0, 0, 0);
+			background-color: rgb(255, 255, 255);
+			opacity: 0.2;
+			box-sizing: border-box;
+			display: none;
+		}
+		.drop_dashed:before {
+			position: absolute;
+			left: 0;
+			top: 50%;
+			width: 100%;
+			text-align: center;
+			font-size: 24px;
+			line-height: 24px;
+			content: "文件拖放到此处";
+		}
+
+		.task_panel {
+			display: none;
+			position: fixed;
+			right: 20px;
+			bottom: 20px;
+			z-index: 99;
+			width: 500px;
+			box-shadow: 0 1px 4px 0 rgba(15,32,66,.2);
+			border: 1px solid rgba(5,13,27,.16);
+			overflow: hidden;
+		}
+		.task_panel:before {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			border: 2px solid #00a4ff;
+		}
+
+		.icon {
+			display: inline-block;
+			width: 36px;
+			height: 36px;
+			line-height: 36px;
+			background-repeat: no-repeat;
+			background-position: center;
+		}
+		.task-progress-status-success {
+			background-image: url("./images/icon-task-succ.svg");
+		}
+		.window-fold {
+			background-image: url("./images/icon-window-fold.svg");
+		}
+		.all-close {
+			background-image: url("./images/icon-all-close.svg");
+		}
+
+		.task_header {
+			padding: 20px;
+			border-bottom: 1px solid #eeeeee;
+		}
+
+		.task_header h4 {
+			margin: 0;
+			padding: 0;
+			font-size: 24px;
+		}
+		.task_header .icon {
+			position: absolute;
+			top: 20px;
+			cursor: pointer;
+			transition: all .5s;
+		}
+		.task_header .icon.window-fold {
+			right: 40px;
+		}
+		.task_header .icon.all-close {
+			right: 10px;
+		}
+		.task_header .icon.window-fold.down, .task_header .icon.all-close:hover {
+			transform: rotate(180deg);
+		}
+
+		.task_body {
+			height: 313px;
+			overflow: auto;
+			transition: height .5s;
+		}
+		.task_body.hide {
+			height: 0;
+		}
+		.task_body li {
+			margin-bottom: 2px;
+			position: relative;
+			height: 20px;
+			line-height: 20px;
+			padding: 20px;
+		}
+		.task_body span {
+			position: relative;
+			z-index: 99;
+		}
+		.task_body li .task-progress-status {
+			position: absolute;
+			right: 10px;
+			top: 0;
+			z-index: 99;
+			line-height: 60px;
+		}
+		.task_body li .task-progress-status .icon {
+			position: relative;
+			top: 15px;
+		}
+		.task_body .progress {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 0%;
+			height: 60px;
+			background-color: rgba(0, 40, 255, .3);
+		}
+	</style>
+</head>
+<body>
+
+<div class="drop_dashed"></div>
+
+<div class="task_panel">
+	<div class="task_header">
+		<h4></h4>
+
+		<span class="icon window-fold"></span>
+		<span class="icon all-close"></span>
+	</div>
+	<ul class="task_body">
+		<li>
+			<span>任务一</span>
+			<div class="task-progress-status">
+				上传中……
+			</div>
+			<div class="progress"></div>
+		</li>
+		<li>
+			<span>任务二</span>
+			<div class="task-progress-status">
+				<span class="icon task-progress-status-success"></span>
+			</div>
+			<div class="progress"></div>
+		</li>
+		<li>
+			<span>任务三</span>
+			<div class="task-progress-status">
+				<span class="icon task-progress-status-success"></span>
+			</div>
+			<div class="progress"></div>
+		</li>
+	</ul>
+</div>
+
+</body>
+</html>

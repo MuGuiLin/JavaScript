@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<ul id="list">
+    <li>第1个li</li>
+    <li>第2个li</li>
+    <li>第3个li</li>
+    <li>第4个li</li>
+    <li>
+        <span>span1</span>
+        <span>span2</span>
+    </li>
+    <!--这是一条注释-->
+</ul>    
+<script>
+// console.log(document);
+// childNodes 子节点
+{
+    let list = document.querySelector("#list");
+    //console.log(list.childNodes);
+    //console.log(document.childNodes);
+    // 节点类型
+    console.log(document.nodeName,document.nodeType);
+    document.childNodes.forEach(item=>{
+        console.log(item,item.nodeType,item.nodeName); // 节点类型
+        // 10 文档声明
+        // 1 元素节点
+    });
+    list.childNodes.forEach(item=>{
+        console.log(item,item.nodeType,item.nodeName);
+        // 3 文本节点
+        // 8 注释节点
+    });
+
+    /*
+     节点类型
+        1 元素节点 （标签名称）
+        3 文本节点  (#text) 
+        8 注释节点  (#comment)
+        9 document  (#document)
+        10 文档声明 (html)
+    */
+}
+</script>    
+</body>
+</html>
