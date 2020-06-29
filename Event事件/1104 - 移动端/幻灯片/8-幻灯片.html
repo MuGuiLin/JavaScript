@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html {
+            font-size: 10vw;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        #wrap {
+            position: relative;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        #list {
+            float: left;
+            display: flex;
+            display: -webkit-box;
+        }
+
+        #list li {
+            flex: none;
+            width: 100vw;
+        }
+
+        #list img {
+            width: 100%;
+            display: block;
+        }
+
+        .nav {
+            position: absolute;
+            left: 0;
+            bottom: .2rem;
+            width: 100%;
+            text-align: center;
+            vertical-align: top;
+        }
+
+        .nav a {
+            display: inline-block;
+            width: .3rem;
+            height: .3rem;
+            background: #fff;
+            margin: 0 .1rem;
+            border-radius: .15rem;
+            transition: .3s;
+        }
+
+        .nav .active {
+            width: .6rem;
+            color: #fff;
+        }
+
+        .textList {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .textList li {
+            font: 14px/40px "宋体";
+            padding-left: 20px;
+            border-bottom: 1px solid #000;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap">
+        <ul id="list">
+            <li><img src="img/banner01.png" /></li>
+            <li><img src="img/banner02.png" /></li>
+            <li><img src="img/banner03.png" /></li>
+            <li><img src="img/banner04.png" /></li>
+        </ul>
+        <nav class="nav">
+            <a class="active"></a><a></a><a></a><a></a>
+        </nav>
+    </div>
+    <ul class="textList">
+    </ul>
+    <script src="../mTween.js"></script>
+    <script>
+        // // 列表结构生成
+        (function () {
+            var list = document.querySelector(".textList");
+            list.innerHTML = [...(".".repeat(20))].map(function (item, index) {
+                return "<li>\u8FD9\u662F\u7B2C" + index + "\u4E2Ali</li>";
+            }).join("");
+        })();
+        // 滑屏幻灯片
+        (function () {
+            var wrap = document.querySelector("#wrap");
+            var imgW = css(wrap, "width");
+            var list = document.querySelector("#list");
+            var navs = document.querySelectorAll(".nav a");
+            var startPoint = {};
+            var startOffset = 0;
+            var now = 0;
+            var isMove = true; //用户是否是想滑动幻灯片，默认 true，代表用户想要滑动幻灯片
+            var isFirst = true; // 判断是否已经判别出了，用户的滑屏方向。true 没有判别出方向，false 判别出了方向
+            list.innerHTML += list.innerHTML;
+            css(list, "translateX", 0);
+            wrap.addEventListener("touchstart", function (e) {
+                mTween.stop(list);
+                var touch = e.changedTouches[0];
+                startPoint = {
+                    x: touch.pageX,
+                    y: touch.pageY
+                };
+                if(now == 0){
+                    now = navs.length;
+                } else if(now == navs.length*2-1){
+                    now = navs.length - 1;
+                }
+                startOffset = -now * imgW;
+                css(list, "translateX", startOffset);
+                isMove = true;
+                isFirst = true;
+            });
+            wrap.addEventListener("touchmove", function (e) {
+                var touch = e.changedTouches[0];
+                var nowPoint = {
+                    x: touch.pageX,
+                    y: touch.pageY
+                };
+                var dis = {
+                    x: nowPoint.x - startPoint.x,
+                    y: nowPoint.y - startPoint.y
+                }; 
+                if(isFirst){
+                    if(Math.abs(dis.x) - Math.abs(dis.y) > 5){ // 判断左右滑动
+                        isMove = true;
+                        isFirst = false;
+                    } else if(Math.abs(dis.y) - Math.abs(dis.x) > 5){
+                        isMove = false;
+                        isFirst = false;
+                    }
+                }
+                if(isMove){
+                    (!isFirst)&&css(list, "translateX", dis.x + startOffset);
+                    e.preventDefault();
+                }
+            });
+            wrap.addEventListener("touchend", function (e) {
+                var touch = e.changedTouches[0];
+                var nowPoint = {
+                    x: touch.pageX,
+                    y: touch.pageY
+                };
+                var dis = {
+                    x: nowPoint.x - startPoint.x,
+                    y: nowPoint.y - startPoint.y
+                };
+                if(Math.abs(dis.x)>imgW*.2&&isMove){
+                    now -= dis.x/Math.abs(dis.x);
+                }
+                mTween({
+                    el: list,
+                    attr: {
+                        translateX: -now * imgW
+                    }
+                });
+                navs.forEach(function (item) {
+                    item.classList.remove("active");
+                });
+                navs[now % navs.length].classList.add("active");
+            });
+        })();
+    </script>
+</body>
+
+</html>

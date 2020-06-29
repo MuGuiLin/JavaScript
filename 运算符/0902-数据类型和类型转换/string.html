@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // String() 直白 
+
+        var num = 123;
+        var bool = true;
+        var unm = undefined ;
+        var nu = null;
+        var n = NaN;
+        var obj = {
+            a:12,
+            b:5
+        }
+
+        var fn = function(){
+
+        }
+
+
+        // console.log(String(num));
+        // console.log(String(bool));
+        // console.log(String(unm));
+        //  console.log(String(nu));
+        //  console.log(String(n));
+        //  console.log(String(obj));  //[object Object]  toString()
+        console.log(String(fn));
+
+         if(String(nu) == 'null'){
+             console.log('就是null')
+         }
+
+
+        console.log(unm)
+
+    </script>
+</body>
+</html>

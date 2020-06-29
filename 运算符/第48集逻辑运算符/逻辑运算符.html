@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            if(这个小括号会将你最终的结果转为布尔值，用于判断if语句的执行流程){}
+            而不是通过 && 
+        */
+        // alert(1 && 2);
+
+        // alert(0 && 2);
+
+        /*
+            && 与
+
+            1. 会看左侧的操作数：1，进行隐式类型的转换，转为boolean，true \ false
+                - false ，直接返回左侧的操作数
+                - true ， 直接返回右侧的操作数
+        */
+
+        // alert(0 || 2);
+        /*
+            ||  或
+
+            1 . 会看左侧的操作数：0，进行隐式类型的转换，转为boolean，true \ false
+                - true ，直接返回左侧的操作数
+                - false， 直接返回右侧的操作数
+
+        */
+
+        // alert(!true)
+        // alert(!0)
+
+        /*
+            ! 非 - 取反， 只作用于一个操作数，得到的结果一定是个boolean
+
+            0 隐式类型转换 ，转换为boolean
+
+        */
+        var num = 1;
+        // alert(Boolean(num));  true
+        alert(!!num);
+
+    </script>
+</body>
+</html>

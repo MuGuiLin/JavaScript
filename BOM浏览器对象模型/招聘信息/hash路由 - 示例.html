@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="css/bootstrap.css" rel="stylesheet" />
+    <style>
+        .panel {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="view">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#">首页</a></li>
+        <li><a href="#/course">课程页</a></li>
+        <li><a href="#/about">关于我们</a></li>
+        <li><a href="#/join">加入我们</a></li>
+    </ul>
+    <div class="panel panel-default">
+        <div class="panel-heading">这里是首页视图</div>
+        <div class="panel-body">这里是首页视图相关链的各种内容</div>
+    </div>
+</div>
+<script>
+// 点击不同选项，显示不同视图，根据url（hash）
+// 根据路径显示不同内容
+{
+    let view = document.querySelector("#view");
+    // 根据 hash 不同显示 不同视图
+    let render = ()=>{
+        let hash = location.hash;
+        // "" #/course #/about #/join #/jo
+        switch(hash){
+            case "":
+                view.innerHTML = indexRender();
+                break;
+            case "#/course":
+                view.innerHTML = courseRender();
+                break;   
+            case "#/about":
+                view.innerHTML = aboutRender();
+                break; 
+            case "#/join":
+                view.innerHTML = joinRender();
+                break; 
+                default:
+                view.innerHTML = `<h1>404</h1>`;        
+        }
+    };
+    render();
+    window.onhashchange = render;
+}
+
+// 首页内容
+function indexRender(){
+    return `
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">首页</a></li>
+            <li><a href="#/course">课程页</a></li>
+            <li><a href="#/about">关于我们</a></li>
+            <li><a href="#/join">加入我们</a></li>
+        </ul>
+        <div class="panel panel-default">
+            <div class="panel-heading">这里是首页视图</div>
+            <div class="panel-body">这里是首页视图相关链的各种内容</div>
+        </div>
+    `;
+}
+
+// 课程页内容
+function courseRender(){
+    return `
+        <ul class="nav nav-tabs">
+            <li><a href="#">首页</a></li>
+            <li class="active"><a href="#/course">课程页</a></li>
+            <li><a href="#/about">关于我们</a></li>
+            <li><a href="#/join">加入我们</a></li>
+        </ul>
+        <div class="panel panel-default">
+            <div class="panel-heading">这里是课程页视图</div>
+            <div class="panel-body">这里是课程页视图相关链的各种内容</div>
+        </div>
+    `;
+}
+// 加入我们内容
+function joinRender(){
+    return `
+        <ul class="nav nav-tabs">
+            <li><a href="#">首页</a></li>
+            <li><a href="#/course">课程页</a></li>
+            <li><a href="#/about">关于我们</a></li>
+            <li class="active"><a href="#/join">加入我们</a></li>
+        </ul>
+        <div class="panel panel-default">
+            <div class="panel-heading">这里是加入页视图</div>
+            <div class="panel-body">这里是加入页视图相关链的各种内容</div>
+        </div>
+    `;
+}
+// 关于我们内容
+function aboutRender(){
+    return `
+        <ul class="nav nav-tabs">
+            <li><a href="#">首页</a></li>
+            <li><a href="#/course">课程页</a></li>
+            <li class="active"><a href="#/about">关于我们</a></li>
+            <li><a href="#/join">加入我们</a></li>
+        </ul>
+        <div class="panel panel-default">
+            <div class="panel-heading">这里是关于视图</div>
+            <div class="panel-body">这里是关于视图相关链的各种内容</div>
+        </div>
+    `;
+}
+</script>
+</body>
+</html>

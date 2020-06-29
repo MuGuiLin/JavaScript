@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container">
+
+
+    </div>
+</body>
+<script>
+
+    for (let i = 0; i < 100; i++) {
+        let mydiv = document.createElement("div");
+        mydiv.style.width = "100px";
+        mydiv.style.height = "100px";
+        let arr = ["red", "yellow", "blue"];
+        mydiv.style.display = "block";
+        mydiv.style.float = "left";
+        mydiv.style.background = arr[i % arr.length];
+        document.querySelector(".container").appendChild(mydiv);
+    }
+
+    let divs = document.querySelectorAll(".container div");
+    // console.log(divs);
+    console.time(1);
+    // 循环绑定；
+    // divs.forEach(div => {
+    //     // console.log(div);
+    //     div.onclick = function () {
+    //         alert(111);
+    //     }
+    // })
+    // 事件委托  、事件代理；
+        document.querySelector(".container").addEventListener("click",e=>{
+            // console.log(e.target);
+            if(e.target.nodeName==="DIV"){
+                alert(1111);
+            }
+        })
+
+    console.timeEnd(1);
+
+</script>
+
+</html>

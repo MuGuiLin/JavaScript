@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>招聘信息</title>
+    <link href="css/bootstrap.css" rel="stylesheet" />
+    <style>
+        #root,
+        #view {
+            padding-top: 10px;
+        }
+        .list-group-item-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+
+<body>
+<div id="root" class="container">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#/sh">社会招聘</a></li>
+        <li><a href="#/xy">校园招聘</a></li>
+    </ul>
+    <div id="view">
+        <!-- <ul class="list-group">
+            <li class="list-group-item">
+                <a href="#/sh/details/1">
+                    <h4 class="list-group-item-heading">职位需求：前端开发工程师需求人数：2名</h4>
+                    <p class="list-group-item-text">岗位要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3岗位要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3岗位要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3岗位要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3</p>
+                </a>
+            </li>
+            <li class="list-group-item">
+
+            </li>
+            <li class="list-group-item">
+
+            </li>
+            <li class="list-group-item">
+
+            </li>
+            <li class="list-group-item">
+
+            </li>
+        </ul> 
+        <ul class="pagination">
+            <li class="active"><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+        </ul>         -->
+    </div>
+</div>    
+<script src="js/data.js"></script>
+<script>
+{
+    let view = document.querySelector("#view");
+    let navs = document.querySelectorAll(".nav li");
+    routerRenter();
+    window.onhashchange = routerRenter;
+    function routerRenter(){
+        let hash = window.location.hash;
+        hash = hash?hash.substring(2):"/";
+        hash = hash.split("/");
+        navs.forEach(item=>{
+            item.classList.remove("active");
+        });
+        if(hash[0] == "sh"||!hash[0]){
+            navs[0].classList.add("active");
+            if(hash[1] == "details"){
+                let id = Number(hash[2]);
+                id = id?id:0;
+                let nowData = data["society"].filter(item=>item.id==id)[0];
+                view.innerHTML =  detailsRender(nowData);
+            } else {
+                let page = Number(hash[1]);
+                page = page?page:0;
+                view.innerHTML =  ListRender(data["society"],page);
+            }
+
+        } else if(hash[0] == "xy"){
+            navs[1].classList.add("active");
+            if(hash[1] == "details"){
+                let id = Number(hash[2]);
+                id = id?id:0;
+                let nowData = data["campus"].filter(item=>item.id==id)[0];
+                view.innerHTML =   detailsRender(nowData);
+            } else {
+                let page = Number(hash[1]);
+                page = page?page:0;
+                view.innerHTML =  ListRender(data["campus"],page);
+            }
+        }
+    }
+}    
+function detailsRender(nowData){
+    let inner = `
+    <div class="panel panel-default">
+        <div class="panel-heading">招聘岗位：${nowData.job}</div>
+        <div class="panel-body">
+           <p>${nowData.ask}</p>
+           <p>招聘人数：${nowData.nub}人</p>
+           <p>发布时间：${nowData.data}</p>
+        </div>
+    </div>
+    `;
+    return inner;
+}
+function ListRender(nowData,page){
+    let start = page*5;
+    let end = (page+1)*5;
+    let type = nowData[0].type;
+    nowPapeData = nowData.filter((item,index)=>index>=start&&index<end);
+    let inner = `
+        <ul class="list-group">
+            ${nowPapeData.map(item=>{
+                return (`
+                    <li class="list-group-item">
+                        <a href="#/${item.type}/details/${item.id}">
+                            <h4 class="list-group-item-heading">职位需求：${item.job} 人数：${item.nub}名</h4>
+                            <p class="list-group-item-text">${item.ask}</p>
+                        </a>
+                    </li>
+                `)
+            }).join("")}
+        </ul>    
+    `;
+    let pageLength = Math.ceil(nowData.length/5);
+    inner += `
+        <ul class="pagination">
+           ${[...("n".repeat(pageLength))].map((item,index)=>{
+               return `<li class="${index==page?"active":""}"><a href="#/${type}/${index}">${index+1}</a></li>`
+           }).join("")}
+        </ul>
+    `; 
+    return inner;
+}
+</script>
+</body>
+</html>

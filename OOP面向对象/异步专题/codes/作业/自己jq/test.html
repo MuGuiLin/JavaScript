@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <title>Document</title>
+    <style>
+        .box{
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="box"></div>
+</body>
+<script>
+// console.log($.cssNumber);
+
+// wh  ---> 改变 宽度 同时改变高度；
+$.cssHooks.wh = {
+    get(ele){
+        console.log(ele);
+        return 111
+    },
+    set(ele,value){
+        // console.log(ele,value);
+        ele.style.width = value;
+        ele.style.height = value;
+    }
+}
+
+// $(".box").css("background","gray");
+// $(".box").css("wh","200px");
+let res = $(".box").css("wh");
+console.log(res);
+
+</script>
+</html>

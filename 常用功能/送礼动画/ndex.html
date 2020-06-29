@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {
+            padding: 200px
+        }
+
+
+
+        div {
+            margin-top: 100px;
+        }
+
+        canvas {
+            border: 1px solid gray;
+        }
+
+        img {
+            border: 1px solid gray;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <video id="video" src="gif-1.mp4" controls ></video>
+    <canvas id="canvas" width="500" height="500"></canvas>
+    <button id="btn1">按钮1</button>
+
+
+</body>
+<script>
+    var i = null;
+    var v = document.getElementById("video");
+    var c = document.getElementById("canvas");
+    ctx = c.getContext('2d');
+    // v.addEventListener('play', function () {
+    //     var i = window.setInterval(function () {
+    //         ctx.drawImage(v, 0, 0, 270, 135)
+    //     }, 20);
+    // }, false);
+    v.addEventListener('pause', function () {
+        window.clearInterval(i);
+    }, false);
+    v.addEventListener('ended', function () {
+        clearInterval(i);
+    }, false);
+
+
+    
+    document.getElementById('btn1').onclick = function (params) {
+
+        v.play();
+        var myImage = document.getElementById("canvas");
+        var cxt = myImage.getContext("2d");
+  
+        v.addEventListener('play', function () {
+            var i = window.setInterval(function () {
+                cxt.drawImage(v, 50, 10, 100, 100);
+                cxt.drawImage(v, 50, 50, 100, 100);
+            }, 20);
+        }, false);
+        
+        window.setTimeout(function () {
+            cxt.fillRect(50,10,100,100);
+            ctx.clearRect(50,100,100,100);
+        }, 1000)
+        
+
+    }
+</script>
+
+</html>

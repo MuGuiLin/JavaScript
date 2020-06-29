@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Document</title>
+<style>
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+} 
+img {
+    vertical-align: top;
+}
+#wrap {
+    margin: 40px auto;
+    position: relative;
+    width: 600px;
+    height: 400px;
+    border: 2px solid #000;
+    overflow: hidden;
+}    
+#pics {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    height: 400px;
+    z-index: 1;
+}
+#pics li{
+    width: 600px;
+    height: 400px;
+    overflow: hidden;
+}
+#pics img {
+    width: 600px;
+    height: 400px;
+}
+.btn {
+    position: absolute;
+    top: 170px;
+    z-index: 2;
+    width: 60px;
+    font: 40px/60px "宋体";
+    text-align: center;
+    background: rgba(255, 255, 255, .6);
+    text-decoration: none;
+    color: #000;
+}
+.btn:hover {
+    background: #fff;
+}
+.prev {
+    left: 0;
+}
+.next {
+    right: 0;
+}
+#navs {
+    position: absolute;
+    left: 0;
+    bottom: 10px;
+    z-index: 3;
+    width: 100%;
+    text-align: center;
+}
+#navs a {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background: #fff;
+}
+#navs .active {
+    background: #f60;
+}
+</style>
+</head>
+<body>
+<div id="wrap">
+    <ul id="pics">
+        <li>
+            <img src="img2/img (1).jpg" />
+        </li>
+        <li>
+            <img src="img2/img (2).jpg" />
+        </li>
+        <li>
+            <img src="img2/img (3).jpg" />
+        </li>
+        <li>
+            <img src="img2/img (4).jpg" />
+        </li>
+    </ul>
+    <a href="javascript:;" class="btn prev"><</a>
+    <a href="javascript:;" class="btn next">></a>
+    <nav id="navs">
+        <a class="active"></a>
+        <a></a>
+        <a></a>
+        <a></a>
+    </nav>
+</div>
+<script src="../mTween.js"></script>
+<script>
+(function(){
+    var wrap = document.querySelector("#wrap");
+    var pics = document.querySelector("#pics");
+    var btns = document.querySelectorAll(".btn");
+    var wrapW = css(wrap,"width");
+    var navs = document.querySelectorAll("#navs a");
+    var now = 0;
+    css(pics,"translateX",0);
+    pics.innerHTML +=  pics.innerHTML;
+    // 上一张
+    function prev(){
+        if(now == 0){ // 如果当前是第0张了，再向前就没有，所以切换到第二组的第0张
+            now = navs.length;
+            css(pics,"translateX",-now*wrapW);
+        }
+        now--;
+        tab();
+    }
+    function next(){
+        if(now == navs.length*2-1){ // 如果当前是最后一张了，再向后就没有，所以切换到第一组的最后一张
+            now = navs.length - 1;
+            css(pics,"translateX",-now*wrapW);
+        }
+        now++;
+        tab();
+    }
+    function tab(){
+        mTween({
+            el: pics,
+            attr: {
+                translateX: -now*wrapW
+            }
+        });
+        navs.forEach(function(item,index){
+            item.classList.remove("active");
+        });
+        navs[now%navs.length].classList.add("active");
+    }
+    navs.forEach(function(item,index){
+        item.onclick = function(){
+            now = index;
+            tab();
+        };
+    });
+    btns[0].onclick = prev;
+    btns[1].onclick = next;
+
+
+})();    
+</script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // alert(10 - 5);
+        // alert(10 - (-5));
+        // alert(10 - NaN)
+
+        /*
+            - Number
+                - 如果左右两侧的操作数，都是数值的话，正常进行减法计算；
+                - 如果任何一个操作数，是NaN，那么结果就是NaN；
+            - string、 null、 undefined、 true、false 
+                - 左右任何一侧不为Number类型的情况，会调用Number进行转换，将其转为Number类型之后，再进行计算。
+        */
+
+        // alert(null - '10');
+        alert(Number(null) - Number('10')); // 0 - 10 = -10
+    </script>
+</body>
+</html>

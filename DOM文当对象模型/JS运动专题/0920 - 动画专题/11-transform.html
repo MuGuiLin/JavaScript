@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Document</title>
+<style>
+    @keyframes rotate {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+    #box {
+        padding: 100px;
+        width: 200px;
+        height: 200px;
+        border: 2px solid #000;
+    }
+    #div {
+        width: 200px;
+        height: 200px;
+        background: red;
+        transition: 3s;
+        /* animation: 3s rotate linear infinite; */
+    }
+    #box:hover #div {
+        transform: scale(2); /*变换 - 旋转 deg */
+        /*
+            scale()
+            scaleX()
+            scaleY();
+        */
+    }
+</style>
+</head>
+<body>
+    <div id="box">
+        <div id="div"></div>
+    </div>
+</body>
+</html>

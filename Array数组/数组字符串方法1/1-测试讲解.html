@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<!-- 
+命名规范:
+1. 数字、字母 &  _
+2. 不能以数字开始
+3. 不能是关键字 和 保留字
+
+1. 下列获取元素正确的是（）   [单选题]
+    A : var 1b = document.getElementById('box');
+    B : var a1 = document.getElementsByTagName('box');
+    C : var b3 = document.querySelectorAll('box');
+    D : var c4 = document.getElementsByTagName('div'); (答案)
+
+
+2. 以下哪个单词不属于javascript保留字和关键字（）   [单选题]
+A. with
+B. parent (答案)
+C. class	
+D. void
+
+3. 下列代码执行结果是？（）
+var a1=10;
+var a2=20;
+alert("a1+a2="+a1+a2)   [单选题]
+A a1+a2=30
+B a1+a2=1020 (答案)
+C a1+a2=a1+a2	
+D 30=30	
+
+4.下列哪个获取在点击按钮的时候能获取到输入之后的value（）
+
+<input type="text" value="呵呵" id="t"/>
+<input type="button" value="按钮" id="btn"/>
+var t=document.getElementById('t');
+var btn=document.getElementById('btn');
+
+A :      
+ var v = t.value;    
+ btn.onclick = function(){      
+       console.log(v);     
+ }	
+B : btn.onclick = function(){     
+       var v = t.value;       
+        console.log(v);    
+  } (答案)
+C:   btn.onclick = function(){        console.log(btn.value);     }	
+D:  btn.onclick = function(){        console.log(box.value);     }	
+
+
+5. 下面哪种自定义属性能使用？（）   [单选题]
+
+A : 'hehe'.index = 0;	
+B : false.index = 0;
+C : undefined.index = 0;
+D : [1,2,3].index = 0; (答案)
+
+6. alert( "12" > "9" ) 的运行结果正确的是：（）   [单选题]
+https://github.com/motao314/js-
+
+A：  true	0	0%
+B：  false (答案)
+正确率：100%
+
+7. 下列的哪一个表达式将返回假 （）   [单选题]
+
+A.!(3 <= 1)	0
+B.(4>=4)&&(5<= 2) (答案)	
+C.(“a”==”a”)&&(“c”!=”d”)
+D.(2<3)||(3<2)
+
+
+8. 下面正确的是？（）   [单选题]
+A : function (){alert(123)};
+B : var fn = function (){console.log(this)} fn(); //undefined	
+C : var fn = function (){console.log(this)} fn(); //document	
+D : function fn(){console.log(this)} fn(); //window (答案)
+
+9. 对作用域上下文和 this 的理解，下列代码结果是？（）
+var User = {
+    count: 1,
+    getCount: function () {
+        return this.count;
+    }
+};
+console.log(User.getCount()); //what?
+var func = User.getCount;
+console.log(func()); // what?   [单选题]
+
+
+A 1 undefined ; (答案)
+B 1 1 ;
+C undefined 1
+D undefined undefined;
+
+10. js中数据类型有（）   [单选题]
+
+A : undefined，null，string，function，NaN，object，symbol
+B : undefined，null，string，boolean，NaN，object，symbol
+C : undefined，null，string，boolean，object，symbol (答案)
+D : undefined，null，string，boolean，function，object，symbol	
+
+typeof: number、string、boolean、function、object、symbol、undefined
+
+标准:
+    基本： number、string、boolean、symbol、undefined、null
+    对象: object
+
+
+-->
+</body>
+</html>

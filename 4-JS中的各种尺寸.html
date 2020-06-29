@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #wrap {
+            position: relative;
+        }
+        #box {
+            position: absolute;
+            top: -200px;
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<script>
+/*
+    offset：可视
+        left  元素左侧距离定位父级的左侧的距离
+        top 元素顶部距离定位父级的顶部的距离
+
+    client:
+        left 元素做边框宽度
+        top 元素上边框宽度
+
+    scroll：
+        left 元素横向滚动条，滚动距离 
+        top  元素纵向滚动条，滚动距离    
+
+    getBoundingClientRect()
+        left 元素左侧距离可视区左侧的距离
+        top  元素顶部距离可视区顶部的距离
+        bottom  元素底部距离距离可视区顶部的距离
+        right   元素右侧距离距离可视区左侧的距离  
+
+
+*/
+{
+    document.write([...(".".repeat(100))].map(item=>`<p>页面内容</p>`).join(""));
+}
+{
+    /*
+        页面的尺寸获取:
+    */
+    // console.log(window.innerHeight);
+    // console.log(document.documentElement.clientHeight); // 可视区高度
+    // console.log(document.documentElement.offsetHeight); // 文档（页面，整个内容的高度）高度
+    // console.log(window.screen.height); //设备屏幕高度
+
+    /*
+        元素相应的坐标
+    */
+    window.onload = function(){
+        let box = document.querySelector("#box");
+        //console.log(box.offsetTop); // 元素相当于定位父级顶部的距离
+        console.log(box.getBoundingClientRect().top); //元素相当于可视区的距离(随着滚动条滚动，元素距离可视区的距离会发生变化)
+        console.log(getPageOffset(box).top);
+
+    };
+}
+// 获取 el 元素 相对页面的坐标
+function getPageOffset(el){
+    let left = 0;
+    let top = 0;
+    while(el){
+        left += el.offsetLeft;
+        top += el.offsetTop;
+        el = el.offsetParent;
+    }
+    return {left,top}
+}
+</script>
+<div id="wrap">
+    <div id="box"></div>    
+</div>    
+</body>
+</html>

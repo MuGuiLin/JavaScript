@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width,user-scalable=no" />
+<title>Document</title>
+<style>
+/*
+    rem： root em  （html em）
+    vw + rem
+*/   
+html {
+    font-size: 30px;
+    /*
+        em是参考当前元素的font-size
+    */
+} 
+#box {
+    width: 5rem;
+    height: 200px;
+    background: red;
+}
+@media (max-width:1024px) and (min-width:600px) {
+    #box {
+        background: yellow;
+    }
+}
+</style>
+</head>
+<body>
+<a href="https://www.baidu.com">百度</a>
+<div id="box">
+    开课吧
+</div>
+</body>
+</html>

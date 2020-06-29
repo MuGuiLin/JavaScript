@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>code编码</title>
+		<style type="text/css">
+			h1 { text-align: center; color: red; font-size: 48px; }
+		</style>
+	</head>
+
+	<body>
+		<h1>code编码</h1><hr />
+		<h1 id="h1"></h1>
+	</body>
+	
+	<script type="text/javascript">
+		let code = '';
+		for(let i = 0; i < 65536; i++){
+			code += `${String.fromCharCode(i)} : ${i} ,`;
+		}
+		document.querySelector('#h1').innerHTML = code;
+		
+		x = x => {alert(x)};
+		
+//		var x = function(x){
+//			return x;
+//		}
+		
+		x`3`;
+		
+
+	</script>
+
+</html>

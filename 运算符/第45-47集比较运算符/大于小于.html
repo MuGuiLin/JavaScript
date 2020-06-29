@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // var num1 = 10;
+        // var num2 = 20;
+        // alert(num1 > num2);
+
+        // var num3 = 15;
+        // var num4 = 15;
+        // var num5 = 20;
+
+        // alert(num3>=num4);
+
+        // alert(num3>=num5);
+        
+        /*
+            关系操作符（比较操作符），最终返回的结果是一个布尔值
+            左右两侧如果都是数值，就比较数值的大小
+
+            **注意如果不是数字的情况
+                1. 字符串的比较
+                    字符串的比较是逐位比较的,并且比较的是字符编码大小
+                2. 如果比较中出现了NaN，那么结果就是false
+                3. null 、undefined、true、false，最终会根据对应的规则进行转换。
+
+                http://www.fengfly.com/document/ECMAScript5.1/ 规则查看地址
+
+        */
+
+        // var str1 = 'A';
+        // var str2 = '3';
+
+        // alert(str1>=str2); //23 > 3 没有转换成数字进行比较  
+        /*
+        
+            23 中的2  对应的字符编码是 50
+            3  中的3  对应的字符编码是 51
+
+            50>=51 =>false
+        */
+
+        // var a = null;
+        var a;
+        var b = 0;
+
+        alert(a >= b);
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var str = '123';
+
+        //var result = str + 2;// 125   1232
+        // var result = Number(str) + 2;
+
+        /*利用隐式类型进行转换*/
+
+        // var result = +str + 2;
+        // alert(result);
+
+        var num1 = 10;
+        var num2 = 20;
+
+        // var result = num1 + num2; // 1020 -> 字符串的拼接
+
+        var result = num1 + '' + num2;
+        alert(result);
+        /*
+        
+            +
+                1. 加法运算符
+                2. 字符串拼接
+                3. 正号（一元加运算符）
+
+            ++  -- 
+
+        */
+    </script>
+</body>
+</html>

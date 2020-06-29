@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Document</title>
+<style>
+.box {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100px;
+    height: 100px;
+    background: red;
+}
+</style>
+</head>
+<body>
+<div class="box"></div>   
+<script src="fns.js"></script> 
+<script>
+{
+    // 拖拽
+    let box = document.querySelector(".box");
+    // 鼠标按下事件
+    let startMouse = {};
+    let startEl = {};
+    // 鼠标移动
+    let move = (e)=>{
+        let nowMouse = {
+            x: e.clientX,
+            y: e.clientY
+        };
+        let disMouse = {
+            x: nowMouse.x - startMouse.x,
+            y: nowMouse.y - startMouse.y
+        };
+       css(box,"left",startEl.x + disMouse.x);
+       css(box,"top",startEl.y + disMouse.y);
+    };
+    box.addEventListener("mousedown",(e)=>{
+        startMouse = {
+            x: e.clientX,
+            y: e.clientY
+        };
+        startEl = {
+            x: css(box,"left"),
+            y: css(box,"top")
+        }
+        box.addEventListener("mousemove",move);
+        box.addEventListener("mouseup",()=>{
+            box.removeEventListener("mousemove",move);
+        },{
+            once: true
+        });
+    });
+
+}
+</script>
+</body>
+</html>

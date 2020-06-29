@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body,
+        p {
+            margin: 0;
+        }
+        .wrap {
+            margin: 50px auto;
+            position: relative;
+            width: 400px;
+            height: 400px;
+            border: 1px solid #000;
+            padding-right: 20px;
+            overflow: hidden;
+        }
+        .inner {
+            font: 14px/30px "宋体";
+        }
+        .scrollbar-wrap {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 20px;
+            height: 100%;
+            background: rgba(0, 0, 0, .2);
+        }
+        .scrollbar {
+            width: 20px;
+            min-height: 40px;
+            border-radius: 10px;
+            background: #000;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <div class="inner">
+
+    </div>
+    <div class="scrollbar-wrap">
+        <div class="scrollbar"></div>
+    </div>
+</div>
+<script src="mTween.js"></script>
+<script>
+// 添加内容
+{
+    let inner = document.querySelector(".inner");
+    inner.innerHTML = [...(".".repeat(100))].map((item,index)=>`<p>这是第${index}项内容</p>`).join("");
+}
+
+// 给元素的区域添加自定义滚动条
+/*
+init: {
+    el: 给哪个区域添加自定义滚动条
+    scrollbar: 自定义滚动条元素
+}
+*/
+function scrollBar({el,scrollbar}){
+    css(el,"translateY",0);
+    css(scrollbar,"translateY",0);
+    // 拖拽 scrollbar，让它移动
+    let inner = el.children[0];
+    let scrollWrap = scrollbar.parentNode;
+    // 滚动比例
+    /*
+        wrap.height/inner.height = scrollbar.height/scrollWrap.height;
+        scrollbar.height = scrollWrap.height*(wrap.height/inner.height);
+    */
+    //console.log(scrollWrap.clientHeight*(el.clientHeight/inner.offsetHeight));
+    css(scrollbar,"height",scrollWrap.clientHeight*(el.clientHeight/inner.offsetHeight));
+    let startMouseY = 0;
+    let startScrollY = 0;
+    let minScroll = 0; // 滚动条的最小值
+    let maxScroll = scrollWrap.clientHeight - scrollbar.offsetHeight;
+    let move = (e)=>{
+        let nowMouseY = e.clientY;
+        let disY = nowMouseY - startMouseY;
+        let nowY = disY + startScrollY;
+        console.log(nowY);
+        nowY = Math.max(nowY,minScroll);
+        nowY = Math.min(nowY,maxScroll);
+        css(scrollbar,"translateY",nowY);
+        css(inner,"translateY",-nowY/scrollScale);
+    };
+    let scrollScale = maxScroll/(inner.offsetHeight - el.clientHeight);//滚动比例
+    scrollbar.addEventListener("mousedown",(e)=>{
+        startMouseY = e.clientY;
+        startScrollY = css(scrollbar,"translateY");
+        document.addEventListener("mousemove",move);
+        document.addEventListener("mouseup",()=>{
+            document.removeEventListener("mousemove",move);
+        },{once:true});
+        e.preventDefault();
+    });
+    mouseScroll({el,
+        up(){
+            let nowScroll = css(scrollbar,"translateY");
+            nowScroll -= maxScroll/20;
+            nowScroll = Math.max(nowScroll,minScroll);
+            css(scrollbar,"translateY",nowScroll);
+            css(inner,"translateY",-nowScroll/scrollScale);
+        },down(){
+            let nowScroll = css(scrollbar,"translateY");
+            nowScroll += maxScroll/20;
+            nowScroll = Math.min(nowScroll,maxScroll);
+            css(scrollbar,"translateY",nowScroll);
+            css(inner,"translateY",-nowScroll/scrollScale);
+        }});
+
+}
+function mouseScroll({el,up,down}){
+    el.addEventListener("mousewheel",(e)=>{
+        if(e.wheelDelta > 0){
+            up&&up.call(el,e);
+        } else {
+            down&&down.call(el,e);
+        }
+    });
+    el.addEventListener("DOMMouseScroll",(e)=>{
+        if(e.detail < 0){
+            up&&up.call(el,e);
+        } else {
+            down&&down.call(el,e);
+        }
+    });
+}
+// 添加自定义滚动条
+{
+    let el = document.querySelector(".wrap");
+    let scrollbar = document.querySelector(".scrollbar");
+    scrollBar({
+        el,
+        scrollbar
+    });
+}
+</script>   
+</body>
+</html>

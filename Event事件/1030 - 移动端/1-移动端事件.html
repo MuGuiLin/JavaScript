@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            width: 200px;
+            height: 200px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<div id="box"></div>
+<script>
+{
+    let box = document.querySelector("#box");
+    /*
+        touchstart --> 手指摁下
+        touchmove --> 手指在元素上摁下之后，在屏幕移动(注意哪怕移动到屏幕其他地方，this和e.target 都还是指向摁下时的this和e.target)
+        touchend --> 手指在元素上摁下之后，在屏幕离开 注意哪怕移动到屏幕其他地方，this和e.target 都还是指向摁下时的this和e.target)
+    */
+   box.addEventListener("touchstart",function(e){
+        console.log("手指摁下");
+   });
+   box.addEventListener("touchmove",function(e){
+        console.log("手指移动");
+   });
+   box.addEventListener("touchend",function(e){
+        console.log("手指离开");
+   });
+
+}
+</script>  
+</body>
+</html>

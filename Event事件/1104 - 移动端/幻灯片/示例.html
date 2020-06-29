@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html {
+            font-size: 10vw;
+        }
+        body {
+            margin: 0;
+        }
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        #wrap {
+            position: relative;
+            width: 100vw;
+            overflow: hidden;
+        }
+        #list {
+            float: left;
+            display: flex;
+            display: -webkit-box;
+        }
+        #list li {
+            flex: none;
+            width: 100vw;
+        }
+        #list img {
+            width: 100%;
+            display: block;
+        }
+        .nav {
+            position: absolute;
+            left: 0;
+            bottom: .2rem;
+            width: 100%;
+            text-align: center;
+            vertical-align: top;
+        }
+        .nav a {
+            display: inline-block;
+            width: .3rem;
+            height: .3rem;
+            background: #fff;
+            margin: 0 .1rem;
+            border-radius: .15rem;
+            transition: .3s;
+        }
+        .nav .active {
+            width: .6rem;  
+            color: #fff;  
+        }
+        .textList {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .textList li {
+            font: 14px/40px "宋体";
+            padding-left: 20px;
+            border-bottom: 1px solid #000;
+        }
+    </style>
+</head>
+<body>  
+<div id="wrap">
+    <ul id="list">
+        <li><img src="img/banner01.png" /></li>
+        <li><img src="img/banner02.png" /></li>
+        <li><img src="img/banner03.png" /></li>
+        <li><img src="img/banner04.png" /></li>
+    </ul>
+    <nav class="nav">
+        <a class="active"></a><a></a><a></a><a></a>
+    </nav>
+</div>  
+<ul class="textList">
+
+</ul>
+<script src="../mTween.js"></script>
+<script>
+// 列表结构生成
+{
+    let list = document.querySelector(".textList");
+    list.innerHTML = [...(".".repeat(200))].map((item,index)=>{
+        return `<li>这是第${index}个li</li>`;
+    }).join("");
+}
+// 幻灯片实现    
+{
+	let wrap = document.querySelector("#wrap");
+    let list = document.querySelector("#list");
+    let navs = document.querySelectorAll(".nav a");
+    list.innerHTML += list.innerHTML;
+    css(list,"translateX",0);
+    let startPoint = {};
+    let startTranlateX = 0;
+    let scale = .3;
+    let now = 0;
+    let isFirst = true;
+    let isMove = false;
+    let timer = 0;
+    // 自动播放
+    auto();
+    function auto(){
+        timer = setInterval(()=>{
+          
+            if(now >= navs.length*2 - 1){ //如果当前已经是最后一张了,再走下一张就没了
+                now = navs.length - 1; //回到第1组的最后一张，然后再执行下一张操作
+                css(list,"translateX",-now*wrap.clientWidth);
+            }
+            now++;
+            let target = -now*wrap.clientWidth;
+            navs.forEach(item=>{
+                item.classList.remove("active");
+            });
+            navs[now%navs.length].classList.add("active");
+            mTween({
+                el: list,
+                attr:{
+                    translateX: target 
+                }
+            });
+        },2000);
+    }
+    wrap.addEventListener("touchstart",(e)=>{
+        clearInterval(timer);
+        let touch = e.changedTouches[0];
+        if(now == 0){ 
+            now = navs.length;
+        } else if(now == navs.length*2 - 1){
+            now = navs.length-1;
+        }
+        css(list,"translateX",-now*wrap.clientWidth);
+        startPoint.x = touch.pageX;
+        startPoint.y = touch.pageY;
+        startTranlateX = css(list,"translateX");
+        isFirst = true;
+        isMove = false;
+    });
+    wrap.addEventListener("touchmove",(e)=>{
+        let touch = e.changedTouches[0];
+        let nowPoint = {
+            x: touch.pageX,
+            y: touch.pageY
+        };
+        let disPoint = {
+            x: nowPoint.x - startPoint.x,
+            y: nowPoint.y - startPoint.y
+        };
+        if(isFirst){
+            if(Math.abs(disPoint.x) - Math.abs(disPoint.y) >= 5){
+                isFirst = false;
+                isMove = true;
+            }
+        } else {
+            e.preventDefault();
+        }
+        if(isMove){
+            css(list,"translateX",startTranlateX + disPoint.x);
+            e.preventDefault();
+        }
+    });
+    wrap.addEventListener("touchend",(e)=>{
+        let disPointX = e.changedTouches[0].pageX - startPoint.x;
+        if(Math.abs(disPointX) > wrap.clientWidth*scale){
+            now -= disPointX/Math.abs(disPointX);
+        }
+        mTween({
+            el: list,
+            attr: {
+                translateX:-now*wrap.clientWidth
+            }
+        });
+        navs.forEach(item=>{
+            item.classList.remove("active");
+        });
+        navs[now%navs.length].classList.add("active");
+        auto();
+    });
+}
+</script>
+</body>
+</html>

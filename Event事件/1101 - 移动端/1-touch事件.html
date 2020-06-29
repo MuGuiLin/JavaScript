@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .box {
+            width: 200px;
+            height: 200px;
+            background: red;
+            font: 14px/30px "宋体";
+            color: #FFF;
+        }   
+    </style>
+</head>
+<body>
+<div class="box"></div>    
+<!--
+    touchstart -> 手指在元素上，摁下
+    touchmove -> 手指在元素上摁下之后，在屏幕移动
+    touchend -> 手指在元素上摁下之后，在屏幕中抬起
+-->
+<script>
+{
+    let box = document.querySelector(".box");
+    box.addEventListener("touchstart",(e)=>{
+        console.log(e.touches);
+        console.log(e.targetTouches);
+        console.log(e.changedTouches);
+    });
+}
+</script>
+</body>
+</html>

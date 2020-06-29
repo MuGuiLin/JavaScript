@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>图片切换</title>
+    <style>
+        body {
+            height: 100vh;
+            background-color: rgb(247, 202, 208);
+        }
+
+        .wrap {
+            width: 860px;
+            height: 400px;
+            margin: 50px auto;
+            position: relative;
+
+        }
+
+
+        img {
+            position: absolute;
+            z-index: 2;
+            transition: 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        #prev {
+            width: 20px;
+            height: 30px;
+            position: absolute;
+            left: 100px;
+            top: 32%;
+            background: url(./img/prev.png) no-repeat;
+            z-index: 9999;
+        }
+
+        #next {
+            width: 20px;
+            height: 30px;
+            position: absolute;
+            left: 460px;
+            top: 32%;
+            background: url(./img/next.png) no-repeat;
+            z-index: 9999;
+        }
+
+        .one{
+            left: 0px;
+            transform: scale(.8);
+            z-index: 0;
+        }
+        .three{
+            left: 300px;
+            transform: scale(.8);
+            z-index: 0;
+        }
+        .two{
+            left:150px;
+            transform: scale(1.2);
+            z-index:10;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <img src="./img/f1.png" alt="" class="one">
+        <img src="./img/f2.png" alt="" class="two">
+        <img src="./img/f3.png" alt="" class="three">
+        <div class="btns">
+            <a href="javascript:;" id="prev">
+            </a>
+            <a href="javascript:;" id="next">
+            </a>
+        </div>
+
+    </div>
+</body>
+
+</html>

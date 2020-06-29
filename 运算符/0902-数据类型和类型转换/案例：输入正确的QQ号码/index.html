@@ -1,0 +1,51 @@
+ <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+    <div class="box">
+      <input type="text" id="txt" />
+      <input type="button" id="btn" value="验证" />
+      <div class="validate">
+        <div class="arrow"><em></em><span></span></div>
+        <div class="text">请输入5-10位数字</div>
+      </div>
+    </div>
+
+<script>
+/*
+  1. 不能是空的
+  2. 只能输入5-10
+  4. 必须是一个合法的整数
+  4. 不能以0开始
+*/
+var txt = document.querySelector("#txt");
+var btn = document.querySelector("#btn");
+btn.onclick = function(){
+  var val = txt.value;
+  if(val == ""){
+      alert("请输入内容");
+  } else if(val.length>10
+  || val.length < 5) {
+      alert("请输入5到10位数字") 
+  } else if(val[0]== "0"){
+      alert("不能以0开始")
+  } else if(
+    isNaN(val)//判断是否是合法数字，true代表不合法
+    || String(parseInt(val))!==val //代表本身 有 小数 .0 的情况
+  ){
+      alert("请输入一个合法的整数");
+  } else {
+      alert("验证通过");
+  }
+  // != 会隐士类型转换 !== 不会转换类型 类型不一样 直接返回不相等
+};
+  
+</script>
+  </body>
+</html>

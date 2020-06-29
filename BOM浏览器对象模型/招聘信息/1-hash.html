@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="css/bootstrap.css" rel="stylesheet" />
+    <style>
+        .panel {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="view">
+    <ul class="nav nav-tabs">
+        <!-- <li class="active"><a href="#">首页</a></li>
+        <li><a href="#/course">课程页</a></li>
+        <li><a href="#/about">关于我们</a></li>
+        <li><a href="#/join">加入我们</a></li> -->
+    </ul>
+    <div class="panel panel-default">
+        <div class="panel-heading">这里是首页视图</div>
+        <div class="panel-body">这里是首页视图相关链的各种内容</div>
+    </div>
+</div>
+<script>
+{
+    let nav = document.querySelector(".nav");
+    let panel = document.querySelector(".panel");
+    let routers = [
+        {
+            path : "",
+            txt: "首页"  
+        },{
+            path : "/course",
+            txt: "课程页"  
+        },{
+            path : "/about",
+            txt: "关于我们"  
+        },{
+            path : "/join",
+            txt: "加入我们"
+        }
+    ];
+    /*
+        hash 地址栏 #后边跟的内容
+    */
+    /*
+        单页应用
+            路由就是指随着浏览器地址栏的变化，展示给用户的不同的视图。
+            路由规则：
+                那个地址对应那个视图
+    */
+    changeView();
+    window.addEventListener("hashchange",()=>{
+        changeView();
+    });
+    function changeView(){
+        let {hash} = location;
+        hash = hash.substr(1);
+        switch(hash){
+            case "":
+                panel.innerHTML = indexRender();
+                break;
+            case "/course":
+                panel.innerHTML = courseRender();
+                break;
+            case "/about":
+                panel.innerHTML = aboutRender();
+                break;
+            case "/join":
+                panel.innerHTML = joinRender();
+                break; 
+                default:
+                panel.innerHTML = "404";             
+        }
+        routerRender(hash);
+    }
+
+    // 根据目前 url，渲染导航
+    function routerRender(path){
+        nav.innerHTML = routers.map(item=>{
+            return `<li class="${item.path == path?"active":""}"><a href="#${item.path}">${item.txt}</a></li>`;
+        }).join("");
+    }
+
+    // 首页内容
+    function indexRender(){
+        return `
+                <div class="panel-heading">这里是首页视图</div>
+                <div class="panel-body">这里是首页视图相关链的各种内容</div>
+        `;
+    }
+
+    // 课程页内容
+    function courseRender(){
+        return `
+                <div class="panel-heading">这里是课程页视图</div>
+                <div class="panel-body">这里是课程页视图相关链的各种内容</div>
+        `;
+    }
+    // 加入我们内容
+    function joinRender(){
+        return `
+                <div class="panel-heading">这里是加入页视图</div>
+                <div class="panel-body">这里是加入页视图相关链的各种内容</div>
+        `;
+    }
+    // 关于我们内容
+    function aboutRender(){
+        return `
+                <div class="panel-heading">这里是关于视图</div>
+                <div class="panel-body">这里是关于视图相关链的各种内容</div>
+        `;
+    }
+}
+</script>
+</body>
+</html>

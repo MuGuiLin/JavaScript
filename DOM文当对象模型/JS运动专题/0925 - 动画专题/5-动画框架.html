@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            position: absolute;
+            left: 0px;
+            top: 100px;
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<button>跑</button>
+<button>停</button>
+<div id="box"></div>
+<script src="mTween.js"></script>
+<script> 
+/*
+- css(el,attr[,value]) css 函数 设置或获取样式
+    - 注意: 非数值类样式的处理
+    - 注意: transform 相关样式的处理问题
+*/ 
+(function(){
+    var btns = document.querySelectorAll("button");
+    var box = document.querySelector("#box");
+    btns[0].onclick = function(){
+         // css(box,"width",200)
+         /* console.log(css(box,"width")); 数值类的样式在获取时，已经转成了数字
+            "width",
+            "height",
+            "left",
+            "top",
+            "right",
+            "bottom",
+            "marginBottom",
+            "marginleft",
+            "marginRight",
+            "marginTop",
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom",
+            "opacity"
+         */
+        css(box,{
+            width: 200,
+            height: 200
+        });
+    };
+})();
+</script>
+</body>
+</html>

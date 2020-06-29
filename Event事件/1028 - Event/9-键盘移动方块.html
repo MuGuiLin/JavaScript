@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .div {
+            position: absolute;
+            left: calc(50% - 50px);
+            top: calc(50% - 50px);
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<div class="div"></div>
+<script src="mTween.js"></script>
+<script>
+{
+    let div = document.querySelector(".div");
+    let speedX = 0;
+    let speedY = 0;
+    let timer = 0;
+    /*
+        可以获得焦点的元素，才可以使用 keydown
+    */
+   css(div,"translateX",0);
+   css(div,"translateY",0);
+   window.addEventListener("keydown",(e)=>{
+        switch(e.keyCode){
+            case 37:
+                // 左
+                speedX = -2;
+                break;
+            case 38:
+                // 上
+                speedY = -2;
+                break;    
+            case 39:
+                // 右
+                speedX = 2;
+                break; 
+            case 40:
+                // 下
+                speedY = 2;
+                break;       
+        }
+        if(!timer){
+            timer = requestAnimationFrame(move);
+        }
+   });
+   window.addEventListener("keyup",()=>{
+       cancelAnimationFrame(timer);
+       speedX = 0;
+       speedY = 0;
+       timer = 0;
+   })
+
+   function move(){
+        let nowX = css(div,"translateX");
+        let nowY = css(div,"translateY"); 
+        css(div,"translateX",nowX += speedX);
+        css(div,"translateY",nowY += speedY);
+        timer = requestAnimationFrame(move);
+   }
+}
+</script>    
+</body>
+</html>

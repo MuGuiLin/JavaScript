@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            position: absolute;
+            left: 0px;
+            top: 100px;
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<button>跑</button>
+<button>停</button>
+<div id="box"></div>
+<script>
+function css(el,attr,val){
+	if(val === undefined){
+		return getComputedStyle(el)[attr];
+	} else {
+		el.style[attr] = val;
+	}
+}    
+(function(){
+    var btns = document.querySelectorAll("button");
+    var box = document.querySelector("#box");
+    var timer = 0;
+    /*
+         requestAnimationFrame JS 中专为动画，新增的新的API
+         var index = requestAnimationFrame(fn);
+         // 到了当前次屏幕重绘时调用 fn;
+    */
+    btns[0].onclick = function(){
+        cancelAnimationFrame(timer);
+        animate();
+    };
+    function animate(){
+        timer = requestAnimationFrame(function(){
+            var l = parseInt(css(box,"left"));
+            l += 2;
+            css(box,"left", l + "px");
+            animate();
+        });
+    }
+    btns[1].onclick = function(){
+        cancelAnimationFrame(timer);
+    };
+})();
+</script>
+</body>
+</html>

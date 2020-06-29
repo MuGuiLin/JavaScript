@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+
+// 摇一摇实现
+// shake 摇一摇
+// fn 摇一摇之后要做的事情
+function throttle(fn, interval=500) {
+    let timer = 0;
+    return function(...arg){ // 处理过节流的函数
+        let _self = this;
+        if(timer){
+            return ;
+        }
+        fn.call(_self,...arg);
+        timer = setTimeout(()=>{
+            timer = 0;
+        },interval);
+    }
+}
+function shake(fn){
+    const MAXRNAGE = 40; // 当用户晃动幅度超过这个值时，认定用户进行了摇一摇
+    const MINRNAGE = 10; // 当用户的晃动幅度停止时，执行摇一摇处理
+    let lastX = 0,
+    lastY = 0,
+    lastZ = 0;
+    let isShake = false;
+    let shakeFn = throttle(function(e){
+        let {x,y,z} = e.acceleration;
+        let range = Math.abs(x - lastX) + Math.abs(y - lastY) + Math.abs(z - lastZ);
+        if(MAXRNAGE < range){ // 当用户的摇动幅度超过我们认定的界限，就认为用户进行了摇一摇
+            isShake = true;//记录进行了摇一摇
+        } else if(isShake&&range < MINRNAGE){
+            fn.call(this,e);
+            isShake = false;
+        }
+    }, 200);
+    window.addEventListener("devicemotion",shakeFn);
+}
+shake(()=>{
+    alert("您摇动了手机");
+});
+</script>    
+</body>
+</html>

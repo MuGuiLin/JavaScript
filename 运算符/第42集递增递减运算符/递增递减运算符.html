@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            前置型：
+                把运算符写到变量的前面
+
+            后置型：
+                把运算符写到变量的后面
+        */
+        var num1 = 0;
+        var num2 = 0;
+
+        // ++num1;
+        // num2++;
+
+        // alert(num1); //1
+        // alert(num2); //1
+
+
+        var result1 = ++num1 + 2; //3   3
+        var result2 = num2++ + 2; //3   2
+
+        console.log(num2);
+
+        // console.log(result1,result2);
+
+        /*
+            单独对一个操作数使用 递增或递减 不和别的发生计算，是没有关系的，结果都是一样的
+
+            一旦需要和别的发生计算：
+
+                前置型：num1基础上，进行+1的操作，然后和2进行相加
+                后置型：num2基础上，和2进行相加，注意：在计算之前，并没有发生自增的情况,但是计算完成之后，还是会自增的。
+
+        */
+    </script>
+</body>
+</html>

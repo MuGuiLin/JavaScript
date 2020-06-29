@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>面向对象选项卡</title>
+		<style type="text/css">
+			section{ margin: auto; width: 830px; padding: 10px; border: 1px solid blue; text-align: center;}
+			button{ margin: 0px; width: 200px; height: 30px;}
+			h1{ text-align: center;}
+			div{ margin-top: 10px; width: 100%; height: 400px; border: 1px solid green; display: none; overflow: auto; }
+			div img{ width: 100%;}
+		</style>
+	</head>
+
+	<body>
+		<section id="tab1">
+			<button>选项卡1</button>
+			<button>选项卡2</button>
+			<button>选项卡3</button>
+			<button>选项卡4</button>
+			
+			<div><img src="http://prog.smgtech.net//data/upload/1/201707/31103728091279am.jpg"/></div>
+			<div><img src="http://prog.smgtech.net//data/upload/1/201707/31103822072166b6.jpg"/></div>
+			<div><img src="http://prog.smgtech.net//data/upload/1/201707/31103901068056b.jpg"/></div>
+			<div><img src="http://prog.smgtech.net//data/upload/1/201707/31103932063209g3.jpg"/></div>
+		</section>
+		
+		<br /><h1>继承类后，扩展新方法，自动播放</h1><br />
+		
+		<section id="tab2">
+			<button>选项卡1</button>
+			<button>选项卡2</button>
+			<button>选项卡3</button>
+			<button>选项卡4</button>
+			
+			<div><img src="http://prog.smgtech.net//data/upload/1/201707/31103728091279am.jpg"/></div>
+			<div><img src="http://prog.smgtech.net//data/upload/1/201707/31103822072166b6.jpg"/></div>
+			<div><img src="http://prog.smgtech.net//data/upload/1/201707/31103901068056b.jpg"/></div>
+			<div><img src="http://prog.smgtech.net//data/upload/1/201707/31103932063209g3.jpg"/></div>
+		</section>
+	</body>
+	
+	<script type="text/javascript">
+		class ObjTab {
+			constructor(box, col = "green") {
+				this.col = col;
+				this.box = document.getElementById(box);
+				this.btn = this.box.querySelectorAll('button');
+				this.div = this.box.querySelectorAll('div');
+				this.init();
+				this.show(0);
+			};
+			
+			init() {
+				for(let i = 0; i < this.btn.length; i++) {
+					this.btn[i].onclick = () => {
+						//alert(this.btn[i].innerHTML)
+						this.hide();
+						this.show(i);
+					}
+				}
+			};
+
+			hide() {
+				for(let i = 0; i < this.div.length; i++) {
+					this.div[i].style.display = "none";
+				};
+				
+				for(let i = 0; i < this.btn.length; i++) {
+					this.btn[i].style.background = "";
+				};
+			};
+			
+			show(i) {
+				this.div[i].style.display = "block";
+				this.btn[i].style.background = this.col;
+			};
+		};
+		
+		new ObjTab("tab1");
+		
+		class newObjTab extends ObjTab {
+			constructor(e, c) {
+				super(e, c);
+				this.auto();
+			};
+			
+			auto() {
+				let i = 0, len = this.btn.length;
+				window.setInterval(() => {
+					i == len ? i = 0 : i
+					this.hide();
+					this.show(i);
+					i++;
+				}, 3000);
+			};
+			
+		}
+		
+		new newObjTab("tab2", "blue");
+	</script>
+
+</html>

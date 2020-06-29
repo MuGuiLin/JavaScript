@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        /* 动画帧 */
+        @keyframes animate {
+             /* 动画起点 */
+            /* 0%{ 
+                left: 0;
+                top: 0;
+            } 
+                不设置起点，起点为 computedStyle 计算后样式
+            */
+            50% {
+                left: 200px;
+                top: 0;
+            }
+            /* 动画终点 */
+            /* 100% {
+                left: 200px;
+                top: 200px;
+            } 
+                不设置终点，终点为 computedStyle 计算后样式
+            */
+        }
+        #box {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100px;
+            height: 100px;
+            background: red;
+            animation: animate 2s;
+        }
+    </style>
+</head>
+<body>
+    <div id="box"></div>   
+</body>
+</html>

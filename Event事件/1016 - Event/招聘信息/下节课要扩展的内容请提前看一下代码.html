@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>招聘信息</title>
+    <link href="css/bootstrap.css" rel="stylesheet" />
+    <style>
+        #root,
+        #view {
+            padding-top: 10px;
+        }
+        .list-group-item-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .nav a {
+            float: left;
+            margin-right: 2px;
+            line-height: 1.42857143;
+            border: 1px solid transparent;
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            padding: 10px 15px;
+            margin-bottom: -1px;
+        }
+        .nav .active {
+            color: #555;
+            cursor: default;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-bottom-color: transparent;
+        }
+    </style>
+</head>
+
+<body>
+<div id="root" class="container">
+    <nav class="nav nav-tabs">
+       <a href="#/society/">社会招聘</a>
+       <a href="#/campus/">校园招聘</a>
+    </nav>
+    <div id="view">
+        
+    </div>
+</div>    
+<script src="js/data.js"></script>
+<script>
+/*
+""
+/
+#
+#/society/:id
+#/society/2
+#/society/3
+……
+#/campus/:page
+#/campus/1
+#/campus/2
+#/campus/3
+
+
+通常路由有两种规则：
+1. 完整匹配，也就url本身是什么就匹配什么样？ /index == /index
+2. 规则中，有一部分是可能会变得  /index/:page == /index/  /index/1
+
+……
+
+*/
+{
+   let view = document.querySelector("#view");
+   //所有的路由规则 
+   let routes = [
+       {
+           path: "/",
+           render: renderIndex,
+           props: {}
+       },
+       {
+           path: "/society/:nowPage",
+           render: renderSociety,
+           props: {}
+       },
+       {
+           path: "/society/details/:id",
+           render: renderSocietyDetails,
+           props: {}
+       },
+       {
+           path: "/campus/details/:id",
+           render: renderCampusDetails,
+           props: {}
+       }
+   ];
+   matching();
+   function matching(){
+        let hash = location.hash.substr(1);
+        hash = hash?hash:"/";
+        let hashArr = hash.split("/");
+        for(let i = 0; i< routes.length; i++){
+            //如果这个 路径中 包含 : ,就把路径分拆 一段一段去匹配
+            if(routes[i].path.includes(":")){
+                let isMatch = routes[i].path.split("/").every((item,index)=>{
+                    if(item.includes(":")){ //包含 : 这段 直接认为匹配成功，拿到相应的值
+                       
+                        console.log(item.substr(1),hashArr[index]);
+                        routes[i].props[item.substr(1)] = hashArr[index];
+                        return true;
+                    } 
+                    return hashArr[index] == item;// 不包含 : 必须完全一样
+                })
+                if(isMatch&&routes[i].path.split("/").length == hashArr.length){
+                   // console.log(isMatch,routes[i]);
+                   console.log(routes[i].path,hash);
+                    view.innerHTML = routes[i].render(routes[i].props);
+                    break;
+                }
+            } else if(routes[i].path == hash) {//完整匹配
+                view.innerHTML = routes[i].render(routes[i].props);
+                break;
+            }
+        }
+   }
+   window.onhashchange = matching;
+}
+// 首页视图
+function renderIndex(){
+    return renderList({
+        type: "society",
+        nowPage:0
+    })
+}
+// 社会招聘 视图
+function renderSociety(props){
+    let {nowPage} = props;
+    return renderList({
+        type: "society",
+        nowPage
+    })
+}
+// 校园招聘视图
+function renderCampus(props){
+    let {nowPage} = props;
+    nowPage = Number(nowPage);
+    return renderList({
+        type: "campus",
+        nowPage
+    })
+}
+// 详情
+function renderSocietyDetails(props){
+    let {id} = props;
+    return renderDetails({
+        type: "society",
+        id
+    })
+}
+// 详情
+function renderCampusDetails(props){
+    let {id} = props;
+    nowPage = Number(nowPage);
+    return renderDetails({
+        type: "campus",
+        id
+    })
+}
+
+function renderDetails(props){
+    let {id,type} = props;
+    console.log(id,type);
+    let nowData = data[type].filter(item=>item.id==id)[0];
+    let inner = `
+        <div class="panel panel-default">
+            <div class="panel-heading">招聘岗位：${nowData.job}</div>
+            <div class="panel-body">
+            <p>${nowData.ask}</p>
+            <p>招聘人数：${nowData.nub}人</p>
+            <p>发布时间：${nowData.data}</p>
+            </div>
+        </div>
+    `;
+    return inner;
+}
+
+function renderList(props){
+    let {nowPage,type} =  props;
+    nowPage--;
+    nowPage = nowPage<0?0:nowPage;
+    let len = 5;//一页显示五条
+    let start = nowPage * len;
+    let end = (nowPage+1) * len;
+    // nowData 当前页数据
+    let nowData = data[type].slice(start,end);
+    let pageLen = Math.ceil(data[type].length/len);
+    // 数据列表
+    let inner = `
+        <ul class="list-group">          
+            ${
+                nowData.map(item=>{
+                    return `
+                    <li class="list-group-item">
+                        <a href="#/${type}/details/${item.id}">
+                            <h4 class="list-group-item-heading">职位需求：${item.job} 人数：${item.nub}名</h4>
+                            <p class="list-group-item-text">${item.ask}</p>
+                        </a>
+                    </li> 
+                    `
+                }).join("")  
+            }
+        </ul>
+    `;
+    // 翻页导航
+    inner += `
+        <ul class="pagination">
+            ${[...(".".repeat(pageLen))].map((item,index)=>{
+                return `<li class="${index==nowPage?"active":""}"><a href="#/${type}/${index+1}">${index+1}</a></li>`;
+            }).join("")}
+        </ul>
+    `
+    return inner;
+}
+</script>
+</body>
+</html>

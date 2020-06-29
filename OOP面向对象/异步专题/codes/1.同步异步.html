@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+// 同步阻塞； 异步非阻塞 ； 
+function fn(cb){
+    setTimeout(()=>{
+        console.log("fn...");
+        cb && cb();
+    },1000)
+    // alert("some value..");
+}
+console.log(111);
+fn(function(){
+    console.log(222);
+});
+
+
+
+</script>
+</html>

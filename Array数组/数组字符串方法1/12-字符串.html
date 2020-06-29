@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+var str = 'miaov-kkb-123-kkb';
+/*
+    slice()、substr()、substring() 从原字符串中，截取一个新的字符串,不修改原字符串
+*/
+var newStr = str.slice(1,10);
+/*
+    slice(start,end)  // 从 start 开始截取，截取到 end(不包含end这位)
+*/
+var newStr2 = str.substr(1,10);
+/*
+    substr(start,length) // 从 start 开始截取，截取 length 位字符
+*/
+var newStr3 = str.substring(1,10);
+/*
+    substring(start,end) // 从 start 开始截取，截取到 end(不包含end这位)
+*/
+console.log(newStr,newStr2,newStr3);
+</script>    
+</body>
+</html>

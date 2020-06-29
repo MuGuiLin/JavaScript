@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style id="css">
+        #time {
+            position: relative;
+            margin: 100px auto;
+            width: 200px;
+            height: 200px;
+            border: 2px solid #000;
+            border-radius: 50%;
+        }
+        #list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        #list li {
+            position: absolute;
+            left: 99px;
+            top: 0;
+            width: 2px;
+            height: 10px;
+            background: #ccc;
+            transform-origin: center 100px;
+        }
+        #list li:nth-child(5n + 1){
+            left: 98px;
+            width: 4px;
+            height: 15px;
+            background: #000;
+        }
+        #hour {
+            position: absolute;
+            left: 95px;
+            top: 50px;
+            width: 10px;
+            height: 50px;
+            background: #000;
+            transform-origin: bottom;
+        }
+        #min {
+            position: absolute;
+            left: 97px;
+            top: 30px;
+            width: 6px;
+            height: 70px;
+            background: yellow;
+            transform-origin: bottom;
+        }
+        #sec {
+            position: absolute;
+            left: 99px;
+            top: 10px;
+            width: 2px;
+            height: 90px;
+            background: red;
+            transform-origin: bottom;
+        }
+        .ico {
+            position: absolute;
+            left: 90px;
+            top: 90px;
+            width: 20px;
+            height: 20px;
+            background: #000;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+<div id="time">
+    <ul id="list">
+    </ul>
+    <div id="hour"></div>
+    <div id="min"></div>
+    <div id="sec"></div>
+    <div class="ico"></div>
+</div>   
+<script>
+// 刻度生成  
+// 0 6  
+(function(){
+    var list = document.querySelector("#list");
+    var css = document.querySelector("#css");
+    var inner = "";
+    var cssInner = "";
+    for(var i = 0; i < 60; i++){
+        inner += '<li></li>';
+        cssInner += '#list li:nth-child('+(i+1)+'){transform:rotate('+(i*6)+'deg)}'
+    }
+    list.innerHTML = inner;
+    css.innerHTML += cssInner;
+})();
+
+// 钟表
+(function(){
+    var elHour = document.querySelector("#hour");
+    var elMin = document.querySelector("#min");
+    var elSec = document.querySelector("#sec");
+
+    getTime();
+    setInterval(getTime,1000);
+    // 获取时间，根据时间，设置各个针的旋转角度
+    function getTime(){
+        var date = new Date;
+        var sec = date.getSeconds();
+        var min = date.getMinutes() + sec/60;
+        var hour = date.getHours() + min/60;
+        elSec.style.transform = 'rotate('+sec*6+'deg)';
+        elMin.style.transform = 'rotate('+min*6+'deg)';
+        elHour.style.transform = 'rotate('+hour*30+'deg)'
+    }
+})();
+</script> 
+</body>
+</html>

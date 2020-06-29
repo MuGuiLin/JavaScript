@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<input type="text" />
+<a href="https://www.baidu.com">百度</a>
+<ul class="list">
+
+</ul>
+<script>
+{
+    let list = document.querySelector(".list");
+    list.innerHTML = [...(".".repeat(100))].map(((item,index)=>{
+        return `<li>这是第${index}个li</li>`;
+    })).join("");
+}
+// 阻止默认事件带来的问题
+{
+    // document.addEventListener("touchstart",(e)=>{
+    //    e.preventDefault();
+    // },{
+    //     passive: false
+    // });
+    document.addEventListener("touchmove",(e)=>{
+       e.preventDefault();
+    },{
+        passive: false
+    });
+    
+    /*
+        在 touchstart 中阻止默认事件
+        1. 系统滚动条不能再滑动
+        2. 输入类型表单控件，不能输入了
+        3. 所有的鼠标事件（包括href 跳转）都被禁止了
+        4. 阻止内容选中
+        5. 阻止唤醒系统菜单
+        6. 阻止页面缩放
+    */
+
+    /*
+        在 touchmove 中阻止默认事件
+        1. 系统滚动条不能再滑动
+        2. 阻止页面缩放
+    */
+
+    /*
+        在 touchend 中阻止默认事件
+        1. 输入类型表单控件，不能输入了
+        2. 所有的鼠标事件（包括href 跳转）都被禁止了
+        3. 阻止内容选中
+        4. 阻止唤醒系统菜单
+    */
+}
+</script>   
+</body>
+</html>

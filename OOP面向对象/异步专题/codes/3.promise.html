@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+// 1.promise对象三种状态；  2、then 2个参数； 3.then会有3种返还；
+//  pending 、resolve 和 reject  
+// 1.pending;
+//  let p1 = new Promise(()=>{
+//      console.log("回调");
+//  });
+// console.log(p1);
+
+// 2.resolved  / fulfilled(火狐) 
+
+// let p1 = new Promise((reslove,reject)=>{
+//      console.log("回调");
+//      reslove("value");
+//  });
+// console.log(p1);
+
+// 3.rejected
+
+// let p1 =  new Promise((reslove,reject)=>{
+//      console.log("回调");
+//      reject();
+//  });
+// console.log(p1);
+
+// then的2个参数 onresolove 和 onreject；
+// let p1 = new Promise((resolve,reject)=>{
+//         // resolve("成功");
+//         reject("失败");
+// })
+// p1.then((res)=>{
+//     console.log(res)
+// },(err)=>{
+//     console.log(err); 
+// });
+
+
+// then 的三种返还值；
+let p1 = new Promise((resolve,reject)=>{
+        resolve("成功");
+})
+// 1.默认返还一个promise对象；
+// let res = p1.then(()=>{
+//     console.log(111)
+// })
+// console.log(res);
+// 2.如果有返还 ，会返还一个 promise对象；
+// let res = p1.then(()=>{
+//     // console.log(111)
+//     return "some value";
+// }).then(res=>{
+//     console.log("--",res);
+// })
+// console.log(res);
+
+// 3.返还一个promise对象； 返还原来的promise对象；
+let res = p1.then(()=>{
+    // console.log(111)
+    return  new Promise(resolve=>{
+        resolve("返还的值")
+    })
+})
+console.log(res);
+
+
+
+
+
+
+
+
+
+
+</script>
+</html>

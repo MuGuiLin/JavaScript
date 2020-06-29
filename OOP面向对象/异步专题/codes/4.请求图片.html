@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+// function loadImg(){
+//     let img = new Image();
+//     img.src = "http://img.redocn.com/sheying/20141022/huangsejuhuatupian_3194297.jpg"
+//     img.onload = function(){
+//         document.querySelector("body").appendChild(img);
+//     }
+// }
+
+// loadImg();
+
+// 通过promise 改写；
+function loadImg(){
+    return new Promise((resolve,reject)=>{
+        let img = new Image();
+        // img.src = "http://img.redocn.com/sheying/20141022/huangsejuhuatupian_3194297.jpg"
+        img.src = "http://img.redocn.com/sheyi"
+        img.onload = function(){
+            resolve(img);
+            // document.querySelector("body").appendChild(img);
+        }
+        img.onerror = function(){
+            reject("图片请求失败");
+        }
+    })
+}
+
+loadImg().then((img)=>{
+    document.querySelector("body").appendChild(img);
+},(err)=>{
+    console.log(err);
+})
+
+
+
+
+</script>
+</html>

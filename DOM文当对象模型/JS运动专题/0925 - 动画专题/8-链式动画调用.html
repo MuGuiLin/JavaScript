@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            position: absolute;
+            left: 0px;
+            top: 100px;
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<button>跑</button>
+<button>停</button>
+<div id="box"></div>
+<script src="mTween.js"></script>
+<script> 
+/*
+mTween(option) 动画函数
+    - option:{
+        el: element要动画的元素,
+        attr: {
+            要动画的样式: '目标值',
+            要动画的样式2: '目标值'
+        },
+        duration: nub||op, 动画时间
+        - op: {
+            multiple: 根据距离计算动画时间比例
+            max: 动画最大时间
+            min: 动画最小时间
+        }
+        fx:'动画形式',
+        moveing: function(){}, 动画执行中回调
+        cb:function(){} 动画执行之后回调
+    }
+*/
+(function(){
+    var btns = document.querySelectorAll("button");
+    var box = document.querySelector("#box");
+    css(box,"translateX",0);
+    css(box,"translateY",0);
+    btns[0].onclick = function(){
+        mTween({
+            el: box,
+            attr: {
+                translateX: 200
+            },
+            duration: 1000,
+            cb: function(){
+                mTween({
+                    el: box,
+                    attr: {
+                        translateY: 200
+                    }
+                });
+            }
+        });
+    };
+    btns[1].onclick = function(){
+        mTween.stop(box); // 停止哪个元素的动画
+    };
+})();
+</script>
+</body>
+</html>

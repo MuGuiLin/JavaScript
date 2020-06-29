@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>抽奖进度条</title>
+    <link rel="stylesheet" href="css/base.css">
+</head>
+<body>
+    <section class="award">
+        <div class="strip">
+            <h1>抽奖满足条件值：<b id="stripMeet">10</b></h1>
+            <div class="strip-box" id="strip-box">
+                <div class="bar" id="strip-bar"><b id="strip-val">20%</b></div>
+            </div>
+            <p>满足条件值：<input oninput="nstripInput(this)" value="100" type="number"></p>
+            <p>当前条件值：<input id="nstripCurrent" type="number"></p>
+            <p>
+                <button id="addStrip">手动添加</button>
+                <button id="autoStrip">自动修改</button>
+            </p>
+        </div>
+
+        <div class="round">
+            <h1>抽奖满足条件值：<b id="roundMeet">10</b></h1>
+            <div class="round-box" id="round-box"></div>
+            <p>满足条件值：<input oninput="roundInput(this)" value="100" type="number"></p>
+            <p>当前条件值：<input id="roundCurrent" type="number"></p>
+            
+            <p>
+                <button id="addRound">手动添加</button>
+                <button id="autoRound">自动修改</button>
+            </p>
+        </div>
+    </section>
+</body>
+
+<script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
+<script src="js/circleChart.js"></script>
+
+<script>
+        let stripMeet = roundMeet = 80,
+            stripValue = roundValue = 20,
+            stripInterval = null, roundInterval = null;
+
+        //条形进度条 满足条件值
+        $('#stripMeet').text(stripMeet);
+
+        //条形进度条 当前进度值
+        $('#roundMeet').text(roundMeet);
+
+        //圆形进度条 满足条件值
+        $('#nstripCurrent').val(stripValue);
+        
+        //圆形进度条 当前进度值
+        $('#roundCurrent').val(roundValue);
+        
+        //条形抽奖进度
+        let UpDataSpeed = (val, isStrip, isClear) => {
+            if(isStrip){
+                if(isClear) {
+                    window.clearInterval(stripInterval);
+                }
+                $('#strip-bar').css('width', val+'%').find('b').text(val+'%');  //根据条形进度条 满足条件值 调整进度比例
+                $('#nstripCurrent').val(stripValue);
+            } else {
+                if(isClear) {
+                    window.clearInterval(roundInterval);
+                }
+                $("#round-box").circleChart({
+                    maxval: roundMeet,  //满足条件值
+                    value: val          //当前进度值
+                }); $('#roundCurrent').val(roundValue);
+            }
+        };
+
+        //条形抽奖满足条件值
+        let nstripInput = (obj) => {
+            stripMeet = $(obj).val();
+            $('#stripMeet').text(stripMeet);
+            UpDataSpeed(parseInt((stripValue / stripMeet) * 100), true);
+        };
+
+        //圆形抽奖满足条件值
+        let roundInput = (obj) => {
+            roundMeet = $(obj).val();
+            $('#roundMeet').text(roundMeet);
+            UpDataSpeed(roundValue);
+        };
+        
+        //条形抽奖进度(手动添加)
+        $(document.body).on('click', '#addStrip', function () {
+            stripValue = stripValue + 1;
+            UpDataSpeed(parseInt((stripValue / stripMeet) * 100), true, true);
+        });
+
+        //圆形抽奖进度(手动添加)
+        $(document.body).on('click', '#addRound', function () {
+            roundValue = roundValue + 1;
+            UpDataSpeed(roundValue, false, true);
+        });
+
+        //自动修改 条形抽奖进度
+        $(document.body).on('click', '#autoStrip', function () {
+            window.clearInterval(stripInterval);
+            stripInterval = window.setInterval(function () {
+                stripValue = parseInt(Math.random() * stripMeet);
+                UpDataSpeed(parseInt((stripValue / stripMeet) * stripMeet), true);
+            }, 2000);
+        });
+
+        //自动修改 圆形抽奖进度
+        $(document.body).on('click', '#autoRound', function () {
+            window.clearInterval(roundInterval);
+            roundInterval = window.setInterval(function () {
+                roundValue = parseInt(Math.random() * roundMeet);
+                UpDataSpeed(roundValue);
+            }, 2000);
+        });
+        
+        //初始化圆形抽奖进度
+        $("#round-box").circleChart({
+            size: 160,                  //圆形大小
+            maxval: roundMeet,          //抽奖满足条件值
+            value: roundValue,          //当前进度值
+            color: "#ff007f",           //进度条颜色
+            backgroundColor: "white",   //进度条背景色
+            background: "red",          // 是否显示进度条之外颜色
+            speed: 2000,                // 出现的时间
+            widthRatio: 0.25,           // 进度条宽度
+            unit: "percent",
+            counterclockwise: false,    // 进度条反方向
+            startAngle: 0,              // 进度条起点
+            animate: true,              // 进度条动画
+            backgroundFix: true,
+            lineCap: "round",
+            animation: "easeInOutCubic",
+            text: true,                 // 显示进度条 进度文字百分比内容
+            textColor: "white",         // 进度文字百分比颜色
+            redraw: false,
+            cAngle: 0,
+            textCenter: true,
+            textSize: false,
+            textWeight: "normal",
+            textFamily: "sans-serif",
+            relativeTextSize: 1 / 5,   // 进度条中字体占比
+            autoCss: true,
+            onDraw: function (el, circle) {
+                circle.text(Math.round(circle.value)); // 根据value修改text
+            }
+        });
+  
+        //页面加载完成后，让条形进度，和 圆形进度 自动赋值
+        window.onload = document.querySelector('#autoStrip').click(), document.querySelector('#autoRound').click();
+
+</script>
+</html>

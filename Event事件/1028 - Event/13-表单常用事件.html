@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<form action="https://www.baidu.com/s" id="form" target="_blank">
+    <input type="text" name="wd" id="txt" value="开课吧" />
+    <input type="submit" value="提交" />
+</form>    
+<script>
+{
+    let form = document.querySelector("#form");
+    let txt = document.querySelector("#txt");
+    txt.focus(); // 获得焦点
+    setTimeout(()=>{
+        txt.blur(); // 失去焦点
+    },2000);
+    setTimeout(()=>{
+        txt.select(); //获得焦点 并选中内容 
+    },3000);
+    setTimeout(()=>{
+        form.submit();
+    },4000);
+}
+</script>
+</body>
+</html>

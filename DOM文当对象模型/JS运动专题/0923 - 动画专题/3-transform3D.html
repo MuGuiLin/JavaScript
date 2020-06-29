@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            margin: 100px auto;
+            padding: 100px;
+            width: 200px;
+            height: 200px;
+            border: 2px solid #000;
+            /* 景深 */
+            perspective: 200px;
+        }
+        #div {
+            transition: 3s;
+            width: 200px;
+            height: 200px;
+            background: red;
+        }
+        #box:hover #div {
+            transform: rotateY(360deg); /* 围绕着 Y 轴的旋转 */
+        }
+    </style>
+</head>
+<body>
+   <div id="box">
+       <div id="div"></div>
+   </div> 
+</body>
+</html>

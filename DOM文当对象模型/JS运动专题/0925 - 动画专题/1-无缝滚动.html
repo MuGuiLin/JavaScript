@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Document</title>
+<style>
+@keyframes move {
+    0% {
+        transform: translateX(0px);
+    }
+    100% {
+        transform: translateX(-400px);
+    }
+}    
+body {
+    margin: 0;
+}
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+#wrap {
+    margin: 100px auto;
+    width: 400px;
+    height: 100px;
+    border: 5px solid #000;
+    overflow: hidden;
+}
+
+#list {
+    display: flex;
+    animation: 4s move linear infinite;
+}
+#wrap:hover #list {
+    animation-play-state: paused;
+}
+#list li {
+    flex: none;
+    width: 98px;
+    height: 98px;
+    background: #000;
+    font: 50px/98px "宋体";
+    color: #fff;
+    text-align: center;
+    border: 1px solid #fff;
+}
+</style>
+</head>
+<body>
+   <div id="wrap">
+       <ul id="list">
+           <li>1</li>
+           <li>2</li>
+           <li>3</li>
+           <li>4</li>
+           <li>1</li>
+           <li>2</li>
+           <li>3</li>
+           <li>4</li>
+       </ul>
+   </div>  
+</body>
+</html>

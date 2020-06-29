@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+<input type="text" id="txt" value="0" />
+<script>
+{
+    // new Event 自定义事件
+    // wheelUp 监听鼠标向上滚动
+    // wheelDown 监听鼠标向下滚动
+
+    let txt = document.querySelector("#txt");
+    // 创建一个事件，并给它起个名字 wheelUp
+    let wheelUp = new Event("wheelUp");
+    let wheelDown = new Event("wheelDown");
+
+    // 设定该事件什么时候触发
+    mouseScroll({
+        el:txt, up() {
+            txt.dispatchEvent(wheelUp);//在这里触发 txt 的  wheelUp 事件
+        }, down() {
+            txt.dispatchEvent(wheelDown);//在这里触发 txt 的  wheelUp 事件 
+        }
+    })
+    function mouseScroll({ el, up, down }) {
+        el.addEventListener("mousewheel", (e) => {
+            if (e.wheelDelta > 0) {
+                up && up.call(el, e);
+            } else {
+                down && down.call(el, e);
+            }
+        });
+        el.addEventListener("DOMMouseScroll", (e) => {
+            if (e.detail < 0) {
+                up && up.call(el, e);
+            } else {
+                down && down.call(el, e);
+            }
+        });
+    }
+}  
+
+// 使用自定义事件
+
+{
+    let txt = document.querySelector("#txt");
+    txt.addEventListener("wheelUp",function(){
+        console.log(this,"向上滚动");
+        this.value = parseInt(this.value) - 1;
+    });
+    txt.addEventListener("wheelDown",function(){
+        this.value = parseInt(this.value) + 1;
+    });
+}
+</script>
+</body>
+
+</html>

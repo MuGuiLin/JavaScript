@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+<section id="wrap">
+  <h2 class="title">百度音乐榜单</h2>
+  <ul id="list">
+    <!-- <li>
+      <input type="checkbox" />
+      <span>第一条信息</span>
+      <a href="javascript:;" class="collect">收藏</a>
+      <a href="javascript:;" class="remove">删除</a>
+    </li> -->
+  </ul>
+  <footer class="footer">
+    <label><input type="checkbox" id="checkAll" />全选/全不选</label>
+    <a href="javascript:;" id="remove">删除</a>
+    <input type="text" id="newInfo" />
+    <a href="javascript:;" id="add">添加</a>
+  </footer>
+</section>
+<script>  
+/*
+  功能分离，数据驱动视图
+*/
+
+function $(cssSelector,parent){
+    parent = parent||document; // 给 parent 设置了一个默认值是document
+    var els = parent.querySelectorAll(cssSelector);
+    return els.length > 1?els:els[0];
+};
+(function(){
+// 数据  
+var data = [
+  {
+    id: 0, // 数据的唯一标识
+    info: "第一条信息",
+    checked: false
+  },{
+    id: 1,
+    info: "第二条信息",
+    checked: false
+  }
+];
+var list = $("#list");
+var colors = ["#fff","#fceef1"];
+render();
+
+// 根据数据渲染视图
+function render(){
+   // 操作元素的 innerHTML，会导致该元素所有子元素子元素的事件全都失效
+    list.innerHTML = data.map(function(item,index){
+      return ('<li style="background:' + colors[index%colors.length] + ';"><input type="checkbox" ' + (item.checked ? "checked" : "") + '><span>'+item.info+'</span><a href="javascript:;" class="remove">删除</a></li>');
+    }).join("");
+    
+    var lists = document.querySelectorAll("#list li");
+    lists.forEach(function(item,index){
+      addEv(item,data[index].id);
+    });
+    // 全选：每一项的 checked 为 true 时，every 才会返回 true
+    $("#checkAll").checked = data.every(function(item){
+        return item.checked;
+    });
+};
+
+// 给每一项添加事件
+/*
+  item 每一个 li  id 当前li 对应的数据的 id
+*/
+function addEv(item,id){
+   // 删除单项
+    $(".remove",item).onclick = function(){
+        data = data.filter(function(item){
+          // 通过 id 找到当前，如果 和当前 id 一直 就删除
+          return item.id !== id;
+        });
+        render();
+    };
+    // 切换当前的选中状态
+    $("input",item).onchange = function(){
+      var _this = this;
+      data.forEach(function(item){
+        if(id == item.id){ // 如果 item.id == id 那就说明这是当前项数据
+          item.checked = _this.checked;
+        }
+      });
+      render();
+    };
+}
+
+
+// 添加数据
+$("#add").onclick = function(){
+    var val = $("#newInfo").value;
+    if(!val.trim()){
+        alert("请输入内容");
+        return ;
+    }
+    data.push({
+      id: Date.now(),
+      info: val,
+      checked: false
+    });
+    render();
+    $("#newInfo").value = "";
+};
+
+// 全选和全不选
+$("#checkAll").onchange = function(){
+    // console.log(this.checked);
+    var _this = this;
+    data.forEach(function(item){
+      item.checked = _this.checked;
+    });
+    render();
+};
+
+// 删除选中项
+
+$("#remove").onclick = function(){
+  data = data.filter(function(item){
+      return !item.checked;
+  });
+  render();
+};
+
+})();
+
+</script>
+</body>
+</html>

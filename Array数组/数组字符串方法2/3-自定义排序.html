@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+var arr = ["三","五","四","一","二"];
+var arrIndex = {
+    "一": 1,
+    "二": 2,
+    "三": 3,
+    "四": 4,
+    "五": 5
+}
+/*
+  自己建立排序规则
+*/
+arr.sort(function(n1,n2){
+    return arrIndex[n1] - arrIndex[n2];
+});
+console.log(arr);
+</script>    
+</body>
+</html>

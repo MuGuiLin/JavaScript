@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            width: 300px;
+            height: 300px;
+            background: red;
+        }
+        #box2 {
+            width: 200px;
+            height: 200px;
+            background: green;
+        }
+        #box3 {
+            width: 100px;
+            height: 100px;
+            background: yellow;
+        }
+        span {
+            position: fixed;
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+<a href="https//:www.baidu.com" target="_blank"><span>百度</span></a>
+<script>
+/*
+ 默认行为(默认事件): 浏览器添加的默认行为
+*/    
+{
+    let a = document.querySelector("a");
+    // a.addEventListener("click",(e)=>{
+    //     //console.log(e);
+    //     e.preventDefault(); // 阻止默认事件
+    // });
+    // 在事件处理函数中，标准浏览器下，第0个参数是 事件对象
+    // 事件对象：该事件的详细信息
+    a.onclick = function(){
+        //return false;
+    };
+}
+</script>    
+</body>
+</html>

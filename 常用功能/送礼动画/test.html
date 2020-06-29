@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+<style>
+        body{ padding: 200px}
+        span{ margin: 20px; position: relative;}
+        span .gif{ margin: 20px; position: absolute; top:0; left: 0;}
+        div{ margin-top: 100px;}
+        canvas{ border: 1px solid gray;}
+    </style>
+</head>
+<body>
+
+    <span>
+        <img src="png-1.png" alt="">
+        <img class="gif" id="gif1" src="" alt="">
+    </span>
+    <span>
+        <img src="png-2.png" alt="">
+        <img class="gif" id="gif2" src="" alt="">
+    </span>
+    <span>
+        <img src="png-3.png" alt="">
+        <img class="gif" id="gif3" src="" alt="">
+    </span>
+    <span>
+        <img src="png-4.png" alt="">
+        <img class="gif" id="gif4" src="" alt="">
+    </span>
+
+    <span>
+        <canvas id="move1" width="200" height="100" ></canvas>
+    </span>
+
+<div>
+<img id="testImg" src="gif-1.gif" width="180" height="200">
+    <p>
+        <input type="button" id="testBtn" value="停止">
+    </p>
+        <button id="btn1">按钮1</button>
+        <button id="btn2">按钮2</button>
+        <button id="btn3">按钮3</button>
+        <button id="btn4">按钮4</button>
+    </div>
+   
+</body>
+<script>
+    var s = 1;
+    document.getElementById('btn1').onclick = function (params) {
+        document.getElementById('gif1').setAttribute('src', 'gif-1.gif');
+        
+        var myImage=document.getElementById("move1");
+
+        var cxt=myImage.getContext("2d");
+        s++;
+        var img=new Image();
+            img.src = "./png-1.png";
+            img.onload = function() {
+                cxt.drawImage(img,50+s,50);
+                cxt.drawImage(img,125,125);
+                cxt.drawImage(img,210,210);
+                window.setTimeout(function() {
+                    cxt.drawImage();
+                }, 1000)
+            }
+        
+    }
+    var i = 1; 
+    document.getElementById('btn2').onclick = function (params) {
+
+        if(i == 1) {
+            i = 0;
+           setTimeout(function(params) {
+                document.getElementById('gif2').setAttribute('src', 'gif-2.gif');
+                i = 1;
+            }, 1000) 
+        }
+        
+    }
+    document.getElementById('btn3').onclick = function (params) {
+        document.getElementById('gif3').setAttribute('src', 'gif-3.gif');
+      
+    }
+    document.getElementById('btn4').onclick = function (params) {
+        document.getElementById('gif4').setAttribute('src', 'gif-4.gif');
+    }
+
+
+if ('getContext' in document.createElement('canvas')) {
+    HTMLImageElement.prototype.play = function() {
+        if (this.storeCanvas) {
+            // 移除存储的canvas
+            this.storeCanvas.parentElement.removeChild(this.storeCanvas);
+            this.storeCanvas = null;
+            // 透明度还原
+            image.style.opacity = '';
+        }
+        if (this.storeUrl) {
+            this.src = this.storeUrl;    
+        }
+    };
+    HTMLImageElement.prototype.stop = function() {
+        var canvas = document.createElement('canvas');
+        // 尺寸
+        var width = this.width, height = this.height;
+        if (width && height) {
+            // 存储之前的地址
+            if (!this.storeUrl) {
+                this.storeUrl = this.src;
+            }
+            // canvas大小
+            canvas.width = width;
+            canvas.height = height;
+            // 绘制图片帧（第一帧）
+            canvas.getContext('2d').drawImage(this, 0, 0, width, height);
+            // 重置当前图片
+            try {
+                this.src = canvas.toDataURL("image/gif");
+            } catch(e) {
+                // 跨域
+                this.removeAttribute('src');
+                // 载入canvas元素
+                canvas.style.position = 'absolute';
+                // 前面插入图片
+                this.parentElement.insertBefore(canvas, this);
+                // 隐藏原图
+                this.style.opacity = '0';
+                // 存储canvas
+                this.storeCanvas = canvas;
+            }
+        }
+    };
+}
+
+var image = document.getElementById("testImg"), 
+    button = document.getElementById("testBtn");
+    
+if (image && button) {
+    button.onclick = function() {
+        // if (this.value == '停止') {
+        //     image.stop();
+        //     this.value = '播放';
+        // } else {
+        //     image.play();
+        //     this.value = '停止';
+        // }
+
+        setInterval(function() {
+            image.play();
+        }, 1000);
+    };
+}
+
+
+</script>
+</html>

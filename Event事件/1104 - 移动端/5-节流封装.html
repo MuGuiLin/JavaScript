@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            width: 200px;
+            height: 200px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<div id="box"></div>
+<ul class="list"></ul>    
+<script>
+// 列表结构添加
+{
+    let list = document.querySelector(".list");
+    list.innerHTML = [...(".".repeat(100))].map((item,index)=>`<li>这是第${index}个li</li>`).join("");
+}
+// 节流
+
+/*
+    函数节流[throttle]
+        让函数保持在一个可接受的固定频率执行
+*/
+
+// throttle 节流函数
+/*
+    fn 要做节流函数,interval 执行间隔时间
+*/
+function throttle(fn, interval=500) {
+    let timer = 0;
+    return function(...arg){ // 处理过节流的函数
+        let _self = this;
+        if(timer){
+            return ;
+        }
+        fn.call(_self,...arg);
+        timer = setTimeout(()=>{
+            timer = 0;
+        },interval);
+    }
+}
+// 高阶函数: 调用函数时，返回一个新函数
+// 回调函数：调用函数时，传入一个函数，传入的函数，会在该函数内容执行时调用
+{
+    let fn = throttle(function(e){
+        console.log(1,this,e);
+    });
+    document.addEventListener("mousemove",fn); 
+}
+</script>
+</body>
+</html>

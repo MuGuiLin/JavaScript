@@ -1,0 +1,137 @@
+<!DOCTYPE html >
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    <link rel="stylesheet" href="./index.css">
+
+</head>
+
+<body>
+<div class="wrap">
+    <div class="nav">
+        <a href="javascript:;">从小到大</a>
+        <a href="javascript:;">打乱顺序</a>
+    </div>
+    <ul>
+        <!-- <li>
+            <img src="images/8.png" alt="">
+            <p>8-指尖社区</p>
+        </li>
+        <li>
+            <img src="images/1.png" alt="">
+            <p>1-温馨办公</p>
+        </li>
+        <li>
+            <img src="images/2.png" alt="">
+            <p>2-游戏桌面</p>
+        </li>
+        <li>
+            <img src="images/3.png" alt="">
+            <p>3-汽车摇滚</p>
+        </li>
+        <li>
+            <img src="images/4.png" alt="">
+            <p>4-狭路相逢</p>
+        </li>
+        <li>
+            <img src="images/5.png" alt="">
+            <p>5-棒球小子</p>
+        </li>
+        <li>
+            <img src="images/6.png" alt="">
+            <p>6-球鞋动力</p>
+        </li>
+        <li>
+            <img src="images/7.png" alt="">
+            <p>7-游戏官网</p>
+        </li> -->
+        
+    </ul>
+</div>
+<script type="text/javascript">
+// // 对象
+// // json 
+// var obj = {
+//     name : "KKB",
+//     age: 6
+// };
+// var json = '{"name":"KKB","age":6}';  //  json 对象格式的字符串
+
+// // JSON 转对象
+// console.log(JSON.parse(json));
+
+// // 对象转JSON
+// console.log(JSON.stringify(obj));
+
+var data = [
+    {
+        txt: "1-温馨办公",
+        img: "images/1.png"
+    },{
+        txt: "2-游戏桌面",
+        img: "images/2.png"
+    },{
+        txt: "3-汽车摇滚",
+        img: "images/3.png"
+    },{
+        txt: "4-狭路相逢",
+        img: "images/4.png"
+    },{
+        txt: "5-棒球小子",
+        img: "images/5.png"
+    },{
+        txt: "6-球鞋动力",
+        img: "images/6.png"
+    },{
+        txt: "7-游戏官网",
+        img: "images/7.png"
+    },{
+        txt: "8-指尖社区",
+        img: "images/8.png"
+    }
+];
+function $(cssSelector,parent){
+    parent = parent||document; // 给 parent 设置了一个默认值是document
+    var els = parent.querySelectorAll(cssSelector);
+    return els.length > 1?els:els[0];
+};
+(function(){
+    var btns = $(".nav a");
+    var list = $(".wrap ul");
+    var isList = true;// 从小到大排序
+    btns[0].onclick = function(){
+        // isList true 从 大到小  false  从小到大
+        this.innerHTML = isList ?"从大到小":"从小到大";
+        data.sort(function(n1,n2){
+            n1 = parseInt(n1.txt);
+            n2 = parseInt(n2.txt);
+            return isList ?n2 - n1:n1-n2;
+        });
+        isList = !isList;
+        render();
+    };
+    btns[1].onclick = function(){
+        data.sort(function(){
+            return Math.random() - .5;
+        });
+        render();
+    };
+
+
+    //数据驱动视图:  所有的功能操作，都是操作数据进行改变, 修改完数据之后，在根据数据同步视图
+    render();
+    // 根据数据把结构渲染出来
+    function render(){
+        /*list.innerHTML = data.map(function(item){
+            return '<li><img src="'+item.img+'" alt=""><p>'+item.txt+'</p></li>';
+        }).join("");*/
+        list.innerHTML = data.reduce(function(item,item2){
+            return item + '<li><img src="'+item2.img+'" alt=""><p>'+item2.txt+'</p></li>';
+        },"");
+    }
+})();
+</script>
+</body>
+</html>
