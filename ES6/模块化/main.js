@@ -32,3 +32,12 @@ class Apple {
 // export default Apple;
 
 export default { database: database, config, Apple};
+
+
+
+
+
+
+
+
+

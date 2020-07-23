@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>移动端1像素边框问题</title>
+    <style>
+        .box {
+            margin: 10px auto;
+            width: 80%;
+            height: 200px;
+            border: 1px solid red;
+            font-size: 32px;
+            text-align: center;
+
+            border-width: thin;
+            /* 有待验证 */
+        }
+
+        @media screen and (-webkit-min-device-pixel-ratio: 2) {
+            .border {
+                border: 0.5px solid;
+            }
+        }
+
+        @media screen and (-webkit-min-device-pixel-ratio: 3) {
+            .border {
+                border: 0.333333px solid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>移动端1像素边框问题</h1>
+    <p> PC端正常，请在移动端查看！ css -webkit-min-device-pixel-ratio: js window.devicePixelRatio</p>
+
+    <div class="box"></div>
+    <div class="box border"></div>
+
+    <a href="https://www.jianshu.com/p/fa670b737a29" target="_blank" rel="noopener noreferrer">移动端1像素边框问题</a>
+    <script>
+        //还有一种方法就是通过 js 获取到设备像素比，然后动态添加 <meta> 标签( 网页的内容都渲染在 viewport 上，所以设备像素比的差异，直接影响的也是 viewport 的大小 ):
+        (function () {
+            var scale = 1.0;
+            if (window.devicePixelRatio === 2) {
+                scale *= 0.5;
+            }
+            if (window.devicePixelRatio === 3) {
+                scale *= 0.333333;
+            }
+            var text = '<meta name="viewport" content="initial-scale=' + scale + ', maximum-scale=' + scale + ', minimum-scale=' + scale + ', width=device-width, user-scalable=no" />';
+            document.write(text);
+        })();
+
+        function showBorder() {
+            console.debug('当前大小：', window.devicePixelRatio);
+            document.querySelector('.box').innerText = window.devicePixelRatio + 'px';
+        };
+
+        function addEvent(elm, event, cbFn) {
+            if (elm.addEventListener) {
+                console.log('addEventListener');
+                elm.addEventListener(event, cbFn, false);
+            } else if (elm.attachEvent) {
+                console.log('attachEvent');
+                elm.attachEvent('on' + event, cbFn);
+            } else {
+                console.log('addEventListener and attachEvent not! ');
+            }
+        };
+
+
+        addEvent(window, 'load', function (e) {
+            showBorder(e);
+        });
+
+        addEvent(window, 'resize', function (e) {
+            showBorder(e);
+        })
+
+        addEvent(window, 'resize', function (e) {
+                showBorder(e);
+            })
+
+
+    </script>
+
+    <script>
+
+    </script>
+</body>
+
+</html>
