@@ -290,22 +290,12 @@
             
             但是，我们要知道这样一个道理，ES7很快也会发布，js引擎们会尽快实现ES6标准的规定，如果一个引擎连标准都实现不了，就会被淘汰，ES6是迟早的事。如果你现在仍然在代码中部署require，那么等到ES6被引擎支持时，你必须升级你的代码，而如果现在开始部署import，那么未来可能只需要做很少的改动。（完）
     </pre>
-<script>
-    var a = 3;
-        var b = '3';
-        alert(a == b); //true
-        // JS中变量的值是强类型的。你懂的.
-        var a = 3;
-        var b = '3';
-        alert(a === b); //false
 
-</script>
     <script src="./Plugin/traceur.js"></script>
     <script src="./Plugin/bootstrap.js"></script>
     <script type="module">
         'use strict';
 
-        
         import { a, b, c } from './main.js';
 
         {
