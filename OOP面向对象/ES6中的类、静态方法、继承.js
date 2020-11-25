@@ -29,6 +29,10 @@ class Person {
 }
 // 静态属性
 Person.instance = '这是一个静态属性';
+// 静态方法
+Person.staticFun = function() {
+    console.log('这是一个静态方法');
+};
 
 // 实例类
 const p = new Person('张三', '26');
@@ -38,6 +42,7 @@ p.getName();
 
 /*调用静态方法*/
 Person.work();
+Person.staticFun();
 
 /*获取静态属性*/
 console.log(Person.instance);
