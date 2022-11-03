@@ -269,7 +269,7 @@ alert(a);
 ③if (条件) { 执行体。。。 } else if (条件) { 执行体。。。 } else { 执行体。。。 };
 
 
-switch判断语句：switch 语句是 if 语句的兄弟语句。
+switch判断语句：switch 语句是 if 语句的兄弟语句(在性能上比if..else要好)。
 
 switch (表达式) {
 	case 1:
@@ -755,7 +755,9 @@ var re = new RegExp("^\\d+" + v + "$", "gim"); // re为/^\d+bl$/gim
 var re = eval("/^\\d+" + v + "$/gim")
 
 
-### 常用JS方法的封闭
+
+
+### 常用JS方法的封装
 ;(function() {
     let o = function() {
 		// this.getById ? ( d.find.ID = function (a, b) {
