@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>postMessage快速了解</title>
+</head>
+
+<body>
+  <h1>主页面</h1>
+  <hr />
+  <div>
+    <h2>主页面接收消息区域：</h2>
+    <h3 id="message"></h3>
+    <textarea oninput="input(event)" cols="117" rows="10"></textarea>
+  </div>
+
+  <div>
+    <h2>在当前iframe中打开子页面接收消息：</h2>
+    <iframe id="child" src="./child.html" width="800" height="300"></iframe>
+  </div>
+
+  <div>
+    <h2>在独立窗口中打开子页面接收消息：</h2>
+    <button onclick="open_new_win(event)">打开独立窗口</button>
+    <button onclick="open_new_win(event, true)">打开独立窗口2</button>
+    <img id="img" src="" alt="" srcset="" />
+  </div>
+  <script>
+
+    // window.postMessage(
+    //   message：将要发送到其他window的消息，它将被结构化克隆算法序列化,
+    //   targetOrigin：目标window所在的源。通过窗口的origin属性来指定哪些窗口能接收到消息事件，其值可以是字符串"*"或者一个URI,
+    // );
+
+    let win = null;
+
+    function open_new_win(e, two = false) {
+      win = window.open(two ? './child2.html' : './child.html', '_blank', 'width=800, height=600, toolbar=no, menubar=no, location=no, status=no');
+
+      // win.postMessage("Hello World!", "http://www.xxx.com:8080");
+      win.postMessage("Hello World!", "*");
+    };
+
+    function input(e) {
+      document.querySelector("#child").contentWindow.postMessage(e.target.value, "*");
+
+      win && win.postMessage(e.target.value, "*");
+    };
+
+    function imgPreview(file) {
+      // 图片预览1
+      const createObjectURL = window.createObjectURL || window.URL.createObjectURL || window.webkitURL.createObjectUR;
+      console.log(createObjectURL(file));
+
+      // 图片预览2
+      const fr = new FileReader();
+      fr.readAsDataURL(file); // Base64 8Bit字节码
+      // fr.readAsBinaryString(file);  // Binary 原始二进制
+      // fr.readAsArrayBuffer(file);   // ArrayBuffer 文件流
+      fr.onload = function (res) {
+        console.log(this.result);
+        console.log(res.target.result);
+        console.log(res.srcElement.result);
+        document.querySelector('#img').setAttribute('src', res.target.result);
+      };
+    };
+
+    // document.onreadystatechange = function (e) {
+    //   if (document.readyState === "complete") {
+        // open_new_win(e);
+
+        // 接收消息
+        window.addEventListener('message', function (event) {
+          // if (event.origin !== 'http://xxx.com:8080') return;
+          console.log(event.data.type, 66666666666)
+          console.log("主页面收到message的event：", event);
+          document.querySelector('#message').innerHTML = event.data;
+
+          if (event.data && event.data.type.startsWith('image')) {
+            imgPreview(event.data)
+          }
+
+          // 回传消息
+          // event.source.postMessage(`Hi，收到消息了：${event.data}`, event.origin);
+        }, false);
+      // }
+    // };
+
+
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,90 @@
+<!-- <!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>postMessage快速了解</title>
+  </head>
+  <body>
+
+    <div>
+      <h2>子页面跨域接收消息区域</h2>
+      <div id="message"></div>
+    </div>
+  </body>
+  <script>
+    //接收父页面传过来的数据
+    window.addEventListener(
+      "message",
+      function (event) {
+        // 处理addEventListener执行两次的情况，避免获取不到data
+        // 因此判断接收的域是否是父页面
+        if (event.origin.includes("http://127.0.0.1:8848")) {
+          console.log(event);
+          document.getElementById("message").innerHTML =
+            "收到" + event.origin + "消息：" + event.data;
+
+          //把数据传递给父页面 > top.postMessage(要传递的数据,父页面的url访问地址)
+          top.postMessage(
+            "子页面消息收到",
+            "http://127.0.0.1:8848/boatStaticHtml/iframe%E9%80%9A%E4%BF%A1.html"
+          );
+        }
+      },
+      false
+    );
+  </script>
+</html> -->
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>postMessage快速了解</title>
+</head>
+
+<body>
+  <h1>子页面2</h1>
+  <hr>
+  <h2>子页面2接收消息区域：</h2>
+  <h3 style="color: green" id="message"></h3>
+  <div>
+    <input type="file" onchange="update(event)" />
+    <input type="button" value="Return Value" onclick="closeWin()" />
+    <textarea oninput="input(event)" cols="117" rows="10"></textarea>
+  </div>
+
+  <script>
+    let source = null;
+    function closeWin() {
+      window.returnValue = true;
+      window.close();
+    };
+
+     function input(e) {
+        // 向父页面中以iframeiframe子页面的父页面发送数据消息
+        source.postMessage(e.target.value, "*");
+      };
+
+    function update(event) {
+      console.log("子页面上传时的event对象：", this);
+      const file =
+        event.target.files[0] ||
+        event.dataTransfer.files[0] ||
+        this.file.files[0];
+
+      source.postMessage(file, "*");
+    };
+
+    document.onreadystatechange = function (e) {
+      if (document.readyState === "complete") {
+        window.addEventListener("message", function (event) {
+          console.log(event);
+          source = event.source;
+          document.querySelector('#message').innerHTML = event.data;
+        });
+      }
+    };
+
+  </script>
+</body>
+
+</html>
