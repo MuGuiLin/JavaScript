@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var a = 367;
+        var b = 15;
+        // alert(a % b); // 7
+
+        // alert(a % NaN)
+        // alert(10 % 0); //这里是NaN
+        // alert(10 / 0) 和取模不太一样
+
+        // alert(0 % 0);
+
+
+        alert(true % 15);
+
+        /*
+                - Number
+                    - 如果左右两侧均是数值，则进行除法计算，结果返回余数！！！；
+                    - 任何一侧为NaN，则结果返回NaN；
+                    - 只要除数是0，则结果返回NaN
+                - 如果有一侧不为Number类型，则（根据对应的规则）转为数字类型后，再进行计算。
+        */
+    </script>
+</body>
+</html>

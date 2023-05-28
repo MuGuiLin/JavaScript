@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div id="box">
+      <div id="left">
+        <img src="images/img.png" id="imgs1" />
+        <div id="mask"></div>
+      </div>
+      <div id="right">
+        <div id="border">
+          <img src="images/img.png" id="img2" />
+        </div>
+      </div>
+    </div>
+    <script>
+    function getStyle(el,attr){
+      return parseFloat(getComputedStyle(el)[attr]);
+    }
+     window.onload=()=>{
+        let mask = document.querySelector("#mask");
+        let img1 = document.querySelector("#imgs1");
+        let img2 = document.querySelector("#img2");
+        let border = document.querySelector("#border");
+        let left = document.querySelector("#left");
+        let scaleX = getStyle(img2,"width")/ getStyle(img1,"width");
+        let scaleY = getStyle(img2,"height")/ getStyle(img1,"height");
+        mask.style.width = getStyle(border,"width") / scaleX + "px";
+        mask.style.height = getStyle(border,"height") / scaleY + "px";
+        //right.style.display = "none";
+        left.addEventListener("mouseenter",function(){
+          mask.style.display = "block";
+          right.style.display = "block";
+        });
+        left.addEventListener("mouseleave",function(){
+          console.log(1);
+          mask.style.display = "none";
+          right.style.display = "none";
+        });
+        left.onmousemove = function(ev){
+          let Left =
+              ev.clientX -
+              left.getBoundingClientRect().left -
+              mask.clientWidth / 2;
+          let Top =
+              ev.clientY -
+              left.getBoundingClientRect().top -
+              mask.clientHeight / 2;
+            //临界处理
+            if (Left < 0) {
+              Left = 0;
+            }
+            if (Top < 0) {
+              Top = 0;
+            }
+            if (Top > left.clientHeight - mask.clientHeight) {
+              Top = left.clientHeight - mask.clientHeight;
+            }
+            if (Left > left.clientWidth - mask.clientWidth) {
+              Left = left.clientWidth - mask.clientWidth;
+            }
+            //改变小框的left和top
+            mask.style.top = Top + "px";
+            mask.style.left = Left + "px";
+
+            //根据左侧小框在其父级里移动的距离，来计算右侧小框内的图片的移动距离
+            img2.style.top = -Top * scaleY  + "px";
+            img2.style.left =  -Left * scaleX +  "px";
+        };
+      }
+    </script>
+  </body>
+</html>

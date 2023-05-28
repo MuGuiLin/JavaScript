@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    
+    <script>
+    
+        document.body.ondragover = function(e) {
+            e.preventDefault();
+        }
+
+        document.ondrop = function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            // 拖拽的内容
+            // console.log( e.dataTransfer.files );
+
+            // items：拖拽的文件
+            // console.log( e.dataTransfer.items );
+
+            [...e.dataTransfer.items].forEach( item => {
+                // console.log(item);
+
+                // let file = item.getAsFile();
+                // console.log(file);
+
+                // 要获取当前item对象的FileSystemEntry对象，通过该对象我们可以分辨出是文件还是文件夹
+                let entry = item.webkitGetAsEntry();
+                // console.log( entry );
+
+                getFiles(entry);
+
+            } );
+
+        }
+
+
+        function getFiles(entry) {
+            if (entry.isFile) {
+                // 如果是文件，直接转成File对象
+                entry.file( f => {
+                    console.log(f); //File
+                }, err => {
+                    console.log('读取失败');
+                } );
+            }
+
+            if (entry.isDirectory) {
+                // console.log('我是一个目录');
+
+                // 创建一个目录读取对象
+                let dirReader = entry.createReader();
+                dirReader.readEntries( entries => {
+                    // console.log(entries);
+
+                    entries.forEach( entry => {
+                        getFiles(entry);
+                    } );
+
+                } );
+
+            }
+        }
+
+    </script>
+
+</body>
+</html>

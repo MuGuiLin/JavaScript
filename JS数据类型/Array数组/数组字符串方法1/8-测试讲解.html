@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// 19. 阅读下列程序，写出 x，y，z 最后的值。（）
+
+
+// var x = 1, y = z = 0;
+// function add(n)
+// {
+//     return n = n + 1;
+// }
+// y = add(x);
+// function add(n)
+// {
+//  return n = n + 3;
+// }
+// z = add(x); 
+
+// var x,y;
+// function add(n)
+// {
+//  return n = n + 3;
+// }
+// x = 1, y = z = 0;
+// y = add(x);
+// z = add(x); 
+// console.log(x,y,z);// 1 4 4
+
+function doSomething() {
+console.log(this);
+}
+// element.onclick = doSomething，点击 element 元素后。// element
+// element.onclick = function() {doSomething()}， 点击 element 元素后。 // window
+// 直接执行 doSomething()。// window
+
+</script>    
+</body>
+</html>

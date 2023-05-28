@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .box {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            margin: -25px 0 0 -25px;
+            width: 50px;
+            height: 50px;
+            background: red;
+            transition: .2s;
+        }
+    </style>
+</head>
+<body>
+<div class="box"></div>
+<script src="mTween.js"></script>
+<script>
+function getIos(){
+    var u = window.navigator.userAgent;
+    return !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+}    
+//console.log(getIos());
+function throttle(fn, interval=500) {
+    let timer = 0;
+    return function(...arg){ // 处理过节流的函数
+        let _self = this;
+        if(timer){
+            return ;
+        }
+        fn.call(_self,...arg);
+        timer = setTimeout(()=>{
+            timer = 0;
+        },interval);
+    }
+}     
+{
+  let box = document.querySelector(".box");
+  css(box,"translateX",0);
+  /*
+    注意：ISO 下 和 安卓下 速度的取值方向相反
+        IOS x = 10 安卓下 x = -10; 
+  */
+  window.addEventListener("devicemotion",(e)=>{
+      let {x} = e.accelerationIncludingGravity;// 重力 + 加速度
+      let {x:x2} = e.acceleration; // 加速度
+      x -= x2; // 重力 = 重力 + 加速度 - 加速度
+      if(getIos()){
+        x = -x; 
+      }
+      let translateX = css(box,"translateX");
+      css(box,"translateX",translateX - x);
+  });  
+}
+</script>    
+</body>
+</html>

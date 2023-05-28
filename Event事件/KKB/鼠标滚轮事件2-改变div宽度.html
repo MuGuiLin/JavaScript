@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div{
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+    <div></div>
+    <script>
+        // 通过滚轮 向上 向下  改变 div的宽度  ↑ 变宽  ↓ 变窄
+        var div=document.querySelector('div');
+        var w=100;
+
+        // 谷歌和ie
+        div.addEventListener('mousewheel',function(e){
+            // e.wheelDelta
+            // 滚轮向上 - > 120
+            // 滚轮向下 - >  -120
+            console.log(e.wheelDelta)
+
+            if(e.wheelDelta > 0){
+                // 向上
+                w+=5;
+                div.style.width=w+'px';
+            }else{
+                //向下
+                w-=5;
+                div.style.width=w+'px';
+            }
+
+        })
+    </script>
+</body>
+</html>

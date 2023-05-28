@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*
+        第2题   下面的描述中不正确的？      [单选题]
+        
+        A.arguments 中保存了实际传入函数内的所有参数
+        B.return 只能在函数内部使用	3	5.36%
+        C.setInterval(fn1,1000) 只会调用一次 fn1 (答案)	46	82.14%
+        D.Date 对象的 getMonth() 获取到的值比实际月份小1
+        */
+
+        /*
+        setInterval("alert('welcome');",1000);      [单选题]
+        
+        A.等待 1000 秒后，再弹出一个对话框	0	0%
+        B.等待 1 秒钟后弹出一个对话框	5	8.93%
+        C.语句报错,语法有问题	5	8.93%
+        D.每隔一秒钟弹出一个对话框 (答案)	46	82.14%
+        */
+        //setInterval("alert('welcome');",1000); 
+
+        /*
+        第4题   下列方式中哪个可以判断数组中是否有大于10的值      [单选题]
+        
+        A.!arr.every(function(item){
+            return  item<=10
+        }) 
+        B.arr.push()	
+        C.arr.some(function(item){
+            return item > 10
+        }) (答案)
+        D.arr.splice()
+        */
+
+        /*
+        第5题   
+        var arr = [1,2,3,4]; arr.join() 结果是多少      [单选题]
+        
+        A.'1234'	12	21.43%
+        B.'1,2,3,4' (答案)	40	71.43%
+        C.'[1,2,3,4]'	3	5.36%
+        D.[1,2,3,4]	1	1.79%
+        */
+        /*
+        第6题   以下代码运行后，arr的结果为：() arr2的结果为:
+        var arr = [1,2]; 
+        var arr2 = arr.concat(); // concat 返回新数组
+         arr2.push(arr.splice(1,0)); //  splice 修改原数组 arr.splice(1,0) => []
+        
+         [1,2]  [1,2,[]]  
+        
+        */
+        // var arr = [1,2]; 
+        // console.log(arr.splice(1,1));
+        /*
+        第7题   下面对 substring(10) 方法描述不正确的是      [单选题]
+        A.一共有两个参数，省略第一个参数表示从开始位置提取到字符串结束。
+        B.提取之前会比较两个参数的大小，并根据大小调整位置	
+        C.可以接收负数参数，负数表示从后往前数字符位置 (答案)
+        D.如果没有设置参数，直接返回整个字符串	
+        */
+        /*
+        第8题   下面能够复制(不修改原数组，并根据原数组创建新数组)数组的方法是   
+        A.[].push()
+        B.[].splice()
+        C.[].concat() (答案)
+        D.[].slice() (答案)
+        
+        第9题   js数组的方法中，哪些方法不能改变自身数组      [单选题]
+        
+        A.pop 
+        B.splice	
+        C.sort	
+        D.concat (答案)
+        
+        var data = {a: 1, b: 2, c: 3, d: 4}; 
+        var arr=Object.keys(data).filter(function(x) { return data[x] > 2;}) 
+        ["a","b","c","d"]
+        console.log(arr);  
+        */
+        /*
+        var data = {a: 1, b: 2, c: 3, d: 4}; 
+        var arr = Object.keys(data);
+        console.log(arr);
+        */
+
+        // var a = b = 10;
+        // (function(){
+        //   var a = b = 20;
+        // })();
+        // console.log(b);
+        // console.log(b);  
+
+        // a = new Array(2, 3, 4, 5, 6);
+        // sum = 0;
+        // for (i = 1; i < a.length; i++)
+        // {
+        //     sum += a[i]; 
+        // }
+        // document.write(sum);  
+
+        // 加在 Array.prototype 的方法，会加给每一个数组
+
+        // Array.prototype.uniq = function () {
+        //     if (this.length <= 1) {
+        //         return this.slice(0);
+        //     }
+        //     var aResult = [];
+        //     for (var i = 0, l = this.length; i < l; i++) {
+        //         if(!(_fExist(aResult, this[i]))) {
+        //             /*
+        //                  第 0 次循环 aResult 是空数组  _fExist 返回 false,
+        //                  _fExist([], 1)
+        //                  push(1);aResult [1]
+
+        //                  第 1 次循环
+        //                  _fExist([1], 2)
+        //                  push(2);aResult [1,2]
+
+        //                  第 2 次循环
+        //                  _fExist([1,2], 3)
+        //                  push(2);aResult [1,2,3]
+
+        //             */     
+        //             aResult.push(this[i]);
+        //         }
+        //     }
+        //     return aResult;
+        //     function _fExist(aTmp, o) {
+        //         if(aTmp.length === 0) {
+        //             return false;
+        //         }
+        //         var tmp;
+        //         for(var i = 0, l = aTmp.length; i < l; i++) {
+        //             tmp = aTmp[i];
+        //             if (tmp === o) { // 有一个一样
+        //                 return true;
+        //             }
+        //         }
+        //         return false;
+        //     }
+        // }
+        Array.prototype.uniq = function () {
+            // var data = {};
+            // for(var i = 0; i < this.length; i++){
+            //     data[this[i]] = "";
+            // }
+            return [...(new Set(this))];
+        }
+        console.log([1, 2, 3, 4, 3, 2].uniq());  
+    </script>
+</body>
+
+</html>

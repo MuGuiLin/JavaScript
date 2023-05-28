@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            width: 200px;
+            height: 200px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<div id="box"></div>
+<ul class="list"></ul>    
+<script>
+// 列表结构添加
+{
+    let list = document.querySelector(".list");
+    list.innerHTML = [...(".".repeat(100))].map((item,index)=>`<li>这是第${index}个li</li>`).join("");
+}
+/*
+    函数防抖[debounce]
+        希望函数只执行一次，哪怕我进行了多次调用
+        如果短时间内，重复调用了多次就只执行最后一次
+*/
+function debounce(fn, interval = 500){
+    let timer = 0;
+    return function(...arg){
+        let _self = this;
+        clearTimeout(timer);
+        timer = setTimeout(()=>{
+            fn.call(_self,...arg);
+        },interval);
+    }
+}
+{
+    let fn = debounce(function(){
+        console.log("move");
+    });
+    document.addEventListener("mousemove",fn); 
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Document</title>
+<style>
+    #box {
+        width: 100px;
+        height: 100px;
+        background: red;
+        /* transition: 10s width ease-in; */
+        transition: 1s;
+        color: #fff;
+    }
+    /* #box:hover {
+        width: 800px;
+    } */
+    /*
+        transition 元素的数值类样式发生改变时，添加一个过渡动画
+        transition-delay  延迟时间(ms||s)
+        transition-duration 动画时间(ms||s)
+        transition-property 需要动画的样式
+        transition-timing-function 动画形式
+            ease 缓冲
+            ease-in 加速
+            ease-out 减速
+            linear 匀速
+            ease-in-out
+    */
+</style>
+</head>
+<body>
+<div id="box"></div>  
+<script>
+
+/*box.onclick = function(){
+    this.style.width = "800px";
+};*/
+box.addEventListener("click",function(){
+    this.style.width = "400px";
+    this.style.height = "400px";
+});
+// transitionend 监听元素的transition动画，执行完了
+// 如果有多条样式执行了transition动画，那每条样式执行完之后，都会触发 transitionend 事件
+box.addEventListener("transitionend",function(e){
+    // e.propertyName 当前是哪个样式执行的 transition
+    console.log("动画执行完了", e.propertyName);
+});
+
+
+/*
+    element.addEventListener("eventname",fn);
+        eventname 事件名称 (不加on)
+*/
+</script>  
+</body>
+</html>

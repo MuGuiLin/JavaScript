@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .box {
+            position: fixed;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+<script>
+{
+    let startMouse = {};
+    let el;
+    /*
+        从左向右画框:
+            1. 记录摁下鼠标坐标 - 元素的 left
+            2. 移动时记录新坐标
+                1) 计算差值
+                2）差值就是元素的宽度
+        从右向左画框:
+            !!! 注意这里 left 值 应该是move时的鼠标位置
+
+            left 值应该是在 左侧的这个值，也就是两个值中的最小值
+
+    */
+    let move = (e)=>{
+        let nowMouse = {
+            x: e.clientX,
+            y: e.clientY
+        };
+        let dis = {
+            x: nowMouse.x - startMouse.x,
+            y: nowMouse.y - startMouse.y
+        };
+        el.style.left = Math.min(startMouse.x,nowMouse.x) + "px";
+        el.style.top = Math.min(startMouse.y,nowMouse.y) + "px";
+        el.style.width = Math.abs(dis.x) + "px";
+        el.style.height = Math.abs(dis.y) + "px";
+    }
+    document.addEventListener("mousedown",(e)=>{
+        el = document.createElement("div")
+        startMouse = {
+            x: e.clientX,
+            y: e.clientY
+        }
+        el.className = "box";
+        document.body.appendChild(el);
+        document.addEventListener("mousemove",move);
+        document.addEventListener("mouseup",()=>{
+            document.removeEventListener("mousemove",move);
+        },{once:true});
+        e.preventDefault();
+    });
+}
+</script>    
+</body>
+</html>

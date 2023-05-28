@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            width: 200px;
+            height: 200px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<div id="box"></div>
+<ul class="list"></ul>    
+<script>
+// 列表结构添加
+{
+    let list = document.querySelector(".list");
+    list.innerHTML = [...(".".repeat(100))].map((item,index)=>`<li>这是第${index}个li</li>`).join("");
+}
+// 节流
+
+/*
+    函数节流[throttle]
+        让函数保持在一个可接受的固定频率执行
+*/
+{
+    let timer = 0;
+    // 执行频率保持在 500 ms 以上 
+    window.addEventListener("scroll",); 
+}
+</script>
+</body>
+</html>

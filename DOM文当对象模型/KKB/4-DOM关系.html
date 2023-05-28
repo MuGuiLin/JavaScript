@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div id="div">
+    <p>p1</p>
+    <h3>h1</h3>
+    <p>p2</p>
+    <!-- 注释 -->
+    <p>p3</p>
+    <h3>h2</h3>
+    <p>p4</p>
+    <h3>h3</h3>
+    <p>p5</p>
+    <p>p6</p>
+</div>    
+<script>
+/* 
+查找子级 
+    childNodes 子节点 (包含所有节点: 文本节点、注释节点、元素节点……)
+    children 子元素 (只包含元素节点)
+    firstChild 第0个子节点
+    firstElementChild 第0个子元素
+    lastChild 最后一个子节点
+    lastElementChild 最后一个子元素
+*/
+{
+    let div = document.querySelector("#div");
+    console.log(div.firstChild,div.firstElementChild);
+    console.log(div.lastChild,div.lastElementChild);
+}
+
+</script>    
+</body>
+</html>

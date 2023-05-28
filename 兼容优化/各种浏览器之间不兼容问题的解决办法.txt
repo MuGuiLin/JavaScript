@@ -1,0 +1,33 @@
+各种浏览器之间不兼容问题的解决办法
+
+问题:					    解决办法
+1、没有使用正确的DocType        		正确声明doctype
+
+2、各浏览器对不同标签的初始值不同		统一初始化CSS样式
+
+3、自身代码书定不规范			加以改正
+
+4、浏览器自身BUG引起			css hack
+
+
+
+
+在IE下常见的BUG及解决办法(尤其是低版本的IE，如IE6，IE7等)
+
+问题:					    解决办法
+1、盒模型BUG				使用严格doctype声明
+
+2、双倍margin BUG			_display:inline;
+
+3、不认识a:link				不加:link，直接a就行了
+
+4、3像素margin BUG			规范浮动或清除浮动
+
+
+Web前端标准 W3C国际标准
+构成:
+1、结构标准----html4.0/xhtml1.0/html5;<!DOCTYPE html> <head></head>  <title></title>  <body></body>
+2、表现标准----css2.0/css3.0;
+3、行为标准----javaScript,Jquery;
+
+

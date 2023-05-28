@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div{
+            width: 200px;
+            height: 200px;
+            background:red;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div></div>
+    <script>
+        var div = document.querySelector('div');
+
+        //谁调用 就是谁
+        var _this = null;
+        div.onclick = function(){
+            _this = this;
+            window.setTimeout(function(){
+                // console.log(this);//window
+                _this.style.cssText = 'width:300px;height:300px';
+                // this.style.cssText = 'width:300px;height:300px';
+            },1000);
+            
+        }
+
+        // div.onclick = function () {
+        //     console.log(this)//div
+        //     this.style.cssText = 'width:300px;height:300px';
+
+        // }
+
+        console.log(window.setTimeout === setTimeout);
+
+        /*
+        
+            1. 谁调用this就指向谁
+
+            定时器 是 js本身就定义好的函数，它不是我们自己去定义的，它被定义在了window下面
+
+            定时器中的this都是指向window，因为定时器是通过window进行调用的
+        */
+    </script>
+</body>
+</html>

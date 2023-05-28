@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Document</title>
+<style>
+h2,
+p {
+    margin: 0;
+}    
+.box {
+    margin: 30px auto;
+    width: 300px;    
+}
+#user,
+#message {
+    box-sizing: border-box;
+    width: 300px;
+    border: 1px solid #000;
+    padding: 10px;
+    height: 100px;
+    resize: none;
+    display: block;
+}
+#user {
+    padding: 0 10px;
+    height: 30px;
+    margin-bottom: 10px;
+}
+#btn {
+    display: block;
+    margin: 10px auto;
+    width: 60%;
+    height: 40px;
+}
+#list {
+    border-top: 1px solid #000;
+    padding: 10px 0 0;
+    margin: 0;
+    list-style: none;
+}
+#list li {
+    position: relative;
+    font: 14px/30px "宋体";
+    border-bottom: 1px solid #000;
+    padding: 0 15px;
+    overflow: hidden;
+}
+.clos {
+    position: absolute;
+    right: 5px;
+    top: 10px;
+}
+</style>
+</head>
+<body>
+<div class="box">
+    <input type="text" id="user" value="小明" />
+    <textarea id="message">我就是传说中的无敌小明</textarea>
+    <button id="btn">提交留言</button>
+    <ul id="list">
+        <li style="height: auto">
+            <h2 class="user">小王说:</h2>
+            <p>呼叫无敌小明</p>
+            <a href="javascript:;" class="clos">删除<span>X</span></a>
+        </li>
+        <li style="height: auto">
+            <h2 class="user">老师说:</h2>
+            <p>小明滚出去</p>
+            <a href="javascript:;" class="clos">删除<span>X</span></a>
+        </li>
+    </ul>
+</div>
+<script>
+    // 给按钮添加点击事件
+    // 创建元素 并且插入到ul列表当中
+    var btn=document.querySelector('#btn');
+    var user=document.querySelector('#user');
+    var message=document.querySelector('#message');
+    var list=document.querySelector('#list');
+   
+
+    // 将事件添加到父级身上  - 事件委托
+    list.addEventListener('click',function(e){
+        // e.target
+        if(e.target.className=='clos'){
+            var li=e.target.parentNode;
+            // console.log(li);
+            list.removeChild(li);
+        }
+    })
+
+
+    btn.addEventListener('click',function(){
+        // 创建一个li
+        var li=document.createElement('li');
+        li.innerHTML=`
+            <h2 class="user">${user.value}说:</h2>
+            <p>${message.value}</p>
+            <a href="javascript:;" class="clos">删除<span>X</span></a>
+        `;
+
+        list.insertBefore(li,list.children[0]);
+    })
+</script>
+</body>
+</html>

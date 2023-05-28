@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        /* 动画帧 */
+        @keyframes animate {
+             0%{
+                 left: 0;
+                 top: 0;
+             }
+             25%{
+                 left: 300px;
+                 top: 0;
+             }
+             50% {
+                 left: 300px;
+                 top: 300px;
+             }
+             75% {
+                 left: 0;
+                 top: 300px;
+             }
+        }
+        #box {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100px;
+            height: 100px;
+            background: red;
+            animation: animate 4s 3;
+        }
+        /*
+            - animation-name 动画帧名称
+            - animation-duration 动画时长
+            - animation-timing-function 动画形式 参考 transition
+            - animation-delay 动画首次执行时延迟时间 (ms||s)
+            - animation-iteration-count 动画执行次数 (count|| infinite)
+            - animation-direction 动画偶数次执行顺序 normal alternate
+            - animation-fill-mode 动画起点及结束点设置
+        */
+    </style>
+</head>
+<body>
+<div id="box"></div> 
+<script>
+(function(){
+    var box = document.querySelector("#box");
+    box.addEventListener("animationstart",function(){
+        console.log("动画首次执行开始");
+    });
+    box.addEventListener("animationiteration",function(){
+        console.log("动画又一次开始");
+    });
+    box.addEventListener("animationend",function(){
+        console.log("动画结束");
+    });
+})();    
+</script>  
+</body>
+</html>

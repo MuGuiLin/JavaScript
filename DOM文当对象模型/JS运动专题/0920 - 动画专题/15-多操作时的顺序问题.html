@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Document</title>
+<style>
+    @keyframes rotate {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+    #box {
+        margin: 100px auto 0;
+        padding: 100px;
+        width: 200px;
+        border: 2px solid #000;
+    }
+    #div {
+        width: 200px;
+        height: 200px;
+        background: red;
+        transition: 3s;
+    }
+    #div2 {
+        width: 200px;
+        height: 200px;
+        background: blue;
+        transition: 3s;
+    }
+    #box:hover #div {
+        transform: scale(.5) translateX(100px);
+    } 
+    #box:hover #div2 {
+        transform: translateX(100px) scale(.5);
+    } 
+    /*
+        后写先计算
+    */
+</style>
+</head>
+<body>
+    <div id="box">
+        <div id="div"></div>
+        <div id="div2"></div>
+    </div>
+</body>
+</html>

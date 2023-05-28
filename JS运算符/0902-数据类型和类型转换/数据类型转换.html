@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div style="width: 200px; height:200px; background:red; position: absolute; left:0px"></div>
+    <script>
+        var div = document.querySelector('div');
+
+        // 字符串是不能直接运算
+
+        // 如果想运算 先得把字符串转成数字！
+
+        // 每点击一次 都往右走100px
+        div.onclick = function(){
+            // 先获取到当前div的left
+
+            // parseInt会将字符串转成整数
+            var  l = parseInt(div.style.left);
+            console.log(l);
+            div.style.left = l+100+'px';
+        }
+    </script>
+</body>
+</html>

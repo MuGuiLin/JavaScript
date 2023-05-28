@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            font: 30px / 90px "微软雅黑";
+        }
+        ul{
+            list-style: none;
+        }
+        .wrap{
+            width: 1000px;
+            height: 1000px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-top: -500px;
+            margin-left: -500px;
+            background: url(img/bg.jpg) no-repeat;
+        }
+        .menu{
+            width: 330px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 285px;
+            margin-left: 335px;
+            background: #f87a75;
+            box-shadow: 0 20px 50px rgba(248,122,117,.5);
+        }
+        .title{
+            height: 90px;
+            padding-left: 112px;
+            box-sizing: border-box;
+            color: #fff;
+            position: relative;
+        }
+        .title::after{
+            content: '';
+            position: absolute;
+            right: 36px;
+            top: 41px;
+            background: url(img/ar.png) no-repeat ;
+            width: 28px;
+            height: 16px;
+        }
+        .list{
+            width: 316px;
+            padding-left:7px; 
+            padding-bottom: 5px;
+            display: none;
+        }
+        .list li{
+            height: 90px;
+            margin-bottom: 2px;
+            background:#fee4e3;
+            border-radius: 20px;
+            padding-left: 112px;
+            box-sizing: border-box;
+            background-position: 23px 24px;
+            background-repeat: no-repeat;
+
+        }
+        .list li:hover{
+            background-color: #fff;
+            box-shadow:0 0 50px rgba(248,122,117,0.93);
+            position: relative;
+        }
+        .list li:nth-of-type(1){
+            background-image: url(img/icon1.png);
+        }
+        .list li:nth-of-type(2){
+            background-image: url(img/icon2.png);
+        }
+        .list li:nth-of-type(3){
+            background-image: url(img/icon3.png);
+        }
+        .list li:nth-of-type(4){
+            background-image: url(img/icon4.png);
+        }
+        .list li:nth-of-type(5){
+            background-image: url(img/icon5.png);
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <div class="menu">
+        <div class="title">菜单</div>
+        <ul class="list">
+            <li>微博</li>
+            <li>图片</li>
+            <li>博客</li>
+            <li>视频</li>
+            <li>更多>></li>
+        </ul>
+    </div>
+</div>
+<script>
+{
+    let list = document.querySelector(".list");
+    let menu = document.querySelector(".menu");
+    let title = document.querySelector(".title")
+    menu.addEventListener("click",function(e){
+        if(getComputedStyle(list)["display"] === "none"){
+            list.style.display = "block";
+        } else {
+            list.style.display = "none";
+        }
+        e.stopPropagation();//阻止冒泡
+        console.log(e.target.innerHTML);
+        if(e.target.tagName == "LI"&& e.target.innerHTML !== "更多&gt;&gt;"){
+            title.innerHTML = e.target.innerHTML;
+        }
+    });
+    document.addEventListener("click",function(){
+        list.style.display = "none";
+    });
+}
+</script>
+</body>
+</html>

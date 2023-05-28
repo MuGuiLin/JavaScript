@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+<input type="button" id="txt" value="0" />
+<script>
+//给el添加长按事件    
+function dispatchLongTap(){
+   let longTap = new Event("longTap");
+   let timer = 0;
+//    setInterval(()=>{
+//     el.dispatchEvent(longTap);
+//    },1000);
+   // 鼠标在元素按下超过 750 ms
+   document.addEventListener("mousedown",(e)=>{
+        timer = setTimeout(()=>{
+            e.target.dispatchEvent(longTap);// 在这里 触发 longTap 事件
+        },750);
+   });
+   document.addEventListener("mouseup",(e)=>{
+       clearTimeout(timer);
+   });
+} 
+dispatchLongTap();
+
+// 使用自定义事件
+
+{
+    let txt = document.querySelector("#txt");
+    //dispatchLongTap(txt);
+    txt.addEventListener("longTap",(e)=>{
+        console.log("长按");
+    })
+}
+</script>
+</body>
+
+</html>

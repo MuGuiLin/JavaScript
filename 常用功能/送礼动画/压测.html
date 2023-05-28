@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>H5送礼动画</title>
+    <style>
+        *{margin: 0; padding: 0;}
+        .move-box{ position: relative; top: 50px; margin: auto; width: 840px; height: 640px; border: 1px solid gray; box-sizing: border-box; }
+        .move-box ul { position: absolute; border: 1px solid gray; text-align: center; }
+        .move-box li {  position: relative; width: 100px; height: 100px; display: inline-block; vertical-align: middle;}
+        .move-box li i, li img { display: block; position: absolute; width: 100px; height: 100px; background-repeat: no-repeat; background-size: contain;}
+
+        .move-box .ul-1 { top: 0; left: 185px; }
+        .move-box .ul-3 { bottom: 0; left: 185px; }
+        .move-box .ul-2 { top: 100px; right: 0; width: 100px;}
+        .move-box .ul-4 { top: 100px; left: 0;  width: 100px;}
+        
+        .ctrl-box{ position: relative; top: 100px; margin: auto; width: 840px;}
+        .ctrl-box .btn-box button,  .img-box img {  margin: 0 50px;  }
+    </style>
+</head>
+
+<body>
+    <section class="move-box">
+        <ul class="ul-1">
+            <li id="box1" class="nub"></li>
+            <li id="box2" class="nub"></li>
+            <li id="box3" class="nup"></li>
+            <li id="box4" class="nup"></li>
+            1
+        </ul>
+        <ul class="ul-2">
+            <li id="box5" class="nub"></li>
+            <li id="box6" class="nub"></li>
+            <li id="box7" class="nup"></li>
+            <li id="box8" class="nup"></li>
+            2
+        </ul>
+        <ul class="ul-3">
+            <li id="box9" class="nub"></li>
+            <li id="box10" class="nub"></li>
+            <li id="box11" class="nup"></li>
+            <li id="box12" class="nup"></li>
+            3
+        </ul>
+        <ul class="ul-4">
+            <li id="box13" class="nub"></li>
+            <li id="box14" class="nub"></li>
+            <li id="box15" class="nup"></li>
+            <li id="box16" class="nup"></li>
+            4
+        </ul>
+    </section>
+
+    <section class="ctrl-box">
+        <div class="img-box">
+            <img src="png-1.png" alt="">
+            <img src="png-2.png" alt="">
+            <img src="png-3.png" alt="">
+            <img src="png-4.png" alt="">
+            <img src="png-5.png" alt="全部">
+        </div>
+        <div id="btn-box" class="btn-box">
+            <button id="btn1"> 鲜 花 </button>
+            <button id="btn2"> 平 锅 </button>
+            <button id="btn3"> 点 赞 </button>
+            <button id="btn4"> 砸 蛋 </button>
+            <button id="btn5"> 压 测 </button>
+        </div>
+    </section>
+
+</body>
+
+<script src="jquery-3.1.1.min.js"></script>
+<script>
+    
+    //计数器，用于在切换不同图片动画时在后面加上后缀（因为切换图片时浏览器和原来图片的地址一样的话就不会切换而导致第二次没有动画效果的情况）
+    let num = 0;
+    
+    //显示切换礼物动画人方法
+    let append = function (d, i) {
+        //当追加的dom元素大于100时就进行一次清空
+        if (100 < $('#box' + d + ' i').length) {
+            $('#box' + d).empty();
+        };
+
+        /*方法一、创建 img标签 并修改src属性来达到切换gif动画图片的效果*/
+            //$('#box' + d).append('<img src="gif-' + i + '.gif?' + num++ + '"></img>');
+
+        
+
+        /*方法二、创建普通标签如 i标签 并修改 标签的css background-image背景来达到切换gif动画图片的效果*/
+            //1、以原生js创建dom 
+            let dom = document.createElement('i');
+            dom.style.cssText = 'background-image: url(gif-' + i + '.gif?' + num++ + ')';
+            document.getElementById('box' + d).appendChild(dom);
+
+            //2、以jQuery创建dom
+            // $('#box'+d).append('<i style="background-image: url(gif-'+i+'.gif?'+ num++ +')"></i>');
+
+        /*
+            测试结果
+                方法一 在进行压测时会出现卡顿、不动、假死等现象，有时还无法正常显示图片，最后导致页面崩溃。
+
+                方法二 效果很好，没有出现上面的情况。
+
+            结论：
+                个人认为：由于方法一中使用的是img标签，img标签本身有一个loading的过程，所以比起在普通标签元素上改背景图要耗费性能得多。
+
+            推荐：
+                使用方法二中的任意一种都行。
+        */
+    };
+
+    //单个礼物
+    $(document.body).on('click', '#btn-box button', function () {
+        append($(this).index() + 1, $(this).index() + 1);
+    });
+
+    //压力测试
+    $(document.body).on('click', '#btn5', function () {
+        var arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+        var arrs = [0, 1, 2, 3, 4];
+        setInterval(function () {
+            for (let i = 0; i < 16; i++) {
+                append(arr[parseInt((Math.random() * 16) + 1)], arrs[parseInt((Math.random() * 4) + 1)]);
+            }
+        }, 10);
+    });
+
+</script>
+
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+function IsPC() {
+    var userAgentInfo = navigator.userAgent;
+    var Agents = ["Android", "iPhone",
+                "SymbianOS", "Windows Phone",
+                "iPad", "iPod"];
+    var flag = true;
+    for (var v = 0; v < Agents.length; v++) {
+        if (userAgentInfo.indexOf(Agents[v]) > 0) {
+            flag = false;
+            break;
+        }
+    }
+    return flag;
+}    
+//console.log(IsPC());
+// onLine 网络信息 true 有网，false 无网
+// userAgent 用户代理信息，
+{
+let ua = navigator.userAgent.toLowerCase();
+if (/android|adr/gi.test(ua)) {
+    // 安卓
+    console.log("安卓");
+    } else if(/\(i[^;]+;( U;)? CPU.+Mac OS X/gi.test(ua)){
+        //苹果
+        console.log("苹果");
+    }
+}
+
+</script>    
+</body>
+</html>

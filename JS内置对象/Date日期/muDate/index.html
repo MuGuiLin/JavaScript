@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>js日历</title>
+    <link rel="stylesheet" href="./css/mupiao.css">
+    <style>
+        h1 {
+            text-align: center;
+        }
+        h1 i{
+            font-size: 18px;
+        }
+        .date-box {
+            margin: auto;
+            width: 500px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>js日历 <i id="date"></i></h1>
+    <hr>
+    <section class="date-box" id="date-box"></section>
+    <script src="./js/jquery.3.4.0.min.js"></script>
+    <script src="./js/mupiao.js"></script>
+    <script>
+        mupiao('#date-box', {
+            startYear: 2020,    //起始年份[默认当前年]
+            startMonth: 5,      //起始月份[默认当前月]
+            mmNum: 2,           //要显示多少个月[默认显示12个月]
+            range: ' 至 ',      //如果不为空，则会进行区域选择，例如 " 至 "，" ~ "，" To "
+            valiDate: [{ start_time: "20191021", end_time: "20191024" }, { start_time: "20200515", end_time: "20200518" }, ],   // 已约时段
+            valiName: '已约',   //已约文件提示
+            callBack: function (data) {
+                // 已选日期回调函数
+                console.log(data);
+                $('#date').text(data);
+            }
+        });
+    </script>
+
+
+
+
+
+    <h1>js钟表 <i id="time"></i></h1>
+    <hr>
+</body>
+
+</html>

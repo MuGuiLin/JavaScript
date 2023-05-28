@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>招聘信息</title>
+    <link href="css/bootstrap.css" rel="stylesheet" />
+    <style>
+        #root,
+        #view {
+            padding-top: 10px;
+        }
+        .list-group-item-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .nav a {
+            float: left;
+            margin-right: 2px;
+            line-height: 1.42857143;
+            border: 1px solid transparent;
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            padding: 10px 15px;
+            margin-bottom: -1px;
+        }
+        .nav .active {
+            color: #555;
+            cursor: default;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-bottom-color: transparent;
+        }
+    </style>
+</head>
+
+<body>
+<div id="root" class="container">
+    <nav class="nav nav-tabs">
+       <a href="#/society/">社会招聘</a>
+       <a href="#/campus/">校园招聘</a>
+    </nav>
+    <div id="view">
+        
+    </div>
+</div>    
+<script src="js/data.js"></script>
+<script>
+/*
+路由：根据不同的 url 显示不同的视图
+
+匹配规则:
+    #/society/   社会招聘列表 1 
+    #/society/1  社会招聘列表 1 
+    #/society/2  社会招聘列表 2 
+
+    #/society/details/1  第几个社会招聘详情页
+
+    #/campus/ 校园招聘列表 1
+    #/campus/1  校园招聘列表 1
+    #/campus/1  校园招聘列表 2
+
+    #/campus/details/1  第几个社会招聘详情页
+
+
+    列表页
+    详情页
+
+
+*/
+{
+   let view = document.querySelector("#view");
+
+   // 路由表，存储该项目所有的视图及对用的url规则
+   let routeList = [
+       {
+           path:"/society/:page", // 对应的url
+           render: societyList,
+           props: {}
+       },{
+           path:"/campus/:page", // 对应的url
+           render: campusList,
+           props: {}
+       },{
+           path:"/society/:id", // 对应的url
+           render: societyDetails,
+           props: {}
+       },{
+           path:"/campus/:id", // 对应的url
+           render: campusDetails,
+           props: {}
+       }
+   ]; 
+   // 社招列表
+   function societyList(page){
+        view.innerHTML = renderList({
+            type: "society",
+            page 
+        })
+    }
+    // 校招列表
+    function campusList(page){
+        view.innerHTML = renderList({
+            type: "campus",
+            page 
+        })
+    }
+    // 社招详情
+    function societyDetails(id){
+        view.innerHTML = renderDetails({
+            type: "society",
+            id 
+        })
+    }
+    // 校招详情
+    function campusDetails(id){
+        view.innerHTML = renderDetails({
+            type: "campus",
+            id 
+        })
+    }
+}
+//渲染列表页
+/*
+    props：{
+        type: "society"||"campus", //当前要取哪个分类下的数据
+        page: 1 (从第1页开始)
+    }
+*/
+function renderList(props){
+    let inner  = "";
+    let {page,type} = props;
+    let len = 5; //每页显示多少条数据
+    page--;//js中从第0页开始计数
+    let start = page*len;
+    let end = (page+1)*len;
+    let nowData = data[type].filter((item,index)=>{
+        return index>=start&&index<end;
+    });
+    let pageLen = Math.ceil(data[type].length/len);//当前有多少页
+    /*
+        0页: 0 - 4,
+        1页: 5 - 9,
+        2页: 10 
+    */
+    // 列表内容
+    inner = `
+        <ul class="list-group">
+            ${nowData.map(item=>{
+                return `
+                    <li class="list-group-item">
+                        <a href="#/society/details/211">
+                            <h4 class="list-group-item-heading">职位需求：${item.job} 人数：${item.nub}名</h4>
+                            <p class="list-group-item-text">${item.ask}</p>
+                        </a>
+                    </li>
+                `;
+            }).join("")}
+        </ul>
+    `;
+
+    // 导航内容
+    inner += `<ul class="pagination">
+        ${[...(".".repeat(pageLen))].map((item,index)=>{
+            return `<li class="${index == page?"active":""}"><a href="#/society/1">${index+1}</a></li>`;
+        }).join("")}
+    </ul>`;
+
+    return inner;
+}
+
+// 详情页视图
+/*
+    props:{
+        type: "society"||"campus", //当前要取哪个分类下的数据
+        id: 1(数据的id)
+    }
+*/
+function renderDetails(props){
+    let {type,id} = props;
+    let nowData = data[type].filter(item=>item.id==id)[0];
+    console.log(nowData);
+
+    return `
+        <div class="panel panel-default">
+            <div class="panel-heading">招聘岗位：${nowData.job}</div>
+            <div class="panel-body">
+            <p>${nowData.ask}</p>
+            <p>招聘人数：${nowData.nub}人</p>
+            <p>发布时间：${nowData.data}</p>
+            </div>
+        </div>
+    `;
+}
+</script>
+</body>
+</html>

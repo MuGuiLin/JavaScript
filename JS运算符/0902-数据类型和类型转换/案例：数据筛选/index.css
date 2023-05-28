@@ -1,0 +1,82 @@
+.box {
+  width: 960px;
+  height: 640px;
+  margin: 30px auto;
+  background: url("./images/bg.png");
+  background-size: contain;
+  position: relative;
+}
+.arrs,
+.screen {
+  width: 440px;
+  position: absolute;
+  left: 235px;
+  font-size: 12px;
+}
+.arrs {
+  height: 103px;
+  line-height: 30px;
+  top: 176px;
+  color: #fff;
+  padding: 16px 40px;
+}
+.screen {
+  width: 520px;
+  height: 115px;
+  top: 332px;
+}
+.screen p {
+  height: 24px;
+  line-height: 24px;
+  margin: 0;
+}
+.screen p:nth-child(1) {
+  color: #ebed56;
+}
+.screen p:nth-child(2) {
+  color: #56d9ed;
+}
+.screen p:nth-child(3) {
+  color: #ed56a8;
+}
+.screen p:nth-child(4) {
+  color: #ffab48;
+}
+span {
+  width: 12px;
+  height: 12px;
+  line-height: 12px;
+  text-align: center;
+  margin-right: 4px;
+  display: inline-block;
+  border-radius: 50%;
+  color: #000;
+}
+i {
+  width: 64px;
+  height: 20px;
+  line-height: 20px;
+  margin-left: 16px;
+  border: solid 1px #fff;
+  color: #fff;
+  background: rgba(255, 255, 255, 0);
+  text-align: center;
+  display: inline-block;
+  border-radius: 10px;
+}
+.active {
+  color: #000;
+  background: #fff;
+}
+.span1 {
+  background: #ebed56;
+}
+.span2 {
+  background: #56d9ed;
+}
+.span3 {
+  background: #ed56a8;
+}
+.span4 {
+  background: #ffab48;
+}

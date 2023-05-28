@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // function clone(Obj) {
+        //     var buf;
+        //     if (Obj instanceof Array) {
+        //         buf = [];
+        //         var i = Obj.length;
+        //         while (i--) {
+        //            buf[i] = clone(Obj[i]);
+        //         }
+        //         return buf;
+        //     } else if (Obj instanceof Object) {
+        //         buf = {};
+        //         for (var k in Obj) {
+        //             buf[k] = clone(Obj[k]);
+        //         }
+        //         return buf;
+        //     } else {
+        //         return Obj;
+        //     }
+        // }
+        // var obj1 = { a: [1, { c: 1 }, 3], b: { 'a': '4' } }
+        // var obj2 = clone(obj1); // 对象本身传地址
+        // console.log(obj1.a[0] + obj2.b.a);
+        // console.log(obj1 == obj2); 
+
+    // 查找重复项
+    // Array.prototype.distinct = function () {
+    //     var ret = []; // 创建新数组
+    //     for (var i = 0; i < this.length; i++) {
+    //         for (var j = i + 1; j <this.length;) {
+    //             if (this[i] === this[j]) {
+    //                 ret.push(this.splice(j,1)[0]);
+    //             } else {
+    //                 j++;
+    //             }
+    //         }
+    //     }
+    //     return ret;
+    // }
+    // alert(['a', 'b', 'c', 'd', 'b', 'a', 'e'].distinct());
+
+    /*
+        var newArr = ['a','b'];
+        
+    */
+// var arr=[{a:1},{}];
+// arr.forEach(function(item,idx){
+//     item.b=idx;
+// }); 
+// [
+//     {
+//         a:1,
+//         b:0
+//     },{
+//         b:1
+//     }
+// ]
+/*
+第17题   以下关于 Array 数组对象的说法不正确的是      [单选题]
+A.对数组里数据的排序可以用 sort 函数，如果排序效果非预期，可以给 sort 函数加一个排序函数的参数
+B.reverse 用于对数组数据的倒序排列
+C.向数组的最后位置加一个新元素，可以用 pop 方法 (答案)
+D.unshift 方法用于向数组第0位开始添加元素	
+
+第18题   如何删除给定数组中的第二项和第三项，并且在得到的新的数组中第二项后面添加一个新的值为2 
+ var arr1 = ['a','b','c','d','e']; 
+ var arr2 = arr1.splice(2,2,2);   
+*/
+    var url = "http://www.kaikeba.com/index.php?key0=0&key1=1&key2=2.............";
+    var obj = parseQueryString(url);
+        alert(obj.key2);
+    function parseQueryString(argu) {
+        var str =
+            argu.split('?')[1];
+        var result
+            = {};
+        var temp = str.split('&');
+        for (var i = 0; i < temp.length; i++) {
+            var temp2 = temp[i].split('=');
+            result[temp2[0]] = temp[1];
+        }
+        return result;
+    }
+    var n = "kai ke ba".indexOf("wei",3);
+</script>
+</body>
+
+</html>

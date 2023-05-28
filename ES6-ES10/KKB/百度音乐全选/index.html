@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+    <div class="box">
+      <div id="wrap">
+        <ul id="list">
+          <li>
+            <label>
+              <input type="checkbox" />
+              <span>第一条信息</span>
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="checkbox" />
+              <span>第二条信息</span>
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="checkbox" />
+              <span>第三条信息</span>
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="checkbox" />
+              <span>第四条信息</span>
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="checkbox" />
+              <span>第五条信息</span>
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="checkbox" />
+              <span>第六条信息</span>
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="checkbox" />
+              <span>第七条信息</span>
+            </label>
+          </li>
+        </ul>
+        <footer class="footer">
+          <label class="checkAll"><input type="checkbox" id="checkAll" />全选</label>
+          <a href="javascript:;" id="remove">删除</label>
+        </footer>
+      </div>
+    </div>
+<script>
+{
+  let list = document.querySelector("#list");
+  let lis = document.querySelectorAll("li");
+  let checkAll = document.querySelector("#checkAll");
+  let remove = document.querySelector("#remove");
+  lis = Array.from(lis);
+  lis.forEach(item=>{
+    let checkbox = item.querySelector("input");
+    checkbox.onchange = ()=>{
+      item.className = checkbox.checked?"active":"";
+      checkAll.checked = lis.every(item=>item.querySelector("input").checked);
+    };
+  })
+  checkAll.onchange = function(){
+    lis.forEach(item=>{
+      let checkbox = item.querySelector("input");
+      checkbox.checked = this.checked;
+      item.className = checkbox.checked?"active":"";
+    });
+  };
+  remove.onclick = ()=>{
+    lis = lis.filter(item=>{
+      let checkbox = item.querySelector("input");
+      if(checkbox.checked){
+        item.parentNode.removeChild(item);
+        return false;
+      }
+      return true;
+    });
+    checkAll.checked = lis.every(item=>item.querySelector("input").checked)&&lis.length>0;
+  };
+}  
+</script>
+</body>
+</html>

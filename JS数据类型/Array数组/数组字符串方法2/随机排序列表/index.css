@@ -1,0 +1,131 @@
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.wrap {
+    width: 1000px;
+    height: 700px;
+    margin: 0 auto;
+    background-image: url(./images/bg.png);
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.wrap .nav {
+    position: absolute;
+    top: 135px;
+    left: 50%;
+    transform: translateX(-50%)
+}
+
+.nav a {
+    display: inline-block;
+    text-decoration: none;
+    width: 146px;
+    height: 38px;
+    border-radius: 20px;
+    border: solid 1px #998ccb;
+    background: #998ccb;
+    color: #fff;
+    text-align: center;
+    line-height: 38px;
+}
+
+.nav a:nth-child(2) {
+    margin-left: 60px;
+}
+
+ul {
+    width: 1000px;
+    display: flex;
+    flex-wrap: wrap;
+    position: absolute;
+    top: 162px;
+    padding: 64px;
+    box-sizing: border-box;
+}
+
+ul li {
+    width: 25%;
+    margin-bottom: 52px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+ul li img {
+    display: block;
+    margin: 0 auto;
+}
+
+ul li p {
+    width: 110px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    background: #fff;
+    color: #6a54a0;
+    border-radius: 20px;
+    text-align: center;
+    margin: 0 auto;
+    font-size: 12px;
+    position: absolute;
+    top: 135px;
+    left: 50%;
+    transform: translateX(-50%)
+}
+
+
+/* ul {
+    margin: 0 auto;
+    padding: 0;
+    width: 1208px;
+}
+
+li {
+    list-style-type: none;
+    float: left;
+    padding: 10px;
+    margin: 0 1px;
+    background-color: white;
+}
+
+p {
+    margin: 0;
+    text-align: center;
+    background-color: #F1F1F1;
+    line-height: 40px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+img {
+    vertical-align: top;
+}
+
+div {
+    margin: 0 auto;
+    width: 210px;
+}
+
+div:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+a {
+    text-decoration: none;
+    width: 100px;
+    line-height: 40px;
+    display: block;
+    color: white;
+    background-color: #009999;
+    text-align: center;
+    float: left;
+}
+
+a:nth-child(1) {
+    margin-right: 10px;
+} */

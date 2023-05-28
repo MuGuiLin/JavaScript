@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./index.css">
+</head>
+
+<body>
+    <div class="wrap">
+        <div id="form">
+            <p>姓名<input id="username" type="text" value="miaov" /></p>
+            <p>年龄<input id="age" type="text" value="11" /></p>
+            <p>性别
+                <select id="gender">
+                    <option>男</option>
+                    <option>女</option>
+                    <option>你猜</option>
+                </select>
+            </p>
+            <p><input type="button" value="添加" id="addBtn" /></p>
+        </div>
+        <table id="table">
+            <thead>
+                <tr>
+                    <th>
+                        <label>
+                        <input type="checkbox" id="checkAll" />
+                        全选
+                    </label>
+                    </th>
+                    <th>
+                        id
+                    </th>
+                    <th>姓名</th>
+                    <th>年龄</th>
+                    <th>性别</th>
+                    <th>操作</th>
+                    <th><a href="javascript:;" id="removeChecked">删除</a></th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- <tr>
+                    <th>1</th>
+                </tr>
+                <tr>
+                        <th>1</th>
+                    </tr> -->
+            </tbody>
+            <!-- <tbody>
+                    <tr>
+                        <th>1</th>
+                    </tr>
+                    <tr>
+                            <th>1</th>
+                        </tr>
+                </tbody> -->
+        </table>
+    </div>
+
+<script>
+{
+   let addBtn = document.querySelector("#addBtn");
+   let username = document.querySelector("#username");
+   let age = document.querySelector("#age");
+   let gender = document.querySelector("#gender");
+   let id = 1;
+   let table = document.querySelector("#table");
+   let tbody = table.tBodies[0];
+   let checkAll = document.querySelector("#checkAll");
+   let removeChecked = document.querySelector("#removeChecked");
+   //console.log(tbody);
+
+   // console.log(table.tHead);
+   //console.log(table.tBodies);
+   //console.log(table.tBodies[0].rows);
+   //console.log(table.tBodies[0].rows[0].cells);
+   // 添加数据
+   addBtn.onclick = function(){
+        let nameVal = username.value;
+        let ageVal = age.value;
+        let genderVal = gender.value;
+        
+        // 验证数据
+        if(!nameVal.trim()){
+            alert("请填写姓名");
+            return ;
+        }
+        if(!ageVal.trim()){
+            alert("请填写年龄");
+            return ;
+        }
+
+        // 开始生产内容
+
+        // 生产行
+        let tr = document.createElement("tr"); //创建元素
+        // 元素 创建完不要直接 放到 DOM 中，而是把元素相关属性内容和事件都加好之后，再放到DOM 中
+        //console.log(tr);
+        // 第一个格子
+        let th1 = document.createElement("th");
+        let checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        // 单选选中判断是否全选
+        checkbox.onchange = function(){
+            isCheckAll();
+        }
+
+        th1.appendChild(checkbox);
+        tr.appendChild(th1);// 在 tr 添加一个子元素 th1
+
+
+        // 第二个格子
+        let th2 = document.createElement("th");
+        th2.innerHTML = id++;
+        tr.appendChild(th2);
+
+        // 第三个格子
+        let th3 = document.createElement("th");
+        th3.innerHTML = nameVal;
+        tr.appendChild(th3);
+
+        // 第四个格子
+        let th4 = document.createElement("th");
+        th4.innerHTML = ageVal;
+        tr.appendChild(th4);
+
+        // 第五个格子
+        let th5 = document.createElement("th");
+        th5.innerHTML = genderVal;
+        tr.appendChild(th5);
+
+        // 第六个格子
+        let th6 = document.createElement("th");
+        let prevBtn = document.createElement("a");
+        prevBtn.href = "javascript:;";
+        prevBtn.innerHTML = "↑";
+        // 上移
+        prevBtn.onclick = function(){
+            let tr = this.parentNode.parentNode;
+            // 向上移动：把当前 tr 插入到上一个 tr 的前边去
+            let pervTr = tr.previousElementSibling;
+            // parent.insertBefore(newNode,oldNode) 在 parent 下，把 newNode 插入到 oldNode 之前, 如果 oldNode 不存在， insertBefore 就会把 newNode 放入 parent 内容最末尾 
+            //console.log(pervTr);
+            //if(pervTr){
+                tbody.insertBefore(tr,pervTr);
+            //}
+            
+        };
+
+
+        let nextBtn = document.createElement("a");
+        nextBtn.href = "javascript:;";
+        nextBtn.innerHTML = "↓";
+        // 下移
+        
+        nextBtn.onclick = function(){
+            let tr = this.parentNode.parentNode;
+            // 下移操作：找到下一个兄弟节点，把下一个兄弟节点，插入到当前行之前
+            let nextTr = tr.nextElementSibling;
+            // console.log(tr,nextTr);
+            if(nextTr){
+                tbody.insertBefore(nextTr,tr);
+            } else {
+                tbody.insertBefore(tr,tbody.rows[0]);
+            }
+           
+        };
+
+        th6.appendChild(prevBtn);
+        th6.appendChild(nextBtn);
+        tr.appendChild(th6);
+
+        // 第七个格子
+        let th7 = document.createElement("th");
+        let removeBtn = document.createElement("a");
+        removeBtn.href = "javascript:;";
+        removeBtn.innerHTML = "删除";
+        // 删除单项
+        removeBtn.onclick = function(){
+            //console.log(this.parentNode.parentNode);
+            this.parentNode.parentNode.remove();
+            isCheckAll();
+        };
+
+
+        th7.appendChild(removeBtn);
+        tr.appendChild(th7);
+        //console.log(tr);
+        tbody.appendChild(tr);
+        isCheckAll();
+   };
+
+   // 全选/全不选
+   checkAll.onclick = function(){
+        let checkboxs = tbody.querySelectorAll('input[type="checkbox"]');
+        checkboxs.forEach(item=>{
+            item.checked = this.checked;
+        });
+   };
+
+   // 批量删除选中元素
+   removeChecked.onclick = function(){
+    let checkboxs = tbody.querySelectorAll('input[type="checkbox"]');
+        checkboxs.forEach(item=>{
+            if(item.checked){
+               // console.log(item.parentNode.parentNode);
+               // romve 从 DOM 中删除掉 元素自己
+               //item.parentNode.parentNode.remove();
+               // parent.removeChild(node) 从 parent 下删除掉 node 自己
+               tbody.removeChild(item.parentNode.parentNode);
+             }
+        });
+        isCheckAll();
+   }
+
+   // 判断是否全选
+   function isCheckAll(){
+        let checkboxs = [...tbody.querySelectorAll('input[type="checkbox"]')];
+        checkAll.checked = checkboxs.every(item=>item.checked)&&checkboxs.length>0;
+        
+   }
+
+
+
+   // 选中
+   // 上移 下移
+   // 删除 
+}
+</script>
+</body>
+
+</html>

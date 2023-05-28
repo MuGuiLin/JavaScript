@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            min-width: 1200px;
+            background: #f5f5f5;
+        }
+        img {
+            display: block;
+        }
+        #main {
+            display: block;
+            margin: 0 auto;
+        }
+        #banner {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            min-width: 1190px;
+            background: #fff;
+            display: none;
+        }
+        #banner img {
+            margin: 0 auto;
+        }
+        #float {
+            position: absolute;
+            right: 50%;
+            margin-right: -655px;
+            width: 50px;
+            top: 50%;
+            padding-top: 18px;
+        }
+        #floatInner {
+            float: left;
+            background: #fff;
+            border-radius: 7px;
+        }
+        #float img {
+            margin-top: -18px;
+        }
+        #backTop {
+            margin: 0 auto;
+            border-top: 1px solid #efefef;
+            width: 34px;
+            display: none;
+        }
+        #backTop a {
+            display: block;
+            margin: 0 -7px;
+            padding: 7px;
+            width: 34px;
+            font: 12px/17px "宋体";
+            text-align: center;
+            text-decoration: none;
+            color:#000;
+        }
+        #search {
+            position: absolute;
+            left: 50%;
+            margin-left: -260px;
+            top: 82px;
+            width: 520px;
+            height: 40px;
+            border: 2px solid #000;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+<img src="view.jpg" id="main" />
+<input type="search" id="search" />
+<div id="banner">
+    <img src="banner.jpg" />
+</div>
+<div id="float">
+    <div id="floatInner">
+        <img src="float.png" />
+        <div id="backTop">
+            <a  href="javascript:;">返回顶部</a>
+        </div>
+    </div>
+</div> 
+<script>
+{
+    let banner = document.querySelector("#banner");
+    let search = document.querySelector("#search");
+    let float = document.querySelector("#float");
+    /*
+        获取元素距离可视区顶部的距离
+    */
+    window.onscroll = ()=>{
+        // 元素底部距离 可视区顶部的距离
+        //console.log(search.getBoundingClientRect().bottom);
+        if(search.getBoundingClientRect().bottom <= 0){
+            banner.style.display = "block";
+        } else {
+            banner.style.display = "none";
+        }
+    };
+}
+
+
+</script>
+</body> 
+</html>

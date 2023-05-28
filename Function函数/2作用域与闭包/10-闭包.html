@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+/*
+    闭包：
+        形式：函数嵌套函数
+        概念：子函数可以使用父函数作用域中局部变量，但是父级不能访问子级
+*/
+
+function fn(){
+    var b = 10
+    function fn2(){
+        console.log(b);
+    }
+    fn2();
+}
+fn();
+</script>    
+</body>
+</html>

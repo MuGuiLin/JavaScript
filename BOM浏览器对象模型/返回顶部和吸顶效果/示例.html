@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            min-width: 1200px;
+            background: #f5f5f5;
+        }
+        img {
+            display: block;
+        }
+        #main {
+            display: block;
+            margin: 0 auto;
+        }
+        #banner {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            min-width: 1190px;
+            background: #fff;
+            display: none;
+        }
+        #banner img {
+            margin: 0 auto;
+        }
+        #float {
+            position: absolute;
+            right: 50%;
+            margin-right: -655px;
+            width: 50px;
+            top: 50%;
+            padding-top: 18px;
+        }
+        #floatInner {
+            float: left;
+            background: #fff;
+            border-radius: 7px;
+        }
+        #float img {
+            margin-top: -18px;
+        }
+        #backTop {
+            margin: 0 auto;
+            border-top: 1px solid #efefef;
+            width: 34px;
+            display: none;
+        }
+        #backTop a {
+            display: block;
+            margin: 0 -7px;
+            padding: 7px;
+            width: 34px;
+            font: 12px/17px "宋体";
+            text-align: center;
+            text-decoration: none;
+            color:#000;
+        }
+        #search {
+            position: absolute;
+            left: 50%;
+            margin-left: -260px;
+            top: 82px;
+            width: 520px;
+            height: 40px;
+            border: 2px solid #000;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+<img src="view.jpg" id="main" />
+<input type="search" id="search" />
+<div id="banner">
+    <img src="banner.jpg" />
+</div>
+<div id="float">
+    <div id="floatInner">
+        <img src="float.png" />
+        <div id="backTop">
+            <a  href="javascript:;">返回顶部</a>
+        </div>
+    </div>
+</div> 
+<script>
+{
+    let banner = document.querySelector("#banner");
+    let search = document.querySelector("#search");
+    let float = document.querySelector("#float");
+    let floatTop = getPageOffset(float).top;
+    let backTop = document.querySelector("#backTop");
+
+    // banner 吸附
+    let isShowBanner = ()=>{
+        if(search.getBoundingClientRect().bottom <= 0){
+            banner.style.display = "block";
+        } else {
+            banner.style.display = "none";
+        }
+    };
+
+    // float 吸附
+    let isFixedFloat = ()=>{
+        let scrollY = window.scrollY;
+        let bannerH = banner.offsetHeight; 
+        // float的top 和 banner bottom 是其的时候，就让 float 固定， 否则 还是原来的位置
+        if(scrollY +  bannerH >= floatTop){
+            float.style.position = "fixed";
+            float.style.top = bannerH + "px";
+        } else {
+            float.style.position = "absolute";
+            float.style.top = "50%";
+        }
+    };
+
+    // 是否显示返回顶部按钮
+    let isShowBackTop = ()=>{
+        // 当滚动条超过1屏显示 backTop 否则 不显示
+        if(scrollY >= innerHeight){
+            backTop.style.display = "block";
+        } else {
+            backTop.style.display = "none";
+        }
+    };
+
+    //返回顶部
+    backTop.onclick = function(){
+        moveScroll(0)
+    };
+    function scrollEv(){
+        // console.log(1);
+        isShowBackTop();
+        isShowBanner();
+        isFixedFloat();
+    };
+    scrollEv();
+    window.onscroll = scrollEv;
+}
+function getPageOffset(el){
+    let elRect = el.getBoundingClientRect();
+    let scrollL = window.scrollX;
+    let scrollT = window.scrollY;
+    return {
+        left : scrollL + elRect.left,
+        top: scrollT + elRect.top
+    }
+}
+function moveScroll(target){
+    cancelAnimationFrame(window.scrollTimer);
+    window.scrollTimer = requestAnimationFrame(move);
+    function move(){
+        let nowScroll = scrollY;
+        // window.scrollY == (document.body.scrollTop||document.documentElement.scrollTop);
+        if(Math.abs(target - nowScroll) < 2){
+            window.scrollTo(0,target);
+            //document.body.scrollTop=document.documentElement.scrollTop = target;
+        } else {
+            let speed = (target - nowScroll)/20; // 距离越大移动速度越快,距离越小移动速度越慢. 距离 和 速度成正比
+            window.scrollTo(0,nowScroll + speed);//  scrollTo 设置滚动条位置 scrollTo(x,y);
+            window.scrollTimer = requestAnimationFrame(move);
+        }
+    }
+}
+</script>
+</body> 
+</html>

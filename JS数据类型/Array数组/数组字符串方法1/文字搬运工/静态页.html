@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>文字搬运工</title>
+    <link rel="stylesheet" href="./index.css">
+</head>
+
+<body>
+    <div class="bg">
+        <div id="box">
+            <textarea>妙味课堂是一支充满温馨并且极富人情味的IT培训团队；2010-2011年，妙味深度关注WEB前端开发领域，为此精心研发出一套灵活而充满趣味的JavaScript课程。2011-2013年，妙味精准研发出最新HTML5\CSS3课程，并推出远程培训课程方案，尝试将线下优良的培训模式移植到远程网络培训中，希望尽最大努力，将一种快乐愉悦的授课体验、结合HTML\CSS\JS知识点，精准传递给妙味课堂的每一位学员。</textarea>
+            <div>
+                <a href="javascript:;"></a>
+                <span>0/0</span>
+                <ul>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+
+            <p></p>
+        </div>
+    </div>
+<script type="text/javascript">
+function $(cssSelector){
+    var els = document.querySelectorAll(cssSelector);
+    return els.length > 1?els:els[0];
+};  
+(function(){
+    var textarea = $("textarea");
+    var p = $("p");
+    var btn = $("a");
+    var startText = textarea.value;
+    var index = 1;//要把几个移到右边去
+    var span = $("span");
+    var timer = 0;
+    var ul = $("ul");
+    var lis = $("ul li");
+    span.innerHTML = "0/" + startText.length;
+    btn.onclick = function(){
+        if(timer){
+            return ;
+        }
+        ul.style.opacity = 1;
+        timer =setInterval(fn,40);
+    };
+
+    function fn(){
+        var r = startText.substr(0,index);
+        var l = startText.substr(index);
+        textarea.value = l;
+        p.innerHTML = r;
+        span.innerHTML = index + "/" + startText.length;
+        if(index >=  startText.length){
+            clearInterval(timer);
+            ul.style.opacity = 0;
+            timer = 0;
+        }
+        for(var i = 0; i < lis.length; i++){
+            lis[i].classList.remove("active");
+        }
+        lis[index%lis.length].classList.add("active");
+        index++;
+
+    }
+})();
+</script>
+</body>
+
+</html>

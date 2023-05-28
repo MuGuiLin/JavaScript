@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Document</title>
+<style>
+    #box {
+        width: 100px;
+        height: 100px;
+        background: red;
+        /* transition: 10s width ease-in; */
+        transition: 10s width cubic-bezier(.15,.96,.3,1.31);
+        color: #fff;
+    }
+    /* #box:hover {
+        width: 800px;
+    } */
+    /*
+        transition 元素的数值类样式发生改变时，添加一个过渡动画
+        transition-delay  延迟时间(ms||s)
+        transition-duration 动画时间(ms||s)
+        transition-property 需要动画的样式
+        transition-timing-function 动画形式
+            ease 缓冲
+            ease-in 加速
+            ease-out 减速
+            linear 匀速
+            ease-in-out
+    */
+</style>
+</head>
+<body>
+<div id="box"></div>  
+<script>
+box.onclick = function(){
+    this.style.width = "800px";
+};
+</script>  
+</body>
+</html>

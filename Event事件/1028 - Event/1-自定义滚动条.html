@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body,
+        p {
+            margin: 0;
+        }
+        .wrap {
+            margin: 50px auto;
+            position: relative;
+            width: 400px;
+            height: 400px;
+            border: 1px solid #000;
+            padding-right: 20px;
+            overflow: hidden;
+        }
+        .inner {
+            font: 14px/30px "宋体";
+        }
+        .scrollbar-wrap {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 20px;
+            height: 100%;
+            background: rgba(0, 0, 0, .2);
+        }
+        .scrollbar {
+            width: 20px;
+            min-height: 40px;
+            border-radius: 10px;
+            background: #000;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <div class="inner">
+
+    </div>
+    <div class="scrollbar-wrap">
+        <div class="scrollbar"></div>
+    </div>
+</div>
+<script src="mTween.js"></script>
+<script>
+// 添加内容
+{
+    let inner = document.querySelector(".inner");
+    inner.innerHTML = [...(".".repeat(100))].map((item,index)=>`<p>这是第${index}项内容</p>`).join("");
+}
+
+// 给元素的区域添加自定义滚动条
+/*
+init: {
+    el: 给哪个区域添加自定义滚动条
+    scrollbar: 自定义滚动条元素
+}
+*/
+function scrollBar({el,scrollbar}){
+    css(el,"translateY",0);
+    css(scrollbar,"translateY",0);
+    // 拖拽 scrollbar，让它移动
+    let inner = el.children[0];
+    let scrollWrap = scrollbar.parentNode;
+    let startMouseY = 0;
+    let startScrollY = 0;
+    let minScroll = 0; // 滚动条的最小值
+    let maxScroll = scrollWrap.clientHeight - scrollbar.offsetHeight;
+    let move = (e)=>{
+        let nowMouseY = e.clientY;
+        let disY = nowMouseY - startMouseY;
+        let nowY = disY + startScrollY;
+        console.log(nowY);
+        nowY = Math.max(nowY,minScroll);
+        nowY = Math.min(nowY,maxScroll);
+        css(scrollbar,"translateY",nowY);
+
+    };
+    scrollbar.addEventListener("mousedown",(e)=>{
+        startMouseY = e.clientY;
+        startScrollY = css(scrollbar,"translateY");
+        document.addEventListener("mousemove",move);
+        document.addEventListener("mouseup",()=>{
+            document.removeEventListener("mousemove",move);
+        },{once:true});
+        e.preventDefault();
+    });
+
+}
+// 添加自定义滚动条
+{
+    let el = document.querySelector(".wrap");
+    let scrollbar = document.querySelector(".scrollbar");
+    scrollBar({
+        el,
+        scrollbar
+    });
+}
+</script>   
+</body>
+</html>

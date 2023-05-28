@@ -1,0 +1,94 @@
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+
+/* 
+img {
+    vertical-align: top;
+} */
+
+#bg {
+    position: relative;
+    width: 760px;
+    height: 590px;
+    margin: 0 auto;
+    overflow: hidden;
+    background-image: url(./img2/bj.png);
+    background-repeat: no-repeat;
+}
+
+#wrap {
+    width: 420px;
+    height: 320px;
+    position: relative;
+    left: 166px;
+    top: 172px;
+    border: 2px solid #fff;
+    z-index: 2;
+    overflow: hidden;
+}
+
+#pics {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 420px;
+    height: 320px;
+    display: flex;
+    z-index: 1;
+}
+
+#pics li {
+    width: 420px;
+    height: 320px;
+}
+
+#pics img {
+    width: 420px;
+    height: 320px;
+}
+
+.btn {
+    position: absolute;
+    top: 128px;
+    z-index: 999;
+    width: 50px;
+    height: 63px;
+    font: 40px/60px "宋体";
+    text-align: center;
+    background: rgba(0, 0, 0, .6);
+    text-decoration: none;
+    color: #fff;
+}
+
+.prev {
+    left: 0px;
+}
+
+.next {
+    right: 0px;
+}
+
+#navs {
+    position: absolute;
+    left: 0;
+    bottom: 15px;
+    z-index: 3;
+    width: 100%;
+    text-align: center;
+}
+
+#navs a {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: #fff;
+}
+
+#navs .active {
+    transform: scaleY(2);
+    transform-origin: bottom center;
+}

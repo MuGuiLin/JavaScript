@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // alert('1' + String(10));
+        /*
+            如果加号两侧的操作数有其中任何一个是 字符串（String）类型的，这时候+ 起到的是字符串拼接作用
+        */
+       /*
+            Number
+                NaN
+
+            作为加法运算，注意以下几点：
+                - Number类型
+                    - 如果左右两侧的 操作数 都是 数值，那么作为正常的加法进行运算；
+                    - 如果其中一个操作数，是NaN，那么结果就是NaN；
+
+            null \ undefined \ true \false
+            
+       */
+        // alert(1+2);
+        // alert(NaN + 2);
+
+        // alert(1 + null) //1
+        // alert(1 + Number(null)); // 1 + 0 = 1
+
+        var result = '1' + 2 + 3; // 15 是错误的答案
+
+        alert(result);
+        /*
+        
+            '1' + 2 = '1' + String(2) = '1' + '2' = '12'
+            '12' + 3 = '12' + '3' = '123'
+        */
+    </script>
+</body>
+</html>

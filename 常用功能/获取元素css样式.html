@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>获取元素css样式</title>
+
+	<style type="text/css">
+		@charset "utf-8";
+
+		div {
+			width: 300px;
+			height: 200px;
+			background: #008000;
+			margin: auto;
+			color: white;
+			font-weight: bold;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="div1"></div>
+
+	<script type="text/javascript">
+
+		//getComputedStyle(oBj,false)[aTr]在JS中获取没有行间内的样式
+
+		/*****************************把下面这个函数封装起来，方便调用**********************************/
+		function getStyle(oBj, aTr) {
+			if (oBj.currentStyle) {
+				return oBj.currentStyle[aTr];//IE浏览器
+			}
+			else {
+				return getComputedStyle(oBj, false)[aTr];//所有浏览器
+			}
+		}
+
+
+		window.onload = function () {
+			/*var oDiv=document.getElementById('div1');
+			
+			//只在要IE浏览器下才能用哦：obj.currentStyle[attr]
+			if(oDiv.currentStyle)
+			{
+			alert(oDiv.currentStyle.height);//currentStyle（取非行间样式 只支持IE）获取div1的外链CSS的样式：高是多少！
+			}
+			//在火狐等浏览器都可以：getComputedStyle(obj, false)[attr]
+			else
+			{
+			alert(getComputedStyle(oDiv,false).width);//getComputedStyle（取非行间样式 都支持）获取div1的外链CSS的样式：宽是多少！
+			}
+			*/
+
+			var oDiv = document.getElementById('div1');
+
+			alert(getStyle(oDiv, 'width'))//这里是调用了上面封装好的函数，叫getStyle，并传参数oDiv,'width',获取div1的外链CSS的样式：宽是多少！
+
+			alert(getStyle(oDiv, 'backgroundColor'));//这里是调用了上面封装好的函数，叫getStyle，并传参数过去！获取div1的外链CSS的样式：背景色！
+
+			alert(getStyle(oDiv, 'fontSize'));//获取div1的外链CSS的样式：默认文字大小！
+
+			oDiv.innerText = '我的宽度：' + getStyle(oDiv, 'width') + '\n' + '我的背景色：' + getStyle(oDiv, 'backgroundColor') + '\n' + '我的字体大小：' + getStyle(oDiv, 'fontSize');
+		}
+	</script>
+
+</html>

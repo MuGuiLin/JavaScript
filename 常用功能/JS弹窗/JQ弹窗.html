@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			.mask{position: fixed; top:0px; left: 0px; z-index:102; background-color: #000; opacity: 0.3; *filter: alpha(opacity=30); width: 100%; height: 100%;}
+			.alert-mask { position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); display: -webkit-box; -webkit-box-pagk: center; -webkit-box-align: center; display: -webkit-flex; -webkit-justify-content: center; -webkit-align-items: center; z-index: 102;}
+			.alert-mask .alert-box { position: absolute; box-sizing: border-box; width: 600px; padding:0 1em 1.8em 1em; background-color: white; border-radius: 1px; box-shadow: 0px 0px 6px 2px gray; -webkit-transition: all 0.2s cubic-bezier(.79,-0.54,.31,1.44); transition: all 0.2s cubic-bezier(.79,-0.54,.31,1.44);}
+			.alert-mask .alert-box .alert-header{ position: relative; display: flex; padding-top: 1.8em; cursor: move;}
+			.alert-mask .alert-box .alert-header > span{flex: 70px 0 0; font-size: 16px; color: #333333;}
+			.alert-mask .alert-box .alert-header > hr{ flex: 1; margin-top: 10px; height: 1px; border: none; border-bottom: 1px dotted #e4e4e4;}
+			.alert-mask .alert-box .alert-header > i { position: absolute; top: 3px; right: 0px; display: block; width: 20px; height: 20px; font-size: 32px; line-height: 32px; color: #6f6f6f; font-style: normal; cursor: pointer;}
+			
+			.alert-mask .alert-box .alert-main { padding: 2em 0.4em; font-size: 18px; color: #333333; line-height: 180%; text-align: center; }
+			.alert-mask .alert-box .alert-main li { line-height: 44px; position: relative; }
+			.alert-mask .alert-box .alert-main li #tost_txt{ color: red;}
+			.alert-mask .alert-box .alert-main li input{ width: 180px; height: 30px; border: 1px solid #E4E4E4; border-radius: 2px; font-size: 14px; padding-left: 6px;}
+			.alert-mask .alert-box .alert-main li span{ display: inline-block; width: 60px; color: #565656; text-align: left; font-weight: 500;}
+			.alert-mask .alert-box .alert-main li a{ display: inline-block; width: 100px; height: 29px; margin-left: 8px; line-height: 30px; border: 1px solid #0091f2; border-radius: 2px; color: #0091f2; font-size: 16px; text-align: center;}
+			.alert-mask .alert-box .alert-main li i{ display: inline-block; width: 102px; height: 31px; position: absolute; top: 7px; left: 377px; display: none; }
+			
+			.alert-mask .alert-box .alert-dom { width: 100%;}
+			.alert-mask .alert-box .alert-dom .review_cont{ resize: none; margin: 15px auto; margin-bottom: 0; padding: 10px; display: block; width: 530px; height: 140px; font-size: 16px; border: 1px solid #e4e4e4; border-radius: 3px;}
+
+			.alert-mask .alert-box .alert-footer { display: -webkit-flex; -webkit-justify-content: center; -webkit-align-items: center; padding: 2em 1em 0;}
+			.alert-mask .alert-box .alert-footer > button { width: 100px; height: 30px; font-size: 14px; margin: 0px 1em; background-color: #0091f2; color: white; border: none; border-radius: 2px; cursor: pointer; -webkit-appearance: normal;}
+			.alert-mask .alert-box .alert-footer > button.success { background-color: rgba(0, 132, 8, 0.8);}
+			.alert-mask .alert-box .alert-footer > button.failed { background-color: rgba(251, 23, 50, 0.8);}
+			.alert-mask .alert-box .alert-footer > button.warning { background-color: rgba(252, 173, 0, 0.8);}
+			.alert-mask .alert-box .alert-footer > button.enter { background-color: #0091f2;}
+			.alert-mask .alert-box .alert-footer > button.enter:hover{background-color: #1960d3;}
+			.alert-mask .alert-box .alert-footer > button.cancel { border: 1px solid #0091f2; color: #0091f2; background-color: white;}
+			.alert-mask .alert-box .alert-footer > button.cancel:hover{border-color: #1063cc; color: #1063cc;}
+		</style>
+	</head>
+	
+	<body>
+		<button id="btn1">按扭一</button>
+		<button id="btn2">按扭二</button>
+		<button id="btn3">按扭三</button>
+	</body>
+	
+	<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.0.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var DEL = {};
+		;(function($) {
+			var Alert = function(config) {
+				var $this = DEL = this;
+				var resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize';
+				this.config = {
+					width: "auto",
+					height: "auto",
+					title: "提示信息",
+					move: true,
+					dom: "",
+					message: "",
+					buttons: [],
+					time: null,
+					opacity: null
+				};
+				if(config && $.isPlainObject(config)) {
+					$.extend(this.config, config)
+				} else{
+					this.isParameter = true;
+				}
+				this.mask = $('<section class="alert-mask">');
+				this.box = $('<div class="alert-box"> id="alertBox"');
+				this.header = $('<div class="alert-header">');
+				this.main = $('<div class="alert-main">');
+				this.dom = $('<div class="alert-dom">');
+				this.footer = $('<div class="alert-footer">');
+				this.RemoveAlert = function(clear) {
+					if($this.config.move) {
+						$this.box.css('transform', 'scale(0)');
+						window.setTimeout(function(){
+							$this.mask.remove();
+						}, 200);
+					}else{
+						$this.mask.remove(); 
+					}
+				};
+				this.CreateButton = function(obj, footer) {
+					obj.forEach( function(obj) {
+						var css = obj.style ? 'class='+ obj.style : 'class="cancel"',
+							name = obj.name ? obj.name : '取消',
+							$fn = obj.callback ? obj.callback : null,
+							$btn = $('<button '+ css +'>'+ name +'</button>');
+						if($fn) {
+							if("cache" === $fn) {
+								$btn.click(function(){
+									$this.RemoveAlert(true);
+								});	
+							} else {
+								$btn.click(function(){
+									$fn();
+								});
+							}
+						} else {
+							$btn.click(function(){
+								$this.RemoveAlert();
+							});	
+						}
+						footer.append($btn);
+					});
+				};
+				this.Animation = function() {
+					$($this.mask).on('touchmove',function(event) { 
+						var e = event || window.event;
+						e.preventDefault(); 
+						e.stopPropagation();
+					}, false);
+					document.body.style.overflow = "hidden";
+					$this.box.css('transform', 'scale(0)');
+					window.setTimeout(function(){
+						$this.box.css({'top':($(window).height() - $($this.box).height()) / 2, 'left':($(window).width() - $($this.box).width()) / 2, 'transform': 'scale(1)'});
+					}, 100);
+				};
+				this.CreateAlert = function() {
+					var mask = this.mask, box = this.box, header = this.header, main = this.main, dom = this.dom, footer = this.footer;
+					if(this.isParameter) {
+						$('body').append(mask.append(box.append(header.append('<span>'+ this.config.title +'</span><hr/><i onclick="DEL.RemoveAlert()">&times;'))));
+					} else {
+						box.append(header.append('<span>'+ this.config.title +'</span><hr/><i onclick="DEL.RemoveAlert()">&times;'));
+						if(config.message) {
+							box.append(main.append(config.message));
+						}
+						if(config.dom) {
+							box.append(dom.append(config.dom));
+						}
+						if(config.buttons) {
+							this.CreateButton(config.buttons, footer);
+							box.append(footer);
+						}
+						$('body').append(mask.append(box));
+						$('#l_conBox, #r_conBox').addClass('pop_box');
+						if('auto' != config.width) {
+							box.width(config.width);
+						}
+						if('auto' != config.height) {
+							box.height(config.height);
+						}
+						if(config.opacity) {
+							mask.css('backgroundColor', 'rgba(0, 0, 0, '+ config.opacity +')');
+						}
+						if(config.time && 0 < config.time) {
+							window.setTimeout(function(){
+								$this.RemoveAlert();
+							}, config.time);
+						}
+						if($this.config.move) {
+							this.Animation();
+						}
+					}
+				};
+				this.CreateAlert();
+				this.WindowRsize = function() {
+					$this.box[0].style.left = (document.documentElement.clientWidth - $this.box[0].offsetWidth) / 2 + 'px';
+				    $this.box[0].style.top = (document.documentElement.clientHeight - $this.box[0].offsetHeight) / 2 + 'px';
+				};
+				$this.header[0].addEventListener('mousedown' , function(event){
+					var dom_L = dom_T = moveX = moveY = 0, isdrag = true, box = $this.box[0], e = event || window.event;
+					dom_L = e.pageX - box.offsetLeft; dom_T = e.pageY - box.offsetTop;  
+					document.onmousemove = function(event){
+						var ev = event || window.event, mouseX = ev.pageX, mouseY = ev.pageY;	
+						var domW = box.offsetWidth, domH = box.offsetHeight;
+						var pageW = document.documentElement.clientWidth, pageH = document.documentElement.clientHeight;
+						if(isdrag === true){
+							moveX = mouseX - dom_L;
+							moveY = mouseY - dom_T;
+							moveX = Math.min((pageW - domW) , Math.max(0 , moveX));
+							moveY = Math.min((pageH - domH) , Math.max(0 , moveY));
+							box.style.left = moveX + 'px';
+							box.style.top = moveY + 'px';
+						}
+					};
+					document.onmouseup = function(){
+						isdrag = false;
+					}
+				}, true);
+				window.addEventListener(resizeEvt, $this.WindowRsize, false);
+				document.addEventListener('DOMContentLoaded', $this.WindowRsize, false);
+			};
+	
+			$.extend({
+				Alert: function(options){
+					return new Alert(options);
+				}
+			});
+		})(jQuery);
+		
+		$(document.body).on('click', '#btn1', function() {
+			$.Alert({ 
+				title: '标题', 
+				message: '我在3秒钟 后退出',
+				time: 3000
+			});
+		});
+		
+		$(document.body).on('click', '#btn2', function() {
+			$.Alert({ 
+				title: '标题', 
+				message: '我要确定 或 取消 后退出！',
+				buttons: [{
+					name: "确定", style:"enter", callback: function(){
+						DEL.RemoveAlert();
+					}
+				},{}]
+			});
+		});
+		
+		
+		$(document.body).on('click', '#btn3', function() {
+			$.Alert({ 
+				title: '标题', 
+				dom: '<textarea class="review_cont" id="Review_Cont" placeholder="我要输入内容 后退出！"></textarea>',
+				buttons: [{
+					name: "确定", style:"enter", callback: function(){
+						var val = $('#Review_Cont').val();
+						if(!val){
+							alert('内容不能为空')
+						} else {
+							alert(val)
+							DEL.RemoveAlert();
+						}
+					}
+				},{}]
+			});
+		});
+	</script>
+</html>

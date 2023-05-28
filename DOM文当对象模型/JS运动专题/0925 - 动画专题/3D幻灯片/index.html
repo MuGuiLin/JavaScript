@@ -1,0 +1,151 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>无标题文档</title>
+	<style id="css">
+		.box {
+			width: 800px;
+			margin: 100px auto 50px;
+			perspective: 1000px;
+		}
+
+		#picList {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			height: 360px;
+			transform-style: preserve-3d;
+		}
+		#picList li {
+			float: left;
+			position: relative;
+			width: 50px;
+			height: 360px;
+			transform-style: preserve-3d;
+			transform: translateZ(-180px) rotateX(0deg);
+		}
+		#picList span {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 50px;
+			height: 360px;
+		}
+		#picList span:nth-child(1){
+			transform: rotateX(0deg) translateZ(180px);
+			background: url("img/1.jpg") no-repeat;
+		}
+		#picList span:nth-child(2){
+			transform: rotateX(90deg) translateZ(180px);
+			background: url("img/2.jpg") no-repeat;
+		}
+		#picList span:nth-child(3){
+			transform: rotateX(180deg) translateZ(180px);
+			background: url("img/3.jpg") no-repeat;
+		}
+		#picList span:nth-child(4){
+			transform: rotateX(270deg) translateZ(180px);
+			background: url("img/4.jpg") no-repeat;
+		}
+		#picList em {
+			position: absolute;
+			left: -155px;
+			top: 0;
+			width: 360px;
+			height: 360px;
+			background: #ccc;
+		}
+		#picList em:nth-child(5) {
+			transform: rotateY(-90deg) translateZ(25px);
+		}
+		#picList em:nth-child(6) {
+			transform: rotateY(90deg) translateZ(25px);
+		}
+		#btns {
+			padding: 50px;
+			height: 30px;
+		}
+		#btns li {
+			height: 30px;
+			width: 30px;
+			background: #000;
+			color: #fff;
+			font-size: 16px;
+			text-align: center;
+			line-height: 30px;
+			margin: 0 10px;
+			float: left;
+			border-radius: 50%;
+			list-style: none;
+		}
+		#btns .active {
+			background: #f60;
+		}
+	</style>
+</head>
+
+<body>
+<div class="box">
+	<ul id="picList">
+		<li>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<em></em>
+			<em></em>
+		</li>
+	</ul>
+	<ol id="btns">
+		<li class="active">1</li>
+		<li>2</li>
+		<li>3</li>
+		<li>4</li>
+	</ol>
+</div>
+<script>
+function css(el,attr,val){
+	if(val === undefined){
+		return getComputedStyle(el)[attr];
+	} else {
+		el.style[attr] = val;
+	}
+}	
+// 布局生成	
+(function(){
+	var picList = document.querySelector("#picList");
+	var cssEl = document.querySelector("#css");
+	var liW = 50;
+	var len = Math.ceil(parseInt(css(picList,"width"))/liW);
+	var inner = '', cssInner = "";
+	for(var i = 0; i < len; i++){
+		inner += '<li><span></span><span></span><span></span><span></span><em></em><em></em></li>';
+		cssInner += '#picList li:nth-child('+(i+1)+') span{background-position: -' + (i*liW)+ 'px 0;}';
+	}
+	picList.innerHTML = inner;
+	cssEl.innerHTML += cssInner;
+})();
+
+// 效果实现
+(function(){
+	var btns = document.querySelectorAll('#btns li');
+	var picLists = document.querySelectorAll("#picList li");
+	btns.forEach(function(btn,index){
+		btn.onclick = function(){
+			var deg = -index*90;
+			//console.log(deg);
+			picLists.forEach(function(li,index){
+				li.style.transition = '.5s ' + index*50 + 'ms'
+				li.style.transform = 'translateZ(-180px) rotateX('+deg+'deg)';
+			});
+			btns.forEach(function(btn,index){
+				btn.classList.remove("active");
+			});
+			btn.classList.add("active");
+		};
+	});
+})();
+</script>
+</body>
+</html>

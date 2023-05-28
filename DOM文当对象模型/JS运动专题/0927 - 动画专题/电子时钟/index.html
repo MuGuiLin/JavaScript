@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #wrap {
+           margin: 100px auto;
+           width: 700px; 
+           display: flex;
+        }
+        .num {
+            margin: 0 10px;
+            width: 80px;
+            height: 120px;
+            overflow: hidden;
+        }
+        .num-inner div {
+            width: 78px;
+            height: 118px;
+            font: 50px/118px "宋体";
+            color: #fff;
+            background: #000;
+            border: 1px solid #fff;
+            text-align: center;
+            border-radius: 20px;
+        }
+        @keyframes dot{
+            0%{
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            40% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+        .dot {
+            font: bold 50px/120px "楷体";
+            animation: 1s dot linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <div class="num">
+            <div class="num-inner">
+                <div>0</div>
+                <div>0</div>
+            </div>
+        </div>
+        <div class="num">
+            <div class="num-inner">
+                <div>0</div>
+                <div>0</div>
+            </div>
+        </div>
+        <div class="dot">:</div>
+        <div class="num">
+            <div class="num-inner">
+                <div>0</div>
+                <div>0</div>
+            </div>
+        </div>
+        <div class="num">
+            <div class="num-inner">
+                <div>0</div>
+                <div>0</div>
+            </div>
+        </div>
+        <div class="dot">:</div>
+        <div class="num">
+            <div class="num-inner">
+                <div>0</div>
+                <div>0</div>
+            </div>
+        </div>
+        <div class="num">
+            <div class="num-inner">
+                <div>0</div>
+                <div>0</div>
+            </div>
+        </div>
+    </div>
+<script src="mTween.js"></script>    
+<script>
+(function(){
+    var nums = document.querySelectorAll(".num-inner");
+    var nowTime = '000000'; //当前显示出来的时间
+    var nubH = css(document.querySelector(".num"),"height");
+    setTime();
+    setInterval(setTime,1000);
+    function setTime(){
+        var nowDate = new Date;
+        var hour = toDB(nowDate.getHours());
+        var min = toDB(nowDate.getMinutes());
+        var sec = toDB(nowDate.getSeconds());
+        var nextTime = hour + min + sec; //接下来要显示的时间 
+        nums.forEach(function(item, index){
+            if(nowTime[index] === nextTime[index]){
+                return ;
+            }
+            var divs = item.querySelectorAll("div");
+            divs[0].innerHTML = nowTime[index];
+            divs[1].innerHTML = nextTime[index];
+            css(item,"translateY",0);
+            mTween({
+                el: item,
+                attr: {
+                    translateY: -nubH
+                }
+            });
+        });
+        nowTime = nextTime;
+    }
+    function toDB(nub){
+        return nub < 10?"0"+nub:""+nub;
+    }
+
+})();
+</script>    
+</body>
+</html>

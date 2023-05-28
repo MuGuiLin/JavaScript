@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            width: 200px;
+            height: 200px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<div id="box"></div>
+<ul class="list"></ul>    
+<script>
+// 列表结构添加
+{
+    let list = document.querySelector(".list");
+    list.innerHTML = [...(".".repeat(100))].map((item,index)=>`<li>这是第${index}个li</li>`).join("");
+}
+// 滑屏时的BUG
+{
+    let box  = document.querySelector("#box");
+    let now = 0;
+    box.addEventListener("touchmove",(e)=>{
+        console.log(now);
+        // 如果在元素中 touchmove 已经触发了 系统滚动条的滚动就不能再阻止默认事件，否则报错
+        // if(now > 10){
+        //     e.preventDefault();
+        // }  如果要在 touchmove 中取消默认事件，一定记得，一上来，就要阻止掉默认事件，否则报错
+        now++;
+    });
+}
+</script>
+</body>
+</html>

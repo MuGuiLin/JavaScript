@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>require</title>
+    <script src="./plugin/require.js"></script>
+    <style>
+         h1 {
+            text-align: center;
+        }
+        pre{ font-size: 18px; line-height: 36px;}
+        code{
+            padding: 0px;
+            display: block;
+            border-radius: 8px;
+            background: gray;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>AMD：RequireJS</h1>
+    <hr>
+    <pre id="pre">
+
+    </pre>
+    <script>
+        //导入模块
+        require(['./js/b'], function (res) {
+
+            console.log(res);
+            console.log(res.name);
+            console.log(res.sum(125, 999));
+
+            document.getElementById('pre').innerHTML = JSON.stringify(res);
+        })
+
+    </script>
+</body>
+
+</html>

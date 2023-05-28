@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <table border="1" id="table" width="300">
+        <thead>
+            <tr>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+            </tr>
+        </tfoot>
+    </table>
+<script>
+{
+    let table = document.querySelector("table");
+    /*  
+        table.tHead 获取 tHead
+        table.tBodies 获取的就是 tbody
+        rows 获取 行(tr)
+        cells 获取单元格 (th,td)
+    */
+    console.log(table.tHead,table.tFoot,table.tBodies);
+    console.log(table.tBodies[0].rows[0].cells[0]);
+}    
+</script>
+</body>
+</html>

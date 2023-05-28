@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        .box {
+            width: 100px;
+            height: 100px;
+            background: blue;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1>一个在移动端打开</h1>
+    <hr>
+    <section class="box"></section>
+
+    <script>
+        const box = window.document.documentElement.querySelector('.box');
+
+        box.addEventListener('touchstart', function (e) {
+            console.log('touchstart手指触摸时：', this, e);
+        });
+
+        box.addEventListener('touchmove', function (e) {
+            console.log('touchmove手指触摸后不放开，并移动手指时：', this, e);
+        });
+
+        box.addEventListener('touchend', function (e) {
+            console.log('touchend手指离开时：', this, e);
+        });
+    </script>
+</body>
+
+</html>

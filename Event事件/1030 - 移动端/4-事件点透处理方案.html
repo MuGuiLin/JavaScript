@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 200px;
+            height: 200px;
+            background: red;
+            opacity: .5;
+        }
+    </style>
+</head>
+<body>
+<a href="https://www.baidu.com">百度</a>
+<div id="box"></div>
+<script>
+{
+    /*
+        事件点透:
+            所有的 mouse 事件，在移动端执行时都有有一个 300ms 左右的延迟
+            在移动端，当我们触发一个操作时，会立即执行 touch 事件，然后，记录触发时的坐标，300ms 延迟之后，然后在该坐标，查找元素，如果该元素有对应 mouse 事件就执行。
+        
+        解决办法：
+            1. 在 touch 的操作，添加延迟
+            2. 在移动端不要使用鼠标事件(包括 a 标签 href)
+            3. 阻止默认事件
+    */
+    let box = document.querySelector("#box");
+    box.addEventListener("touchend",(e)=>{
+        box.style.display = "none";
+        e.preventDefault();
+    });
+}
+</script>  
+</body>
+</html>

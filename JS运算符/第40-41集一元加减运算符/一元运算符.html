@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // alert(5);
+        // alert(+5);
+        // alert(-NaN);
+
+        // alert(+true);
+        // alert(+null);
+        // alert(+undefined);
+        // alert(+'a');
+        /*
+            如果操作数是Number类型，并且是个数值，那么这个运算符对我们并不会产生任何的影响。
+            不论是正号还是负号，对NaN都是不会产生任何影响的
+
+            如果是其他类型，会经过隐式类型转换
+                - Boolean会通过Number进行转换，然后变成一个数字类型
+                - Null 会通过Number进行转换，然后变成一个数字类型
+                - Undefined 会通过Number进行转换，然后变成一个数字类型
+                - 
+
+
+        */
+
+        // alert(-5);
+
+        // alert(typeof -'1');
+        // alert(-true);
+        alert(-undefined); //-NaN
+        /*
+            如果操作数是数值，我们在前面加上一元减运算符，该数字会成为一个负数。
+
+        */
+
+
+    </script>
+</body>
+</html>

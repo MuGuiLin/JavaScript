@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .nav {
+            margin: 100px auto;
+            width: 200px;
+            position: relative;
+        }
+        .nav nav {
+            display: flex;
+        }
+        .nav a {
+            width: 20px;
+            overflow: hidden;
+        }
+        .nav a:nth-child(2n) span {
+            margin-left:-20px;
+        }
+        .nav span {
+            display: block;
+            width: 40px;
+            font: 36px/40px "宋体";
+            text-align: center;
+			cursor: pointer;
+        }
+        .nav mark {
+            display: none;
+            position: absolute;
+            right: -100px;
+            top: 0;
+            width: 60px;
+            font: 16px/40px "宋体";
+            color: #fff;
+            background: red;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- ☆★ -->
+<div class="nav">
+    <nav>
+        <a><span>☆</span></a>
+        <a><span>☆</span></a>
+        <a><span>☆</span></a>
+        <a><span>☆</span></a>
+        <a><span>☆</span></a>
+        <a><span>☆</span></a>
+        <a><span>☆</span></a>
+        <a><span>☆</span></a>
+        <a><span>☆</span></a>
+        <a><span>☆</span></a>
+    </nav>
+    <mark>一般</mark>
+</div>
+<script>
+{
+    let mark = document.querySelector(".nav mark");
+    let navs = document.querySelectorAll(".nav span");
+    let info = ["很差","较差","一般","良好","优秀"];
+    let now = -1; // 记录点击的是第几个,初始时并没有评分，所以初始为 -1
+    for(let i = 0; i < navs.length; i++){
+        // 箭头函数本身没有this，在箭头函数中使用 this 时，是其所在作用域的 this
+        navs[i].onmouseover = ()=>{
+            tab(i);
+        };
+        navs[i].onclick = ()=>{
+            now = i;
+        };
+        navs[i].onmouseout = ()=>{
+            tab(now);
+        };
+    }
+    function tab(index){
+        for(let i = 0; i < navs.length; i++){
+            if(i <= index){
+                navs[i].innerHTML = "★";
+            } else {
+                navs[i].innerHTML = "☆";
+            }
+        }
+        if(index < 0){
+            mark.style.display = "none";
+            return;
+        }
+        mark.style.display = "block";
+        mark.innerHTML = (index+1)/2;
+    }
+}
+/*
+    鼠标移入：
+        鼠标移入哪一块，点亮这块及之前的，清空他之后的
+    
+    鼠标移出：
+        1. 未发生点击: 鼠标移出清空所有的
+        2. 发生点击: 鼠标移出，点亮点击的之前的，清空他之后的
+*/
+</script>
+</body>
+</html>

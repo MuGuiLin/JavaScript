@@ -1,0 +1,98 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-cn">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <title>js的日历</title>
+    <meta name="keywords" content="关键字列表" />
+    <meta name="description" content="网页描述" />
+    <link rel="stylesheet" type="text/css" href="" />
+    <style type="text/css">
+        table tr td {
+            width: 27px;
+            text-align: center;
+        }
+    </style>
+    <script type="text/javascript">
+        (function () {
+            //获取日历的函数，参数是年份year和月份Month，默认是今年当月的日历
+            function getcalendar(year, month) {
+                year = year ? year : new Date().getFullYear();
+                //month是0开始到11结束的，获取当前月份必须加1
+                month = month ? month : new Date().getMonth() + 1;
+                var last = new Date(year, month - 1, 0);
+                var lastdate = last.getDate(); //获取上个月的最大日期
+                var lastday = last.getDay(); //获取上个月最大日期的星期几
+                var months = new Date(year, month, 0);
+                var Maxdate = months.getDate(); //获取这个月最大的日期
+                //获取当前的日期，为的是高亮显示当前的日期
+                var today = new Date().getDate();
+                var thisyear = new Date().getFullYear();
+                var thismonth = new Date().getMonth() + 1;
+                var str =
+                    '<table><tr style="font-size:21px;font-weight:bold;"><td id="dec">\<</td> <td colspan="5">' +
+                    year + '年' + month +
+                    '月</td><td id="add">\></td></tr><tr><th>日</th><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th></tr>';
+                //获取上个月在这个月份中存在的最后日期
+                var remainlastdate = lastdate - lastday;
+                var t = 1;
+                str += '<tr>';
+                for (var g = 0; g <= 6; g++) {
+                    //星期是从0开始到6结束的，小于等于上个月最大星期的日期则是上个月的日期
+                    if (g <= lastday) {
+                        str += '<td>' + remainlastdate++ + '</td>';
+                    } else {
+                        //高亮显示当前日期
+                        if (thisyear == year && thismonth == month && today == t) {
+                            str += '<td style="color:red;">' + t++ + '</td>';
+                            //假如不是当前月份则默认1为高亮日期
+                        } else if ((thisyear != year && t == 1) || (thismonth != month && t == 1)) {
+                            str += '<td style="color:red;">' + t++ + '</td>';
+                        } else {
+                            //该月份的普通日期
+                            str += '<td style="color:blue;">' + t++ + '</td>';
+                        }
+                    }
+                }
+                str += '</tr>';
+                //除去上面的部分，这个月从哪里开始
+                var remainlastday = 6 - lastday + 1;
+                var nextMonthday = 1; //下一个月份的开始日期
+                //这里i最大值为5是为了兼容所有的月份，有的月份可能跨越6个tr
+                for (var i = 1; i <= 5; i++) {
+                    str += '<tr>';
+                    for (var j = 0; j < 7; j++) {
+                        if (remainlastday <= Maxdate) {
+                            if (thisyear == year && thismonth == month && today == remainlastday) {
+                                str += '<td style="color:red;">' + remainlastday++ + '</td>';
+                            } else {
+                                if ((thisyear != year && remainlastday == 1) || (thismonth != month &&
+                                        remainlastday == 1)) {
+                                    //剩下的天数从这里开始的话，默认的第一天还是为红色
+                                    str += '<td style="color:red;">' + remainlastday++ + '</td>';
+                                } else {
+                                    str += '<td style="color:blue;">' + remainlastday++ + '</td>';
+                                }
+                            }
+                        } else {
+                            str += '<td>' + nextMonthday++ + '</td>';
+                        }
+                    }
+                    str += '</tr>';
+                }
+                str += '</table>';
+                return str;
+            }
+            return window.calendar = getcalendar;
+        })();
+        document.write(calendar(2018, 12));
+        document.write(calendar(2019, 1));
+        document.write(calendar(2019, 2));
+        document.write(calendar(2019, 3));
+    </script>
+</head>
+
+<body>
+    <div id='di'></div>
+</body>
+
+</html>

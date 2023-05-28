@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        
+    </style>
+</head>
+<body>
+<script>
+/*
+    mousewheel 监听滚轮发生滚动 (IE/chrome)
+        e.wheelDelta 120 up | -120 down
+
+    DOMMouseScroll 监听滚轮发生滚动 (firefox);
+        e.detail -3 up | 3 down
+
+*/   
+    
+// window.addEventListener("DOMMouseScroll",(e)=>{
+//     console.log(e.detail);
+// });
+/*
+    mouseScroll 在el上监听滚轮发生滚动
+        el : 监听的元素
+        up 向上滚动要做的事情
+        down 向下滚动要做的事情
+*/
+function mouseScroll({el,up,down}){
+    el.addEventListener("mousewheel",(e)=>{
+        if(e.wheelDelta > 0){
+            up&&up.call(el,e);
+        } else {
+            down&&down.call(el,e);
+        }
+    });
+    el.addEventListener("DOMMouseScroll",(e)=>{
+        if(e.detail < 0){
+            up&&up.call(el,e);
+        } else {
+            down&&down.call(el,e);
+        }
+    });
+}
+</script>    
+</body>
+</html>

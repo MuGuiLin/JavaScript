@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>scrollIntoViewIfNeeded demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            height: 200vh;
+        }
+
+        .chunk {
+            margin-top: 100vh;
+            height: 20vh;
+            background: lightcoral;
+        }
+
+        div[class^=btn] {
+            width: 50px;
+            padding: 10px 15px;
+            position: fixed;
+            top: 50vh;
+            right: 0;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn-top {
+            background: lightgreen;
+        }
+
+        .btn-bottom {
+            margin-top: 50px;
+            background: lightblue;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chunk"></div>
+    <div class="btn-top">up</div>
+    <div class="btn-bottom">down</div>
+    <script>
+        const up = document.querySelector('.btn-top');
+        const down = document.querySelector('.btn-bottom');
+        const test = document.querySelector('.chunk');
+        
+        up.addEventListener('click', function () {
+            test.scrollIntoView(true);
+        });
+        down.addEventListener('click', function () {
+            test.scrollIntoView(false);
+        });
+    </script>
+
+</body>
+
+</html>

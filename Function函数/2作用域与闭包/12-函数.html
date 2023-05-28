@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<button>按钮1</button>
+<button>按钮2</button>
+<button>按钮3</button>   
+<script>
+/*
+    匿名函数自执行
+
+    (函数)();
+*/    
+// (function(b){
+//     var btns = document.querySelectorAll("button");
+//     console.log(b);
+// })(10);
+/*
+    全局污染: 不要使用全局变量
+*/
+(function(){ 
+    var btns = document.querySelectorAll("button");
+
+    // 函数的每次调用之间没有任何的关联，函数每一次都相当于在计算机内部，把这个代码重新写了一遍
+    for(var i = 0; i < btns.length;i++){
+        fn(i);
+    }
+    function fn(index){
+        btns[index].onclick = function(){
+            console.log(index);
+        };
+    }
+    // fn(0);
+    // fn(1);
+    // fn(2);
+
+    // function fn1(){
+    //     var index = 0;
+    //     btns[index].onclick = function(){
+    //         console.log(index);
+    //     }
+    // }
+    // function fn2(){
+    //     var index = 1;
+    //     btns[index].onclick = function(){
+    //         console.log(index);
+    //     }
+    // }
+    // function fn3(){
+    //     var index = 2;
+    //     btns[index].onclick = function(){
+    //         console.log(index);
+    //     }
+    // }
+    // fn1();
+    // fn2();
+    // fn3();
+    
+
+})();   
+</script>    
+</body>
+</html>

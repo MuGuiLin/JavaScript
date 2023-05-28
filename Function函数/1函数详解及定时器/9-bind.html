@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+function fn(){
+    console.log(this);
+}
+var fn2 = fn.bind(document);
+fn2();
+/*
+    bind:
+        1. 调用 bind 会返回一个新函数
+        2. bind 返回的这个新函数 this 会一直被绑定，并且不能再修改(apply,call)
+        3. bind 返回的新函数，不能再使用bind
+*/
+</script>    
+</body>
+</html>

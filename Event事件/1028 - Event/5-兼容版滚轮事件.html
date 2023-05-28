@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+function mouseScroll({el,up,down}){
+    el.addEventListener("mousewheel",(e)=>{
+        if(e.wheelDelta > 0){
+            up&&up.call(el,e);
+        } else {
+            down&&down.call(el,e);
+        }
+    });
+    el.addEventListener("DOMMouseScroll",(e)=>{
+        if(e.detail < 0){
+            up&&up.call(el,e);
+        } else {
+            down&&down.call(el,e);
+        }
+    });
+}
+
+{
+    mouseScroll({
+        el: document,
+        up(){
+            console.log("向上滚动",this);
+        },down(){
+            console.log("向下滚动");
+        }}) 
+}
+</script>    
+</body>
+</html>

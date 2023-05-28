@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>当离开页面时事件</title>
+	</head>
+
+	<body>
+		<h1><a href="code编码.html">code编码</a></h1>
+	</body>
+
+	<script src="public/js/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		/*
+		 * JS
+		 */
+		
+		window.onbeforeunload = function(event) {
+			return confirm("确定离开此页面吗？");
+		};
+
+		
+		/*
+		 * jQuery
+		 */
+
+		//绑定beforeunload事件
+		//$(window).bind('beforeunload', function() {
+		//	return '您输入的内容尚未保存，确定离开此页面吗？';
+		//});
+
+
+		//解除绑定，一般放在提交触发事件中
+		//$(window).unbind('beforeunload');
+	</script>
+
+</html>

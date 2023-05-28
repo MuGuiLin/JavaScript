@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="box" class="box">
+        <div>div</div>
+    </div>
+    <script>
+        {
+            let box = document.querySelector("#box");
+            let div = box.children[0];
+            div.index = 1;
+            div.setAttribute("kkb","miaov");
+            box.innerHTML = box.innerHTML;
+            console.log(box.children[0].index);
+            console.log(box.children[0].getAttribute("kkb"));
+            // 只要操作了innerHTML 元素的所有子元素上，存在内存中的事件和相关的属性都会丢失。如果希望元素的某些属性在操作了父级的innerHTML 之后，还存在就把这个属性加在 DOM 中
+        }
+    </script>    
+</body>
+</html>

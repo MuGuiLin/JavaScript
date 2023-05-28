@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<ul id="list">
+    
+</ul>
+<script>
+let data = [
+    {
+        id: 1,
+        title: "第一项",
+        time: 20191010
+    },
+    {
+        id: 2,
+        title: "第二项",
+        time: 20191010
+    },
+    {
+        id: 3,
+        title: "第三项",
+        time: 20191010
+    }
+];
+{
+    let list = document.querySelector("#list");
+    let inner = data.map(item=>{
+        return `
+            <li>
+                <p>
+                    <span>${item.title}</span>
+                    <time>${item.time}</time>
+                    <a>更多</a>
+                </p>
+            </li>
+        `;
+    });
+    list.innerHTML = inner.join("");
+}
+</script>    
+</body>
+</html>

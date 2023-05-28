@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div{
+            width: 100px;
+            height: 100px;
+            background: red;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div></div>
+    <script src="mTween.js"></script>
+    <script>
+        // 鼠标按下 mousedown
+        // 鼠标移动 mousemove 不断的改变元素的top/left
+        // 鼠标抬起 mouseup 
+
+        var div=document.querySelector('div');
+
+        // 1. 鼠标点击的位置
+        var startPos={}
+        // 2. 元素的初始位置
+        var boxPos={}
+
+        div.addEventListener('mousedown',function(e){
+            startPos.x=e.clientX;
+            startPos.y=e.clientY;
+            boxPos.x=css(div,'left')
+            boxPos.y=css(div,'top')
+
+            // 鼠标移动过程中改变元素的位置
+            div.addEventListener('mousemove',function(e){
+                // 当前位置
+                var nowPos={
+                    x:e.clientX,
+                    y:e.clientY
+                }
+
+                // 当前鼠标位置 - 初始鼠标位置 = 移动距离
+                var dis={
+                    x:nowPos.x-startPos.x,
+                    y:nowPos.y-startPos.y
+                }
+
+                // 移动距离+元素的初始位置 = 元素最新的位置
+                var newPos={
+                    l:dis.x+boxPos.x,
+                    t:dis.y+boxPos.y
+                }
+                
+                // 修改样式
+                css(div,'top',newPos.t)
+                css(div,'left',newPos.l)
+            })
+
+
+        })
+
+
+    </script>
+</body>
+</html>

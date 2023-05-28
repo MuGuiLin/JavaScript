@@ -1,0 +1,117 @@
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.wrap {
+    width: 700px;
+    min-height: 500px;
+    background-image: url(./images/bg.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 0 auto;
+    position: relative;
+}
+
+.wrap #form {
+    width: 460px;
+    height: 120px;
+    background: #fff;
+    border-radius: 12px;
+    position: absolute;
+    left: 50%;
+    top: 116px;
+    transform: translateX(-50%);
+    display: flex;
+    flex-wrap: wrap;
+    padding: 26px;
+    box-sizing: border-box;
+}
+
+.wrap #form p {
+    margin-bottom: 10px;
+}
+
+.wrap #form p input {
+    width: 140px;
+    height: 28px;
+    border-radius: 12px;
+    border: solid 1px #19c2ff;
+    margin: 0 10px;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.wrap #form p:last-child input {
+    width: 180px;
+    background: #19c2ff;
+    color: #fff;
+    outline: none;
+}
+
+.wrap #form p select {
+    width: 140px;
+    height: 28px;
+    border-radius: 12px;
+    border: solid 1px #19c2ff;
+    margin: 0 5px;
+}
+
+.wrap #table {
+    width: 460px;
+    border-radius: 12px;
+    position: absolute;
+    left: 50%;
+    top: 275px;
+    transform: translateX(-50%);
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.wrap #table thead {
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    color: #fff;
+    background: #4cbfe5;
+}
+
+.wrap #table thead a {
+    color: #fff;
+}
+
+.wrap #table tbody {
+    color: #19c2ff;
+}
+
+.wrap #table tbody a {
+    color: #19c2ff;
+}
+
+.wrap #table tbody tr {
+    background: #fff;
+}
+
+.wrap #table tbody tr th:nth-child(1) {
+    text-align: left;
+    padding-left: 20px;
+}
+
+
+/* input[type='checkbox'] {
+    width: 12px;
+    height: 12px;
+    background-color: #fff;
+     -webkit-appearance: none; 
+    border: 1px solid #19c2ff;
+    border-radius: 2px;
+    outline: none;
+}
+
+input[type=checkbox]:checked {
+    color: #19c2ff;
+} */

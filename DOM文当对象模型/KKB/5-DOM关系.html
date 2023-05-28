@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div id="div">
+    <p>p1</p>
+    <h3>h1</h3>
+    <p>p2</p>
+    <!-- 注释 -->
+    <p>p3</p>
+    <h3>h2</h3>
+    <p>p4</p>
+    <h3>h3</h3>
+    <p>p5</p>
+    <p>p6</p>
+</div>    
+<script>
+/* 
+查找兄弟 
+- nextSibling 下一个兄弟节点
+- nextElementSibling 下一个兄弟元素
+- previousSibling 上一个兄弟节点
+- previousElementSibling 上一个兄弟元素 
+*/
+{
+    let div = document.querySelector("#div");
+    let p2 = div.children[2];
+    console.log(p2.nextSibling);
+    console.log(p2.nextElementSibling);
+    console.log(p2.previousSibling);
+    console.log(p2.previousElementSibling);
+}
+
+</script>    
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Symbol数据类型</title>
+	</head>
+	<body>
+		<h1>Symbol数据类型</h1>
+		<h3>
+			ES6引入了一种新的原始数据类型Symbol，表示独一无二的值。它是JavaScript语言的第七种数据类型，前六种是：undefined、null、布尔值（Boolean）、字符串（String）、数值（Number）、对象（Object）。
+			
+			例子：
+			let teacher={
+				[Symbol('name')]:'沐枫',
+				[Symbol('description')]:'有点意思'
+			}
+			
+			let dabinge={
+				[Symbol('name')]:'飘哥',
+				[Symbol('description')]:'帅'
+			}
+			
+			let target={};
+			
+			Object.assign(target,teacher,dabinge);
+			console.log(target);
+			
+			这个在书写插件和库的时候很重要，因为经常涉及到选项或者参数合并，symbal很好的解决了这个问题。
+			
+			解决问题的场景：
+			let teacher={
+				name:'沐枫',
+				description:'有点意思'
+			}
+			let dabinge={
+				name:'飘哥',
+				description:'帅'
+			}
+			let target={};
+			//结合两个对象复制到一个新对象:
+			Object.assign(target,teacher,dabinge);
+			console.log(target);
+ 
+		</h3>
+	</body>
+</html>

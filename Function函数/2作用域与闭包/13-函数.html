@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<button>按钮1</button>
+<button>按钮2</button>
+<button>按钮3</button>   
+<script>
+(function(){ 
+    var btns = document.querySelectorAll("button");
+
+    // !!!函数的每次调用之间没有任何的关联，函数每一次都相当于在计算机内部，把这个代码重新写了一遍
+    // for(var i = 0; i < btns.length;i++){
+    //     (function(index){
+    //         btns[index].onclick = function(){
+    //             console.log(index);
+    //         };
+    //     })(i);
+    // }
+    for(var i = 0; i < btns.length;i++){
+        btns[i].onclick = (function(index){
+            return function(){
+                console.log(index);
+            };
+        })(i);
+    }
+})();   
+</script>    
+</body>
+</html>

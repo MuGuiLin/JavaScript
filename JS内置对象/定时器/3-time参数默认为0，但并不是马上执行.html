@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <button>1</button>
+    <button>2</button>
+    <button>3</button>
+    <script>
+        // setTimeout(function(){
+        //     console.log('开课吧1');
+        // },0)
+
+        // console.log('开课吧2')
+        /*
+            如果不提供第二个参数，那么默认为0
+        */
+        
+        /*经典面试题*/
+        for(var i=0;i<5;i++){
+            setTimeout(function(){
+                console.log(i);//5 5 5 5 5
+            },0)
+        }
+        /*
+            for循环执行的非常的快，但是呢，setTimeout执行比for循环慢，所以导致setTimeout执行函数的时候，获取的i已经是for循环结束以后的
+
+            也就是说，我们看到的定时器虽然把时间设置为0了，但是并没有立刻执行代码
+
+            mdn  -> 定时器 最小执行时间 >= 4ms
+            
+        */
+
+
+
+        // var btn = document.querySelectorAll('button');
+
+
+        // var i = 0;
+        // for(;i< btn.length;i++){
+        //     btn[i].onclick = function(){
+        //         // var i = 10;
+        //         console.log(i);
+        //     }
+        // }
+
+        /*
+            1. for循环一上来就给所有的元素都添加上了事件
+            2. i 会根据作用域规则进行查找，首先找自己所在的函数作用域，函数作用域内没有，就会向外进行查找，一直到全局作用域
+        */
+
+    </script>
+</body>
+</html>

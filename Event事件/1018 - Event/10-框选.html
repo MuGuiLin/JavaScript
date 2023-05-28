@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .box {
+            position: fixed;
+            border: 1px solid #000;
+            background: rgba(0, 0, 0, .3);
+        }
+        #list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        #list li {
+            float: left;
+            margin: 10px;
+            width: 100px;
+            height: 100px;
+            background: green;
+        }
+    </style>
+</head>
+<body>
+<ul id="list">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>   
+<script>
+{
+    let lists =  document.querySelectorAll("#list li");
+
+    // 框选
+    let startMouse = {};
+    let el;
+    let move = (e)=>{
+        let nowMouse = {
+            x: e.clientX,
+            y: e.clientY
+        };
+        let dis = {
+            x: nowMouse.x - startMouse.x,
+            y: nowMouse.y - startMouse.y
+        };
+        el.style.left = Math.min(startMouse.x,nowMouse.x) + "px";
+        el.style.top = Math.min(startMouse.y,nowMouse.y) + "px";
+        el.style.width = Math.abs(dis.x) + "px";
+        el.style.height = Math.abs(dis.y) + "px";
+        lists.forEach(item=>{
+            if(boom(el,item)){
+                item.style.background = "red";
+            } else {
+                item.style.background = "green";
+            }
+        });
+    }
+    document.addEventListener("mousedown",(e)=>{
+        el = document.createElement("div")
+        startMouse = {
+            x: e.clientX,
+            y: e.clientY
+        }
+        el.className = "box";
+        document.body.appendChild(el);
+        document.addEventListener("mousemove",move);
+        document.addEventListener("mouseup",()=>{
+            document.removeEventListener("mousemove",move);
+            el.remove();
+        },{once:true});
+        e.preventDefault();
+    });
+}
+function boom(el,el2){
+    let rectEl1 = el.getBoundingClientRect();
+    let rectEl2 = el2.getBoundingClientRect();
+    if(rectEl1.right < rectEl2.left
+    || rectEl2.right < rectEl1.left
+    || rectEl1.bottom < rectEl2.top
+    || rectEl2.bottom < rectEl1.top){
+        return false;
+    }
+    return true;
+}
+</script> 
+</body>
+</html>

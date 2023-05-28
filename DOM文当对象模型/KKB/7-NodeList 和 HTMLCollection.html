@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div id="div">
+    <p>p1</p>
+    <h3>h1</h3>
+    <p>p2</p>
+    <!-- 注释 -->
+    <p>p3</p>
+    <h3>h2</h3>
+    <p>p4</p>
+    <h3>h3</h3>
+    <p>p5</p>
+    <p>p6</p>
+</div>    
+<script>
+/*
+    nodeList
+        childNodes
+        querySelectorAll    
+    HTMLCollection 
+        children
+        getElementsByTagName
+        getElementsByClassName
+
+    1. nodeList 有 forEach 方法，但是 HTMLCollection 没有forEach
+    2. HTMLCollection 每次调用时都会动态的去获取, nodeList 中 childNodes 有动态更新，但是querySelectorAll 就不会动态更新
+*/    
+{
+    let div = document.querySelector("#div");
+    let nodes = div.querySelectorAll("p");
+    let collection = div.children;
+    console.log(nodes,collection);
+    div.innerHTML = "";
+    //nodes = div.querySelectorAll("p");
+    console.log(nodes,collection);
+    // console.log(div.getElementsByClassName("p"));
+    // div.childNodes.forEach(item=>{
+    //     console.log(item);
+    // });
+    // div.children.forEach(item=>{
+    //     console.log(item);
+    // });
+}
+
+</script>    
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            margin: 50px auto;
+            position: relative;
+            width: 500px;
+            height: 500px;
+            border: 1px solid #000;
+        }
+        #div {
+            position: absolute;
+            left: 100px;
+            top: 100px;
+            margin: 50px 0 0 -100px;
+            width: 100px;
+            height: 100px;
+            padding: 30px;
+            border: 5px solid #000;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+ <div id="box">
+     <div id="div"></div>
+ </div>   
+<script>
+
+{
+    let div = document.querySelector("#div");
+    // clientWidth/clientHeight =  width(height) + padding;
+    console.log(div.clientWidth,div.clientHeight);
+    // clientLeft/clientTop: 左边框宽度/上边框宽度
+    console.log(div.clientLeft,div.clientTop);
+}
+
+</script>    
+</body>
+</html>

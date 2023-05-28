@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>JavaScript事件</title>
+</head>
+
+<body>
+    <h1>JavaScript事件</h1>
+    <hr>
+    <pre>
+        事件绑定：
+            - 如果给一个元素绑定多次绑定一种事件，只有第一个启效，因为后面的不会覆盖前面的。
+            - 事件名称前面要加 on 。
+
+            语法：
+                1、dom.事件名称 = 执行函数 如：div.onclick = function() {}
+
+        事件监听：
+            - 如果给一个元素绑定多次绑定一种事件，互不影响，都会触发。
+            - 事件名称前面不加 on 。
+
+            语法：
+                - dom.addEventListener('事件名称', '执行函数', '是否 冒泡(默认：false) / 捕获(true))')
+                例如：div.addEventListener('click', function(){
+
+                }, true);
+
+            参数：
+                第1个参数：事件名称
+                第2个参数：执行函数
+                第3个参数：默认：false
+                    - 可以是：true/false 冒泡(默认：false) / 捕获(true)
+                        例如：
+                        div.addEventListener('click', function(){
+                            //函数体
+                        }, true);
+
+                    - 可以是：{}对象
+                        {
+                            captue: true/false(默认) 是否是捕获阶段执行
+                            once: true/fasle(默认) 是否只执行1次（如果给一个元素绑定多次绑定一种事件, 只执行1次）
+                            passive: true/false(默认) 是否阻止默认行为
+                        }
+                        例如： dom.addEventListener('click', function(){
+                            //函数体
+                        }, {
+                            captue: true,
+                            once: true,
+                            passive: true
+                        }) ;
+
+        事件对象：
+
+
+        事件类型：
+
+
+        
+        事件冒泡：
+            - 当子元素的某个事件（如click）被触发时，父元素(一直向上到body)的相同事件（click）也会被执行
+            - 执行顺序 从当前自己被触发的元素向上触发
+
+        事件捕获：
+            向下触发
+
+        事件流：
+            事件流就是事件冒泡 或 事件捕获 的执行顺序！
+
+        阻止默认行为：
+            event.preventDefault();
+
+        阻止事件冒泡：
+            event.stopPropagation();
+
+    </pre>
+
+    <div class="box">
+        <button>事件绑定</button>
+        <button>事件监听</button>
+    </div>
+
+
+    <script>
+        {
+            const oBtn = document.querySelectorAll('.box button');
+
+            oBtn[0].onclick = function () {
+                alert('我是事件绑定，一个元素只能绑定一次')
+            };
+
+            oBtn[0].onclick = () => {
+                alert('我是事件绑定，多次绑定无效，');
+            };
+
+            oBtn[1].addEventListener('click', function() {
+                alert('我是事件监听，一个元素可以被多次监听1')
+                event.stopPropagation()
+            });
+
+            oBtn[1].addEventListener('click', () => {
+                alert('我是事件监听，一个元素可以被多次监听2')
+            });
+        }
+    </script>
+</body>
+
+</html>

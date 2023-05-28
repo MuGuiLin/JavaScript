@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="box">由于大量使用with语句会导致性能下降，同时也会给调试代码造成困难，因此在开发大型应用程序时，不建议使用with语句！</div>
+    <script>
+        with (navigator) {
+            console.log(this);
+
+            var search = appCodeName;
+            var hostname = appName;
+            var href = appVersion;
+            var language = language;
+
+            console.log(search);
+            console.log(hostname);
+            console.log(href);
+        };
+
+        let box = document.querySelector('#box').style;
+        with (box) {
+            console.log(box);
+            padding = '20px';
+            fontSize = '16px';
+            width = '200px';
+            height = '100px';
+            color = 'white';
+            background = 'blue';
+        }
+
+        var a1 = 10;
+        var a2 = 20;
+        alert('a1+a2=' + a1 + a2)  // ?? 
+
+        var User = {
+            num: 1,
+            getNum: function() {
+                return this.num;
+            }
+        };
+
+        console.log(User.getNum()); // ??
+
+        var fun = User.getNum;
+        console.log(fun()); // ??
+
+        var i = 0;
+        console.log(++i , i++);
+        alert(++i == i++); // ??
+        alert(++i === i++); // ??
+        console.log(++i, i++) // ??
+
+    </script>
+</body>
+
+</html>

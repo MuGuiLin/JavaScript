@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Document</title>
+<style>
+    .inner {
+        width: 2000px;
+        height: 200px;
+        border: 2px solid #000;
+    }
+    #banner {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 200px;
+        height: 200px;
+        background: #000;
+        font: 20px/50px "宋体";
+        color:#fff;
+    }
+</style>
+</head>
+<body>
+   <!-- <div id="banner">广告弹窗</div> -->
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div>
+   <div class="inner">页面内容</div> 
+</body>
+</html>
+<script>
+// scroll 监控滚动条位置发生变化
+window.onscroll = function(){
+   /*
+        // chrome,firefox, mobile
+        window.scrollY 获取纵向滚动条位置
+        window.scrollX 获取横向滚动条位置
+        window.scrollTo(x,y);
+   */
+  // console.log(document.body.scrollLeft,document.body.scrollTop);
+  // console.log(document.documentElement.scrollLeft,document.documentElement.scrollTop);
+  var scrollT = document.documentElement.scrollTop||document.body.scrollTop;
+  
+};
+setTimeout(()=>{
+    document.documentElement.scrollTop=document.body.scrollTop = 0;
+},3000);
+</script>

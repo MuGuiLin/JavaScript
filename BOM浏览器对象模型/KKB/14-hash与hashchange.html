@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<nav>
+    <a href="#view1">视图1</a>
+    <a href="#view2">视图2</a>
+    <a href="#view3">视图3</a>
+</nav>   
+<div id="view">
+    这是第一个视图
+</div> 
+<script>
+{
+    let view = document.querySelector("#view");
+    setView();
+    window.onhashchange =  setView;
+    function setView(){
+        let hash = location.hash;
+        console.log(hash);
+        switch(hash){
+            case "":
+            case "#view1":
+            console.log(1);
+                view.innerHTML = "这是第一个视图";
+                break;
+            case "#view2":
+                view.innerHTML = "这是第二个视图";
+                break;
+            case "#view3":
+                view.innerHTML = "这是第三个视图";
+                break;
+        }
+    }
+}    
+// console.log(location.hash);    
+// // 监听 location 中的 hash 变化了
+// window.onhashchange = function(){
+//     console.log(location.hash); 
+// };
+</script>    
+</body>
+</html>

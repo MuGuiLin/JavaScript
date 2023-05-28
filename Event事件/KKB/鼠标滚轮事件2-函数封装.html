@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div{
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+    <div></div>
+    <script>
+        // 通过滚轮 向上 向下  改变 div的宽度  ↑ 变宽  ↓ 变窄
+        var div=document.querySelector('div');
+        var h=100;
+
+        toWheel(div,function(){
+            // this->div
+            console.log(this)
+            h+=5;
+            this.style.height=h+'px';
+        },function(){
+            h-=5;
+            this.style.height=h+'px';
+        })
+
+
+        // toWheel(el,downFn,upFn)
+        // el 添加滚动事件的元素
+        // downFn 滚轮向下时执行的函数
+        // upFn 滚轮向上时执行的函数
+
+        function toWheel(el,downFn,upFn){
+            el.addEventListener('mousewheel',function(e){
+                if(e.wheelDelta>0){
+                    // 向上
+                    upFn&&upFn.call(el)
+                }else{
+                     // 向下
+                     downFn&&downFn.call(el)
+                }
+            })
+            el.addEventListener('DOMMouseScroll',function(e){
+                if(e.detail>0){
+                    // 向下
+                    downFn&&downFn.call(el)
+                }else{
+                     // 向上
+                     upFn&&upFn.call(el)
+                }
+            })
+        }
+
+
+        
+    </script>
+</body>
+</html>

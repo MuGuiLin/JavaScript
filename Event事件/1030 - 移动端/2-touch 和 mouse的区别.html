@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            width: 200px;
+            height: 200px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<div id="box"></div>
+<script>
+{
+    let box = document.querySelector("#box");
+    /*
+        touchstart --> 手指摁下
+        touchmove --> 手指移动
+        touchend --> 手指抬起
+    */
+   box.addEventListener("mousedown",function(e){
+        console.log("手指摁下",this,e.target);
+   });
+   box.addEventListener("mousemove",function(e){
+        console.log("手指移动",this,e.target);
+   });
+   box.addEventListener("mouseup",function(e){
+        console.log("手指离开",this,e.target);
+   });
+
+}
+</script>  
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+        }
+        #box {
+            position: relative;
+            left: 100px;
+            top: 100px;
+            width: 500px;
+            height: 500px;
+            border: 1px solid #000;
+        }
+        #div {
+            position: absolute;
+            left: 100px;
+            top: 100px;
+            width: 100px;
+            height: 100px;
+            padding: 30px;
+            border: 5px solid #000;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+ <div id="box">
+     <div id="div"></div>
+ </div>   
+<script>
+{
+    let div = document.querySelector("#div");
+    console.log(getPageOffset(div));
+}
+function getPageOffset(el){
+    let left = el.offsetLeft;
+    let top =  el.offsetTop;
+    while(el.offsetParent){
+        el = el.offsetParent;
+        left += el.offsetLeft + el.clientLeft;
+        top += el.offsetTop + el.clientTop;
+    }
+    return {left,top};
+}
+
+</script>    
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+        
+            - Number
+                - 左右两侧均为数值，正常进行除法计算
+                - 如果任何一侧为NaN，则结果返回NaN
+
+            - 有任何一侧不是Number类型,则（根据对应的规则）转成数字类型后，再进行计算。
+        */
+
+        // alert(6 / 3 );
+        // alert(NaN / 3);
+
+
+        // alert(true / 2); // 隐式类型转换 Number(true) => 1
+
+        // alert(10 / 0); // 我们不允许0 作为除数
+
+        alert(0 / 0); // NaN
+    </script>
+</body>
+</html>

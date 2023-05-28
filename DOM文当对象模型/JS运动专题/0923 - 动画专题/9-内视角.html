@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            margin: 100px auto;
+            padding: 100px;
+            width: 200px;
+            height: 200px;
+            border: 2px solid #000;
+            perspective: 500px;
+        }
+        #div {
+            /* transition: 5s linear; */
+            position: relative;
+            width: 200px;
+            height: 200px;
+            transform-style: preserve-3d;
+            transform: translateZ(-100px) rotateY(0deg);
+        }
+        #div span {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 200px;
+            height: 200px;
+            font: 100px/200px "宋体";
+            color: #fff;
+            text-align: center;
+            backface-visibility: hidden;
+            /* 和当前父级角度相差超过 90 deg 就是背面 */
+            /*
+                背面：和父级角度相差超过90度的面
+            */
+        }
+        #div span:nth-child(1) {
+            background: red;
+            transform: rotateY(0deg) translateZ(-100px);
+        }
+        #div span:nth-child(2) {
+            background: blue;
+            transform: rotateY(90deg) translateZ(-100px);
+        }
+        #div span:nth-child(3) {
+            background: yellow;
+            transform: rotateY(180deg) translateZ(-100px);
+        }
+        #div span:nth-child(4) {
+            background: green;
+            transform: rotateY(270deg) translateZ(-100px);
+        }
+        #div span:nth-child(5) {
+            background: #000;
+            transform: rotateX(90deg) translateZ(-100px);
+        }
+        #div span:nth-child(6) {
+            background: #000;
+            transform: rotateX(-90deg) translateZ(-100px);
+        }
+        /* #box:hover #div {
+            transform: translateZ(-100px) rotateY(-360deg);
+        } */
+    </style>
+</head>
+<body>
+   <div id="box">
+       <div id="div">
+           <span>1</span>
+           <span>2</span>
+           <span>3</span>
+           <span>4</span>
+           <span>5</span>
+           <span>6</span>
+       </div>
+   </div> 
+</body>
+</html>

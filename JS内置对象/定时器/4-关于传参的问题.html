@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // setTimeout(fn("非常好"),1000);
+
+        // setTimeout(function(txt){
+        //     console.log('开课吧' + txt);
+        // },1000,"非常好")
+
+        function fn(txt){
+            console.log('开课吧' + txt);
+        }
+        /*
+            如果是有名函数，那么传参我们需要放到小括号，但是一旦有小括号，这个函数就被调用了
+            我们设置的时间就无效了
+        */
+
+
+        /*
+            解决方法一：字符串（不推荐使用，影响性能）
+                字符串会被解析两次
+                
+        */
+        // setTimeout('fn("非常好")',1000);
+
+        /*
+            解决方案二：用匿名函数包一下
+        */
+
+        // setTimeout(function(){
+        //     fn("非常好");
+        // },1000)
+
+        /*
+            解决方案三：bind() - > 小于ie9是不能用的
+        */
+
+        // var obj = {
+        //     age:18,
+        //     getAge:function(x,y,z){
+        //         console.log(x,y,z);
+        //         // console.log(this.age);
+        //     }
+        // }
+
+        // // obj.getAge();
+        // var getNewAge = obj.getAge.bind(obj,2,3,4);
+        // getNewAge(); // this -> window
+        
+        setTimeout(fn.bind(null,"非常好"),1000);
+
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .wrap {
+            position: relative;
+            border: 1px solid #000;
+            width: 400px;
+            height: 400px;
+            padding-right: 10px;
+            overflow: hidden;
+        }
+        .scrollBar {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 10px; 
+            height: 100%;
+            background: #ccc;
+        }
+        .scrollBar span {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 10px;
+            background: #000;
+            min-height: 20px;
+            border-radius: 5px;;
+        }
+        .list {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 400px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <ul class="list"></ul>
+    <div class="scrollBar">
+        <span></span>
+    </div>
+</div>
+<script src="fns.js"></script>
+<script>
+// 列表内容
+{
+    let list = document.querySelector(".list");
+    list.innerHTML = [...(".".repeat(100))].map((item,index)=>{
+        return `<li>这是第${index}个li</li>`
+    }).join("");
+}
+// 显示区域高度/内容总高度 = 滚动条高度/滚动轨道高度
+// 滚动条高度 = 显示区域高度/内容总高度*滚动轨道高度;
+
+// 自定义滚动条
+{
+    let wrap = document.querySelector(".wrap");
+    let list = document.querySelector(".list");
+    let scrollBar = document.querySelector(".scrollBar span");
+
+
+    // 按照比例设置滚动条高度
+    let scrollBarH = wrap.clientHeight/list.offsetHeight*wrap.clientHeight;
+    css(scrollBar,"height",scrollBarH);
+    
+    // 滚动比例计算
+   
+    let scrollBarMax = wrap.clientHeight - scrollBar.offsetHeight;
+    let innerMax = list.offsetHeight - wrap.clientHeight;
+    let scale = scrollBarMax/innerMax;// 内容移动最大距离/滚动条移动最大距离
+    console.log(scale);    
+    /*
+        滚动条移动距离/滚动条移动最大距离 = 内容移动距离/内容移动最大距离 
+        内容移动距离 = 滚动条移动距离/(内容移动最大距离/滚动条移动最大距离)
+    */
+
+    // 滚动条拖拽
+    let startEl = 0;
+    let startMouse = 0;
+    let move = (e)=>{
+        let nowMouse = e.clientY;
+        let disMouse = nowMouse - startMouse;
+        let nowY = disMouse + startEl;
+
+        // 限制滚动条范围
+        nowY = Math.max(0,nowY);// 最小值限制
+        nowY = Math.min(wrap.clientHeight - scrollBar.offsetHeight,nowY);// 最大值限制
+        css(scrollBar,"top",nowY);
+        css(list,"top",-nowY/scale);
+    };
+    scrollBar.addEventListener("mousedown",(e)=>{
+        startMouse = e.clientY;
+        startEl = css(scrollBar,"top");
+        document.addEventListener("mousemove",move);
+        document.addEventListener("mouseup",()=>{
+            document.removeEventListener("mousemove",move);
+        },{once:true});
+        e.preventDefault();
+    });
+}
+</script>
+</body>
+</html>

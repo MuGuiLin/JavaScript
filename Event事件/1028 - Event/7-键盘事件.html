@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<input type="text" id="txt" />    
+<script>
+// // 键盘摁下    
+// window.addEventListener("keydown",(e)=>{
+//     console.log(e.keyCode); // 键值
+// });
+// 只能输入数字
+{
+    let txt = document.querySelector("#txt");
+    txt.addEventListener("keydown",(e)=>{
+        console.log(e.keyCode);
+        console.log(e.key);
+        if((e.keyCode < 48
+        || e.keyCode > 57)
+        && e.keyCode != 8){ // 非数字
+            e.preventDefault();
+        }
+    });
+}
+</script> 
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+    <div class="box">
+      <div class="arrs">
+        var arr = [ '100px', 'abc'-6, [], -98765, 34, -2, 0, '300', ,
+        function(){alert(1);}, null, document, [], true, '200px'-30,'23.45元',
+        5, Number('abc'), function(){ alert(3); }, 'xyz'-90 ];
+      </div>
+      <!-- 
+          所有的数字：-98765,34,-2,0,5
+          可以转数字的是：100px,-98765,34,-2,0,300,23.45元,5
+          最大值是：300
+          NaN的位置是：1,14,17,19
+       -->
+      <div class="screen">
+        <p id="p1"></p>
+        <p id="p2"></p>
+        <p id="p3"></p>
+        <p id="p4"></p>
+      </div>
+    </div>
+
+    <script>
+            var arr = [
+              "100px",
+              "abc" - 6,
+              [],
+              -98765,
+              34,
+              -2,
+              0,
+              "300",
+              ,
+              function() {
+                alert(1);
+              },
+              null,
+              document,
+              [],
+              true,
+              "200px" - 30,
+              "23.45元",
+              5,
+              Number("abc"),
+              function() {
+                alert(3);
+              },
+              "xyz" - 90
+            ];
+            /*
+            
+               所有的数字：-98765,34,-2,0,5
+               可以转数字的是：100px,-98765,34,-2,0,300,23.45元,5
+               最大值是：300
+               NaN的位置是：1,14,17,19
+
+            */
+
+            // 查找所有的数字
+            // for(var i = 0; i < arr.length; i++){
+            //     if(typeof arr[i] == "number"
+            //     && arr[i] == arr[i]){// arr[i] === arr[i] NaN 不等于自己 如果自己等于自己说明不是NaN 
+            //       console.log(arr[i]);
+            //     }
+            // }  
+
+            // 可以转数字的是：100px,-98765,34,-2,0,300,23.45元,5
+            // for(var i = 0; i < arr.length; i++){
+            //    if(!isNaN(parseFloat(arr[i]))){
+            //       console.log(arr[i]);
+            //    }
+            // }
+
+            // var maxNub = -Infinity; // Infinity 数字中的特殊值 Infinity无穷大 -Infinity 无穷小 
+
+            // 100,-98765,34,-2,0,300,23.45,5
+            // for(var i = 0; i < arr.length; i++){
+            //    var nub =  parseFloat(arr[i])
+            //    if(!isNaN(nub)
+            //    && maxNub < nub){
+            //       //console.log(arr[i]);
+            //       /*
+            //         用 maxNub 和数字中的每一位去比较
+            //      */
+            //       // 如果 nub 比 maxNub 大，就把 nub 的值 存入 maxNub 中
+            //        maxNub = nub; 
+            //    }
+            // }
+            // // maxNub 和数组中每一位比较过后 maxNub 中保留就是 数组中的最大值
+            // console.log(maxNub);
+
+            // NaN的位置是：1,14,17,19
+            for(var i = 0; i < arr.length; i++){
+                if(typeof arr[i] == "number"
+                && isNaN(arr[i])){
+                  console.log(i);
+                }
+            }      
+    </script>
+  </body>
+</html>

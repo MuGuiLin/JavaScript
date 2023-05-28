@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>鼠标事件</title>
+
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        .ul {
+            padding: 10px 20px;
+            margin: 50px auto;
+            border: 1px solid gray;
+            width: 300px;
+        }
+
+        .ul li {
+            margin: 10px auto;
+            padding-left: 20px;
+            line-height: 32px;
+            border: 1px solid gray;
+            list-style: none;
+        }
+
+        .move{
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 0, 0.5);
+            border: 1px solid gray;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>鼠标事件</h1>
+    <hr>
+
+    <pre>
+
+    鼠标事件：MouseEvent
+        onclick 鼠标单击时触发 当用户点击某个对象时调用的事件句柄。
+        ondblclick 鼠标双击时触发 当用户双击某个对象时调用的事件句柄。
+
+        onmousedown: 鼠标按下时触发
+        onmouseup: 鼠标抬起时触发 按键被松开。
+
+        onmouseenter: 鼠标移入时触发（要冒泡） 当鼠标指针移动到元素上时触发。
+        onmouseleave: 鼠标移出时触发（要冒泡）当鼠标指针移出元素时触发
+
+        onmouseover: 鼠标移入时触发（不冒泡） 当鼠标指针移动到元素上时触发。
+        onmouseout: 鼠标移出时触发（不冒泡）当鼠标指针移出元素时触发
+
+        onmousemove: 鼠标移动时触发
+
+        oncontextmenu: 事件在元素中用户右击鼠标时触发并打开上下文菜单。
+
+    滚轮事件：WheelEvent
+        onmousewheel: 鼠标滚轮滚动时触发
+    </pre>
+
+    <ul class="ul" id="ul1">
+        <li>第一个li</li>
+        <li>第二个li</li>
+        <li>第三个li</li>
+        <li>第四个li</li>
+        <li>第五个li</li>
+    </ul>
+
+    <ul class="ul" id="ul2">
+        <li>第一个li</li>
+        <li>第二个li</li>
+        <li>第三个li</li>
+        <li>第四个li</li>
+        <li>第五个li</li>
+    </ul>
+
+    <div class="move" id="move"></div>
+
+
+    <script>
+
+        {
+            // mouseover 移入事件和 mouseout 移出事件 都有冒泡事件，所以导至给ul加的事件，在移动到li也会向上冒泡触发到ul的事件
+
+            const ul1 = document.querySelector('#ul1');
+
+            ul1.addEventListener('mouseover', (e) => {
+                // console.log(e.srcElement)
+                e.srcElement.style['background'] = ['red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'purple'][parseInt(Math.random() * 6)];
+            });
+
+            ul1.addEventListener('mouseout', (e) => {
+                // console.log(e);
+                e.target['style']['background'] = '';
+            });
+
+
+
+
+            // mouseenter 移入事件和 mouseleave 移出事件 当移动到li不会向上冒泡，性能更佳
+            const ul2 = document.querySelector('#ul2');
+
+            ul2.addEventListener('mouseenter', (e) => {
+                console.log(e);
+                e.srcElement.style['background'] = ['red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'purple'][parseInt(Math.random() * 6)];
+            });
+
+            ul2.addEventListener('mouseleave', (e) => {
+                e.target['style']['background'] = '';
+            });
+
+            window.oncontextmenu = function (e) {
+                //取消默认的浏览器自带右键 很重要！！
+                e.preventDefault();
+                console.log(e);
+            };
+
+
+            document.documentElement.addEventListener('mousewheel', (e) => {
+                console.log(e);
+            });
+
+        };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>智能社——http://www.zhinengshe.com</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <style>
+        .on{ background: #f60; color: #fff}
+        .box div{
+            width:200px;
+            height:200px;
+            border: 1px solid #000;
+            display: none;
+        }
+    </style>
+    <script>
+        //选项卡
+        class Tab{
+            constructor(id){
+                this.oBox=document.getElementById(id);
+                this.aBtn=this.oBox.getElementsByTagName('input');
+                this.aDiv=this.oBox.getElementsByTagName('div');
+                this.iNow=0;
+                this.init();
+            }
+            init(){
+                for(let i=0; i<this.aBtn.length; i++){
+                    this.aBtn[i].onclick=function(){
+                        this.iNow=i;
+                        this.hide();
+                        this.show(i);
+                        document.title=this.iNow;
+                    }.bind(this);
+                }
+            }
+            hide(){
+                for(let i=0; i<this.aBtn.length; i++){
+                    this.aBtn[i].className='';
+                    this.aDiv[i].style.display='none';
+                }
+            }
+            show(index){
+                this.aBtn[index].className='on';
+                this.aDiv[index].style.display='block';
+            }
+        }
+        //继承
+        class AutoTab extends Tab{
+            next(){
+                this.iNow++;
+                if(this.iNow==this.aBtn.length)this.iNow=0;
+                this.hide();
+                this.show(this.iNow);
+            }
+        }
+
+        window.onload=function(){
+            new Tab('box');
+            var at=new AutoTab('box2');
+
+            document.onclick=function(){
+                at.next();
+            };
+        };
+    </script>
+</head>
+<body>
+    <div id="box" class="box">
+        <input class="on" type="button" value="aaa">
+        <input type="button" value="bbb">
+        <input type="button" value="ccc">
+        <div style="display: block;">1111</div>
+        <div>2222</div>
+        <div>3333</div>
+    </div>
+    <div id="box2" class="box">
+        <input class="on" type="button" value="aaa">
+        <input type="button" value="bbb">
+        <input type="button" value="ccc">
+        <div style="display: block;">1111</div>
+        <div>2222</div>
+        <div>3333</div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

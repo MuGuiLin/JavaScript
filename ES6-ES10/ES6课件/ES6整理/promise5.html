@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>智能社——http://www.zhinengshe.com</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <style>
+
+    </style>
+    <script>
+        function ajax(url,fnSucc,fnFail){
+            var oAjax=new XMLHttpRequest();
+            oAjax.open('GET',url,true);
+            oAjax.send();
+            oAjax.onload=function(){
+                if(oAjax.readyState==4 && oAjax.status==200){
+                    fnSucc(oAjax.responseText)
+                }else{
+                    fnFail(oAjax.status);
+                }
+            };
+        }
+        window.onload=function(){
+            let oBtn=document.getElementById('btn1');
+            let oBox=document.getElementById('box1');
+
+            oBtn.onclick=function(){
+                let p1=new Promise(function(resolve,reject){
+                    ajax('a.txt',function(str){
+                        resolve(str);
+                    },function(str){
+                        reject(str);
+                    });
+                });
+
+                p1.then(function(str){
+                    oBox.innerHTML=str;
+                },function(str){
+                    oBox.innerHTML=str;
+                });
+
+            };
+        };
+    </script>
+</head>
+<body>
+<input type="button" value="aaa" id="btn1">
+<div id="box1"></div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

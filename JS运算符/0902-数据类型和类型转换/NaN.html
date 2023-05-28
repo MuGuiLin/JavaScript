@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var num = 123;
+        var num2 = Number('456a');
+
+        var num3 = num+num2;
+
+        console.log(num3)
+
+
+        // 人格分裂 不和任何值相等
+        if(num2 == NaN){
+            console.log('相等')
+        }else{
+            console.log('不相等')
+        }
+
+
+        // 它是一个不是数字的数字类型！
+        console.log(typeof NaN)
+
+        // 判断是否是NaN
+        // isNaN()
+
+        // isNaN(num2) true
+        // 如果不是NaN 返回false
+        if(isNaN(num2)){
+            console.log('num2是一个nan')
+        }
+
+
+
+        // 是数字
+        // isNaN 在判断之前 会给 字符串转成数字（ 调用Number方法）
+        // console.log(isNaN('123'))
+        console.log(isNaN('123a'));
+
+
+        
+
+
+
+    </script>
+</body>
+</html>

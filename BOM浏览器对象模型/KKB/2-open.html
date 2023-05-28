@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<button id="btn">按钮</button>    
+<script>
+/*
+    window.open(); 打开一个新窗口
+        
+*/
+
+{
+    let btn = document.querySelector("#btn");
+    btn.onclick = function(){
+        let win = window.open("http://www.baidu.com","_blank","width=200,height=200,menubar=yes,resizable = no,titlebar = no,left = 500,top = 500");
+        // console.log(win.close());
+        /*
+            - _blank 新窗口打开
+            - _self 当前窗口打开
+            -
+        */
+       setTimeout(()=>{
+            win.close();
+            window.close();
+       },3000);
+    };
+}
+</script>    
+</body>
+</html>

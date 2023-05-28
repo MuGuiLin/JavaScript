@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div{
+            width: 200px;
+            height: 200px;
+            background: red;
+            margin: 100px auto;
+        }
+        p{
+            width: 100px;
+            height: 100px;
+            background: blue;
+            margin: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <p></p>
+    </div>
+    <script>
+        var div=document.querySelector('div');
+
+        // 如果鼠标移入或者移出 子元素 范围 
+        // mouseover 和 mouseout  会触发~
+
+        div.addEventListener('mouseover',function(){
+            console.log('移入了')
+        })
+
+        div.addEventListener('mouseout',function(){
+            console.log('移出了')
+        })
+        
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>日期推算</h1>
+    <input type="text">年
+    <input type="text">月
+    <input type="text">日
+    <p>相差的天数<input type="text" value="100"></p>
+    <button>计算</button>
+    <hr>
+    计算结果 <span>2019-4-10</span>
+    <script>
+        /*
+            初始化 年月日
+                1. 创建日期对象
+                2. 取出 年 月 日 进行赋值给value
+        */
+
+        //如果不给参数，那么这里就是系统的当前时间
+        var date =  new Date();
+        var input = document.querySelectorAll('input');
+        var btn = document.querySelector('button');
+        var span = document.querySelector('span');
+        
+        //初始化年月日，默认设置为今天
+        init();
+        function init(){
+            input[0].value = date.getFullYear();
+            input[1].value = date.getMonth() + 1;
+            input[2].value = date.getDate();
+        }
+
+        btn.onclick = function(){
+            var txtYear = input[0].value;
+            var txtMonth = input[1].value - 1;
+            var txtDate = input[2].value;
+
+            var discount = input[3].value;
+            // console.log(txtYear, txtMonth, txtDate, discount);
+            
+            var dis = 1000 * 60 * 60 * 24 * discount;
+            date.setFullYear(txtYear);
+            date.setMonth(txtMonth);
+            date.setDate(txtDate);
+
+            // console.log(date);
+            date.setMilliseconds(dis);
+            // console.log(date);
+
+            /*
+                1s = 1000ms
+                1分钟 = 60 * 1000
+                一小时 = 60 * 1000 * 60
+                一天 = 24 * 60 * 60 * 1000
+            */
+            console.log(date);
+            span.innerHTML = date.getFullYear() + '年' + (date.getMonth() + 1 ) + '月' + date.getDate() + '日';
+        }
+    </script>
+</body>
+</html>

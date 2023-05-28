@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            position: absolute;
+            left: 0px;
+            top: 100px;
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<button>跑</button>
+<button>停</button>
+<div id="box"></div>
+<script src="mTween.js"></script>
+<script> 
+/*
+"rotate",
+"rotateX",
+"rotateY",
+"rotateZ",
+"translateX",
+"translateY",
+"translateZ",
+"scale",
+"scaleX",
+"scaleY",
+"skewX",
+"skewY"
+*/ 
+(function(){
+    var btns = document.querySelectorAll("button");
+    var box = document.querySelector("#box");
+    css(box,"rotate",30);
+    /*
+        transform 相关的操作的如果需要通过css方法获取，一定使用 css 设置
+    */
+    btns[0].onclick = function(){
+        console.log(css(box,"rotate"));
+    };
+})();
+</script>
+</body>
+</html>

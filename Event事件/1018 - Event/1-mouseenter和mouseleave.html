@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            width: 200px;
+            border: 10px solid #000;
+            padding: 10px; 
+        }
+        .list li {
+            font: 14px/30px "宋体";
+            border-bottom: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+<ul class="list">
+    <li>第一个li</li>
+    <li>第二个li</li>
+    <li>第三个li</li>
+    <li>第四个li</li>
+</ul>  
+<script>
+{
+    let list = document.querySelector(".list");
+    // list.addEventListener("mouseover",()=>{
+    //     console.log("移入");
+    // });
+    // list.addEventListener("mouseout",()=>{
+    //     console.log("移出");
+    // });
+    list.addEventListener("mouseenter",()=>{
+        console.log("移入");
+    });
+    list.addEventListener("mouseleave",()=>{
+        console.log("移出");
+    });
+}
+</script>  
+</body>
+</html>

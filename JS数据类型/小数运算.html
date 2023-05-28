@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>JavaScript中数字的 精度处理 和 小数运算</title>
+	<style type="text/css">
+		body {
+			font-size: 16px;
+		}
+
+		h1 {
+			text-align: center;
+		}
+		main{
+			margin: auto;
+			width: 1024px;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>JavaScript中数字的 精度处理 和 小数运算</h1>
+	<hr />
+	<main>
+		<h3>精度处理：</h3>
+		<pre>
+			大家都知道js里面的toFixed保留小数的时候，是四舍五入的，但是项目需求是不要四舍五入，即：小数点后第三位如果有值则进一。
+
+			例如:小数是：10.521  处理之后结果却是10.53；
+			
+			另外，js 有精度的问题；
+				alert(5.97+0.01);   //结果不是5.98哦  
+			
+			parseFloat() 函数可解析一个字符串，并返回一个浮点数。
+			toFixed(n) 把数字转换为字符串，结果的小数点后有指定位数的数字。
+
+			方法1、小数转为整数
+			下退 Math.floor(12.9999) = 12;
+			上进 Math.ceil(12.1) = 13; 
+			
+			四舍五入 Math.round(12.5) = 13;
+					Math.round(12.4) = 12;
+			
+			方法2、小数位数控制 
+			保留到整数：exam = Math.round(exam);
+			保留一位小数：exam = Math.round(exam * 10) / 10;
+			保留二位小数：exam = Math.round(exam * 100) / 100;
+			保留三位小数：exam = Math.round(exam * 1000) /1000;
+			其它依次类推。
+		</pre>
+
+
+		<h3>小数运算：</h3>
+		<pre>
+			console.log(0.1 + 0.2); //结果不是0.3哦  
+			console.log(5.97 + 0.01); //结果不是5.98哦
+		</pre>
+	</main>
+</body>
+<script type="text/javascript">
+
+	/**
+	 * 小数的处理
+	*/
+	var num = "10";
+	num = parseFloat(num);
+
+	console.log(num);
+	console.log(num.toFixed(2)); //保留两位小数：(四舍五入)
+
+	var num = 5.9758966564164646;
+	console.log(num.toFixed(2)); //保留两位小数：(四舍五入)
+
+	// 方式1：小数转为整数
+	function decimalToInteger(num) {
+		const str = num + "";
+		const dian = str.indexOf(".");
+		if (dian == -1) {
+			return num.toFixed(2);
+		} else {
+			const len = str.substring(dian + 1, str.length);
+			return len.length >= 3 ? Number(num.toFixed(2)) + 0.01 : num.toFixed(2);
+		}
+	};
+	console.log("原数值：10.5213四舍五入后：", decimalToInteger(10.5213));
+
+	// 方式2：小数位数控制
+	function decimalControl(num) {
+		const str = num + "";
+		const dian = str.indexOf(".");
+		if (dian == -1) {
+			return num.toFixed(2);
+		} else {
+			const len = str.substring(dian + 1, str.length);
+			return len.length >= 3
+				? ((Number(num.toFixed(2)) + 0.01) * 100000000000) / 100000000000	// js小数计算小数点后显示多位小数
+				: num.toFixed(2);
+		}
+	};
+	console.log("原数值：5.9708966564164646四舍五入后：", decimalControl(5.9708966564164646));
+
+	/**
+	 * 小数的计算
+	*/
+	console.log('0.1 + 0.2 = ', 0.1 + 0.2); //结果不是0.3哦！！
+	console.log('处理后的：0.1 + 0.2 = ', parseFloat((0.1 + 0.2).toFixed(5)));
+
+	console.log('5.97 + 0.01 = ', 5.97 + 0.01); //结果不是5.98哦！！
+	console.log('处理后的：5.97 + 0.01 = ', parseFloat((5.97 + 0.01).toFixed(5)));
+
+</script>
+
+</html>

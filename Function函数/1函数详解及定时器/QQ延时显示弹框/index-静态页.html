@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>QQ延时面板</title>
+    <style>
+        .wrap{
+            width: 300px;
+            height: 700px;
+            border: 1px solid #000;
+            box-shadow: 0 0 10px #000;
+            position: absolute;
+            right: 40px;
+            top: 10px;
+            border-radius: 10px;
+        }
+        .user{
+            height: 150px;
+            border-bottom: 1px solid rgb(70, 120, 212);
+        }
+        .user a{
+            text-decoration: none;
+            color: #000;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+        .avatar{
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 2px solid rgb(57, 150, 236);
+            position: absolute;
+            left: 10px;
+            top: 20px;
+            cursor: pointer;
+        }
+        .info{
+            width: 200px;
+            height: 150px;
+            position: absolute;
+            background-color: rgb(238, 180, 180);
+            left: -210px;
+            top: 0;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgb(243, 88, 88);
+            display: none;
+        }
+        .info p{
+            text-indent: 10px;
+            color: rgb(110, 6, 6);
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="user">
+            <a href="javascript:;">☓</a>
+            <div class="avatar">
+                <img src="./img.png" alt="">
+            </div>
+        </div>
+        <div class="info">
+            <p>昵称：开课吧</p>
+            <p>地点：北京市 朝阳区</p>
+        </div>
+    </div>
+<script>
+function $(cssSelector){
+    var els = document.querySelectorAll(cssSelector);
+    return els.length > 1?els:els[0];
+};  
+/*
+    css 方法，用来获取或设置样式
+
+    只传：el,attr 获取样式
+    el,attr,val: 设置样式
+*/  
+function css(el,attr,val){
+    if(val === undefined){
+        return getComputedStyle(el)[attr]
+    }
+    el.style[attr] = val;
+} 
+(function(){
+    var avatar = $(".avatar");
+    var info = $(".info");
+    var timer = 0;
+    // avatar.onmouseover = function(){
+    //     clearTimeout(timer);
+    //     css(info,"display","block");
+    // };
+    // avatar.onmouseout = function(){
+    //     clearTimeout(timer);
+    //     timer = setTimeout(function(){
+    //         css(info,"display","none");
+    //     },200);
+    // };
+    // info.onmouseover = function(){
+    //     clearTimeout(timer);
+    // };
+    // info.onmouseout = function(){
+    //     clearTimeout(timer);
+    //     timer = setTimeout(function(){
+    //         css(info,"display","none");
+    //     },200);
+    // };
+    info.onmouseover =  avatar.onmouseover = function(){
+        clearTimeout(timer);
+        css(info,"display","block");
+    };
+    info.onmouseout = avatar.onmouseout = function(){
+        clearTimeout(timer);
+        timer = setTimeout(function(){
+            css(info,"display","none");
+        },200);
+    };
+    // info.onmouseover = function(){
+    //     clearTimeout(timer);
+    //     css(info,"display","block");
+    // };
+    
+})()    
+</script>
+</body>
+</html>

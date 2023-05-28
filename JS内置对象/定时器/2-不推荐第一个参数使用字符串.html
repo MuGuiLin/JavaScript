@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text">
+    <button>点击执行对应函数</button>
+    <script>
+        // setTimeout('fn()',1000);
+
+        // function fn(){
+        //     console.log('这是延迟定时器');
+        // }
+        /*
+            不推荐使用字符串
+                1. 影响性能（需要解析两次）
+                    - 解析字符串
+                    - 解析函数
+                2. xss注入
+        */
+
+        var input = document.querySelector('input');
+        var btn = document.querySelector('button');
+
+        btn.onclick = function(){
+            var txt = input.value;
+
+            setTimeout(txt,1000);
+        }
+
+        function fn1(){
+            alert('这是fn1');
+        }
+        function fn2() {
+            alert('这是fn2');
+        }
+        function fn3() {
+            alert('这是fn3');
+        }
+        function fn4() {
+            alert('这是fn4');
+        }
+
+        // (function(){
+        //     while(true){
+        //         alert('123');
+        //     }
+        // })();
+    </script>
+</body>
+</html>

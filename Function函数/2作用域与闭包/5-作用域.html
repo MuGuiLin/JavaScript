@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+<script>
+var a = 10;
+window.b = 20;
+</script>    
+<script>
+a = 5;
+c = 30;
+console.log(window);
+/*
+    作用域：一条数据(参数、function、变量)可以使用(调用或修改)的范围
+
+    全局作用域: 在全局任意地方都可以使用和修改 (全局变量、全局函数)
+        全局变量: 
+            1. 声明在任意函数之外（ES6 中也要声明在任意块之外）,那么该条数据在全局任意地方都可以使用和修改(全局变量，在浏览器中运行时，都会挂载在 window 属性下)
+            2. 全局对象的属性,(window 作为 JS 在浏览器中运行的全局对象，如果调用 window 的属性 默认 window 可以省略 )
+            3. 定义变量时，如果不加 var，会被当做 window 的属性处理，也就是变成了全局变量
+    
+    局部作用域: 只能在某个范围内使用 和 修改
+        1. function (函数)作用域
+        2. 块级作用域 (ES6 新增)
+
+    如何区分一条数据的作用域：如何知道一条数据的作用范围呢，观察这条数据声明在哪    
+*/
+console.log(a);
+</script>    
+</body>
+</html>

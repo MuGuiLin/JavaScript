@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>自定义右键</title>
+    <style>
+        body {
+            width: 100vw;
+            height: 100vh;
+            background: url(./imgs/bg.png) no-repeat;
+            background-size: 100% 100%;
+            position: relative;
+        }
+
+        #list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            width: 180px;
+            height: 200px;
+            position: absolute;
+            background-color: #fff;
+            display: none;
+        }
+
+        #logo {
+            width: 200px;
+            height: 48px;
+            background: url(./imgs/logo.png) no-repeat;
+            margin: 50px auto;
+            position: absolute;
+            left: 50%;
+            margin-left: -100px;
+            top: 50px;
+        }
+
+        #list li {
+            width: 100%;
+            height: 50px;
+            line-height: 50px;
+            text-indent: 56px;
+            color: #f5726c;
+        }
+
+        #list li:nth-child(1) {
+            background: url(./imgs/download.png) no-repeat 20px 16px;
+        }
+
+        #list li:nth-child(2) {
+            background: url(./imgs/remove-icon.png) no-repeat 20px 16px;
+        }
+
+        #list li:nth-child(3) {
+            background: url(./imgs/move-icon.png) no-repeat 20px 15px;
+        }
+
+        #list li:nth-child(4) {
+            background: url(./imgs/rename-icon.png) no-repeat 20px 14px;
+        }
+
+        #list li:hover {
+            background-color: #fde9e9;
+            color: #e6423c;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="logo"></div>
+    <ul id="list">
+        <li>下载</li>
+        <li>删除</li>
+        <li>移动到</li>
+        <li>重命名</li>
+    </ul>
+    <script src="./fns.js"></script>
+    <script>
+        let list = document.querySelector('#list');
+        document.addEventListener('contextmenu', (e) => {
+            console.log(e)
+            e.preventDefault();
+            css(list, 'display', 'block');
+            let maxWidth = document.body.offsetWidth - css(list, 'width');
+            let maxHeight = document.body.offsetHeight - css(list, 'height');
+            
+            let l = e.clientX;
+            let t = e.clientY;
+            if (l > maxWidth) {
+                l = l - css(list, 'width');
+            }
+            if (t > maxHeight) {
+                t = t - css(list, 'height');
+            }
+            css(list, 'left', l);
+            css(list, 'top', t);
+            console.log(e.clientY,css(list,'top'))
+        })
+        document.addEventListener('click', (e) => {
+            if (e.target.parentElement === list) {
+                return;
+            } else {
+                css(list, 'display', 'none');
+            }
+        })
+    </script>
+</body>
+
+</html>

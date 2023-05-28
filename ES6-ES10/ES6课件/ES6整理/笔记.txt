@@ -1,0 +1,491 @@
+ES6:
+	ECMAScript6
+
+js:
+	组成部分: ECMA  DOM BOM
+
+	javaScript
+	actionScript
+-------------------------------------------
+什么是ECMA?
+	ECMA是标准， js是实现
+		类似 HTML5是标准，IE10， chrome、FF都是实现
+		换句话说, 将来也有可能其他 xxxScript来实现ECMA
+
+ECMAscript  简写  ECMA 或者 ES
+
+	目前版本：
+		低级浏览器: 主要支持 ES3.1
+		高级浏览器: 正在从ES5 过渡到 ES6
+历史:
+	1996	ES1.0	js稳定	Netscape将js提交给ECMA组织， ES正式出现
+	1998	ES2.0	ES2.0正式发布
+	1999	ES3.0	ES3被浏览器广泛支持
+	2007	ES4.0	ES4过于激进，被废除了
+	2008	ES3.1	4.0退化为严重缩水版的 3.1, 代号	Harmony（和谐）
+	2009	ES5.0	ES5正式发布了，同时公布JavScript.next 也就后来 6.0
+	2011	ES5.1	ES5.1 成为了ISO国际标准
+	2013.3	ES6.0	ES6.0 制定草案
+	2013.12 ES6.0	ES6.0 草案发布
+	2015.6	ES6.0	ES6.0预计发布正式版， 同时Javascript.next指向 ES7.0
+------------------------------------------
+兼容性:
+	目前为止 ES5 ES6 支持情况，凑合
+
+	nodeJs用的就是chrome内核， 在node中可以使用ES5 ES6很多特性
+
+	ES5和ES6已经逐渐沦为后台语言
+------------------------------------------
+在浏览器里面如何使用？
+	需要用到编译工具
+
+	babel	不说了
+	------------------------------------------
+	traceur	——由Google出的编译器，把ES6语法编译为ES5
+
+	bootstrap	引导程序，跟css里面认识bootstrap不一样
+
+在网页上使用:
+	用法一:	√
+		<script src="traceur.js"></script>
+		<script src="bootstrap.js"></script>
+		<script type="module">
+			
+		</script>
+	用法二:
+		直接在线编译——主要用于测试
+		http://babeljs.io/repl/
+		https://google.github.io/traceur-compiler/demo/repl.html
+	用法三:
+		直接在node里面使用
+
+		a). 直接用，需要添加 'use strict'
+		b). node --harmony_desctructuring  xxx.js
+------------------------------------------------------------------------
+玩ES6时候:
+	先不用任何引入东西，测试，如果失败了，引入traceur
+------------------------------------------------------------------------
+1. 定义变量 ,let 	——已经被浏览器实现了
+	var a=12;
+	
+	let——用来定义变量
+
+	let a=12;
+
+	代码块:	{} 包起来的代码， 形成了一个作用域，块级作用域
+		比如: if for while
+
+	特点: 只能在代码块里面使用
+
+	var 只有函数作用域
+		
+
+	a). let具备块级作用域
+	b). 不允许重复声明
+		let a=12;
+		let a=5;	//错的
+	总结: 其实let才接近其他语言的变量
+
+
+	用处：
+		封闭空间：
+			(function(){
+				var a=12;
+			})()
+		现在：
+			{
+				let a=12;
+			}
+
+		i问题:
+
+	总结: 块级作用域，其实就是 匿名函数立即调用
+------------------------------------------------------------------------
+const——用来定义 常量
+	一旦赋值，以后再也修改不了了
+
+	const a-=12;
+	a=15	//报错
+
+	注意:  const必须给初始值， 不能重复声明
+		因为以后再也没法赋值了，所以声明的时候一定得有值
+
+	用途: 为了防止意外修改变量
+		比如引入库名，组件名
+------------------------------------------------------------------------
+字符串连接:
+	之前:
+		var str='';
+		var str=""
+
+	反单引号:	var str= ``	字符串模板
+
+	之前: 	'abc'+变量名+'ef'
+	现在:	`abc${变量名}ef`
+------------------------------------------------------------------------
+解构赋值:
+	var [a,b,c]=[12,5,101];
+
+	var {a,b,c}={b:5,a:12,c:101};	跟顺序无关
+
+	
+	模式匹配：——左侧的样子，需要和右侧一样
+		var [a,[b,c],d]=[12,[1,2],5];
+
+		var [{a,e},[b,c],d]=[{e:'eeee', a:'aaaa'},[1,2],5];
+
+	交互——数据解析:
+		[{title:'', href:'', img:""}]
+
+	解构赋值还可以给默认值:
+		var json={};
+
+		var a=json.a || 12
+
+		语法:
+		var {time=12,id=0}={};
+
+		运动框架:
+		function move(obj,json,options){
+			options=options || {};
+			options.time=options.time || 300;
+		}
+
+		function move(obj,json,{time=300}={}){
+
+		}
+-----------------------------------------------
+复制数组:
+	a). 循环
+	b). Array.from(arr)
+	c). var arr2=[...arr];
+
+	function show(...args){
+	    	args.push(5);
+	    	console.log(args);
+	}
+	show(1,2,3,4);
+-----------------------------------------------
+循环：
+	普通for
+	for in
+
+	for of	循环, 可以循环数组，不能循环json
+		真正目的为了循环  map对象
+
+遍历(迭代、循环)整个对象， 	表现  类似 for in
+
+	var arr=['apple','banana','orange','pear'];
+
+Map对象:
+	和json相似，也是一种key-value形式
+	Map对象为了和for of循环配合而生的
+
+	var map=new Map();
+
+	设置:
+	map.set(name,value);
+
+	获取：
+	map.get(name)
+
+	删除：
+	map.delete(name)
+
+	遍历map:
+		不能使用for in，没有效果
+		
+		for(var name of map){
+			console.log(name); // a,apple   b,banana
+		}
+		for(var [key,value] of map){
+			console.log(key, value); // key value
+		}
+
+		for(var name of map.entries()){
+			console.log(name);
+		}
+
+		for(var [key,value] of map.entries()){
+			console.log(name);
+		}
+
+		for(var key of map.keys()){	//只是循环key
+			console.log(key);
+		}
+
+		for(var val of map.values()){     //只是循环value
+			console.log(val);
+		}
+
+	for.. of也可以循环数组:
+		只循环值:
+			for(var value of arr){}
+		只循环索引:
+			for(var key of arr.keys()){}
+		索引和值都循环：
+			for(var some of arr.entries()){}
+--------------------------------------------------------------
+函数:
+	之前:
+		function show(){
+			alert(1);
+		}
+		show();
+		----------------------
+		function show(a){
+			return a;
+		}
+		show(12);
+		----------------------
+		function show(a,b){
+			return a+b;
+		}
+		show(12,5);
+箭头函数：
+	=>
+
+	var show=a=>a;		function show(a){return a};
+	
+	var show=(a,b)=>a+b;		function show(a,b){return a+b};
+
+	var show=()=>'welcome';	function show(){return 'welcome'}
+
+	var show=() => {		function show(){
+	    alert(1);				alert(1);
+	}				}
+
+	注意：
+		this问题， this指向了window
+		arguments， 不能使用了
+--------------------------------------------------
+对象:
+	对象语法简洁化
+
+	单体模式:
+		json
+		var name='abb';
+		var age=101;
+		var preson={
+		    	name,
+		    	age,
+		    	showName(){
+		       		return this.name;
+		    	},
+		    	showAge(){
+		        		return this.age;
+		   	 }
+		}
+面向对象:
+	之前：
+		人类	工人类
+		function Person(name,age){	//类、构造函数
+		    	this.name=name;
+		    	this.age=age;
+		}
+		Person.prototype.showName=function(){
+		    	return this.name;
+		};
+		Person.prototype.showAge=function(){
+		    	return this.age;
+		};
+
+	ES6:
+		类	class
+		构造函数	constructor	生成完实例以后，自己就执行的
+
+		class Person{ //类
+		    constructor(name,age){
+		        	this.name=name;
+		        	this.age=age;
+		    }
+		    showName(){
+		        	return this.name;
+		    }
+		    showAge(){
+		        	return this.age;
+		    }
+		}
+
+	继承:
+		之前:  子类.prototype=new 父类();
+
+		ES6: 
+		class Worker extends Person{
+			constructor(){
+				super()	//调用父级构造
+			}
+        		}
+
+	队列类:
+		[1,2,3,4]
+
+		var q=new Queue([1,2,3,4]);
+
+		q.shift();
+
+		q._queue
+	-----------------------------------
+--------------------------------------------------------
+模块化：——必须引入traceur 和bootstrap， type必须写成 module
+	seajs	requireJs
+
+	ES6自带模块化
+
+	如何定义(导出)模块:
+		const a=12;
+
+		export default a;
+		---------------------------
+		const a=5;
+		const b=12;
+
+		export default {a,b};
+	如何使用(引用):
+		import modA from './a.js';
+--------------------------------------------------------
+异步: 多个操作可以同时进行
+	ajax
+	
+	ajax(url,function(){
+		//1
+	},fnFail);
+	//2
+--------------------------------------------------------
+Promise:——承诺
+
+	就是一个对象，用来传递异步操作的数据(消息)
+
+	pending（等待、处理中）—> Resolve(完成、fullFilled)
+				  —> Rejected(拒绝、失败)
+使用：
+	var p1=new Promise(function(resolve,reject){
+		//resolve  成功了
+		//reject    失败了
+        	});
+
+	var p1=new Promise(function(resolve,reject){
+		if(异步处理成功了){
+			resolve(成功数据)
+		}else{
+			reject(失败原因)
+		}
+        	});
+
+	p1.then(成功(resolve),失败(reject))	√
+	--------------------------------------------
+	
+	p1.catch——用来捕获错误
+	
+	--------------------------------------------
+	Promise.all——全部，用于将多个promise对象，组合，包装成一个全新的promise实例
+		Promise.all([p1,p2,p3...]);
+
+		所有的promise对象，都正确，才走成功
+		否则，只要有一个错误，是失败了
+	--------------------------------------------
+	Promise.race——返回也是一个promise对象
+		最先能执行的promise结果， 哪个最快，用哪个
+	--------------------------------------------
+	Promise.reject()	——生成错误的一个promise
+
+	--------------------------------------------
+	Promise.resolve()	——生成一个成功的promise对象
+		语法：
+			Promise.resolve(value)
+			Promise.resolve(promise)
+-------------------------------------------------------
+Generrator——生成器
+	是一个函数
+	
+	可以遍历， Generrator就是一个状态机
+
+	语法:
+		function show(){	//普通函数
+		
+		}
+
+		function* show(){	//generator函数
+			yield xxx
+		}
+
+	形式上:
+		a). 函数名字前面有 *
+		b). 函数内部使用 yield语句
+
+	function* show(){
+	    	yield 'Hello';
+	    	yield 'World';
+	    	yield 'Es6';
+	}
+	var res=show();
+
+	res.next()	{value:'Hello', done:false}
+	res.next()	{value:'World', done:false}
+	res.next()	{value:'Es6', done:false}
+	res.next()	{value:'undefined', done:true}
+
+	总结： 每次返回一个value和done结果
+		value，每次yield后面值
+		done是一个布尔值，代表是否遍历结束
+
+	yield是否有返回值？
+		yield语句本身没有返回值，或者每次返回undefined
+
+	next可以带参数？
+		给上一个yield值
+
+	for....of循环: 循环generator函数
+
+	generator函数放到对象里面：
+		var json={
+			*show(){
+				yield ‘xx’
+				yield ‘xx’
+			}
+		}
+
+		
+		
+	
+
+	
+
+		
+		
+		
+	
+	
+	
+
+		
+
+	
+	
+	
+	
+
+
+	
+		
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+    <div class="box">
+      <div class="arrs">
+        var arr = [ '100px', 'abc'-6, [], -98765, 34, -2, 0, '300', ,
+        function(){alert(1);}, null, document, [], true, '200px'-30,'23.45元',
+        5, Number('abc'), function(){ alert(3); }, 'xyz'-90 ];
+      </div>
+      <!-- 
+          所有的数字：-98765,34,-2,0,5
+          可以转数字的是：100px,-98765,34,-2,0,300,23.45元,5
+          最大值是：300
+          NaN的位置是：1,14,17,19
+       -->
+      <div class="screen">
+        <p id="p1">所有的数字：</p>
+        <p id="p2">可以转数字的是：</p>
+        <p id="p3">最大值是：</p>
+        <p id="p4">NaN的位置是：</p>
+      </div>
+    </div>
+
+    <script>
+            var arr = [
+              "100px",
+              "abc" - 6,
+              [],
+              -98765,
+              34,
+              -2,
+              0,
+              "300",
+              ,
+              function() {
+                alert(1);
+              },
+              null,
+              document,
+              [],
+              true,
+              "600px" - 30,
+              "23.45元",
+              5,
+              Number("abc"),
+              function() {
+                alert(3);
+              },
+              "xyz" - 90
+            ];
+            /*
+            
+               所有的数字：-98765,34,-2,0,5
+               可以转数字的是：100px,-98765,34,-2,0,300,23.45元,5
+               最大值是：300
+               NaN的位置是：1,14,17,19
+
+            */
+
+            let p1 = document.querySelector('#p1');
+
+            // 所有的数字
+            let p1Html = [];
+            for(let i = 0; i<arr.length;i++){
+              // p1Html.push()
+              if(!isNaN(Number(arr[i])) && typeof(arr[i])=='number'){
+                p1Html.push(arr[i])
+              }
+            }
+            p1.innerHTML += p1Html;
+
+
+            // 可以转成数字的是
+            let p2 = document.querySelector('#p2');
+
+            let p2Html = [];
+            for(let i = 0; i<arr.length;i++){
+              if(!isNaN(parseInt(arr[i]))){
+                p2Html.push(arr[i])
+              }
+            }
+            p2.innerHTML += p2Html;
+
+
+            // 最大值
+            let p3 = document.querySelector('#p3');
+
+            let p3Html =-Infinity;
+            for(let i = 0; i<arr.length;i++){
+              if(Number(arr[i])>p3Html){
+                p3Html=Number(arr[i])
+              }
+            }
+            p3.innerHTML += p3Html;
+
+            // NaN的位置
+            let p4 = document.querySelector('#p4');
+
+            let p4Html =[];
+            for(let i = 0; i<arr.length;i++){
+              if(isNaN(parseInt(arr[i])) && typeof arr[i] == 'number'){
+                p4Html.push(i);
+              }
+            }
+            p4.innerHTML += p4Html;
+
+
+    </script>
+  </body>
+</html>

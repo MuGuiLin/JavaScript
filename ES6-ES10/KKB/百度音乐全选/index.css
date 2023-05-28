@@ -1,0 +1,72 @@
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+input {
+  margin: 0;
+}
+.box {
+  box-sizing: border-box;
+  margin: 30px auto;
+  width: 766px;
+  padding: 50px 142px;
+  background: #201e2b;
+  position: relative;
+}
+#wrap {
+  width: 482px;
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+#list {
+  padding-top: 10px;
+}
+#list li {
+  opacity: .8;
+}
+#list li:nth-child(2n) {
+  background: #fceef1;
+}
+#list li:hover {
+  background: #e7788d;
+  opacity: 1;
+}
+#list li.active {
+  background: #e7788d;
+}
+#list label {
+  display: block;
+  line-height: 45px;
+}
+#list label input {
+  margin: 0 20px 0 30px;
+}
+
+.footer {
+  padding: 13px 30px 10px;
+  background: #e15671;
+  font: 14px/24px "宋体";
+  color: #fff;
+  height: 24px;
+}
+input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  vertical-align: middle;
+}
+.checkAll {
+  float: left;
+ 
+}
+#checkAll {
+  margin-right: 5px;
+}
+#remove {
+  padding-left: 35px;
+  float: right;
+  color: #fff;
+  text-decoration: none;
+  background: url("images/remove.png") no-repeat;
+}

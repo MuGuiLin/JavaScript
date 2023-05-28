@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            margin: 100px auto;
+            padding: 100px;
+            width: 100px;
+            height: 200px;
+            border: 2px solid #000;
+            perspective: 500px;
+        }
+        #div {
+            position: relative;
+            width: 100px;
+            height: 200px;
+            transform-style: preserve-3d;
+        }
+        #div span {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100px;
+            height: 200px;
+            font: 80px/200px "宋体";
+            color: #fff;
+            text-align: center;
+            opacity: .5;
+        }
+        #div span:nth-child(1) {
+            background: red;
+        }
+        #div span:nth-child(2) {
+            background: blue;
+        }
+        #div span:nth-child(3) {
+            background: yellow;
+        }
+        #div span:nth-child(4) {
+            background: green;
+        }
+        #div span:nth-child(5) {
+            background: #000;
+        }
+        #div span:nth-child(6) {
+            background: pink;
+        }
+    </style>
+</head>
+<body>
+<div id="box">
+    <div id="div">
+        <span>1</span>
+        <span>2</span>
+        <span>3</span>
+        <span>4</span>
+        <span>5</span>
+        <span>6</span>
+    </div>
+</div> 
+<script>
+/*
+    Math.PI 圆周率
+    Math.tan(rad) 正切函数
+    rad 弧度 = deg/180*Math.PI;
+
+*/    
+(function(){
+    // 正N边型外角和 360
+    // 正N边型外角 = 360/N;
+    // 直角三角形  tan = 对边/邻边的比值
+    var div = document.querySelector("#div");
+    var span = div.querySelectorAll("span");
+    var spanW =  parseInt(getComputedStyle(span[0])["width"]);
+    var outDeg = 360/span.length; // 外角
+    var innerDeg = (180 - outDeg)/2; //邻边和斜边夹角
+    var tan = Math.tan(innerDeg/180*Math.PI);// innerDeg 的正切
+    var r = spanW/2*tan;// 边心距
+    var startDeg = 0;
+    span.forEach(function(item,index){
+        item.style.transform = 'rotateY('+(index*outDeg)+'deg) translateZ('+r+'px)';
+    });
+    div.style.transform =  'translateZ('+-r+'px) rotateY(0deg)';
+})();
+</script>
+</body>
+</html>

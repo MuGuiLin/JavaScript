@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<input type="text" id="txt" value="111" />
+<ul id="list">
+
+</ul>
+<script>
+{
+    let txt = document.querySelector("#txt");
+    let list = document.querySelector("#list");
+    let oldKey = "";
+    // enter 13
+    // 空格 32
+    txt.addEventListener("keydown",(e)=>{
+        if(oldKey == 13 && e.keyCode == 32
+        || oldKey == 32 && e.keyCode == 13){
+            console.log("组合成功");
+        }
+        oldKey = e.keyCode;
+    });
+    txt.addEventListener("keyup",(e)=>{
+        oldKey = "";
+    });
+}
+</script>    
+</body>
+</html>

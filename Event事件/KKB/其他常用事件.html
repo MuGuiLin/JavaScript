@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <form id="form1">
+        <input type="text" name="" id="txt">
+        <input type="submit" name="" id="sub">
+        <input type="reset" name="" id="res">
+    </form>
+    
+    <script>
+        var txt=document.querySelector('#txt');
+        var sub=document.querySelector('#sub');
+        var res=document.querySelector('#res');
+        var form1=document.querySelector('#form1');
+       
+
+        // 获取焦点时
+        txt.addEventListener('focus',function(){
+            console.log('获取焦点时')
+        })
+
+        // 在失去焦点时执行 - （执行条件：如果内容发生变化 才会触发）
+        txt.addEventListener('change',function(){
+            console.log('内容改变时')
+        })
+
+        // 在内容发生变化时触发！
+        txt.addEventListener('input',function(){
+            console.log('当内容修改时')
+        })
+
+        // 提交表单事件
+        form1.addEventListener('submit',function(e){
+            e.preventDefault();
+            console.log('提交事件')
+        })
+
+        // 重置表单事件
+        form1.addEventListener('reset',function(){
+            console.log('重置事件')
+        })
+
+
+    </script>
+</body>
+</html>

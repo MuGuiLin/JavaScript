@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>indexedDB</title>
+    <style></style>
+  </head>
+  <body>
+    <h1>indexedDB</h1>
+    <hr />
+    <div>
+      <textarea name="" id="write-txt" cols="30" rows="10"></textarea>
+      <button id="write-btn">写入存储</button>
+    </div>
+    <div>
+      <textarea name="read-txt" id="" cols="30" rows="10"></textarea>
+      <button id="read-btn">读取存储</button>
+    </div>
+    <script src="./js/db.js"></script>
+    <script>
+      const write_txt = document.querySelector("#write-txt");
+      const write_btn = document.querySelector("#write-btn");
+      const read_txt = document.querySelector("#read-txt");
+      const read_btn = document.querySelector("#read-btn");
+
+      IndexedDB.openDB("my-db-name", 1.0, (res) => {
+        console.log(res);
+      });
+
+      write_btn.onclick = () => {
+        console.log(write_txt.value, IndexedDB);
+        if (write_txt.value) {
+          IndexedDB.add("my-table-name", [{ text: write_txt.value }], (res) => {
+            console.log(res);
+          });
+        }
+      };
+
+      read_btn.onclick = () => {
+        IndexedDB.getData("my-table-name").then((res) => {
+          console.log(res);
+          read_txt.value = res || '没有数据';
+        });
+      };
+    </script>
+  </body>
+</html>

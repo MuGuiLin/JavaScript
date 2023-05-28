@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        /* 动画帧 */
+        @keyframes animate {
+             0%{
+                 left: 100px;
+                 top: 0;
+             }
+             100% {
+                left: 100px;
+                top: 100px;
+             }
+        }
+        #box {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100px;
+            height: 100px;
+            background: red;
+            animation: animate 4s 2s;
+            animation-fill-mode: both;
+        }
+        /*
+        - animation-name 动画帧名称
+        - animation-duration 动画时长
+        - animation-timing-function 动画形式 参考 transition
+        - animation-delay 动画首次执行时延迟时间 (ms||s)
+        - animation-iteration-count 动画执行次数 (count|| infinite)
+        - animation-direction 动画偶数次执行顺序 normal alternate
+        - animation-fill-mode 动画起点及结束点设置
+            - 默认 如果起点 和 计算后样式不统一，动画开始时会直接跳到起点开始执行这个动画
+            - 默认 如果终点 和 计算后样式不统一，动画结束时会直接跳回计算后样式
+            forwards 动画执行完之后，位置保持在终点
+            backwards 动画开始前，位置保持在起点
+            both: forwards + backwards;
+        */
+    </style>
+</head>
+<body>
+    <div id="box"></div>   
+</body>
+</html>

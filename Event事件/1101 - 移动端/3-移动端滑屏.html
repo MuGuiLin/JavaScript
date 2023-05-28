@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+        }
+        .box {
+            margin-top: 20vh;
+            height: 50vh;
+            border: 1px solid #000;
+            overflow: hidden;
+        }   
+        .list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <ul class="list"></ul>
+</div>
+<script src="mTween.js"></script>    
+<script>    
+// list 内容设置
+{
+    let list = document.querySelector(".list");
+    list.innerHTML = [...(".".repeat(100))].map((item,index)=>`<li>这是第${index}个li</li>`).join("");
+}
+// 滑屏处理
+{
+    let box = document.querySelector(".box");
+    let list = document.querySelector(".list");
+    let startPointY = 0;
+    let startOffset = 0;
+    css(list,"translateY",0);
+    box.addEventListener("touchstart",(e)=>{
+        let touch = e.changedTouches[0];
+        startPointY = touch.clientY;
+        startOffset = css(list,"translateY");
+        e.preventDefault();
+    });
+    box.addEventListener("touchmove",(e)=>{
+        let touch = e.changedTouches[0];
+        let nowPointY = touch.clientY;
+        let disPointY = nowPointY - startPointY;
+        console.log(disPointY + startOffset);
+        css(list,"translateY",disPointY + startOffset);
+    });
+}
+</script>
+</body>
+</html>

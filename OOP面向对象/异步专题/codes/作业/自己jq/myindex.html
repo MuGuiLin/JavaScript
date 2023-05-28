@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="./myjq.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="box">111</div>
+    <div class="box">2222</div>
+    <!-- <button class="btn" >点击</button> -->
+</body>
+<script>
+    // $(".btn").click(function(){
+
+    // })
+ //选择器；
+//  方式一 ：获取节点  ---》this
+//   let res =  $(".box");
+//   console.log(res);
+// 方式二；
+// $(function(){
+//     console.log(111);
+// })
+// 方式三 ：获取节点  ---》this
+// 传入一个对象；
+// console.log(document.querySelector(".box").length);
+// $(document.querySelector(".box"));
+// 传入类数组；
+// console.log(document.querySelectorAll(".box"));
+// $(document.querySelectorAll(".box"));
+
+// $(".box").click(function(){
+//     alert(111)
+// })
+// $(".box").on("mousemove mousedown",function(){
+//     console.log(1111);
+// })
+// console.log($(".box").eq(1));
+// $(".box").eq(0).click(function(){
+//     console.log(111);
+// })
+// let res =  $(".box");
+// console.log(res);
+// let res = $(".box").eq(0).end();
+// console.log(res);
+// css方法
+// $(".box").css("background","red");
+// $(".box").css("height",200);
+// $(".box").css("opacity",0.4);
+// $(".box").css("z-index",10);
+// $(".box").css({background:"red",height:"200px"});
+// $(".box").css("opacity",0.4);
+// 扩展；
+// $.cssNumber.wh = true;
+// $(".box").css("wh",0.4);
+$.cssHooks.wh = {
+    get(ele){
+        console.log(ele);
+        return 111
+    },
+    set(ele,value){
+        // console.log(ele,value);
+        ele.style.width = value;
+        ele.style.height = value;
+    }
+}
+// $(".box").css("wh");  //get
+
+//  $(".box").css("wh","200px");   // set
+
+
+
+</script>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <p>开课吧</p>
+    <div>
+        <a href="http://kaikeba.com">开课吧</a>
+    </div>
+    <img src="./images/logo-new.png" draggable="false" />
+
+    <!-- 设置被拖放元素的draggable属性为true -->
+    <div id="box1" draggable="true" style="width: 100px;height: 100px;background: red"></div>
+
+    <script>
+    
+        /*
+            我们可以给默认可以拖拽的元素（选中的文本、链接、图像）设置draggable为false，就可以阻止它们拖拽
+
+            firefox：如果拖拽的元素没有设置拖放内容，还是不能拖放
+                - draggable=true
+                - 设置拖放内容
+        */
+        let box1 = document.querySelector('#box1');
+
+        box1.ondragstart = function(e) {
+            // 设置拖放内容：e.dataTransfer.setData('text', 'kaikeba');
+            e.dataTransfer.setData('text', 'kaikeba');
+        }
+
+    </script>
+</body>
+</html>

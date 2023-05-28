@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .box {
+            width: 100px;
+            height: 100px;
+            background: red;
+            position: absolute;
+            left: 0px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box"></div>
+</body>
+<script>
+    // 方块运动； left top  
+    function move(ele, dir, target, cb) {
+        let start = parseInt(getComputedStyle(ele, null)[dir]);
+        // console.log(start)
+        let dis = (target - start) / Math.abs(target - start);
+        let speed = dis * 5;
+        function fn() {
+            let now = parseInt(getComputedStyle(ele, null)[dir]);
+            console.log(now)
+            if (Math.abs(now - target) < 3) {
+                // console.log("运动完成...");
+                cb && cb();
+            } else {
+                ele.style[dir] = now + speed + "px";
+                // setTimeout(()=>{
+                //     fn();
+                // },20)
+                requestAnimationFrame(fn);
+            }
+        }
+        fn();
+    }
+
+// 回调地狱；---》promise；
+    let box = document.querySelector(".box");
+    move(box, "left", 200, function () {
+        move(box, "top", 200, function () {
+            move(box, "left", 0, function () {
+                move(box, "top", 0, function () {
+                    console.log("运动完成...")
+                })
+            })
+        })
+    });
+
+
+
+
+
+
+</script>
+
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<input type="checkbox" />
+<script>
+(function(){
+    var checkbox = document.querySelector("input");
+    // checked 
+    // checkbox.checked true 选中 false 不选中
+    checkbox.onchange = function(){ // 监听单选和复选的状态发生改变
+        console.log(this.checked);
+    }
+
+})();    
+</script>   
+</body>
+</html>

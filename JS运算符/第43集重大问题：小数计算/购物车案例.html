@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <input id="input1" type="text">
+    +
+    <input id="input2" type="text">
+    <button id="btn"> = </button>
+    <span id="result"></span>
+    <script>
+        //0.1  0.2
+
+        var input1 = document.getElementById('input1');
+        var input2 = document.getElementById('input2');
+        var btn = document.getElementById('btn');
+        var result = document.getElementById('result');
+
+        // btn.onclick = function(){
+        //     var txt1 = input1.value;
+        //     var txt2 = input2.value;
+        //     result.innerHTML = (+txt1) + (+txt2);
+        // }
+
+        /*
+            如何处理这样的小数
+
+            x * 10 + y * 10 => ( x + y ) * 10 
+        */
+
+
+        btn.onclick = function(){
+            var txt1 = input1.value;
+            var txt2 = input2.value;
+
+            result.innerHTML =((+txt1) * 10 + (+txt2) * 10) / 10  ; // 0.1 => 1    0.2 => 2 根据小数点后的位数，乘以整10的位数，将该数字变为整数再进行计算
+            
+        }
+    </script>
+</body>
+</html>

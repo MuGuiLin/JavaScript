@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+var arr = [2,4,12,123,3,5,55];
+// 默认按照字典序进行排列
+// arr.sort();
+arr.sort(function(n1,n2){
+   //console.log(n1,n2);
+   //return -1;// 返回值为负数，交互两个参数的位置
+   // return n2 - n1; // 从大到小排列
+   return n1 - n2;// 从小到大排列
+});
+console.log(arr);
+</script>    
+</body>
+</html>

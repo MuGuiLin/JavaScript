@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+<script>
+    // 16.以下代码中，会出现什么结果：第一次弹（ ），第二次弹（ ），第三次弹（ ）
+    function fn1() {
+        var a = 0;
+        function fn2() { ++a; alert(a); }
+        return fn2;
+    }
+    fn1()(); // 1
+    var newFn = fn1();
+    newFn();  // 1
+    newFn(); // 2
+ /*
+     函数的每次没有关联, 没执行一次都相当于在计算机内部重新创建了一个新的函数
+function fn1() {
+    var a = 0;
+    function fn2() { ++a; alert(a); }
+    fn2();
+}
+
+
+function newfn1() {
+    var a = 0;
+    function fn2() { ++a; alert(a); }
+    fn2();
+    function newfn2() { ++a; alert(a); }
+    newfn2();
+}
+ 
+*/
+
+</script>
+</body>
+
+</html>

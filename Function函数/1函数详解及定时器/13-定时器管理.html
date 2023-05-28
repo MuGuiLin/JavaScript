@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            position: absolute;
+            left: 0;
+            top: 100px;
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<button id="run">跑</button>
+<button id="stop">停</button>
+<div id="box"></div>  
+<script>
+/*
+定时器:
+    setTimeout(fn,delay) 延迟型定时器
+    setInterval(fn,interval) 间隔型定时器
+    
+    返回值：index 定时器编号
+
+清除(关闭)定时器:
+    clearInterval(index);
+    clearTimeout(index);
+
+定时器管理：养成一个好习惯确保单个效果中，只有一个定时器在执行
+    1. 在定时器开启之前，确保定时器是关闭的    
+    2. 判断定时器如果已经开启了，就先不开启
+
+*/    
+function $(cssSelector){
+    var els = document.querySelectorAll(cssSelector);
+    return els.length > 1?els:els[0];
+};    
+(function(){
+    var run = $("#run");
+    var stop = $("#stop");
+    var box = $("#box");
+    var l = 0;
+    var timer = 0;
+    run.onclick = function(){
+        if(timer){
+            return ;
+        }
+        timer = setInterval(function(){
+            l += 2;
+            box.style.left = l + "px";
+        },16);
+    };
+    stop.onclick = function(){
+        clearInterval(timer);
+        timer = 0;
+    };
+})();    
+</script>  
+</body>
+</html>

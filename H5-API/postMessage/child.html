@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>postMessage快速了解</title>
+</head>
+
+<body>
+    <h1>子页面</h1>
+    <hr>
+    <h2>子页面接收消息区域：</h2>
+    <h3 style="color: green" id="message"></h3>
+    <div>
+        <input type="file" onchange="update(event)" />
+        <textarea oninput="input(event)" cols="117" rows="10"></textarea>
+    </div>
+
+    <script>
+        function input(e) {
+            // 向父页面中以iframeiframe子页面的父页面发送数据消息
+            window.parent.postMessage(e.target.value, "*");
+        };
+
+        function update(event) {
+            console.log("子页面上传时的event对象：", this);
+            const file =
+                event.target.files[0] ||
+                event.dataTransfer.files[0] ||
+                this.file.files[0];
+
+            // window.parent.postMessage(
+            //   JSON.stringify({
+            //     event_obj: event,
+            //     event_target: event.target,
+            //     event_target_file: file,
+            //     message: "子页面在上传时的event对象，被JSON.stringify()过的！",
+            //     time_stamp: Date.now(),
+            //   }),
+            //   "*"
+            // );
+
+            window.parent.postMessage(file, "*");
+        };
+
+        document.onreadystatechange = function (e) {
+            if (document.readyState === "complete") {
+
+                // 接收方 B页面
+                window.addEventListener('message', function (event) {
+                    // if (event.origin !== 'http://xxx.com:8080') return;
+
+                    console.log("子页面收到message的event：", event);
+                    document.querySelector('#message').innerHTML = event.data;
+
+                    // 回传消息
+                    event.source.postMessage(`Hi，收到消息了：${event.data}`, event.origin);
+                }, false);
+            }
+        }
+    </script>
+</body>
+
+</html>

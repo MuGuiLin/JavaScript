@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #wrap {
+            margin: 100px auto;
+            width: 600px;
+            display: flex;
+        }
+        #wrap ul {
+            margin: auto;
+            display: flex;
+            padding: 0;
+            list-style: none;
+        }
+        #wrap li {
+            width: 100px;
+            height: 100px;
+            font: 50px/100px "宋体";
+            text-align: center;
+            margin: 0 5px;
+            background: #000;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div id="wrap">
+    <button id="prev">prev</button>
+    <ul>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+    </ul>
+    <button id="next">next</button>
+</div>
+<script>
+function $(cssSelector){
+    var els = document.querySelectorAll(cssSelector);
+    return els.length > 1?els:els[0];
+};     
+(function(){
+    var prev = $("#prev");
+    var next = $("#next");
+    var lists = $("ul li");
+    var inners = [];
+    for(var i = 0; i < lists.length; i++){
+        inners.push(lists[i].innerHTML);
+    }
+    prev.onclick = function(){
+        inners.unshift(inners.pop());
+        //console.log(inners);
+        for(var i = 0; i < lists.length; i++){
+            lists[i].innerHTML = inners[i];
+            //inners.push(lists[i].innerHTML);
+        }
+    };
+    next.onclick = function(){
+        inners.push(inners.shift());
+        //console.log(inners);
+        for(var i = 0; i < lists.length; i++){
+            lists[i].innerHTML = inners[i];
+            //inners.push(lists[i].innerHTML);
+        }
+    };
+})();
+</script>    
+</body>
+</html>

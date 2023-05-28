@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div id="box">
+      <div id="left">
+        <img src="images/img.png" id="imgs1" />
+        <div id="mask"></div>
+      </div>
+      <div id="right">
+        <div id="border">
+          <img src="images/img.png" id="img2" />
+        </div>
+      </div>
+    </div>
+    <script>
+    function getStyle(el,attr){
+      return parseFloat(getComputedStyle(el)[attr]);
+    }
+     window.onload=()=>{
+        let mask = document.querySelector("#mask");
+        let img1 = document.querySelector("#imgs1");
+        let img2 = document.querySelector("#img2");
+        let border = document.querySelector("#border");
+        let left = document.querySelector("#left");
+        
+        // 放大比例
+        let scale = 3;
+        mask.style.width = getStyle(border,"width")/scale + "px";
+        mask.style.height = getStyle(border,"height")/scale  + "px";
+        img2.style.width = getStyle(img1,"width")*scale + "px";
+        img2.style.height = getStyle(img1,"height")*scale + "px";
+
+        left.addEventListener("mouseenter",()=>{
+            mask.style.display = "block";
+        });
+        left.addEventListener("mouseleave",()=>{
+            mask.style.display = "none";
+        });
+        left.addEventListener("mousemove",(e)=>{
+            let {x,y} = left.getBoundingClientRect();
+            // console.log(e.clientX,e.clientY); // 相当于可视区的坐标
+            // 鼠标相对于元素的坐标 = 鼠标相当于可视区的坐标 - 元素相当于可视区的坐标 
+            x = e.clientX - x - mask.offsetWidth/2;
+            y = e.clientY - y - mask.offsetHeight/2;
+
+
+
+            mask.style.left = x + "px";
+            mask.style.top = y + "px";
+
+            img2.style.left = -x*scale + "px";
+            img2.style.top = -y*scale + "px";
+        });
+
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,60 @@
+#box{
+    width: 900px;
+    height: 500px;
+    background: url(./images/bg.png) no-repeat;
+    position: relative;
+    margin: 20px auto;
+}
+#left{
+    width: 335px;
+    height: 188px;
+    position: absolute;
+    left: 148px;
+    top: 155px;
+    overflow: hidden;
+}
+#imgs1{
+    width: 100%;
+    height: 100%;
+}
+#right{
+    /* width: 0;
+    height: 0; */
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    position: absolute;
+    left: 580px;
+    top: 150px;
+    border-radius: 50%;
+    background: url(./images/border.png) no-repeat;
+    /* display: none; */
+}
+#mask{
+    width: 50px;
+    height: 50px;
+    left: 0;
+    top: 0;
+    background: yellow;
+    border-radius: 50%;
+    opacity: .6;
+    position: absolute;
+    display: none;
+    cursor: move;
+}
+#border{
+    width: 184px;
+    height: 184px;
+    position: absolute;
+    left: 7px;
+    top: 7px;
+    border-radius: 50%;
+    overflow: hidden;
+    
+}
+#img2{
+    width: 300%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}

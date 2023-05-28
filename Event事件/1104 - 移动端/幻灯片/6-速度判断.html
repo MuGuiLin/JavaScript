@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html {
+            font-size: 10vw;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        #wrap {
+            position: relative;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        #list {
+            float: left;
+            display: flex;
+            display: -webkit-box;
+        }
+
+        #list li {
+            flex: none;
+            width: 100vw;
+        }
+
+        #list img {
+            width: 100%;
+            display: block;
+        }
+
+        .nav {
+            position: absolute;
+            left: 0;
+            bottom: .2rem;
+            width: 100%;
+            text-align: center;
+            vertical-align: top;
+        }
+
+        .nav a {
+            display: inline-block;
+            width: .3rem;
+            height: .3rem;
+            background: #fff;
+            margin: 0 .1rem;
+            border-radius: .15rem;
+            transition: .3s;
+        }
+
+        .nav .active {
+            width: .6rem;
+            color: #fff;
+        }
+
+        .textList {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .textList li {
+            font: 14px/40px "宋体";
+            padding-left: 20px;
+            border-bottom: 1px solid #000;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap">
+        <ul id="list">
+            <li><img src="img/banner01.png" /></li>
+            <li><img src="img/banner02.png" /></li>
+            <li><img src="img/banner03.png" /></li>
+            <li><img src="img/banner04.png" /></li>
+        </ul>
+        <nav class="nav">
+            <a class="active"></a><a></a><a></a><a></a>
+        </nav>
+    </div>
+    <ul class="textList">
+    </ul>
+    <script src="../mTween.js"></script>
+    <script>
+        // // 列表结构生成
+        (function () {
+            var list = document.querySelector(".textList");
+            list.innerHTML = [...(".".repeat(20))].map(function (item, index) {
+                return "<li>\u8FD9\u662F\u7B2C" + index + "\u4E2Ali</li>";
+            }).join("");
+        })();
+        // 滑屏幻灯片
+
+        /*
+            判断最后一次的速度，如果速度大于某个临界点，切换至下一张
+
+            速度: move中最后一次的距离/move中最后一次的时间
+        */
+        (function () {
+            var wrap = document.querySelector("#wrap");
+            var imgW = css(wrap, "width");
+            var list = document.querySelector("#list");
+            var navs = document.querySelectorAll(".nav a");
+            var startPoint = {};
+            var startOffset = 0;
+            var now = 0;
+            var lastX = 0;
+            var lastTime = 0;
+            var lastSpeed = 0;
+            var isFirst = true; // 是否首次判断方向
+            var isMove = false; // 默认情况下，认定用户想要滑动页面滚动条
+
+            list.innerHTML += list.innerHTML;
+            css(list, "translateX", 0);
+            wrap.addEventListener("touchstart", function (e) {
+                mTween.stop(list);
+                var touch = e.changedTouches[0];
+                startPoint = {
+                    x: touch.pageX,
+                    y: touch.pageY
+                }; // 无缝处理
+
+                if (now == 0) {
+                    //第一组第0张，需要切换到第二组第0张
+                    now = navs.length;
+                } else if (now == navs.length * 2 - 1) {
+                    // 第二组最后一张，需要切换到第一组最后一张
+                    now = navs.length - 1;
+                }
+
+                startOffset = -now * imgW;
+                css(list, "translateX", startOffset);
+                isMove = false;
+                isFirst = true;
+                lastX = touch.pageX;
+                lastTime = Date.now();
+                lastSpeed = 0;
+            });
+            wrap.addEventListener("touchmove", function (e) {
+                var touch = e.changedTouches[0];
+                var nowPoint = {
+                    x: touch.pageX,
+                    y: touch.pageY
+                };
+                var dis = {
+                    x: nowPoint.x - startPoint.x,
+                    y: nowPoint.y - startPoint.y
+                }; // 判断方向
+                var nowTime = Date.now();
+                if (isFirst) {
+                    if (Math.abs(dis.x) > Math.abs(dis.y)) {
+                        // 判定用户左右滑动，想要触发幻灯片滑动,判定用户是左右滑动
+                        isMove = true;
+                        isFirst = false;
+                    } else if (Math.abs(dis.y) < Math.abs(dis.x)) {
+                        // 判定用户是上下滑动
+                        isFirst = false;
+                        isMove = false;
+                    }
+                }
+                if (isMove) { // 先判断是否是要 切换幻灯片，是再阻止默认事件
+                    lastSpeed = (nowPoint.x - lastX)/(nowTime - lastTime);
+                    // 两次 touchmove时的速度 (px/ms);
+                    lastX = nowPoint.x;  // 对于下一次 touchmove 来说这就是上一次的位置
+                    lastTime = nowTime; //  对于下一次 touchmove  这就是上一次的时间
+                    css(list, "translateX", dis.x + startOffset);
+                    e.preventDefault(); 
+                }
+            });
+            wrap.addEventListener("touchend", function (e) {
+                console.log(lastSpeed);
+                var touch = e.changedTouches[0];
+                var nowPoint = {
+                    x: touch.pageX,
+                    y: touch.pageY
+                };
+                var dis = {
+                    x: nowPoint.x - startPoint.x,
+                    y: nowPoint.y - startPoint.y
+                }; // 抬起时，如果移动距离 > 元素宽度的.3切换图片
+                if (Math.abs(dis.x) >= imgW * .4 && isMove) {
+                    //判断是否需要切换图片
+                    //console.log("切换图片",dis.x);
+                    // console.log(dis.x/Math.abs(dis.x));
+                    now -= dis.x / Math.abs(dis.x);
+                } else if(Math.abs(lastSpeed) > .5 && isMove){
+                    now -= dis.x / Math.abs(dis.x);
+                }
+                if (isMove) {
+                    e.preventDefault();
+                }
+                mTween({
+                    el: list,
+                    attr: {
+                        translateX: -now * imgW
+                    }
+                });
+                navs.forEach(function (item) {
+                    item.classList.remove("active");
+                });
+                navs[now % navs.length].classList.add("active");
+            });
+        })();
+    </script>
+</body>
+
+</html>

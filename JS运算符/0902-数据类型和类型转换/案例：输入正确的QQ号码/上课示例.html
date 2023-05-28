@@ -1,0 +1,53 @@
+ <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+    <div class="box">
+      <input type="text" id="txt" />
+      <input type="button" id="btn" value="验证" />
+      <div class="validate">
+        <div class="arrow"><em></em><span></span></div>
+        <div class="text">请输入5-10位数字</div>
+      </div>
+    </div>
+
+<script>
+/*
+  1. 不能是空的
+  2. 只能输入5-10
+  4. 必须是一个合法的整数
+  4. 不能以0开始
+*/
+var txt = document.querySelector('#txt');
+var btn = document.querySelector('#btn');
+
+btn.onclick = function(){
+
+console.log( parseInt(txt.value) != txt.value)
+  //  !txt.value  
+  var len = txt.value.length;
+  // console.log(txt.value)
+  // if(!txt.value)
+  if(txt.value == ''){
+    alert('请输入内容');
+  }else if(len>10 || len <5){
+    alert('请输入5-10位数字')
+  }else if(isNaN(txt.value) || parseInt(txt.value) != txt.value){
+    alert('请输入合法的整数')
+  }else if(txt.value[0] == '0'){
+    alert('第一个数不能是0')
+  }else{
+    alert('验证成功！')
+  }
+
+}
+
+</script>
+  </body>
+</html>

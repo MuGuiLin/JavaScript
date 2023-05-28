@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Document</title>
+<style>
+.box {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100px;
+    height: 100px;
+    background: red;
+}
+.box2 {
+    position: fixed;
+    left: calc(50% - 50px);
+    top: calc(50% - 50px);
+    width: 100px;
+    height: 100px;
+    background: green;
+
+}
+</style>
+</head>
+<body>
+<div class="box">文字</div>   
+<div class="box2"></div>
+<script src="fns.js"></script> 
+<script>
+{
+
+    // 拖拽
+    let box = document.querySelector(".box");
+    let box2 = document.querySelector(".box2");
+    // 鼠标按下事件
+    let startMouse = {};
+    let startEl = {};
+    // 鼠标移动
+    let move = (e)=>{
+        let nowMouse = {
+            x: e.clientX,
+            y: e.clientY
+        };
+        let disMouse = {
+            x: nowMouse.x - startMouse.x,
+            y: nowMouse.y - startMouse.y
+        };
+       css(box,"left",startEl.x + disMouse.x);
+       css(box,"top",startEl.y + disMouse.y);
+       if(boom(box,box2)){
+            box2.style.background = "yellow";
+       } else {
+        box2.style.background = "green";
+       }
+    };
+    box.addEventListener("mousedown",(e)=>{
+        startMouse = {
+            x: e.clientX,
+            y: e.clientY
+        };
+        startEl = {
+            x: css(box,"left"),
+            y: css(box,"top")
+        }
+        document.addEventListener("mousemove",move);
+        document.addEventListener("mouseup",()=>{
+            document.removeEventListener("mousemove",move);
+        },{
+            once: true
+        });
+        e.preventDefault();
+    });
+}
+function boom(el,el2){
+    let rectEl1 = el.getBoundingClientRect();
+    let rectEl2 = el2.getBoundingClientRect();
+    if(rectEl1.right < rectEl2.left
+    || rectEl2.right < rectEl1.left
+    || rectEl1.bottom < rectEl2.top
+    || rectEl2.bottom < rectEl1.top){
+        return false;
+    }
+    return true;
+}
+</script>
+</body>
+</html>

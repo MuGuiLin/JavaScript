@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>根据经伟度坐标获取地址</title>
+        <style>
+            h1{ text-align: center; color: white; }
+            body{background:repeating-radial-gradient(blue,black);}
+            article{ margin: auto; width: 640px; text-align: left; color: white; line-height: 32px; }
+            section{ margin: auto; padding: 20px; width: 600px; background: rgba(255,255,255,0.1); border: 1px solid grey; box-shadow: 0 0 4px 0px white; border-radius: 4px; overflow: hidden;}
+            section p{ text-align: center; font-size: 18px; color: white;}
+            section p label{ margin-left: 52px;}
+            section input[type='number']{ padding: 4px; width: 500px; height: 24px; font-size: 16px;}
+            section input[type='radio']{ padding: 4px; width: 20px; height: 20px; font-size: 16px; vertical-align: text-top;}
+            section button{ margin-top: 6px; padding: 8px 80px; font-size: 18px; font-weight: bold; color: blue; cursor: pointer; }
+            section textarea{ padding: 4px; width: 500px; font-size: 16px; vertical-align: middle; resize: none;}
+        </style>
+    </head>
+
+    <body>
+        <h1>逆地理编码</h1> <hr>
+
+        <article>
+            功能介绍：<br/> &nbsp; &nbsp; &nbsp; &nbsp; 根据输入的经伟度坐标，查询获取对应所在地址位置；用户可通过该功能，将结构化地址（省/市/区/街道/门牌号）解析为对应的位置坐标。地址结构越完整，地址内容越准确，解析的坐标精度越高。
+        </article>
+
+        <section>
+            <p>经 度：<input type="number" id="longitude" maxlength="10" placeholder="请输入经度：如 116.322986"/></p>
+            <p>纬 度：<input type="number" id="latitude"  maxlength="10" placeholder="请输入纬度：如 39.982658 "/></p>
+
+            <p>周边POI：
+                <label><input type="radio" name="pois" value="1" checked /> 显 示</label>
+                <label><input type="radio" name="pois" value="0"/> 隐 藏</label>
+            </p>
+
+            <p><button id="select-btn">立 即 查 询</button></p> <hr>
+
+            <p>地 址：<textarea id="site" cols="50" rows="3" placeholder="查询结果：地址位置信息! " ></textarea></p>
+            <p>详 情：<textarea id="item" cols="50" rows="3" placeholder="查询结果：地址位置的详细信息! " ></textarea></p>
+            <p>周 边：<textarea id="pois" cols="50" rows="6" placeholder="查询结果：周边100米以内的POI兴趣点! " ></textarea></p>
+        </section>
+    </body>
+
+    <script>
+        ;(function (global, factory) {
+            'use strict';
+
+            typeof exports === 'object' && typeof module !== 'undefined' ?
+                module.exports = factory(require('global/window'), require('global/document')) :
+            typeof define === 'function' && define.amd ?
+                define(['global/window', 'global/document'], factory) :
+            factory(global.window, global.document);
+
+        }(typeof window !== "undefined" ? window : this, (function (global, doc) {
+            'use strict';
+
+            var Geocoding = function() {
+                this.jsonp_key = 'D4bef01281a3d8dcea3f4db5cda88522';
+                this.jsonp_url = 'http://api.map.baidu.com/geocoder/v2/?ak=key&callback=render';
+                this.getDom = function(dom) {
+                    return document.querySelector(dom);
+                };
+                this.getVal = function(dom, radio) {
+                    if(radio) {
+                        for(var i = 0, l = radio.length; i < l; i++){
+                            if(true == radio[i].checked) return radio[i].value;
+                        }
+                    } else {
+                        return document.querySelector(dom).value;
+                    }
+                };
+                this.init();
+                //服务文档：http://lbsyun.baidu.com/index.php?title=webapi/guide/webservice-geocoding
+            };
+
+            Geocoding.prototype = {
+                init: function() {
+                    var _this = this;
+                    this.getDom('#select-btn').addEventListener('click', function() {
+                        _this.select(_this.getVal('#longitude'), _this.getVal('#latitude'));
+                    }, false);
+                },
+                getUrl: function(lon, lat) {
+                    var pois = this.getVal(0, document.getElementsByName('pois'));
+                    return this.jsonp_url + '&location='+ lat + ',' + lon + '&output=json&pois=' + pois +'&roads=1';
+                },
+                select: function(lon, lat) {
+                    if(!lon || !lat) {
+                        alert('对不起：请正确输入经纬度！');
+                    } else {
+                        var script = document.createElement('script');
+                            script.type = 'text/javascript';
+                            script.src = this.getUrl(lon, lat).replace('key', this.jsonp_key);
+                        document.body.appendChild(script);
+                    }
+                },
+                clsVal: function() {
+                    mupiao.getDom('#site').value = '';
+                    mupiao.getDom('#item').value = '';
+                    mupiao.getDom('#pois').value = '';
+                }
+            };
+
+            global.mupiao = new Geocoding();
+            
+            global.render = function (o){
+                //console.log(o);
+                var o = o.result, poi= '';
+                mupiao.clsVal();
+
+                if(o.formatted_address){
+                    mupiao.getDom('#site').value = o.addressComponent.country + o.formatted_address;
+                };
+
+                if(o.sematic_description) {
+                    mupiao.getDom('#item').value = o.addressComponent.country + o.formatted_address + o.sematic_description;
+                };
+
+                if(o.pois) {
+                    for(var i in o.pois) {
+                        poi += (Number(i)+1) + '.【'+ o.pois[i].name + '】, 类型：'+  o.pois[i].poiType + '，方向：' + o.pois[i].direction + '，地点：' + o.pois[i].addr + '，距离：' + o.pois[i].distance + '米。\n\n';
+                    }
+                    mupiao.getDom('#pois').value = poi;
+                };
+            };
+        })));
+    </script>
+
+</html>

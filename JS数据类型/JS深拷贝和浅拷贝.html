@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>JS深拷贝和浅拷贝</title>
+		<style>
+			h1 {
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>JS浅拷贝 和 深拷贝</h1>
+		<hr>
+		<script>
+			{
+				// 传值:
+				let a = 666;
+				let b = a;
+				a = 888;
+				console.log(b); // 666
+			}
+
+			{
+				// 传址:
+				let a = [1, 2, 3];
+				let b = a;
+
+				a[0] = 100;
+				console.log(b); // [100, 2, 3]
+			}
+
+			{
+				let a = [1, 2, 3, [4, 5, 6]];
+				// let b = [...a]; // 浅拷贝1
+				// let b = Object.assign([], a) // 浅拷贝2
+				 let b = [].concat(a);
+
+				a[0] = 100;
+				a[3][1] = 500;
+				console.log('数组浅拷贝：', b); // [1, 2, 3, [4, 500, 6]]
+			}
+
+			{
+				// 传址:
+				let a = {
+					name: '小明',
+					age: 18,
+					hobby: ['学习', '打球', '玩游戏']
+				};
+				let b = a;
+
+				a.name = '小强';
+				a.age = 16;
+
+				console.log(b); // {name: '小强', age: 16, hobby: ['学习', '打球', '玩游戏']}
+			}
+
+			{
+				// 传址:
+				let a = {
+					name: '小明',
+					age: 18,
+					hobby: ['学习', '打球', '玩游戏']
+				};
+				// let b = {...a}; // 浅拷贝1
+				let b = Object.assign({}, a) // 浅拷贝2
+
+				a.name = '小强';
+				a.age = 16;
+				a.hobby[0] = '研究';
+
+				console.log('对象浅拷贝', b); // {name: '小明', age: 18, hobby: ['研究', '打球', '玩游戏']}
+			}
+
+			// 数组
+			{
+				let a = [1, 2, 3, [4, 5, 6]];
+				console.log(a); // [1, 2, 3, [4, 5, 6] ];
+
+				let b = [...a]; // 浅拷贝
+
+				a[0] = 100;
+				a[3][1] = 500; // 这里还是会影响变量b中的第4个下标[]！！
+
+				console.log('数组浅拷贝', b); // [1, 2, 3, [4, 500, 6]]
+			}
+
+			// 对象
+			{
+				let a = {
+					name: '小明',
+					age: 18,
+					hobby: ['学习', '打球', '玩游戏']
+				};
+
+				let b = {
+					...a
+				}; // 浅拷贝1
+
+				a.name = '小强';
+				a.age = 16;
+				a.hobby[0] = '研究'; // 这里还是会影响变量b中的hobby！！
+
+				console.log(b); // {name: '小明', age: 18, hobby: ['研究', '打球', '玩游戏']}
+			}
+		</script>
+	</body>
+</html>

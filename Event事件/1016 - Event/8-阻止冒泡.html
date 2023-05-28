@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .menu {
+            width: 200px;   
+        }
+        .list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: none;
+            border: 1px solid #000;
+            border-bottom: none;
+        }
+        .list li {
+            font: 14px/30px "宋体";
+            border-bottom: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+<div class="menu">
+    <button class="btn">选项1</button>
+    <ul class="list">
+        <li>选项1</li>
+        <li>选项2</li>
+        <li>选项3</li>
+        <li>选项4</li>
+        <li>选项5</li>
+        <li>选项6</li>
+    </ul>
+</div>
+<input type="text" id="txt" />
+<button id="addBtn">添加</button>
+<script>
+{
+    let menu = document.querySelector(".menu");
+    let btn = document.querySelector(".btn");
+    let list = document.querySelector(".list");
+    let txt = document.querySelector("#txt");
+    let addBtn = document.querySelector("#addBtn");
+    addBtn.addEventListener("click",()=>{
+        list.innerHTML += `<li>${txt.value}</li>`; 
+    });
+
+    menu.addEventListener("click",(e)=>{
+        if(e.target.tagName === "BUTTON"){
+            let display = getComputedStyle(list)["display"];
+            list.style.display = display=="none"?"block":"none";
+            e.stopPropagation();
+        } else if(e.target.tagName === "LI") {
+            btn.innerHTML = e.target.innerHTML;
+        }
+    });
+    document.addEventListener("click",()=>{
+        list.style.display = "none";
+    });
+    // list.children[0].addEventListener("click",(e)=>{
+    //     //e.cancelBubble = true;// true 阻止冒泡
+    //     e.stopPropagation(); // 阻止冒泡
+    // });
+
+    /*
+    
+    事件代理(事件委托)  
+    - e.target 事件源
+    事件代理(事件委托)：利用冒泡机制将事件统一委托在父祖级上执行，在通过事件源获取到相关元素
+    - 优点：1)减少事件注册，节省内存; 2)可以给将来的元素添加事件
+    - 缺点：1)建议就近委托，否则会导致浏览器频繁的调用处理函数;2)容易出现误判，所以写好相应判断
+    */
+}
+</script>    
+</body>
+</html>

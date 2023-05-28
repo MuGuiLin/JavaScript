@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Document</title>
+<style>
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+} 
+img {
+    vertical-align: top;
+}
+#wrap {
+    margin: 40px auto;
+    position: relative;
+    width: 600px;
+    height: 400px;
+    border: 2px solid #000;
+    overflow: -hidden;
+}    
+#pics {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    height: 400px;
+    z-index: 1;
+}
+#pics li{
+    width: 600px;
+    height: 400px;
+    overflow: hidden;
+}
+#pics img {
+    width: 600px;
+    height: 400px;
+}
+.btn {
+    position: absolute;
+    top: 170px;
+    z-index: 2;
+    width: 60px;
+    font: 40px/60px "宋体";
+    text-align: center;
+    background: rgba(255, 255, 255, .6);
+    text-decoration: none;
+    color: #000;
+}
+.btn:hover {
+    background: #fff;
+}
+.prev {
+    left: 0;
+}
+.next {
+    right: 0;
+}
+#navs {
+    position: absolute;
+    left: 0;
+    bottom: 10px;
+    z-index: 3;
+    width: 100%;
+    text-align: center;
+}
+#navs a {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background: #fff;
+}
+#navs .active {
+    background: #f60;
+}
+</style>
+</head>
+<body>
+<div id="wrap">
+    <ul id="pics">
+        <li>
+            <img src="img2/img (1).jpg" />
+        </li>
+        <li>
+            <img src="img2/img (2).jpg" />
+        </li>
+    </ul>
+    <a href="javascript:;" class="btn prev"><</a>
+    <a href="javascript:;" class="btn next">></a>
+    <nav id="navs">
+        <a class="active"></a>
+        <a></a>
+        <a></a>
+        <a></a>
+    </nav>
+</div>
+<script src="../mTween.js"></script>
+<script>
+(function(){
+    var wrap = document.querySelector("#wrap");
+    var pics = document.querySelector("#pics");
+    var picsImg = pics.querySelectorAll("img");
+    var btns = document.querySelectorAll(".btn");
+    var wrapW = css(wrap,"width");
+    var navs = document.querySelectorAll("#navs a");
+    var now = 0; // 当前显示的这一张
+    var next = 0; // 接来下显示的这一张
+    var data = [
+        "img2/img (1).jpg",
+        "img2/img (2).jpg",
+        "img2/img (3).jpg",
+        "img2/img (4).jpg"
+    ];
+    css(pics,"translateX",0);
+    /*
+        每次动画只走一张图的距离:
+            1. 从左向右移动 （now > next 执行从左向右的运动）
+                1) img0 显示 next,img1 显示 now
+                2) -imgW 移动 到 0
+
+            2. 从右向左移动 （next > now 执行从右向左的运动）
+                1) img1 显示 next,img0 显示 now
+                2) 0 移动 到 -imgW
+    */
+    btns[0].onclick = function(){
+        next = now - 1;
+        next = next < 0?data.length-1:next;
+        picsImg[0].src = data[next];
+        picsImg[1].src = data[now];
+        css(pics,"translateX",-wrapW);
+        mTween({
+            el: pics,
+            attr: {
+                translateX: 0
+            }
+        });
+        now = next;
+    };
+
+    btns[1].onclick = function(){
+        next = now + 1;
+        next = next > data.length-1?0:next;
+        picsImg[1].src = data[next];
+        picsImg[0].src = data[now];
+        css(pics,"translateX",0);
+        mTween({
+            el: pics,
+            attr: {
+                translateX: -wrapW
+            }
+        });
+        now = next;
+    };
+})();    
+</script>
+</body>
+</html>
