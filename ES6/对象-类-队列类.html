@@ -21,6 +21,16 @@
 
         {
             class Queue {
+                static name = 'mupiao'; //静态属性；
+                static fn = () => {
+                    console.log('静态方法');
+                };
+
+                #age = 28;  //私有属性；
+                #myFn = () =>{
+                    console.log('私有方法');
+                }
+
                 constructor(arr = []) {
                     this.arr = [...arr];  //复制数组，[...arr]复制一个新的数组并且新数组改变时，不会改变原来的数组
                     this.init();
@@ -28,7 +38,10 @@
                 };
 
                 init() {
-
+                    console.log(this.name, this.#age);
+                    this.#myFn();
+                    this.fn();
+                    
                 };
 
                 shift() {
@@ -41,6 +54,12 @@
                     return this.arr.push(i); //向数组中的最后添加一个元素，并返回新数组的长度
                 }
             };
+
+            Queue.num = 0; //静态属性；
+
+            Queue.fun = () =>{
+                console.log('静态方法');
+            }
 
             const Q = new Queue(['H5', 'CSS3', 'ES6']);
             
