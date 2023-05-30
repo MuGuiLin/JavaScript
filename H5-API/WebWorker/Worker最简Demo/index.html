@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web Worker</title>
+    <style>
+      h1 {
+        text-align: center;
+      }
+      h2 b {
+        color: red;
+        font-size: 14px;
+      }
+      h3 {
+        color: green;
+        font-size: 15px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Web Worker</h1>
+    <hr />
+    <h2>当前是主线程页面：<b>【注：请在http服务器环境下运行】</b></h2>
+    <h3>
+      在 Web Worker中， 主线程 与 子线程 之间的通信，也是通过 postMessage API
+      来进行通信的！！！
+    </h3>
+    <div>
+      <input id="text" />
+      <button type="button" id="send">向子线程发送消息</button>
+      <button type="button" id="stop">立即终止Worker的行为</button>
+      <ul id="ul"></ul>
+    </div>
+
+    <script>
+      /**
+        * 可以将一些最复杂的事情（尤其是会堵塞DOM渲染等主线程的事情，如：大文件分片上传时的唯一标识计算等）放在子线程里面去做！！
+        * 
+        * 因为在JS的子线程，不会影响主线程。
+        */
+
+
+      // 创建worker
+      const worker = new Worker("./worker.js");
+      console.dir(worker);
+
+
+      // 监听子线程发来的消息 方式1
+      worker.onmessage = function (e) {
+        if (e.data?.send) {
+          const li = document.createElement("li");
+
+          li.innerHTML = e.data.msg + `<h5>${e.data.back}</h5>`;
+          ul.append(li);
+        } else {
+          console.log(e, e.data);
+        }
+      };
+
+
+      // 监听子线程发来的消息 方式2
+      worker.addEventListener(
+        "message",
+        function (e) {
+          if (e.data?.send) {
+            const li = document.createElement("li");
+
+            li.innerHTML = e.data.msg + `<h5>${e.data.back}</h5>`;
+            ul.append(li);
+          } else {
+            console.log(e, e.data);
+          }
+        },
+        false
+      );
+
+
+      // 向子线程发送消息
+      worker.postMessage("Hello! 我是主线程发来的消息！");
+
+
+      document.querySelector("#send").addEventListener(
+        "click",
+        function () {
+          const text = document.querySelector("#text");
+          if (text.value) {
+            // 向子线程发送消息
+            worker.postMessage({ send: true, msg: text.value });
+            text.value = "";
+          } else {
+            alert("请输入消息！");
+          }
+        },
+        false
+      );
+
+
+      document.querySelector("#stop").addEventListener(
+        "click",
+        function () {
+          worker.terminate();
+        },
+        false
+      );
+    </script>
+  </body>
+</html>
