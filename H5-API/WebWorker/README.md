@@ -6,6 +6,8 @@
 
 [Web Workers API 接口参考 | MDN (mozilla.org)]([Web Workers API - Web API 接口参考 | MDN (mozilla.org)](https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Workers_API))
 
+[Worker() - Web API 接口参考 | MDN (mozilla.org)](https://developer.mozilla.org/zh-CN/docs/Web/API/Worker/Worker)
+
 ###  什么是Web Worker 
 
 > `Web Worker` 是 HTML5 标准的一部分，这一规范定义了一套 API，允许我们在 JS 主线程之外开辟新的 Worker 线程，并将一段 JS 脚本运行其中，它赋予了开发者利用 JS 操作多线程的能力。
