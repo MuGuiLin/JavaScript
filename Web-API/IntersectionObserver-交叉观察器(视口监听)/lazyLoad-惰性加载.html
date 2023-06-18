@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IntersectionObserver-交叉观察器(lazyLoad-惰性加载)</title>
+    <style>
+      main {
+        color: white;
+        text-align: center;
+        background: green;
+      }
+      main img {
+        display: inline-block;
+        margin: 50px auto;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>IntersectionObserver-交叉观察器(lazyLoad-惰性加载)</h1>
+      <hr />
+    </header>
+
+    <main id="main">
+      <h3>
+        有时，我们希望某些静态资源（比如图片），只有用户向下滚动，它们进入视口时才加载，这样可以节省带宽，提高网页性能。这就叫做“惰性加载”。
+      </h3>
+      <img src="./img/loading.gif" data-src="./img/img-1.jpg" />
+      <img src="./img/loading.gif" data-src="./img/img-2.jpg" />
+      <img src="./img/loading.gif" data-src="./img/img-3.jpg" />
+      <h3>只有上面的图像开始可见（在可视区）时，才会加载真正的图像文件。</h3>
+    </main>
+
+    <footer>footer</footer>
+
+    <script>
+      function query(selector) {
+        return Array.from(document.querySelectorAll(selector));
+      }
+
+      const observer = new IntersectionObserver(function (entries) {
+        console.log(entries);
+        entries.forEach(function (entry) {
+          entry.target.src = entry.target.dataset.src;
+          // 停止观察
+          observer.unobserve(entry.target);
+        });
+      }, {});
+
+      query("#main img").forEach(function (item) {
+        // 开始观察
+        observer.observe(item);
+      });
+
+      // 关闭观察器
+      // observer.disconnect();
+    </script>
+  </body>
+</html>

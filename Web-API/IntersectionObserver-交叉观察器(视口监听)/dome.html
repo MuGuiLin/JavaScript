@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IntersectionObserver-交叉观察器(视口监听)</title>
+    <style>
+      main {
+        height: 2000px;
+        background: green;
+        overflow: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>IntersectionObserver-交叉观察器(视口监听)</h1>
+      <hr />
+    </header>
+
+    <main id="main">
+      <pre>
+        IntersectionObserver API，可以自动“观察”元素是否可见，Chrome 51+ 已经支持。由于可见（visible）的本质是，目标元素与视口产生一个交叉区，所以这个 API 叫做“交叉观察器”（intersection oberserver）。
+      </pre>
+      <a
+        href="https://juejin.im/post/59d74afe5188257e8267b03f"
+        target="_blank"
+        rel="noopener noreferrer"
+        >https://juejin.im/post/59d74afe5188257e8267b03f</a
+      >
+      <ul id="ul"></ul>
+      <button id="button" type="button">button</button>
+    </main>
+
+    <footer>footer</footer>
+
+    <script>
+      {
+        let li = "";
+        for (let i = 0; i < 100; i++) {
+          li += `<li>${i + 1}</li>`;
+        }
+        document.querySelector("#ul").innerHTML = li;
+      }
+
+      /**
+      注意，IntersectionObserver API 是异步的，不随着目标元素的滚动同步触发。规格写明，IntersectionObserver的实现，应该采用requestIdleCallback()，即只有线程空闲下来，才会执行观察器。这意味着，这个观察器的优先级非常低，只在其他任务执行完，浏览器有了空闲才会执行。
+      **/
+      const observer = new IntersectionObserver(
+        function (entries, observer) {
+          console.log(entries, observer);
+          entries.forEach((o) => {
+            console.log("time: " + o.time); // time：可见性发生变化的时间，是一个高精度时间戳，单位为毫秒
+            console.log("target: " + o.target); // target：被观察的目标元素，是一个 DOM 节点对象
+            console.log("intersectionRatio: " + o.intersectionRatio); // intersectionRatio：目标元素的可见比例，即intersectionRect占boundingClientRect的比例，完全可见时为1，完全不可见时小于等于0
+            console.log("rootBounds: " + o.rootBounds); // rootBounds：容器元素的矩形区域的信息，getBoundingClientRect()方法的返回值，如果没有容器元素（即直接相对于视口滚动），则返回null
+            console.log("boundingClientRect: " + o.boundingClientRect); // boundingClientRect：目标元素的矩形区域的信息
+            console.log("intersectionRect: " + o.intersectionRect); // intersectionRect：目标元素与视口（或容器元素）的交叉区域的信息
+          });
+        },
+        {
+          root: document.querySelector("#main"),
+          rootMargin: "0px 0px -200px 0px",
+
+          // 当目标元素 0%、25%、50%、75%、100% 可见时，会触发回调函数
+          threshold: [0, 0.25, 0.5, 0.75, 1],
+        }
+      );
+
+      // 开始观察
+      observer.observe(document.getElementById("button"));
+
+      // 停止观察
+      // observer.unobserve(document.getElementById("button"));
+
+      // 关闭观察器
+      // observer.disconnect();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IntersectionObserver-交叉观察器(infiniteScroll-无限滚动)</title>
+    <style>
+      header {
+        text-align: center;
+      }
+      main {
+        text-align: center;
+        border: 2px solid green;
+        height: calc(100vh - 110px);
+        overflow: auto;
+      }
+      main pre {
+        padding: 10px;
+        text-align: left;
+        font-size: 18px;
+      }
+      main img {
+        width: 20px;
+        vertical-align: middle;
+      }
+      main ul li {
+        margin: 20px;
+        line-height: 100px;
+        border: 1px solid gray;
+      }
+      main ul li b {
+        color: blue;
+      }
+      main #loading {
+        padding: 20px;
+        font-size: 18px;
+        color: white;
+        background: green;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>IntersectionObserver-交叉观察器(infiniteScroll-无限滚动)</h1>
+      <hr />
+    </header>
+
+    <main>
+      <pre>
+        无限滚动（infinite scroll）指的是，随着网页滚动到底部，不断加载新的内容到页面。
+        滚动时，页面底部有一个页尾栏（又称sentinels，上例是#loading）。一旦页尾栏可见，就表示用户到达了页面底部，从而加载新的条目放在页尾栏前面。
+        否则就需要每一次页面加入新内容时，都调用observe()方法，对新增内容的底部建立观察。
+      </pre>
+      <ul id="ul"></ul>
+      <div id="loading">
+        <img src="./img/loading-hp.gif" />
+        加载中。。。！
+      </div>
+    </main>
+    <script>
+      let index = 0;
+
+      const push = (len) => {
+        let li = "";
+        for (let i = 0; i < len; i++) {
+          li += `<li>第<b>【${index}】</b>次加载-0${i + 1}</li>`;
+        }
+        document.querySelector("#ul").innerHTML += li;
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        // 如果不可见，就返回
+        if (entries[0].intersectionRatio <= 0) return;
+        index++;
+        setTimeout(() => {
+          push(10);
+          console.log(`第【${index}】次加载`);
+        }, 1000);
+      });
+
+      // 开始观察
+      observer.observe(document.querySelector("#loading"));
+
+      // 关闭观察器
+      // observer.disconnect();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IntersectionObserver-交叉观察器(autoPlay自动播放)</title>
+    <style>
+      header {
+        text-align: center;
+      }
+      main {
+        text-align: center;
+        border: 2px solid green;
+        height: calc(100vh - 110px);
+        overflow: auto;
+      }
+      main pre {
+        padding: 10px;
+        text-align: left;
+        font-size: 18px;
+      }
+      main video {
+        width: 800px;
+        vertical-align: middle;
+      }
+      main .loading {
+        padding: 500px 0;
+        font-size: 18px;
+        color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>IntersectionObserver-交叉观察器(autoPlay滚动自动播放)</h1>
+      <hr />
+    </header>
+
+    <main>
+      <pre>
+        希望视频在完全进入视口的时候就自动播放，而在离开视口的时候就自动暂停。
+        IntersectionObserver()的第二个参数是配置对象，它的threshold属性等于1，即目标元素完全可见时触发回调函数。
+      </pre>
+      <video autoplay loop controls>
+        <source src="./mp4/bbx.mp4" type="video/mp4" />
+      </video>
+      <div class="loading">
+        <img src="./img/loading-hp.gif" />
+        加载中。。。！
+      </div>
+    </main>
+    <script>
+      let video = document.querySelector("video");
+      let isPaused = false;
+
+      let observer = new IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach((entry) => {
+            if (entry.intersectionRatio != 1 && !video.paused) {
+              video.pause();
+              isPaused = true;
+            } else if (isPaused) {
+              video.play();
+              isPaused = false;
+            }
+            console.log("isPaused", isPaused);
+          });
+        },
+        {
+          threshold: 1,
+        }
+      );
+
+      observer.observe(video);
+
+      // 关闭观察器
+      // observer.disconnect();
+    </script>
+  </body>
+</html>
