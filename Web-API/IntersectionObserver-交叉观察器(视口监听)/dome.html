@@ -73,8 +73,7 @@
       /**
       注意，IntersectionObserver API 是异步的，不随着目标元素的滚动同步触发。规格写明，IntersectionObserver的实现，应该采用requestIdleCallback()，即只有线程空闲下来，才会执行观察器。这意味着，这个观察器的优先级非常低，只在其他任务执行完，浏览器有了空闲才会执行。
       **/
-      const observer = new IntersectionObserver(
-        (entries, observer) => {
+      const observer = new IntersectionObserver((entries, observer) => {
           console.log(entries, observer);
           entries.forEach((o) => {
             console.log("time: " + o.time); // time：可见性发生变化的时间，是一个高精度时间戳，单位为毫秒
@@ -84,14 +83,17 @@
             console.log("boundingClientRect: " + o.boundingClientRect); // boundingClientRect：目标元素的矩形区域的信息
             console.log("intersectionRect: " + o.intersectionRect); // intersectionRect：目标元素与视口（或容器元素）的交叉区域的信息
           });
+
           const ratio = entries[0].intersectionRatio;
           footer.style.opacity = ratio;
           li.style.opacity = ratio;
           num.innerHTML = `${(ratio * 100).toFixed(2)}%`;
+
           if (entries[0].intersectionRatio) {
             console.log("进入可视区啦！！");
           }
         },
+
         // 如果这第二个参数未指定，observer 实例默认使用文档视口作为 root，并且没有 margin，阈值为 0%（意味着即使一像素的改变都会触发回调函数）
         {
           // root 监听元素的祖先元素Element对象，其边界盒将被视作视口。目标在根的可见区域的的任何不可见部分都会被视为不可见。
@@ -100,7 +102,7 @@
           // rootMargin 一个在计算交叉值时添加至根的边界盒 (bounding_box (en-US)) 中的一组偏移量，类型为字符串 (string) ，可以有效的缩小或扩大根的判定范围从而满足计算需要。默认值是(top、right、bottom、left)"0px 0px 0px 0px"。
           rootMargin: "0px 0px 300px 0px",
 
-          // 当目标元素 0%、25%、50%、75%、100% 可见时，会触发回调函数
+          // threshold 当目标元素 0%、25%、50%、75%、100% 可见时，会触发回调函数 0不触发，1完全触发
           threshold: [0, 0.25, 0.5, 0.75, 1], // threshold规定了一个监听目标与边界盒交叉区域的比例值，可以是一个具体的数值或是一组 0.0 到 1.0 之间的数组。若指定值为 0.0，则意味着监听元素即使与根有 1 像素交叉，此元素也会被视为可见。若指定值为 1.0，则意味着整个元素都在可见范围内时才算可见。可以参考阈值来深入了解阈值是如何使用的。阈值的默认值为 0.0。
         }
       );
