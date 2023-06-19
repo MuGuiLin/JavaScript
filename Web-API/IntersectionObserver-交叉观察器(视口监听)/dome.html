@@ -88,9 +88,9 @@
           footer.style.opacity = ratio;
           li.style.opacity = ratio;
           num.innerHTML = `${(ratio * 100).toFixed(2)}%`;
-          // if (entries.length && ) {
-          //   main.
-          // }
+          if (entries[0].intersectionRatio) {
+            console.log("进入可视区啦！！");
+          }
         },
         // 如果这第二个参数未指定，observer 实例默认使用文档视口作为 root，并且没有 margin，阈值为 0%（意味着即使一像素的改变都会触发回调函数）
         {
