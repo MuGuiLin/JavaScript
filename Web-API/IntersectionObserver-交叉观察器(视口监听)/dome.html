@@ -73,7 +73,8 @@
       /**
       注意，IntersectionObserver API 是异步的，不随着目标元素的滚动同步触发。规格写明，IntersectionObserver的实现，应该采用requestIdleCallback()，即只有线程空闲下来，才会执行观察器。这意味着，这个观察器的优先级非常低，只在其他任务执行完，浏览器有了空闲才会执行。
       **/
-      const observer = new IntersectionObserver((entries, observer) => {
+      const observer = new IntersectionObserver(
+        (entries, observer) => {
           console.log(entries, observer);
           entries.forEach((o) => {
             console.log("time: " + o.time); // time：可见性发生变化的时间，是一个高精度时间戳，单位为毫秒
