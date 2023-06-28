@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>购物车</title>
+    <style>
+        *{ margin: 0; padding: 0;}
+        h1{text-align: center;}
+        .box{ margin: auto; padding: 10px; width: 500px; border: 1px solid salmon; }
+        .head{ width: 100%; height: 40px; line-height: 40px; border-bottom: 1px solid gray; text-align: center;} 
+        .foot{width: 100%; height: 40px; line-height: 40px; border-top: 1px solid gray; display: flex; justify-content: space-between; align-content: center;}
+        .foot input{width: 18px; height: 18px; vertical-align: text-bottom; }
+        .foot button{margin-top: 10px; padding: 2px 20px; height: 24px; color: red; }
+        .goods-box li{ list-style: none; display: flex; justify-content: space-around; margin: 10px 0;}
+        .goods-box li .check{ display: flex; flex-direction: column; justify-content: center;}
+        .goods-box li .check a{display: inline-block; width: 18px; height:18px; line-height: 18px; border: 1px solid gray; border-radius: 18px; text-align: center; cursor: pointer;}
+        .goods-box li .check a.checked {position: relative;}
+        .goods-box li .check a.checked::after{ content: ""; position: absolute; top: 1px; left: 1px; width: 16px; height: 16px; border-radius: 16px; background: #00b600;}
+        .goods-box li .image{}
+        .goods-box li .image img{ width: 100px; height: 60px; vertical-align: middle;}
+        .goods-box li .title{width: 200px;}
+        .goods-box li .title h4{ line-height: 30px;}
+        .goods-box li .title b{ font-size: 16px; color: red;}
+        .goods-box li .edits{ text-align: center; line-height: 60px; user-select: none; color: green; }
+        .goods-box li .edits a{ display: inline-block; width: 20px; height: 20px; line-height: 20px; font-weight: bold; border: 1px solid gray; border-radius: 20px; text-align: center; cursor: pointer; }
+        .goods-box li .edits b{  color: blueviolet; }
+    </style>
+</head>
+
+<body>
+    <h1>购物车</h1>
+    <hr>
+    <section class="box">
+        <header class="head"><h2>购 物 车</h2></header>
+        <section class="main">
+            <ul class="goods-box">
+                <li>
+                    <div class="check">
+                        <a class="checkbox"></a>
+                    </div>
+                    <div class="image">
+                        <img src="./img/img.jpg" alt="">
+                    </div>
+                    <div class="title">
+                        <h4>我是商品标题</h4>
+                        <b>￥360.88</b>
+                    </div>
+                    <div class="edits">
+                        <a class="jie">-</a>
+                        <b class='sum'>0</b>
+                        <a class="jia">+</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="check">
+                        <a class="checkbox"></a>
+                    </div>
+                    <div class="image">
+                        <img src="./img/img.jpg" alt="">
+                    </div>
+                    <div class="title">
+                        <h4>我是商品标题</h4>
+                        <b>￥198.45</b>
+                    </div>
+                    <div class="edits">
+                        <a class="jie">-</a>
+                        <b class='sum'>0</b>
+                        <a class="jia">+</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="check">
+                        <a class="checkbox"></a>
+                    </div>
+                    <div class="image">
+                        <img src="./img/img.jpg" alt="">
+                    </div>
+                    <div class="title">
+                        <h4>我是商品标题</h4>
+                        <b>￥998.00</b>
+                    </div>
+                    <div class="edits">
+                        <a class="jie">-</a>
+                        <b class='sum'>0</b>
+                        <a class="jia">+</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="check">
+                        <a class="checkbox"></a>
+                    </div>
+                    <div class="image">
+                        <img src="./img/img.jpg" alt="">
+                    </div>
+                    <div class="title">
+                        <h4>我是商品标题</h4>
+                        <b>￥568.58</b>
+                    </div>
+                    <div class="edits">
+                        <a class="jie">-</a>
+                        <b class='sum'>0</b>
+                        <a class="jia">+</a>
+                    </div>
+                </li>
+            </ul>
+        </section>
+        <footer class="foot">
+            <label><input type="checkbox" id="all"> 全 选</label>
+            <label id="with"></label>
+            <button id="del">删 除</button>
+        </footer>
+    </section>
+    <script>
+        let li = document.querySelectorAll('.goods-box li');
+
+        //计算商品最大单价，件数，总价
+        let sumPriceFn = () => {
+            let maxPrice = sumNum = sumPrice = 0;
+            li.forEach((item) => {
+                let sum = Number(item.querySelector('.sum').innerText);
+                if(0 < sum) {
+                    let price = item.querySelector('.title b').innerText;
+                        price = Number(price.substr(1)).toFixed(2);
+                    maxPrice = Math.max(price, maxPrice);
+                    sumNum += sum; 
+                    sumPrice += sum * price;
+                };
+            });
+            document.querySelector('#with')['innerHTML'] = `最高单价:￥${maxPrice}， 件数:${sumNum}， 总价:￥${sumPrice.toFixed(2)}`;//四舍五入保留小数点后四位
+        };
+        
+
+        li.forEach((o, i) => {
+            //选商品
+            o.querySelector('.check a').onclick = function() {
+                this.classList.toggle('checked');
+                if ([...li].every(item => item.querySelector('.checkbox').classList.contains('checked'))) {
+                    document.querySelector('#all').checked = true;
+                } else {
+                    document.querySelector('#all')['checked'] = false;
+                };
+                console.log(([...li].every(item => item.querySelector('.checkbox').classList.contains('checked'))));
+            };
+
+           //商品减
+            o.querySelector('.jie')['onclick'] = () => { 
+                let num = Number(o.querySelector('.sum')['innerHTML']);
+                num--;
+                o.querySelector('.sum').innerHTML = (num <= 0) ? 0 : num;
+                sumPriceFn();
+            };
+            
+            //商品加
+            o.querySelector('.jia')['onclick'] = () => {
+                let num = Number(o.querySelector('.sum')['innerHTML']);
+                num++;
+                o.querySelector('.sum')['innerHTML'] = num;
+                sumPriceFn();
+            };
+        });
+
+        //全选
+        document.querySelector('#all')['onchange'] = () => {
+
+            if(li.every(item => item.querySelector('.checkbox').classList.contains('checked'))) {
+
+            }
+
+        };
+
+        //删除
+        document.querySelector('#all')['onclick'] = () => {
+
+        };
+    </script>
+</body>
+
+</html>

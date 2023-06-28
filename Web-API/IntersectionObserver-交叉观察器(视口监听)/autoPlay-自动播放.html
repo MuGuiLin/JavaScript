@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IntersectionObserver-交叉观察器(autoPlay自动播放)</title>
+    <style>
+      header {
+        line-height: 50px;
+        text-align: center;
+        color: white;
+      }
+      main {
+        text-align: center;
+        border: 2px solid green;
+        height: calc(100vh - 110px);
+        overflow: auto;
+      }
+      main pre {
+        padding: 10px;
+        text-align: left;
+        font-size: 18px;
+      }
+      main video {
+        height: 400px;
+        vertical-align: middle;
+      }
+      main .loading {
+        padding: 500px 0;
+        font-size: 18px;
+        color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <header id="header">
+      <h1>IntersectionObserver-交叉观察器(autoPlay滚动自动播放)</h1>
+    </header>
+
+    <main id="main">
+      <pre>
+        希望视频在完全进入视口的时候就自动播放，而在离开视口的时候就自动暂停。
+        IntersectionObserver()的第二个参数是配置对象，它的threshold属性等于1，即目标元素完全可见时触发回调函数。
+      </pre>
+      <video autoplay loop controls>
+        <source src="./mp4/bbx.mp4" type="video/mp4" />
+      </video>
+      <div class="loading">
+        <img src="./img/loading-hp.gif" />
+        加载中。。。！
+      </div>
+    </main>
+    <script>
+      const main = document.querySelector("#main");
+      const video = document.querySelector("video");
+      let isPaused = false;
+
+      const observer = new IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach((entry) => {
+            if (entry.intersectionRatio != 1 && !video.paused) {
+              video.pause();
+              isPaused = true;
+            } else if (isPaused) {
+              video.play();
+              isPaused = false;
+            }
+            console.log("isPaused", isPaused);
+          });
+        },
+        {
+          root: main,
+          rootMargin: "-100px 0px 0px 0px", //  root存在时rootmargin才会生效（一定要要加个单位：如px） 【这里的300px指的时，当被监听对象video高度（总高度为400px）的300px位置在 父级滚动元素main的启始高度时触发】
+          threshold: 0,
+        }
+      );
+      observer.observe(video);
+
+      video.addEventListener("play", (e) => {
+        header.style.background = "green";
+      });
+
+      video.addEventListener("pause", (e) => {
+        header.style.background = "red";
+      });
+
+      // 关闭观察器
+      // observer.disconnect();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>函数的祖先Function对象</title>
+	</head>
+
+	<body>
+	</body>
+
+	<script type="text/javascript">
+		Function.prototype.mupiao = function(name, fn){
+			//alert(name);
+			//alert(fn);
+			this[name] = fn;
+			return this;
+		};
+		var oMupiao = function(){};
+		
+		oMupiao.mupiao('fun1', function(str) {
+			alert('你好:'+ str);
+			return this;
+		}).mupiao('fun2', function(str) {
+			alert('我是做：'+ str);
+			return this;
+		}).mupiao('fun3', function(str) {
+			alert('我今年：'+ str);
+			return this;
+		}).mupiao('funn', function(sssss) {
+			alert(sssss);
+		});
+		
+		oMupiao.fun1('穆飘');
+		
+		//oMupiao.fun2('WEB前端的');
+		
+		oMupiao.fun3('26岁');
+		
+		oMupiao.funn('就这样可以写n多个方法啦！');
+	</script>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>工厂模式与构造函数</title>
+</head>
+
+<body>
+	<script>
+		{
+			/*
+				工厂模式：
+					* 目的：咸少重复代码
+
+				用构造函数来创建工厂模式：
+					* 性能：
+						1、构造函数自动创建对象
+						2、构造函数自动返回对象
+			*/
+
+
+			// 工厂模式
+			{
+				function Person(name = '没传', age = 18) {
+					var obj = {
+						name: name,
+						hobby: function () {
+							console.log('爱好');
+						}
+					};
+
+					obj.age = age;
+
+					obj.getInfo = function () {
+						return {
+							name: this.name,
+							age: this.age
+						}
+					};
+
+					return obj;
+				};
+
+				let mupiao = Person('mupiao', 28);
+
+				console.log(mupiao);
+			};
+
+
+
+
+			//类/构造函数
+			{
+				function Person(name = '没传', age = 18) {
+					this.name = name;
+					this.age = age;
+
+					this.hobby = function () {
+						console.log('爱好');
+					};
+				};
+
+				Person.getInfo = function () {
+					return {
+						name: this.name,
+						age: this.age
+					}
+				};
+
+				/*
+				实例化 类/构造函数 
+					实例化 类/构造函数  使用new运算符，它是new时做了以下5事件：
+						1、执行了构造函数，
+						2、新创建一个对象，
+						5、隐式返回了创建的新对象，
+				*/
+				// var mupiao = new Person;
+				var mupiao = new Person('mupiao', 28);
+
+				console.log(mupiao);
+			}
+
+
+
+
+		}
+	</script>
+</body>
+
+</html>
