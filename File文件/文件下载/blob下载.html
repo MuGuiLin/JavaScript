@@ -1,12 +1,81 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <title>blob下载</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+		<style>
+			h1{ text-align: center;}
+			a{display: block; margin: 30px; font-size: 18px;}
+			input{margin: 30px; padding: 10px; width: 360px;}
+			button{ padding: 10px;}
+			img{ max-width: 800px;}
+			section{ padding: 50px;}
+		</style>
     </head>
     <body>
         <h1>blob下载</h1>
 		<hr />
+		
+		<section>
+		<a href="./img/img.jpg" download>本地下载</a> 
+		
+		<a href="https://cn.bing.com/th?id=OHR.BanyakIslands_ZH-CN6620304821_1920x1080.jpg" download>跨域下载1（注：不是本域的文件，加上download属性，也会直接在浏览器中打开）</a> 
+		
+		<a id="cross" download>跨域下载2（blob下载）</a>
+		
+		<input id="input" placeholder="请输入文件下载地址！" />
+		
+		<button id="button">文件下载地址测试</button> <br />
+		
+		<img id="img" />
+		
+		</section>
+		
+		<script>
+			function createRequest() {
+			  try {
+				return new XMLHttpRequest();
+			  } catch (trymicrosoft) {
+				try {
+				  return new ActiveXObject("Msxml2.XMLHTTP");
+				} catch (othermicrosoft) {
+				  try {
+					return new ActiveXObject("Microsoft.XMLHTTP");
+				  } catch (failed) {
+					alert("Error initializing XMLHttpRequest!");
+				  }
+				}
+			  }	
+			};
+			
+			function download(url){
+				const http = createRequest();
+				console.log(http);
+				
+				http.responseType = 'blob' || 'ArrayBuffer';
+				
+				http.onload = ({target}) => {
+					if(4 === target.readyState && 200 === target.status) {
+						const url = URL.createObjectURL(target.response)
+						cross.href = url
+						img.src = url
+					} else {
+						alert("下载文件可能被做了防盗链！")
+					}
+				}
+				
+				http.open('GET', url || 'https://img.alicdn.com/imgextra/i3/399299073/O1CN01RHEk4l2GtULyZxBs3_!!399299073.jpg', true);
+				http.send(null)
+			
+			}
+			
+			download()
+			
+			button.onclick = ()=>{
+				download(input.value)
+			}
+		</script>
+		
     </body>
 </html>
