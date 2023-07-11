@@ -59,8 +59,10 @@
     </main>
     <script>
       let index = 0;
+      let isLoading = false;
 
       const push = (len) => {
+        isLoading = true;
         setTimeout(() => {
           let li = "";
           for (let i = 0; i < len; i++) {
@@ -68,33 +70,26 @@
           }
           document.querySelector("#ul").innerHTML += li;
           console.log(`第【${index}】次加载`);
-        }, 2000);
+          isLoading = false;
+        }, 1000);
       };
 
       const observer = new IntersectionObserver(
         (entries) => {
           const entrie = entries[0];
+          // 如果不可见，就返回
+          if (entrie.intersectionRatio <= 0) return;
 
-          // 判断方式1
-          {
-            // 如果不可见，就返回
-            if (entrie.intersectionRatio <= 0) return;
+          index++;
+          push(10);
+
+          if (entrie.isIntersecting && !isLoading) {
             console.log("加载更多！");
-            index++;
-            push(10);
-          }
-
-          // 判断方式2
-          {
-            if (entrie.isIntersecting) {
-              console.log("加载更多！");
-              index++;
-              push(10);
-            }
+            // push(10);
           }
         },
         {
-          threshold: 0.5, // 观察目标元素(#loading) 和 可视区的重叠范围在 50% （0 - 1 === 0% - 100%，【0 不重叠，1 完全重叠】）时触发！
+          thresholds: 0.5, // 观察目标元素和可视区的重叠范围在50%（0 - 1 === 0% - 100%，【0 不重叠，1 完全重叠】）时触发
         }
       );
 
