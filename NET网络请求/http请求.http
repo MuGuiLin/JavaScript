@@ -6,8 +6,21 @@
 
 # 3 请求体 Body
 
-GET /s HTTP/1.1
-Host: www.baidu.com
+
+# GET实例：https://www.baidu.com/s?wd=沐枫
+# GET /?wd=沐枫 HTTP/1.1
+# Host: www.baidu.com
 
 
-# ?wd=沐枫
+# POST文件上传实例：
+POST /api/file HTTP/1.1
+Host: study.duyiedu.com
+Content-Type: multipart/form-data; boundary=aaa
+
+
+--aaa
+Content-Disposition: form-data; name="cover"; filename="./files/001.jpg"
+Content-Type: image/jpeg
+
+< ./files/001.jpg
+--aaa--
