@@ -3,7 +3,7 @@
 # http响应 有3个部分组成：响应行Line、响应头Headers、响应体Body
 
 
-# 【注：其实请求 和 响应的数据都是字符串】
+# 【注：其实请求 和 响应的数据都是字符串，而且请求地址URL中不能用中文因为它是用ASCII编码，如一定要用中文可通过encodeURIComponent('沐枫')编码，通过decodeURIComponent('%E6%B2%90%E6%9E%AB') 或 decodeURI('%E6%B2%90%E6%9E%AB') 解码】
 
 
 
