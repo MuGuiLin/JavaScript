@@ -41,7 +41,7 @@
         text-align: center;
         color: #fff;
         overflow: hidden;
-        transition: 0.5s;
+        transition: 2s;
       }
       .card1 {
         line-height: 100px;
@@ -93,9 +93,14 @@
     let n1 = 2;
     let n2 = 1;
 
+    const move = () => {
+      card2.style.transform = `rotateX(${0}deg)`;
+      card3.style.transform = `rotateX(${-180}deg)`;
+    };
+
     setInterval(() => {
-      // n1 = n1 + 1;
-      // n2 = n2 + 1;
+      n1 = n1 + 1;
+      n2 = n2 + 1;
 
       card1.innerText = n2;
       card2.innerText = n2;
@@ -103,19 +108,19 @@
       card3.innerText = n1;
       card4.innerText = n1;
 
-      card2.style.transition = "0.5s";
-      card3.style.transition = "0.5s";
-      card2.style.transform = `rotateX(${0}deg)`;
-      card3.style.transform = `rotateX(${-180}deg)`;
-    }, 1000);
+      move();
 
-    setTimeout(() => {
-      setInterval(() => {
-        card2.style.transition = "none";
-        card3.style.transition = "none";
-        card2.style.transform = `rotateX(${180}deg)`;
-        card3.style.transform = `rotateX(${0}deg)`;
-      }, 1000);
-    }, 500);
+      // card2.style.transition = "0.5s";
+      // card3.style.transition = "0.5s";
+    }, 2000);
+
+    // setTimeout(() => {
+    //   setInterval(() => {
+    //     card2.style.transition = "none";
+    //     card3.style.transition = "none";
+    //     card2.style.transform = `rotateX(${180}deg)`;
+    //     card3.style.transform = `rotateX(${0}deg)`;
+    //   }, 1000);
+    // }, 500);
   </script>
 </html>

@@ -1,32 +1,7 @@
 @charset "utf-8";
 
 /* CSS Document */
-body,
-div,
-dl,
-dt,
-dd,
-ul,
-ol,
-li,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-pre,
-code,
-form,
-fieldset,
-legend,
-input,
-button,
-textarea,
-p,
-blockquote,
-th,
-td {
+* {
     margin : 0;
     padding: 0;
 }
@@ -148,67 +123,7 @@ body {
 }
 
 /*翻页动画*/
-@-webkit-keyframes flipTop {
-    0% {
-        -webkit-transform: perspective(400px) rotateX(0deg);
-    }
-
-    100% {
-        -webkit-transform: perspective(400px) rotateX(-90deg);
-    }
-}
-
-@-webkit-keyframes flipBottom {
-    0% {
-        -webkit-transform: perspective(400px) rotateX(90deg);
-    }
-
-    100% {
-        -webkit-transform: perspective(400px) rotateX(0deg);
-    }
-}
-
-@-moz-keyframes flipTop {
-    0% {
-        -moz-transform: perspective(400px) rotateX(0deg);
-    }
-
-    100% {
-        -moz-transform: perspective(400px) rotateX(-90deg);
-    }
-}
-
-@-moz-keyframes flipBottom {
-    0% {
-        -moz-transform: perspective(400px) rotateX(90deg);
-    }
-
-    100% {
-        -moz-transform: perspective(400px) rotateX(0deg);
-    }
-}
-
-@-ms-keyframes flipTop {
-    0% {
-        -ms-transform: perspective(400px) rotateX(0deg);
-    }
-
-    100% {
-        -ms-transform: perspective(400px) rotateX(-90deg);
-    }
-}
-
-@-ms-keyframes flipBottom {
-    0% {
-        -ms-transform: perspective(400px) rotateX(90deg);
-    }
-
-    100% {
-        -ms-transform: perspective(400px) rotateX(0deg);
-    }
-}
-
-@-keyframes flipTop {
+@keyframes flipTop {
     0% {
         transform: perspective(400px) rotateX(0deg);
     }
@@ -218,7 +133,7 @@ body {
     }
 }
 
-@-keyframes flipBottom {
+@keyframes flipBottom {
     0% {
         transform: perspective(400px) rotateX(90deg);
     }
@@ -301,9 +216,9 @@ body {
 }
 
 .dataStatistics .digit>div.shadow_top {
-    width             : 120px;
-    opacity           : 0;
-    -webkit-transition: opacity 0.3s ease-in;
+    width     : 120px;
+    opacity   : 0;
+    transition: opacity 0.3s ease-in;
 }
 
 .dataStatistics .digit>div.digit_bottom,
@@ -338,22 +253,16 @@ body {
 }
 
 .dataStatistics .digit>div.shadow_bottom {
-    opacity           : 0;
-    -webkit-transition: opacity 0.3s ease-in;
+    opacity   : 0;
+    transition: opacity 0.3s ease-in;
 }
 
 .dataStatistics .digit.previous .digit_top,
 .dataStatistics .digit.previous .shadow_top {
-    opacity                 : 1;
-    z-index                 : 2;
-    -webkit-transform-origin: 50% 100%;
-    -webkit-animation       : flipTop 0.3s ease-in both;
-    -moz-transform-origin   : 50% 100%;
-    -moz-animation          : flipTop 0.3s ease-in both;
-    -ms-transform-origin    : 50% 100%;
-    -ms-animation           : flipTop 0.3s ease-in both;
-    transform-origin        : 50% 100%;
-    animation               : flipTop 0.3s ease-in both;
+    opacity         : 1;
+    z-index         : 2;
+    transform-origin: 50% 100%;
+    animation       : flipTop 0.3s ease-in both;
 }
 
 .dataStatistics .digit.previous .digit_bottom,
@@ -367,13 +276,7 @@ body {
 }
 
 .dataStatistics .digit.active .digit_bottom {
-    z-index                 : 2;
-    -webkit-transform-origin: 50% 0%;
-    -webkit-animation       : flipBottom 0.3s 0.3s ease-out both;
-    -moz-transform-origin   : 50% 0%;
-    -moz-animation          : flipBottom 0.3s 0.3s ease-out both;
-    -ms-transform-origin    : 50% 0%;
-    -ms-animation           : flipBottom 0.3s 0.3s ease-out both;
-    transform-origin        : 50% 0%;
-    animation               : flipBottom 0.3s 0.3s ease-out both;
+    z-index         : 2;
+    transform-origin: 50% 0%;
+    animation       : flipBottom 0.3s 0.3s ease-out both;
 }

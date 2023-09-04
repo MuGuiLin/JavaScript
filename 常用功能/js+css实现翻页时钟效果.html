@@ -175,6 +175,7 @@
       .querySelector(" li:nth-child(5)")
       .querySelectorAll(".beforeTime")
       .forEach((ele) => (ele.innerHTML = formatTime(oldSecond)));
+      
     const changeTime = () => {
       let time = new Date();
       let hour = time.getHours();
