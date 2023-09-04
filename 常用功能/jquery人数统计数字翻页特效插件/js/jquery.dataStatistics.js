@@ -50,6 +50,24 @@ $.fn.dataStatistics = function (options) {
 	//初始化---------------------------------------end
 
 
+	//当数字翻到9的时候，前一位数执行一次动画
+	function prevNumber(ths) {
+		var current = ths.find('.active'),
+			previous = ths.find('.previous');
+		previous.removeClass('previous');
+		current.removeClass('active').addClass('previous');
+
+		if (current.next().length == 0) {
+			ths.find('.digit:first-child').addClass('active');
+			var prev = ths.prev();
+			if (prev.length > 0) {
+				prevNumber(prev);
+			}
+		} else {
+			current.next().addClass('active');
+		}
+	}
+
 	//执行			
 	function run() {
 		var difference = options.max - options.min;//要执行动画的次数
@@ -84,25 +102,8 @@ $.fn.dataStatistics = function (options) {
 		}
 
 		var timer1 = setInterval(increase, t);
-
 	}
-	//当数字翻到9的时候，前一位数执行一次动画
-	function prevNumber(ths) {
-		var current = ths.find('.active'),
-			previous = ths.find('.previous');
-		previous.removeClass('previous');
-		current.removeClass('active').addClass('previous');
 
-		if (current.next().length == 0) {
-			ths.find('.digit:first-child').addClass('active');
-			var prev = ths.prev();
-			if (prev.length > 0) {
-				prevNumber(prev);
-			}
-		} else {
-			current.next().addClass('active');
-		}
-	}
 	run();
 };
 
