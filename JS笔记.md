@@ -1,5 +1,9 @@
 # Web前端开发标准 -> W3C标准
 
+ [W3C官网(www.w3.org)](https://www.w3.org/zh-hans/)、[W3C中国 (chinaw3c.org)](https://www.chinaw3c.org/)
+
+[谷歌Chrome浏览器的源码](https://github.com/chromium/chromium)
+
 ### 构成:
 
 1、结构标准----html4.0 / xhtml1.0 / html5; （结构，骨架）
@@ -19,44 +23,94 @@
 
 **URL参数加解密（ASCII码）：**
 encodeURIComponent()加密
-decodeURIComponent()解码+
+decodeURIComponent()解码
+
+
+
+**字母、数字的随机数 + 时间戳**
+
+```js
+Math.random().toString(36).substring(2)+Date.now(); // 9ui4o3sdrgp1693888458382
+```
+
+
+
+**CSS动态变量 setProperty()：**
+
+```html
+<style>
+    div {
+       width: var(--div-width);
+    }
+</style>
+
+<script>
+    // 在js中给DOM元素设置CSS变量
+	div.style.setProperty('--div-width', div.clientWidth);
+</script>
+```
+
+
 
 **toLocaleString() 方法**：
 
 千分位：
 
 ```js
-(1234567891024.32).toLocaleString('zh-CN', {
+(12345678910).toLocaleString(); // 12,345,678,910
+
+(1234567891026.32).toLocaleString('zh-CN', {
   style: 'currency',
   currency: 'CNY',
-}) // '¥1,234,567,891,024.32'
+}); // '¥1,234,567,891,026.32'
+```
+
+百分比：
+
+```js
+(0.5).toLocaleString('zh-CN', {
+  style: 'percent',
+  currency: 'CNY',
+}); // '50%'
+```
+
+日期格式化：
+
+```js
+new Date().toLocaleString(); // 2023/9/8 12:30:16
+new Date().toLocaleString('chinese', {
+    hour12: true
+}); // 2023/9/8 下午12:30:16
 ```
 
 
 
-下DOM中的默认事件对象
+**下DOM中的默认事件对象：**
 event.preventDefault() 取消事件默认行为
 event.stopPropagation() 取消事件冒泡对当前节点无影响
 event.stopImmediatePropagation() 取消事件冒泡同时阻止当前节点上的事件处理程序被调用
 
-IE中的事件对象：（ 不符合W3C标准）
+
+
+**IE中的事件对象：（ 不符合W3C标准）**
 event.cancelBubble() 取消事件冒泡
 event.returnValue() 取消事件默认行为
 
 
-在IE下常见的BUG及解决办法(尤其是低版本的IE，如IE6，IE7等)
-
-问题: 解决办法
-1、盒模型BUG				使用严格doctype声明
-
-2、双倍margin BUG				_display: inline;
-
-3、不认识a: link				不加: link，直接a就行了
-
-4、3像素margin BUG				规范浮动或清除浮动
 
 
-点击超链接不跳转:
+在**IE**下常见的BUG及解决办法(尤其是低版本的IE，如IE6，IE7等)
+
+| 问题               | 解决办法                |
+| ------------------ | ----------------------- |
+| 1、盒模型BUG       | 使用严格doctype声明     |
+| 2、双倍margin BUG  | _display: inline;       |
+| 3、不认识a: link   | 不加: link，直接a就行了 |
+| 4、3像素margin BUG | 规范浮动或清除浮动      |
+
+
+
+**关于点击超链接不让跳转:**
 
 1：<a href="#"></a>
 
@@ -66,18 +120,20 @@ event.returnValue() 取消事件默认行为
 
 4：<a href="#" onclick="return false"></a>
 
+
+
 ##  JavaScript基础
 
-网景公司：
-作用: 实现用户交互行为, 网页特效, 数据验证等, 它是一种脚本语言, 是弱类型语言，
-实现用户交互行为操作----- 通过一些事件-- - 来执行一些操作
-
-js的出现最初就是为了表单的效检而发明的！
+> 网景公司：
+> 作用: 实现用户交互行为, 网页特效, 数据验证等, 它是一种脚本语言, 是弱类型语言，
+> 实现用户交互行为操作----- 通过一些事件-- - 来执行一些操作，
+>
+> javaScript的出现最初就是为了表单的效检而发明的！
 
 JavaScript组成;
 1、ECMA Script; (是一个标准ECMA - 262定义) （是js语言的核心）作用： 解释器，翻译，如果没有它，你写的代码，浏览器根本不认识，因为计算机只认二进码：0和1；
 
-2、DOM：Document Object Model: 网页文档  对象  模型   作用操作页面(document)提供访问网页内容的方法和接口
+2、DOM：Document Object Model: 【文档  对象  模型】作用操作页面(document)提供访问网页内容的方法和接口，当然还有CSS中的CSSOM 
 
 3、BOM：Browser Object Model: 浏览器  对象  模型  作用操作浏览器(window)提供与浏览器交互的方法和接口。
 
