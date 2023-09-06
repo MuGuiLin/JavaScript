@@ -214,29 +214,31 @@ var 是根据你所赋的值来决定数据类型的，一个变量最好只存�
 typeof () 判断数据类型
 单体对象：【Global对象 和 Math对象：】
 
-1、Global对象常用的方法:
-isNaN() 判断不是数字 如果不是就返回true，如果是就返回false；
-parseInt()将字符转为整数
-parseFloat()将字符转为小数
-eval（变量名，对象名，数组名等); //它能将字符串、对象、数组等 解析 为js代码（用途很多如：传参数，传脚本，动态解析执行等）;
+- 1、Global对象常用的方法:
+    isNaN() 判断不是数字 如果不是就返回true，如果是就返回false；
+    parseInt()将字符转为整数
+    parseFloat()将字符转为小数
+    eval（变量名，对象名，数组名等); //它能将字符串、对象、数组等 解析 为js代码（用途很多如：传参数，传脚本，动态解析执行等）;
 
-2、Math对象常用的方法:
-Math.ceil()执行向上舍入，即它总是将数值向上舍入为最接近的整数；
-Math.floor()执行向下舍入，即它总是将数值向下舍入为最接近的整数；
-Math.round()执行标准舍入，即它总是将数值四舍五入为最接近的整数(这也是我们在数学课上学到的舍入规则)
+- 2、Math对象常用的方法:
+    Math.ceil()执行向上舍入，即它总是将数值向上舍入为最接近的整数；
+    Math.floor()执行向下舍入，即它总是将数值向下舍入为最接近的整数；
+    Math.round()执行标准舍入，即它总是将数值四舍五入为最接近的整数(这也是我们在数学课上学到的舍入规则)
 
 
 this 当前发生事件的元素!
 innerHTML: 几乎所有的元素都有innerHTML属性, 它是一个字符串(获取HTML当前标签的起始和结束里面的内容)
 
-
 JavaScript eval()函数可计算某个字符串，并执行其中的的 JavaScript 代码
 例：
+
+```js 
 eval("x=10;y=20;document.write(x*y)") //结果：200
 
 document.write(eval("2+2"))  //结果：4
 var x = 10
 document.write(eval(x + 17))  //结果：27
+```
 
 
 
@@ -247,7 +249,7 @@ typeof () 判断数据类型： typeof 返回值有六种可能： "number," "st
 var a = 123;
 alert(typeof a)
 结果：Number
-一、基本类型：Number, String, Boolean, Undefined, Null 5种
+**1、基本类型：Number, String, Boolean, Undefined, Null 5种**
 ①Number： 数字类型（整数，小数【最高精度17位小数】，NaN不是一个数(注：js里面 唯一只有NaN 自己不于自己本身的，如：if (NaN == NaN) { 结果：不等于 }) ，lnfinity正无穷，-lnfinity负无穷 ）
 
 * 小数精度例如：
@@ -279,7 +281,7 @@ alert(typeof a)
 ④Undefined：表示：未定义（没有被定义）//一般是变量声明了，但没赋值
 ⑤Null：表示：空值、空对象 //没有内容/数据               
 
-三、引用类型（复合类型）： object, function;
+**2、引用类型（复合类型）： object, function;**
 对象      函数义
 
 JS中一切皆是对象object：因为object由number, string, boolean, undefined, 组成；
