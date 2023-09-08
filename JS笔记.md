@@ -705,7 +705,7 @@ myDate.toLocaleTimeString();  //获取当前时间
 myDate.toLocaleString();  //获取日期与时间
 
 ### JS运动 
-setInterval(fnuction(), 30)定时器
+> setInterval(fnuction(), 30)定时器
 
 clearInterval(obj.mupiao)//清除鼠标当前DIV的定时器
 
