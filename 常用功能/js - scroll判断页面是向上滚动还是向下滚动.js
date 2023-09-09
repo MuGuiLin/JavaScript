@@ -7,14 +7,11 @@
 
 	如果变小了， 表示向上滚动（ scrollTop值变小）。
 
-
-
 	js获取，设置滚动条位置
 
 	注： document.documentElement.scrollTop 和 document.documentElement.scrollTop 会有一个为0
 
 */
-
 
 //获取document信息
 function ScollPostion() {
@@ -48,7 +45,6 @@ window.scrollTo(0,scrollTop);
 $(document).ready(function() {
 
 	var p = 0,
-
 		t = 0;
 
 	$(window).scroll(function() {
@@ -103,7 +99,6 @@ scroll(function(direction) {
 
 
 
-
 // 以上方法苹果手机浏览器事件会跳动， 解决方法代码改进
 
 scrollDirect: function(fn) {
@@ -129,11 +124,8 @@ scrollDirect: function(fn) {
 		var windowHeight = $(this).height();
 
 		if (scrollTop + windowHeight > scrollHeight - 10) {
-
 			fn("up");
-
 			return;
-
 		}
 
 		if (afterScrollTop < 10 || afterScrollTop > $(document.body).height - 10) {
@@ -143,13 +135,10 @@ scrollDirect: function(fn) {
 		} else {
 
 			if (Math.abs(delta) < 10) {
-
 				return false;
-
 			}
 
 			fn(delta > 0 ? "down" : "up");
-
 		}
 
 	}, false);
@@ -173,7 +162,6 @@ crollDirect(function(direction) {
 			$(".footer_wrap").slideUp(200);
 
 			downlag = 0;
-
 			upflag = 1;
 
 		}
