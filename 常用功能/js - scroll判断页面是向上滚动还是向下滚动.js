@@ -196,13 +196,14 @@ BottomJumpPage: function() {
 
 	var windowHeight = $(this).height();
 
-	if (scrollTop + windowHeight == scrollHeight) { //滚动到底部执行事件
+	// 滚动到底部执行事件
+	if (scrollTop + windowHeight == scrollHeight) { 
 
 		console.dir("我到底部了")
-
 	}
 
-	if (scrollTop == 0) { //滚动到头部执行事件
+	// 滚动到头部执行事件
+	if (scrollTop == 0) { 
 
 		console.dir("我到头部了")
 
