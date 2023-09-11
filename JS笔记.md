@@ -31,7 +31,7 @@ decodeURIComponent()解码
 
 
 
-**字母、数字的随机数 + 时间戳**
+**随机数字符串：字母 + 数字 + 时间戳**
 
 ```js
 Math.random().toString(36).substring(2)+Date.now(); // 9ui4o3sdrgp1693888458382
