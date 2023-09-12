@@ -50,13 +50,13 @@ const person = new Person();
 
 * this就是js中的一个对象。是一个对象，不是一个函数，此是的对象你可以看作是一个对象的引用，引用谁？引用调用方法的那个对象. 
 
-* this这个对象存在哪里？存在JS代码中，一般存在于函数之中。如果你把this放到<script>标签中，你可以试下window==this，打印什么?为什么？ 
+* this这个对象存在哪里？存在JS代码中，一般存在于函数之中。如果你把this放到<script>标签中，你可以试下window === this，打印什么?为什么？ 
 
   代码如下:
 
 ```js
 function ready() {
-    alert(this == window);
+    alert(this === window);
 }
 ready();
 
@@ -64,29 +64,27 @@ ready();
 
 function Person() {
     this.name = '张三';
-    alert(this == window);
+    alert(this === window);
 }
 new Person();
 
 //此时打印什么？false, 为什么？
 //把代码加长点.加一个var perso = 
-var person = new Person(); 
+const person = new Person(); 
 ```
 
 
 
 全世界的人都知道person引用了new Person产生的那个对象。new Person创建的是一个JS实例对象，我们就可以绑定属性和方法. 
-看下面这段代码 
-代码如下:
+看下面这段代码:
 
 ```js
 fn = function () {
 }
 fn.ready = function () {
-    alert(this == fn);
+    alert(this === fn);
 } 
 ```
-
 
 
 当调用fn.ready()的时候打印什么？true ,为什么？ 
