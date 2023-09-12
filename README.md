@@ -19,7 +19,7 @@
 ### 二、JS中的真真假假
 
 ```js
-空、null、NaN、undefined、false、0、'' 、"" 这些都为假, 其他都为真！
+null、NaN、undefined、false、0、'' 、""  // 这些都为假, 其他都为真！
 ```
 
 
@@ -32,7 +32,11 @@
 ```js
 function Person(){ 
 } 
-var person = new Person(); 
+const person = new Person(); 
+
+class Person(){ 
+} 
+const person = new Person(); 
 //Person我们可以称为函数，类，对象，构造器(不带参数) 
 //person称为对象的引用 
 ```
