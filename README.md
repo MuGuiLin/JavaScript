@@ -301,8 +301,8 @@ setInterval(function() {
 
 
 + 这个方式为什么高效? 
-  - 1、少了一个参数l=arr.length; 
-  - 2、for语句中间那个玩意少进行了一次计算,以前的话是for(i=0;i<l;i++)这样的话中间的语句会先比较i<l 然后比较出来的结果在跟true 或者false比较,自然多了次计算;
+  - 1、少了一个参数l = arr.length; 
+  - 2、for语句中间那个玩意少进行了一次计算,以前的话是for(i = 0; i < l; i++) // 这样的话中间的语句会先比较 i < l 然后比较出来的结果在跟true 或者false比较,自然多了次计算;
 
 
 
@@ -382,4 +382,3 @@ alert(attr(document.getElementById("test"), "classxx"));
     }
 })(); 
 ```
-
