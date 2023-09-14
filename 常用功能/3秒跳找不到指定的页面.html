@@ -27,7 +27,7 @@
     {
         second = document.getElementById('totalSecond').textContent;
     }
-    setInterval("redirect()", 1000);  //每1秒钟调用redirect()方法一次
+   
     function redirect()
     {
         if (second < 0)
@@ -44,5 +44,7 @@
             }
         }
     }
+
+    setInterval(redirect, 1000);  //每1秒钟调用redirect()方法一次
 -->
 </script>
