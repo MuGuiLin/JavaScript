@@ -4,7 +4,7 @@ const Router = require('koa-router')();
 const App = new Koa();
 
 /*
-常用的请求主法：
+常用的请求方式：
     1、GET      获取资源
     2、POST     创建资源
     3、PUT      更新资源
