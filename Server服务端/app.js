@@ -11,7 +11,7 @@ const App = new Koa();
     4、PATCH    修改资源
     5、DELETE   删除资源
 
-    6、OPTIONS
+    6、OPTIONS  预检请求
     7、HEAD
     8、TRACT
     9、CONNECT
