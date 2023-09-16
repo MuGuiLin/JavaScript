@@ -17,7 +17,6 @@ const App = new Koa();
     9、CONNECT
 */
 
-
 Router
     // GET请求会向数据库发索取数据的请求，从而来获取信息，该请求就像数据库的select操作一样，只是用来查询一下数据，不会修改、增加数据，不会影响资源的内容，即该请求不会产生副作用。无论进行多少次操作，结果都是一样的。
     .get('/', (ctx, next) => {
@@ -58,8 +57,6 @@ Router
 
         ctx.body = 'OK 删除成功！';
     })
-
-
 
 App
     .use(async (ctx, next) => {
