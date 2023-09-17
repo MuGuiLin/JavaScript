@@ -73,11 +73,13 @@
 				// Object.defineproperty 的作用就是直接在一个对象上定义一个新属性
 				Object.defineProperty(Mupiao.prototype, 'show2', {
 					// value: 属性值
-					// writable：对象属性值是否可以被修改  true允许(默认)  false不允许
-					// configurable: 对象属性是否可以被删除 true允许(默认)  false不允许
-					// enumerable: 对象属性是否可被枚举 true允许(默认)  false不允许
-					// get(): 给一个属性提供getter方法, 当访问这个对象的属性值得时候触发该方法
-					// set(): 给一个属性提供setter方法, 当设置属性值得时候触发该方法 
+
+					// writable：对象属性值是否可以被修改  true允许  false不允许(默认)
+					// configurable: 对象属性是否可以被删除 true允许  false不允许(默认)
+					// enumerable: 对象属性是否可被枚举 true允许  false不允许(默认)
+
+					// get(): 给一个属性提供getter方法, 当访问属性值时候触发该方法
+					// set(): 给一个属性提供setter方法, 当修改属性值时候触发该方法 
 
 					value: function() {
 						// 验证this指向
