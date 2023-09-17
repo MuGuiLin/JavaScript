@@ -38,19 +38,33 @@
 					console.log(this.name)
 				};
 			};
+
+			// Mupiao('沐枫'); // constructor Mupiao cannot be invoked without 'new'
 			const M1 = new Mupiao('沐枫');
 			M1.show();
 		};
 
 		// 普通构造function
 		{
+			'use strict'; // 注1：在ES6的class中默认就是严格模式！！
+
 			function Mupiao(name){
+				// 验证this指向
+				if (!(this instanceof Mupiao)) {
+					throw new TypeError('构造函数Mupiao不能在没有“new”的情况下调用！');
+				}
+				
 				this.name = name;
 			};
 
 			Mupiao.prototype.show = function() {
 				console.log(this.name);
 			};
+
+			// 注2：构造函数必须使用new关键字来调用，不用直接调用！！
+			// Mupiao('沐枫');
+			
+
 
 			const M1 = new Mupiao('沐枫');
 			M1.show();
