@@ -20,77 +20,89 @@
 				};
 
 				show(){
-					console.log(this.name)
-				}
-			}
+					console.log(this.name);
+				};
+			};
 			
 		</pre>
 
 		<script>
-		// ES6 class
-		{
-			class Mupiao {
-				constructor(name){
+			// ES6 class
+			{
+				class Mupiao {
+					constructor(name){
+						this.name = name;
+					};
+
+					show(){
+						console.log(this.name)
+					};
+				};
+
+				// Mupiao('沐枫'); // constructor Mupiao cannot be invoked without 'new'
+
+				const M1 = new Mupiao('沐枫');
+				M1.show();
+
+				for( const key in M1) {
+					console.log(key);  // ES6中class 的方法是不能被枚举(循环遍历)的！所以这里看不到show方法
+				};
+
+				// new M1.show(); // M1.show is not a constructor
+			};
+
+
+
+			// 普通构造function
+			{
+				'use strict'; // 注1：在ES6的class中默认就是严格模式！！
+
+				function Mupiao(name){
+					// 验证this指向
+					if (!(this instanceof Mupiao)) {
+						throw new TypeError('构造函数Mupiao不能在没有“new”的情况下调用！');
+					}
+					
 					this.name = name;
 				};
 
-				show(){
-					console.log(this.name)
+				Mupiao.prototype.show = function() {
+					console.log(this.name);
 				};
-			};
 
-			// Mupiao('沐枫'); // constructor Mupiao cannot be invoked without 'new'
-			const M1 = new Mupiao('沐枫');
-			M1.show();
+				Object.defineProperty(Mupiao.prototype, 'show2', {
+					// value: 属性值
+					// writable：对象属性值是否可以被修改  true允许(默认)  false不允许
+					// configurable: 对象属性是否可以被删除 true允许(默认)  false不允许
+					// enumerable: 对象属性是否可被枚举 true允许(默认)  false不允许
+					// get(): 给一个属性提供getter方法, 当访问这个对象的属性值得时候触发该方法
+					// set(): 给一个属性提供setter方法, 当设置属性值得时候触发该方法 
 
-			for( const key in M1) {
-				console.log(key);
-			}
-		};
+					value: function() {
+						// 验证this指向
+						if (!(this instanceof Mupiao)) {
+							throw new TypeError('M1.show2不是构造函数，不能通过“new”的情况下调用！');
+						}
+						console.log(this.name, '在循环遍历时 不会看到show2这个方法');
+					},
+					enumerable: false,
+				});
 
-		// 普通构造function
-		{
-			'use strict'; // 注1：在ES6的class中默认就是严格模式！！
-
-			function Mupiao(name){
-				// 验证this指向
-				if (!(this instanceof Mupiao)) {
-					throw new TypeError('构造函数Mupiao不能在没有“new”的情况下调用！');
-				}
+				// 注2：ES6中class 必须使用new关键字来调用，不用直接调用！！
+				// Mupiao('沐枫');
 				
-				this.name = name;
+				const M1 = new Mupiao('沐枫');
+				M1.show();
+				M1.show2();
+
+				// 注3：ES6中class 的方法是不能被枚举(循环遍历)的！
+				for( const key in M1) {
+					console.log(key);
+				}
+
+				new M1.show(); // undefined 
+				new M1.show2(); // M1.show2不是构造函数，不能通过“new”的情况下调用！
 			};
-
-			Mupiao.prototype.show = function() {
-				console.log(this.name);
-			};
-
-			Object.defineProperty(Mupiao.prototype, 'show2', {
-				// value: 属性值
-				// writable：对象属性值是否可以被修改  true允许  false不允许
-				// configurable: 对象属性是否可以被删除 true允许  false不允许
-				// enumerable: 对象属性是否可被枚举 true允许(默认)  false不允许
-				// get(): 给一个属性提供getter方法, 当访问这个对象的属性值得时候触发该方法
-				// set(): 给一个属性提供setter方法, 当设置属性值得时候触发该方法 
-
-				value: function() {
-					console.log(this.name, '在循环遍历时 不会看到show2这个方法');
-				},
-				enumerable: false,
-			})
-
-			// 注2：ES6中class 必须使用new关键字来调用，不用直接调用！！
-			// Mupiao('沐枫');
-			
-			const M1 = new Mupiao('沐枫');
-			M1.show();
-			M1.show2();
-
-			// 注3：ES6中class 的方法是不能被枚举(循环遍历)的！
-			for( const key in M1) {
-				console.log(key);
-			}
-		};
 			
 		</script>
 	</body>
