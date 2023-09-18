@@ -4,8 +4,8 @@
 		<meta charset="UTF-8">
 		<title>js原型常用方法</title>
 		<style type="text/css">
-			h1{ text-align: center;}
-			pre{font-size: 16px;}
+			h1{ text-align: center; }
+			pre{ font-size: 16px; }
 		</style>
 	</head>
 
@@ -150,8 +150,7 @@
 			
 			var prototypeObj = Object.getPrototypeOf(p1);  // 根据实例对象 p1 , 获得它(p1)的原型对象
 			
-			if(prototypeObj === Preson.prototype)
-			{
+			if(prototypeObj === Preson.prototype) {
 				alert('p1的原型对象是：Preson.prototype')
 			}
 			alert(prototypeObj);
@@ -204,8 +203,7 @@
 			* 扩展：自定义的方法
 			* 如何判断一个属性是否属于原型对象 并且 是否在原型对象中
 			*/
-			function hasPrototypePrototypeYN (Object , name)
-			{
+			function hasPrototypePrototypeYN (Object , name) {
 				return !Object.hasOwnProperty(name) && name in Object ; //这是关键点 同时用到了hasOwnProperty() 和 in
 			}
 			alert('答案是：' + hasPrototypePrototypeYN(p4,'age'));
