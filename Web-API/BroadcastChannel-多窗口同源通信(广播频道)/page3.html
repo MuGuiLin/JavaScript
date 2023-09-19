@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>接收消息 BroadcastChannel-多窗口同源通信(广播频道)</title>
+  </head>
+
+  <body>
+    <h1>接收消息 BroadcastChannel-多窗口同源通信(广播频道)</h1>
+    <hr />
+    <div>
+      <h2>接收页面发送消息区域：</h2>
+      <textarea id="send" cols="117" rows="10"></textarea>
+      <button onclick="open_new_win(event)">发送消息</button>
+    </div>
+
+    <br />
+
+    <div>
+      <h2>接收页面接收消息区域：</h2>
+      <textarea id="receive" cols="117" rows="10"></textarea>
+    </div>
+    <script>
+      const MuChannel = new BroadcastChannel("mupiao");
+
+      let order = +localStorage.getItem("--open-order--");
+
+      if (isNaN(order)) {
+        order = 0;
+      } else {
+        order++;
+        localStorage.setItem("--open-order--", order);
+      }
+
+      function open_new_win({ target }) {
+        MuChannel.postMessage({
+          msg:
+            "我是mupiao广播频道 【接收页面】 ，返馈回来的消息！" +
+            document.querySelector("#send").value,
+        });
+      }
+
+      // 监听返馈消息
+      MuChannel.addEventListener("message", function (e) {
+        console.log("收到返馈：", e);
+        document.querySelector("#receive").value = e.data.msg;
+      });
+    </script>
+  </body>
+</html>
