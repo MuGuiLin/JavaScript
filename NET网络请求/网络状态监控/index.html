@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网络状态监控</title>
+    <style>
+        body {
+            padding: 100px;
+        }
+
+        #box {
+            padding: 20px 30px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: greenyellow;
+            width: fit-content;
+        }
+
+        .off {
+            background-color: red !important;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Web navigator.connection 网络状态监控</h1>
+    <hr>
+
+    <div id="box" class="off">
+        <p>网络状态：<b id="line">离线（offline）</b></p>
+        <p>网络类型：<b id="effectiveType">--</b></p>
+        <p>网络带宽：<b id="downlink">--Mb/s</b></p>
+        <p>网络延迟：<b id="rtt">--ms</b></p>
+        <p>低功耗模式：<b id="saveData">false</b></p>
+        <!-- <p>本地IP：<b id="ip"></b></p>
+        <p>本地MAC：<b id="mac"></b></p> -->
+    </div>
+
+    <script>
+        console.log('网络状态监控', navigator.connection);
+        // 网络状态监控
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection || { tyep: 'unknown' };
+        function getNetInfo() {
+            let info;
+            if (navigator.onLine) {
+                info = {
+                    effectiveType: connection.effectiveType,  // 网络类型
+                    rtt: connection.rtt,  // 网络延迟
+                    downlink: connection.downlink, // 下行速度
+                    downlinkMax: connection.downlinkMax,  // 最大下行速度
+                    saveData: connection.saveData,    // 是否为低功耗模式
+                    // ip: connection.ip,    // 本地IP
+                    // mac: connection.mac, // 本地MAC
+                }
+            } else {
+                info = {
+                    effectiveType: connection.effectiveType,  // 网络类型
+                    rtt: connection.rtt,  // 网络延迟
+                    downlink: connection.downlink, // 下行速度
+                    downlinkMax: connection.downlinkMax,  // 最大下行速度
+                    saveData: connection.saveData,    // 是否为低功耗模式
+
+                }
+            }
+            return info;
+        };
+
+        function updateInfo() {
+            const info = getNetInfo()
+            line.innerText = navigator.onLine ? ' 在线（online）' : '离线（offline）';
+            effectiveType.innerText = info.effectiveType;
+            downlink.innerText = info.downlink + 'Mb/s'
+            rtt.innerText = info.rtt + 'ms';
+            saveData.innerText = info.saveData;
+            if (!navigator.onLine) {
+                box.classList.add('off');
+            } else {
+                box.classList.remove('off');
+            }
+            // box.classList.toggle('online', navigator.onLine);
+        };
+
+        // 网络状态在线时触发
+        globalThis.addEventListener('online', updateInfo);
+        // 网络状态离线时触发
+        globalThis.addEventListener('offline', updateInfo);
+        // effectiveType 发生改变时触发
+        navigator.connection.addEventListener('change', updateInfo);
+
+        updateInfo();
+        setInterval(updateInfo, 1000);
+    </script>
+</body>
+
+</html>
