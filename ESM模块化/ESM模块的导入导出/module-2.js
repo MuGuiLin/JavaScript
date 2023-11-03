@@ -6,7 +6,10 @@
 export * from "./module-3.js";
 
 
-export { AudioTrackList, AudioTrackRequest } from './';
+import * as all from "./module-3.js";
+console.dir(all)
+
+// export { AudioTrackList, AudioTrackRequest } from './';
 
 
 /**
@@ -17,4 +20,4 @@ export { AudioTrackList, AudioTrackRequest } from './';
 /**
  * 导入导出默认模块 并更名为myDef
  */
-export { default as myDef } from './module-3.js';
+// export { default as myDef } from './module-3.js';
