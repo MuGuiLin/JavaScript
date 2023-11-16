@@ -23,31 +23,30 @@
         console.log('demo.js模块中所有导出的内容都在这里：', all);
     </script> -->
 
-<script type="module">
-    function load() {
-        import('./module-3.js').then((esm) => {
-            demo = esm;
-            console.log('esm就是./demo.js模块文件中所有导出的内容：', esm);
-            console.log(esm.PI);
+    <script type="module">
+        function load() {
+            import('./module-3.js').then((esm) => {
+                console.log('esm就是./demo.js模块文件中所有导出的内容：', esm);
+                console.log(esm.PI);
 
-            const def = esm.default;
-            console.log('esm.default就是./demo.js模块文件中默认导出的内容：', def);
-            def.sum(100, 200);
-        });
+                const def = esm.default;
+                console.log('esm.default就是./demo.js模块文件中默认导出的内容：', def);
+                def.sum(100, 200);
+            });
 
-        import('./module-3.js').then(({ PI, isOdd, Person }) => {
-            console.log('也可以直接解构./demo.js模块文件分别独立导出的内容：', PI, isOdd, Person);
-            isOdd(666);
-            const p = new Person('沐枫');
-            p.sayHello();
-        });
-    };
+            import('./module-3.js').then(({ PI, isOdd, Person }) => {
+                console.log('也可以直接解构./demo.js模块文件分别独立导出的内容：', PI, isOdd, Person);
+                isOdd(666);
+                const p = new Person('沐枫');
+                p.sayHello();
+            });
+        };
 
-    // 在用户点击以后再去加载 想要引用和调用的模块。
-    btn.onclick = function () {
-        load();
-    };
-</script>
+        // 在用户点击以后再去加载 想要引用和调用的模块。
+        btn.onclick = function () {
+            load();
+        };
+    </script>
 </body>
 
 </html>
