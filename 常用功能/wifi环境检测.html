@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>wifi环境检测</title>
+		<style type="text/css">
+			h1{text-align: center;}
+			p{ text-align: center; font-size: 36px;}
+		</style>
+	</head>
+
+	<body>
+		<h1>wifi环境检测</h1><hr />
+		<p id="p"></p>
+	
+		<script type="text/javascript">
+			const getNetworkType = () => {
+					let type = ''
+					const ua = navigator.userAgent
+					console.log(ua)
+					this.detection = function(){
+						try {
+							const con = navigator?.connection
+							console.log(con)
+							if (con) {
+								type = 'wifi' === (con.type || con.effectiveType) ? 'wifi' : (con.type || con.effectiveType)
+							}
+						} catch (error) {
+							if (/MicroMessenger/.test(ua)) {
+								type = ua.indexOf('WIFI') >= 0 ? 'wifi' : '未知'
+							}
+						}
+					}
+					try {
+						const net = ua.match(/NetType\/\w+/) ? ua.match(/NetType\/\w+/)[0] : 'NetType/other'
+						switch (net.toLowerCase().replace('nettype/', '')) {
+							case 'wifi':
+								type = 'wifi'
+								break
+							case '5g':
+								type = '5g'
+								break
+							case '4g':
+								type = '4g'
+								break
+							case '3g':
+							case '3gnet':
+								type = '3g'
+								break
+							case '2g':
+								type = '2g'
+								break
+							default:
+								type = 'other'
+						}
+					} catch (error) {
+						this.detection()
+					} finally {
+						('other' == type) && this.detection()
+						return type
+					}
+				}
+			
+				setInterval(() => {
+					const is = getNetworkType()
+					p.innerText = is;
+					console.log(is)
+				}, 1000)
+			
+		</script>
+	</body>
+</html>

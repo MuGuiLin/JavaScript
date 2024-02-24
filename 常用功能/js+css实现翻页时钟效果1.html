@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>js+css实现翻页时钟效果</title>
+    <style>
+      * {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      ul {
+        position: relative;
+        margin: 100px auto;
+        max-width: 200px;
+        height: 100px;
+        border: 1px solid gray;
+        perspective: 200px;
+      }
+      ul::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        margin-top: -1px;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(to bottom, #333, #333 1px, #ddd 1px);
+        z-index: 666;
+      }
+      li {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 50%;
+        font-size: 100px;
+        text-align: center;
+        color: #fff;
+        overflow: hidden;
+        transition: 1s ease-in;
+      }
+      .card1 {
+        line-height: 100px;
+        background: blue;
+      }
+      .card2 {
+        top: 50%;
+        line-height: 0px;
+        background: blue;
+        transform: rotateX(180deg);
+        transform-origin: center top;
+        backface-visibility: hidden;
+        z-index: 2;
+      }
+      .card3 {
+        line-height: 100px;
+        background: blue;
+        transform-origin: center bottom;
+        backface-visibility: hidden;
+        z-index: 2;
+      }
+      .card4 {
+        top: 50%;
+        line-height: 0px;
+        background: blue;
+      }
+
+      ul:hover .card2 {
+        transform: rotateX(0deg);
+      }
+      ul:hover .card3 {
+        transform: rotateX(-180deg);
+      }
+    </style>
+  </head>
+  <body>
+    <ul>
+      <li class="card1">2</li>
+      <li class="card2">2</li>
+      <li class="card3">1</li>
+      <li class="card4">1</li>
+    </ul>
+  </body>
+</html>

@@ -25,8 +25,9 @@
 	<script src="mupiao.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">
 		alert(mupiao);
+		console.log(globalThis);
 		var list = ""
-		for(var i in mupiao){
+		for(let i in mupiao){
 			list += '<a href='+mupiao[i].url+'.html><li>' + mupiao[i].name + '</a></li>';
 		}
 		document.getElementById("menu").innerHTML = list;

@@ -4,19 +4,18 @@ const Router = require('koa-router')();
 const App = new Koa();
 
 /*
-常用的请求主法：
+常用的请求方式：
     1、GET      获取资源
     2、POST     创建资源
     3、PUT      更新资源
     4、PATCH    修改资源
     5、DELETE   删除资源
 
-    6、OPTIONS
+    6、OPTIONS  预检请求
     7、HEAD
     8、TRACT
     9、CONNECT
 */
-
 
 Router
     // GET请求会向数据库发索取数据的请求，从而来获取信息，该请求就像数据库的select操作一样，只是用来查询一下数据，不会修改、增加数据，不会影响资源的内容，即该请求不会产生副作用。无论进行多少次操作，结果都是一样的。
@@ -58,8 +57,6 @@ Router
 
         ctx.body = 'OK 删除成功！';
     })
-
-
 
 App
     .use(async (ctx, next) => {

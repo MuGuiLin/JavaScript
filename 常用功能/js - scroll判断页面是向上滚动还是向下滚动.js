@@ -1,19 +1,17 @@
-js - scroll判断页面是向上滚动还是向下滚动
-原理： 那当前的scrollTop和之前的scrollTop对比
-
 /*
+	js - scroll判断页面是向上滚动还是向下滚动
+	
+	原理： 那当前的scrollTop和之前的scrollTop对比
+	
 	如果变大了， 表示向下滚动（ scrollTop值变大）；
 
 	如果变小了， 表示向上滚动（ scrollTop值变小）。
-
-
 
 	js获取，设置滚动条位置
 
 	注： document.documentElement.scrollTop 和 document.documentElement.scrollTop 会有一个为0
 
 */
-
 
 //获取document信息
 function ScollPostion() {
@@ -42,12 +40,11 @@ function ScollPostion() {
 window.scrollTo(0,scrollTop);
 
 
-方法一： js代码：
+// 方法一： js代码：
 
 $(document).ready(function() {
 
 	var p = 0,
-
 		t = 0;
 
 	$(window).scroll(function() {
@@ -55,15 +52,10 @@ $(document).ready(function() {
 		p = $(this).scrollTop();
 
 		if (t < p) {
-
 			//下滚
-
 		} else {
-
-			//上滚            
-
+			//上滚
 		}
-
 		setTimeout(function() {
 			t = p;
 		}, 0)
@@ -72,9 +64,8 @@ $(document).ready(function() {
 
 })
 
-方法二：
-
-1. 单纯判断滚动条方向：
+// 方法二：
+// 1. 单纯判断滚动条方向：
 
 function scroll(fn) {
 
@@ -100,15 +91,15 @@ function scroll(fn) {
 
 })
 
-调用方法： scroll(function(direction) {
+// 调用方法： 
+scroll(function(direction) {
 	console.log(direction)
 });
 
 
 
 
-
-以上方法苹果手机浏览器事件会跳动， 解决方法代码改进
+// 以上方法苹果手机浏览器事件会跳动， 解决方法代码改进
 
 scrollDirect: function(fn) {
 
@@ -133,11 +124,8 @@ scrollDirect: function(fn) {
 		var windowHeight = $(this).height();
 
 		if (scrollTop + windowHeight > scrollHeight - 10) {
-
 			fn("up");
-
 			return;
-
 		}
 
 		if (afterScrollTop < 10 || afterScrollTop > $(document.body).height - 10) {
@@ -147,20 +135,17 @@ scrollDirect: function(fn) {
 		} else {
 
 			if (Math.abs(delta) < 10) {
-
 				return false;
-
 			}
 
 			fn(delta > 0 ? "down" : "up");
-
 		}
 
 	}, false);
 
 }
 
-调用方法：
+// 调用方法：
 
 var upflag = 1;
 
@@ -177,7 +162,6 @@ crollDirect(function(direction) {
 			$(".footer_wrap").slideUp(200);
 
 			downlag = 0;
-
 			upflag = 1;
 
 		}
@@ -202,7 +186,7 @@ crollDirect(function(direction) {
 
 
 
-滚动条滚动到底部和头部判断
+// 滚动条滚动到底部和头部判断
 
 BottomJumpPage: function() {
 
@@ -212,13 +196,14 @@ BottomJumpPage: function() {
 
 	var windowHeight = $(this).height();
 
-	if (scrollTop + windowHeight == scrollHeight) { //滚动到底部执行事件
+	// 滚动到底部执行事件
+	if (scrollTop + windowHeight == scrollHeight) { 
 
 		console.dir("我到底部了")
-
 	}
 
-	if (scrollTop == 0) { //滚动到头部执行事件
+	// 滚动到头部执行事件
+	if (scrollTop == 0) { 
 
 		console.dir("我到头部了")
 
@@ -226,4 +211,5 @@ BottomJumpPage: function() {
 
 }
 
-调用方法： $(window).scroll(BottomJumpPage);
+//调用方法：
+$(window).scroll(BottomJumpPage);

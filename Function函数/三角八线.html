@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+
+</head>
+
+<body>
+	<h1>三角八线：八线指的是八种三角函数线（正余弦，正余切，正余割，正余矢）</h1>
+	<hr />
+	<p>求对角边公式：对角边的长度 = 斜边长度 * sin(对角度数)</p>
+	<p>
+		sin
+		<input type="text" id="r" placeholder="斜边长度" />
+		<input type="text" id="du"  placeholder="对角度数" />
+		<input type="text" id="xVal" placeholder="对角边的长度" />
+		<input type="button" id="rxVal" value="开始计算" />
+	</p>
+
+
+</body>
+
+<script type="text/javascript">
+	function $(el) {
+		return document.querySelector(el);
+	};
+	function xValFn(r, du) {
+		console.log(r, Math.sin(Number(du)))
+		return Number(r) * Math.sin(Number(du * Math.PI / 180)).toFixed(4);
+	};
+	$('#rxVal').onclick = () => {
+		$('#xVal').value = xValFn($('#r').value, $('#du').value);
+	};
+</script>
+
+</html>

@@ -10,6 +10,7 @@
 			canvas, img{ width: 600px; height: 350px; border: 1px solid darkgray;}
 			button{ padding: 6px 20px; margin: 6px 3px;}
 			h3{color: red;}
+			pre{text-align: left;}
 		</style>
 	</head>
 
@@ -44,6 +45,34 @@
 		</footer>
 
 		<h3>注：请服务器中运行才有效果哦，如用：WampServer64环境将代码放在 www 目录下，如用phpStudy工具将站点目录指到这个文件！</h3>
+		
+		<pre>
+			// 视频任意帧数截图函数
+			function videoCutOutImg (url, frames = 5) {
+				let video = document.createElement('video')
+				let slide = 0.5
+				video.crossOrigin = 'anonymous'
+				video.setAttribute('src', url)
+				video.currentTime = frames // 帧数，取5帧吧，第一帧可能会是黑色，帧数自定义取
+				return new Promise((resolve, reject) => {
+					video.addEventListener('loadeddata', function () {
+					let canvas = document.createElement('canvas')
+					canvas.width = video.videoWidth * slide
+					canvas.height = video.videoHeight * slide
+					canvas
+						.getContext('2d')
+						.drawImage(video, 0, 0, canvas.width, canvas.height)
+					resolve(canvas.toDataURL('image/png'))
+					
+					})
+				})
+			};
+
+			// 调用方式: url参数是视频链接
+			videoCutOutImg(url).then(res => {
+				console.log(res);// 返回截取到的视频帧图片
+			});
+		</pre>
 	</body>
 
 	<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>

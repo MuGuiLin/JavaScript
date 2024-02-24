@@ -1,47 +1,120 @@
-## Web前端开发标准 -> W3C标准
-构成:
-1、结构标准----html4.0 / xhtml1.0 / html5; （结构骨架）
-2、表现标准----css2.0 / css3.0; （布局）
+# Web前端开发标准 -> W3C标准
+
+ [W3C官网(www.w3.org)](https://www.w3.org/zh-hans/)、[W3C中国 (chinaw3c.org)](https://www.chinaw3c.org/)
+
+[谷歌Chrome浏览器的源码](https://github.com/chromium/chromium)
+
+### 构成:
+
+1、结构标准----html4.0 / xhtml1.0 / html5; （结构，骨架）
+2、表现标准----css2.0 / css3.0; （样式，布局）
 3、行为标准----javaScript, Jquery; （功能，操作）
 
 
-各种浏览器之间不兼容问题的解决办法
 
-问题: 解决办法:
+**各种浏览器之间不兼容问题的解决办法**
 
-1、没有使用正确的DocType        		正确声明doctype
-2、各浏览器对不同标签的初始值不同		统一初始化CSS样式
-3、自身代码书定不规范				加以改正
-4、浏览器自身BUG引起				css hack
+| 问题                              | 解决办法          |
+| --------------------------------- | ----------------- |
+| 1、没有使用正确的DocType          | 正确声明doctype   |
+| 2、各浏览器对不同标签的初始值不同 | 统一初始化CSS样式 |
+| 3、自身代码书定不规范             | 加以改正          |
+| 4、浏览器自身BUG引起              | css hack          |
+|                                  |                   |
+|                                  |                   |
 
 
-URL参数加解密：
+
+**URL参数加解密（ASCII码）：**
 encodeURIComponent()加密
 decodeURIComponent()解码
 
-下DOM中的默认事件对象
+
+
+**随机数字符串：字母 + 数字 + 时间戳**
+
+```js
+Math.random().toString(36).substring(2)+Date.now(); // 9ui4o3sdrgp1693888458382
+```
+
+
+
+**CSS动态变量 setProperty()：**
+
+```html
+<style>
+    div {
+       width: var(--div-width);
+    }
+</style>
+
+<script>
+    // 在js中给DOM元素设置CSS变量
+	div.style.setProperty('--div-width', div.clientWidth);
+</script>
+```
+
+
+
+**toLocaleString() 方法**：
+
+千分位：
+
+```js
+(12345678910).toLocaleString(); // 12,345,678,910
+
+(1234567891026.32).toLocaleString('zh-CN', {
+  style: 'currency',
+  currency: 'CNY',
+}); // '¥1,234,567,891,026.32'
+```
+
+百分比：
+
+```js
+(0.5).toLocaleString('zh-CN', {
+  style: 'percent',
+  currency: 'CNY',
+}); // '50%'
+```
+
+日期格式化：
+
+```js
+new Date().toLocaleString(); // 2023/9/8 12:30:16
+new Date().toLocaleString('chinese', {
+    hour12: true
+}); // 2023/9/8 下午12:30:16
+```
+
+
+
+**下DOM中的默认事件对象：**
 event.preventDefault() 取消事件默认行为
 event.stopPropagation() 取消事件冒泡对当前节点无影响
 event.stopImmediatePropagation() 取消事件冒泡同时阻止当前节点上的事件处理程序被调用
 
-IE中的事件对象：（ 不符合W3C标准）
+
+
+**IE中的事件对象：（ 不符合W3C标准）**
 event.cancelBubble() 取消事件冒泡
 event.returnValue() 取消事件默认行为
 
 
-在IE下常见的BUG及解决办法(尤其是低版本的IE，如IE6，IE7等)
-
-问题: 解决办法
-1、盒模型BUG				使用严格doctype声明
-
-2、双倍margin BUG				_display: inline;
-
-3、不认识a: link				不加: link，直接a就行了
-
-4、3像素margin BUG				规范浮动或清除浮动
 
 
-点击超链接不跳转:
+在**IE**下常见的BUG及解决办法(尤其是低版本的IE，如IE6，IE7等)
+
+| 问题               | 解决办法                |
+| ------------------ | ----------------------- |
+| 1、盒模型BUG       | 使用严格doctype声明     |
+| 2、双倍margin BUG  | _display: inline;       |
+| 3、不认识a: link   | 不加: link，直接a就行了 |
+| 4、3像素margin BUG | 规范浮动或清除浮动      |
+
+
+
+**关于点击超链接不让跳转:**
 
 1：<a href="#"></a>
 
@@ -51,18 +124,20 @@ event.returnValue() 取消事件默认行为
 
 4：<a href="#" onclick="return false"></a>
 
+
+
 ##  JavaScript基础
 
-网景公司：
-作用: 实现用户交互行为, 网页特效, 数据验证等, 它是一种脚本语言, 是弱类型语言，
-实现用户交互行为操作----- 通过一些事件-- - 来执行一些操作
-
-js的出现最初就是为了表单的效检而发明的！
+> 网景公司：
+> 作用: 实现用户交互行为, 网页特效, 数据验证等, 它是一种脚本语言, 是弱类型语言，
+> 实现用户交互行为操作----- 通过一些事件-- - 来执行一些操作，
+>
+> javaScript的出现最初就是为了表单的效检而发明的！
 
 JavaScript组成;
 1、ECMA Script; (是一个标准ECMA - 262定义) （是js语言的核心）作用： 解释器，翻译，如果没有它，你写的代码，浏览器根本不认识，因为计算机只认二进码：0和1；
 
-2、DOM：Document Object Model: 网页文档  对象  模型   作用操作页面(document)提供访问网页内容的方法和接口
+2、DOM：Document Object Model: 【文档  对象  模型】作用操作页面(document)提供访问网页内容的方法和接口，当然还有CSS中的CSSOM 
 
 3、BOM：Browser Object Model: 浏览器  对象  模型  作用操作浏览器(window)提供与浏览器交互的方法和接口。
 
@@ -139,29 +214,31 @@ var 是根据你所赋的值来决定数据类型的，一个变量最好只存�
 typeof () 判断数据类型
 单体对象：【Global对象 和 Math对象：】
 
-1、Global对象常用的方法:
-isNaN() 判断不是数字 如果不是就返回true，如果是就返回false；
-parseInt()将字符转为整数
-parseFloat()将字符转为小数
-eval（变量名，对象名，数组名等); //它能将字符串、对象、数组等 解析 为js代码（用途很多如：传参数，传脚本，动态解析执行等）;
+- 1、Global对象常用的方法:
+    isNaN() 判断不是数字 如果不是就返回true，如果是就返回false；
+    parseInt()将字符转为整数
+    parseFloat()将字符转为小数
+    eval（变量名，对象名，数组名等); //它能将字符串、对象、数组等 解析 为js代码（用途很多如：传参数，传脚本，动态解析执行等）;
 
-2、Math对象常用的方法:
-Math.ceil()执行向上舍入，即它总是将数值向上舍入为最接近的整数；
-Math.floor()执行向下舍入，即它总是将数值向下舍入为最接近的整数；
-Math.round()执行标准舍入，即它总是将数值四舍五入为最接近的整数(这也是我们在数学课上学到的舍入规则)
+- 2、Math对象常用的方法:
+    Math.ceil()执行向上舍入，即它总是将数值向上舍入为最接近的整数；
+    Math.floor()执行向下舍入，即它总是将数值向下舍入为最接近的整数；
+    Math.round()执行标准舍入，即它总是将数值四舍五入为最接近的整数(这也是我们在数学课上学到的舍入规则)
 
 
 this 当前发生事件的元素!
 innerHTML: 几乎所有的元素都有innerHTML属性, 它是一个字符串(获取HTML当前标签的起始和结束里面的内容)
 
-
 JavaScript eval()函数可计算某个字符串，并执行其中的的 JavaScript 代码
 例：
+
+```js 
 eval("x=10;y=20;document.write(x*y)") //结果：200
 
 document.write(eval("2+2"))  //结果：4
 var x = 10
 document.write(eval(x + 17))  //结果：27
+```
 
 
 
@@ -172,7 +249,7 @@ typeof () 判断数据类型： typeof 返回值有六种可能： "number," "st
 var a = 123;
 alert(typeof a)
 结果：Number
-一、基本类型：Number, String, Boolean, Undefined, Null 5种
+**1、基本类型：Number, String, Boolean, Undefined, Null 5种**
 ①Number： 数字类型（整数，小数【最高精度17位小数】，NaN不是一个数(注：js里面 唯一只有NaN 自己不于自己本身的，如：if (NaN == NaN) { 结果：不等于 }) ，lnfinity正无穷，-lnfinity负无穷 ）
 
 * 小数精度例如：
@@ -204,7 +281,7 @@ alert(typeof a)
 ④Undefined：表示：未定义（没有被定义）//一般是变量声明了，但没赋值
 ⑤Null：表示：空值、空对象 //没有内容/数据               
 
-三、引用类型（复合类型）： object, function;
+**2、引用类型（复合类型）： object, function;**
 对象      函数义
 
 JS中一切皆是对象object：因为object由number, string, boolean, undefined, 组成；
@@ -628,7 +705,7 @@ myDate.toLocaleTimeString();  //获取当前时间
 myDate.toLocaleString();  //获取日期与时间
 
 ### JS运动 
-setInterval(fnuction(), 30)定时器
+> setInterval(fnuction(), 30)定时器
 
 clearInterval(obj.mupiao)//清除鼠标当前DIV的定时器
 
@@ -777,11 +854,11 @@ var re = eval("/^\\d+" + v + "$/gim")
 	};
 
     o.prototype = {
-		//判断两个数据是否相等
+    	//判断两个数据是否相等
     	arrayEqual: function(arr1, arr2) {
-			if (!arr1 || !arr2) {
-				return false;
-			}
+    		if (!arr1 || !arr2) {
+    			return false;
+    		}
     		if (arr1 === arr2) {
     			return true;
     		}  
@@ -794,100 +871,100 @@ var re = eval("/^\\d+" + v + "$/gim")
     			}	
     		}   
     		return true;
-		},
-		
-		//判断是否为手机号
-		isPhoneNum: function (str) {
-			return /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/.test(str);
-		},
-		
-		//判断是否为邮箱地址
-		isEmail: function (str) {
-		  	return /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(str);
-		},
-
-		//判断是否为身份证号
-		isIdCard: function (str) {
-			return /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/.test(str);
-		},
-		
-		//判断是否为URL地址
-		isUrl: function (str) {
-			return /[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i.test(str);
-		},
-
-		//获取Cookie
-		getCookie: function (name) {
-			var arr = document.cookie.replace(/\s/g, "").split(';');
-			for (var i = 0; i < arr.length; i++) {
-				var tempArr = arr[i].split('=');
-				if (tempArr[0] == name) {
-					return decodeURIComponent(tempArr[1]);
-				}
-			}
-			return '';
-		},
-		
-		//设置Cookie
-		setCookie: function (name, value, days) {
-			var date = new Date();
-			date.setDate(date.getDate() + days);
-			document.cookie = name + '=' + value + ';expires=' + date;
-		},
-
-		//删除Cookie
-		delCookie: function (name) {
-			this.setCookie(name, '1', -1); //设置已过期，系统会立刻删除cookie
-		},
-
-		//获取滚动条距顶部的距离
-		getScrollTop: function () {
-			return (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
-		},
-		
-		//获取当前操作系统
-		getOS: function () {
-			var userAgent = 'navigator' in window && 'userAgent' in navigator && navigator.userAgent.toLowerCase() || '',
-			 	vendor = 'navigator' in window && 'vendor' in navigator && navigator.vendor.toLowerCase() || '',
-				appVersion = 'navigator' in window && 'appVersion' in navigator && navigator.appVersion.toLowerCase() || '';
-			if (/mac/i.test(appVersion)) return 'MacOSX'
-			if (/win/i.test(appVersion)) return 'windows'
-			if (/linux/i.test(appVersion)) return 'linux'
-			if (/iphone/i.test(userAgent) || /ipad/i.test(userAgent) || /ipod/i.test(userAgent)) 'ios'
-			if (/android/i.test(userAgent)) return 'android'
-			if (/win/i.test(appVersion) && /phone/i.test(userAgent)) return 'windowsPhone'
-		},
-
-		//获取浏览器类型和版本
-		getExplore: function () {
-			var sys = {}, ua = navigator.userAgent.toLowerCase(), s;
-			(s = ua.match(/rv:([\d.]+)\) like gecko/)) ? sys.ie = s[1]:
-			(s = ua.match(/msie ([\d\.]+)/)) ? sys.ie = s[1] :
-			(s = ua.match(/edge\/([\d\.]+)/)) ? sys.edge = s[1] :
-			(s = ua.match(/firefox\/([\d\.]+)/)) ? sys.firefox = s[1] :
-			(s = ua.match(/(?:opera|opr).([\d\.]+)/)) ? sys.opera = s[1] :
-			(s = ua.match(/chrome\/([\d\.]+)/)) ? sys.chrome = s[1] :
-			(s = ua.match(/version\/([\d\.]+).*safari/)) ? sys.safari = s[1] : 0;
-
-			// 根据关系进行判断
-			if (sys.ie) return ('IE: ' + sys.ie)
-			if (sys.edge) return ('EDGE: ' + sys.edge)
-			if (sys.firefox) return ('Firefox: ' + sys.firefox)
-			if (sys.chrome) return ('Chrome: ' + sys.chrome)
-			if (sys.opera) return ('Opera: ' + sys.opera)
-			if (sys.safari) return ('Safari: ' + sys.safari)
-			return 'Unkonwn';
-		}
-		
-		//随机生成颜色
-		randomColor: function () {
-			return '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).slice(-6);
-		},
-
-		// 生成指定范围随机数
-		randomNum: function (min, max) {
-			return Math.floor(min + Math.random() * (max - min));
-		}
+    	},
+    	
+    	//判断是否为手机号
+    	isPhoneNum: function (str) {
+    		return /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/.test(str);
+    	},
+    	
+    	//判断是否为邮箱地址
+    	isEmail: function (str) {
+    	  	return /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(str);
+    	},
+    
+    	//判断是否为身份证号
+    	isIdCard: function (str) {
+    		return /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/.test(str);
+    	},
+    	
+    	//判断是否为URL地址
+    	isUrl: function (str) {
+    		return /[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i.test(str);
+    	},
+    
+    	//获取Cookie
+    	getCookie: function (name) {
+    		var arr = document.cookie.replace(/\s/g, "").split(';');
+    		for (var i = 0; i < arr.length; i++) {
+    			var tempArr = arr[i].split('=');
+    			if (tempArr[0] == name) {
+    				return decodeURIComponent(tempArr[1]);
+    			}
+    		}
+    		return '';
+    	},
+    	
+    	//设置Cookie
+    	setCookie: function (name, value, days) {
+    		var date = new Date();
+    		date.setDate(date.getDate() + days);
+    		document.cookie = name + '=' + value + ';expires=' + date;
+    	},
+    
+    	//删除Cookie
+    	delCookie: function (name) {
+    		this.setCookie(name, '1', -1); //设置已过期，系统会立刻删除cookie
+    	},
+    
+    	//获取滚动条距顶部的距离
+    	getScrollTop: function () {
+    		return (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
+    	},
+    	
+    	//获取当前操作系统
+    	getOS: function () {
+    		var userAgent = 'navigator' in window && 'userAgent' in navigator && navigator.userAgent.toLowerCase() || '',
+    		 	vendor = 'navigator' in window && 'vendor' in navigator && navigator.vendor.toLowerCase() || '',
+    			appVersion = 'navigator' in window && 'appVersion' in navigator && navigator.appVersion.toLowerCase() || '';
+    		if (/mac/i.test(appVersion)) return 'MacOSX'
+    		if (/win/i.test(appVersion)) return 'windows'
+    		if (/linux/i.test(appVersion)) return 'linux'
+    		if (/iphone/i.test(userAgent) || /ipad/i.test(userAgent) || /ipod/i.test(userAgent)) 'ios'
+    		if (/android/i.test(userAgent)) return 'android'
+    		if (/win/i.test(appVersion) && /phone/i.test(userAgent)) return 'windowsPhone'
+    	},
+    
+    	//获取浏览器类型和版本
+    	getExplore: function () {
+    		var sys = {}, ua = navigator.userAgent.toLowerCase(), s;
+    		(s = ua.match(/rv:([\d.]+)\) like gecko/)) ? sys.ie = s[1]:
+    		(s = ua.match(/msie ([\d\.]+)/)) ? sys.ie = s[1] :
+    		(s = ua.match(/edge\/([\d\.]+)/)) ? sys.edge = s[1] :
+    		(s = ua.match(/firefox\/([\d\.]+)/)) ? sys.firefox = s[1] :
+    		(s = ua.match(/(?:opera|opr).([\d\.]+)/)) ? sys.opera = s[1] :
+    		(s = ua.match(/chrome\/([\d\.]+)/)) ? sys.chrome = s[1] :
+    		(s = ua.match(/version\/([\d\.]+).*safari/)) ? sys.safari = s[1] : 0;
+    
+    		// 根据关系进行判断
+    		if (sys.ie) return ('IE: ' + sys.ie)
+    		if (sys.edge) return ('EDGE: ' + sys.edge)
+    		if (sys.firefox) return ('Firefox: ' + sys.firefox)
+    		if (sys.chrome) return ('Chrome: ' + sys.chrome)
+    		if (sys.opera) return ('Opera: ' + sys.opera)
+    		if (sys.safari) return ('Safari: ' + sys.safari)
+    		return 'Unkonwn';
+    	}
+    	
+    	//随机生成颜色
+    	randomColor: function () {
+    		return '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).slice(-6);
+    	},
+    
+    	// 生成指定范围随机数
+    	randomNum: function (min, max) {
+    		return Math.floor(min + Math.random() * (max - min));
+    	}
     }
     window.O = new o();
 }());

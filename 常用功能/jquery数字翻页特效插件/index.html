@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>人数统计翻页特效插件</title>
+		<link rel="stylesheet" href="style/style.css" media="screen" type="text/css" />
+	</head>
+
+	<body>
+		<div class="tj_top"></div>
+		<div class="tj_tit"></div>
+
+		<div class="dataStatistics">
+			<div class="digit_set"></div>
+			<div class="digit_set"></div>
+			<div class="digit_set"></div>
+			<div class="digit_set"></div>
+			<div class="digit_set"></div>
+			<div class="digit_set set_last"></div>
+		</div>
+
+		<div class="tj_foot"></div>
+
+		<script type="text/javascript" src='js/jquery.js'></script>
+		<script type="text/javascript" src="js/jquery.dataStatistics.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$('.dataStatistics').dataStatistics({ 
+					min: 0, 
+					max: 686868,
+					time: 1000,
+					len: 6
+				});
+			});
+		</script>
+
+	</body>
+</html>

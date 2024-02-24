@@ -41,7 +41,7 @@
       win = window.open(two ? './child2.html' : './child.html', '_blank', 'width=800, height=600, toolbar=no, menubar=no, location=no, status=no');
 
       // win.postMessage("Hello World!", "http://www.xxx.com:8080");
-      win.postMessage("Hello World!", "*");
+      win.postMessage("Hello World!", "*"); // 在生产环境中使用时 最好指定域名，不要用* ！！
     };
 
     function input(e) {
