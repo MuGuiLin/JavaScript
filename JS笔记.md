@@ -26,8 +26,8 @@
 
 
 **URL参数加解密（ASCII码）：**
-encodeURIComponent()加密
-decodeURIComponent()解码
+encodeURIComponent(xxx)加密
+decodeURIComponent(xxx)解码
 
 
 
