@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>从视频文件提取画面帧</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        input {
+            font-size: 32px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>从视频文件提取画面帧</h1>
+    <hr>
+    <pre>
+        在视频第一帧的时候截图，然后再设置为封面即可。
+        
+        根据视觉暂留原理，人眼无法辨别单幅的静态画面；看上去是平滑连续的视觉效果，这样连续的画面叫做视频。视频技术最早是为了电视系统而发展，但现在已经发展为各种不同的格式以利消费者将视频记录下来。
+        
+        网络技术的发达也促使视频的纪录片段以串流媒体的形式存在于因特网之上并可被电脑接收与播放。视频与电影属于不同的技术，后者是利用照相术将动态的影像捕捉为一系列的静态照片。
+        
+        扫描传送：
+        
+        视频可以用逐行扫描或隔行扫描来传送，交错扫描是早年广播技术不发达，带宽甚低时用来改善画质的方法(其技术细节请参见其主条目）。NTSC，PAL与SECAM皆为交错扫描格式。
+        
+        在视频分辨率的简写当中经常以i来代表交错扫描。例如PAL格式的分辨率经常被写为576i50，其中576代表垂直扫描线数量，i代表隔行扫描，50代表每秒50个field（一半的画面扫描线）。
+        
+        在逐行扫描系统当中每次画面更新时都会刷新所有的扫描线。此法较消耗带宽但是画面的闪烁与扭曲则可以减少。
+    </pre>
+    <!-- <input type="file" onchange="readFile(this.files[0])" /> -->
+    <input type="file" onchange="readFile(event)" />
+    <script>
+        const getVideoFrame = (file, time = 0) => {
+            return new Promise((resolve, reject) => {
+                const video = document.createElement('video');
+                // 由于浏览器策略, 不允许视频自动播放，所以需要静音才能自动播放
+                video.muted = true;
+                video.crossOrigin = 'anonymous';
+                // 获取设置本地blob的视频播放RUL
+                video.src = URL.createObjectURL(file);
+                if (time) {
+                    // 如果传有时间参数，则直接跳转到指定时间（默认第一帧画面）
+                    video.currentTime = time;
+                }
+                video.play().then(() => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    // 将视频帧渲染到canvas上
+                    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+                    canvas.toBlob((blob) => {
+                        // 将canvas转成blob
+                        resolve({
+                            blob: blob, // 可用于图片文件上传数据格式的文件流对象
+                            url: URL.createObjectURL(blob), // 可用于图片显示的URL
+                            base64: canvas.toDataURL('image/png'), // 可用于显示png的图片格式
+                        });
+                        video.pause();
+                        video = null;
+                    });
+                });
+
+                video.onerror = (err) => {
+                    video.pause();
+                    video = null;
+                    reject(err);
+                };
+            });
+        }
+
+
+        const getVideoFrame2 = (file = '', time = 0) => {
+            if (!file) return void 0;
+            return new Promise((resolve, reject) => {
+                let video = document.createElement('video')
+                if (time) {
+                    video.currentTime = time
+                }
+                video.src = URL.createObjectURL(file);
+                // video.muted = true
+                // video.autoplay = true;
+                video.crossOrigin = 'anonymous'
+                try {
+                    video.addEventListener('seeked', () => {
+                        const canvas = document.createElement('canvas')
+                        canvas.width = video.videoWidth
+                        canvas.height = video.videoHeight
+                        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height)
+                        canvas.toBlob((blob) => {
+                            resolve({
+                                blob: blob,
+                                url: URL.createObjectURL(blob),
+                                base64: canvas.toDataURL('image/png'),
+                            })
+                            video.pause()
+                            video = null
+                        })
+                    })
+                    video.onerror = (err) => {
+                        video.pause()
+                        video = null
+                        reject(err)
+                    };
+                } catch (err) {
+                    reject(err)
+                }
+            })
+        }
+
+
+        const readFile = (e) => {
+            // console.log(e);
+            const file = e.target.files[0] || document.querySelector('input[type="file"]').files[0];
+            // console.log(file);
+
+            // 获取第一帧
+            getVideoFrame(file, 0).then((res) => {
+                console.log(res);
+                const img = document.createElement('img');
+                img.src = res.url;
+                img.width = 600;
+                img.onload = () => {
+                    document.body.appendChild(img);
+                }
+            });
+
+            document.body.appendChild(document.createElement('br'));
+
+            // 获取1000到1010帧
+            for (let i = 1000; i < 1010; i++) {
+                getVideoFrame2(file, i * 0.1).then((res) => {
+                    const img = document.createElement('img');
+                    img.src = res.url;
+                    img.width = 300;
+                    img.setAttribute('data-index', i);
+                    img.onload = () => {
+                        document.body.appendChild(img);
+                    }
+                });
+            }
+
+        }
+    </script>
+</body>
+
+</html>
