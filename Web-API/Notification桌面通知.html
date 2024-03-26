@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notification桌面通知</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Notification桌面通知</h1>
+    <hr>
+    <button class="on_click">手动触发桌面通知</button>
+    <script>
+        class NotificationDesktop {
+            constructor(title, options) {
+                this.title = title;
+                this.options = options;
+            }
+            show() {
+                if (Notification.permission === 'granted') {
+                    const notification = new Notification(this.title, this.options);
+                    notification.onclick = function () {
+                        console.log('Notification clicked.');
+                    };
+                } else if (Notification.permission !== 'denied') {
+                    Notification.requestPermission().then(function (permission) {
+                        if (permission === 'granted') {
+                            const notification = new Notification(this.title, this.options);
+                            notification.onclick = function () {
+                                console.log('Notification clicked.');
+                            };
+                        }
+                    });
+                }
+            }
+        }
+
+        const notification = new NotificationDesktop('桌面通知', {
+            body: '这是通知内容',
+            icon: 'https://www.baidu.com/img/bd_logo1.png',
+            tag: '123',
+            data: '这是通知数据',
+            dir: 'auto',
+            lang: 'zh-CN',
+            renotify: true,
+            silent: true,
+            sound: 'https://www.baidu.com/img/bd_logo1.png',
+        })
+
+        notification.show();
+
+        /**
+         *  title：通知的标题
+            options：通知的设置选项（可选）。
+                body：字符串。通知的body内容。
+                tag：代表通知的一个识别标签，相同tag时只会打开一个通知窗口。
+                icon：字符串。要在通知中显示的图标的URL。
+                data：想要和通知关联的数据,可以在new Notification返回的实例中找到。
+                renotify: 布尔值。相同tag，新通知出现的时候是否替换之前的(开启此项，tag必须设置)。
+                requireInteraction：布尔值。通知不自动关闭，默认为false(自动关闭)。
+        */
+
+
+        function showDeskTopNotice(id, title, msg) {
+            var Notification = window.Notification || window.mozNotification || window.webkitNotification;
+            if (Notification) {
+                Notification.requestPermission(function (status) {
+                    //status默认值'default'等同于拒绝 'denied' 意味着用户不想要通知 'granted' 意味着用户同意启用通知
+                    if ("granted" != status) {
+                        return;
+                    } else {
+                        var tag = "sds" + Math.random();
+                        var notify = new Notification(title, {
+                            dir: 'auto',
+                            lang: 'zh-CN',
+                            requireInteraction: true,
+                            tag: id,//实例化的notification的id
+                            icon: '/kfmanage/public/assets/images/index/workerman_logo.png',//通知的缩略图,//icon 支持ico、png、jpg、jpeg格式
+                            body: msg //通知的具体内容
+                        });
+                        notify.onclick = function () {
+                            //如果通知消息被点击,通知窗口将被激活
+                            window.focus();
+                            notify.close();
+                            //打开对应的界面
+                            $("#v" + id + " .visit_content").trigger('click');
+                        },
+                            notify.onerror = function () {
+                                console.log("HTML5桌面消息出错！！！");
+                            };
+                        notify.onclose = function () {
+                            console.log("HTML5桌面消息关闭！！！");
+                        };
+                    }
+                });
+            } else {
+                console.log("您的浏览器不支持桌面消息");
+            }
+        };
+
+        const notification1 = new Notification(this.title, this.options);
+        notification1.onclick = function () {
+            console.log('Notification clicked.');
+        };
+    </script>
+</body>
+
+</html>
