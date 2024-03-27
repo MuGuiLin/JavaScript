@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MutationObserver API</title>
+</head>
+
+<body>
+    <h1>MutationObserver API</h1>
+    <hr>
+    <pre>
+        MutationObserver用来监视 DOM 变动。DOM 的任何变动，比如节点的增减、属性的变动、文本内容的变动都会触发MutationObserver事件。
+        但是，它与事件有一个本质不同：事件是同步触发，
+        也就是说，DOM 的变动立刻会触发相应的事件；Mutation Observer 则是异步触发，DOM 的变动并不会马上触发，而是要等到当前所有 DOM 操作都结束才触发。
+        
+        Mutation Observer 有以下特点：
+            - 它等待所有脚本任务完成后，才会运行（即异步触发方式）。
+            - 它把 DOM 变动记录封装成一个数组进行处理，而不是一条条个别处理 DOM 变动。
+            - 它既可以观察 DOM 的所有类型变动，也可以指定只观察某一类变动。
+
+    </pre>
+    <input type="text" style="margin-bottom:20px;width:500px;height:30px;" oninput="onInput(this)" placeholder="在这里输入内容，观察到的 DOM 变动" />
+    <div id="div" contenteditable="true">
+        <p>F12打开控制台，console.log()输入内容后，观察到的 DOM 变动!</p>
+    </div>
+
+    <script>
+        // 目标要监听的 div 元素
+        const targetDiv = document.querySelector('#div');
+
+        // 创建 MutationObserver 对象并传入回调函数
+        var observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                // console.log(mutation);
+                console.log(mutation.type, "Text changed!");
+
+                // 这里可以编写处理文本变化的逻辑
+                console.log(mutation.target.textContent);
+            });
+        });
+
+        // 配置 MutationObserver 对象
+        var config = { attributes: true, childList: true, subtree: true };
+
+        // 开始观察目标节点上的变化
+        observer.observe(targetDiv, config);
+
+        function onInput(self) {
+            targetDiv.innerHTML = self.value;
+        }
+
+    </script>
+
+</body>
+
+</html>
