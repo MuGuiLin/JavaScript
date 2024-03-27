@@ -100,9 +100,24 @@
                 silent: true,
                 sound: 'https://www.baidu.com/img/bd_logo1.png',
             }, (self) => {
-                console.info(self, 66666666)
+                console.info(self)
+                self.onclick = function () {
+                    //如果通知消息被点击,通知窗口将被激活
+                    window.focus();
+                    notify.close();
+                    //打开对应的界面
+                    $("#v" + id + " .visit_content").trigger('click');
+                };
+
+                self.onerror = function () {
+                    console.log("HTML5桌面消息出错！！！");
+                };
+
+                self.onclose = function () {
+                    console.log("HTML5桌面消息关闭！！！");
+                };
             })
-        }
+        };
 
 
         function showDeskTopNotice(title, msg) {
@@ -146,6 +161,8 @@
             }
         };
 
+
+
         function deskNotice(title = '消息提醒', options, collBack) {
             const Notification = globalThis.Notification || window.mozNotification || window.webkitNotification;
             if (Notification) {
@@ -167,10 +184,10 @@
                 return false;
             }
         }
-        deskNotice('注意注意：', { body: '我是5秒后自动触发的桌面通知！' })
+
         setTimeout(() => {
             // showDeskTopNotice('注意注意：', '我是5秒后自动触发的桌面通知！')
-            // deskNotice('注意注意：', { body: '我是5秒后自动触发的桌面通知！' })
+            deskNotice('注意注意：', { body: '我是5秒后自动触发的桌面通知！' })
         }, 5000);
 
     </script>
