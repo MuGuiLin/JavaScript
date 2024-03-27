@@ -15,85 +15,127 @@
 <body>
     <h1>Notification桌面通知</h1>
     <hr>
-    <button class="on_click">手动触发桌面通知</button>
+    <p>注：Notification方法只能在https协议 或 本地http://localhost/下使用！</p>
+    <pre>
+        1、Notification.requestPermission()可以来获取用户是否允许通知，接受一个回调函数，回调函数中接受一个参数结果，这个结果就是是否允许通知
+        <code>
+            // 获取用户是否允许通知
+            Notification.requestPermission((result)=>{
+                // result可能的值包括：denied (用户拒绝了通知的显示), granted (用户允许了通知的显示), 或 default (因为不知道用户的选择，所以浏览器的行为与 denied 时相同).
+                console.log(result);
+            });
+        </code>
+        其中回调函数的参数result可能的值代表的意思
+            denied  表示：用户拒绝了通知的显示
+            granted 表示：用户允许了通知的显示
+            default 表示：因为不知道用户的选择，所以浏览器的行为与 denied 时相同 即 拒绝
+            
+            只要调用上面的方法，浏览器就会显示下面图片的的通知，点击允许，回调接受的参数是granted，点击禁止，回调接受的参数是denied，点击右上角的×，回调接受的参数是default
+
+
+        2、new Notification() 来给用户发送通知，其中可以传参数，配置通知的信息
+        注意，只有当result为granted时，才会执行下方的new Notification代码，denied和default不会执行
+        <code>
+            // 传递的参数，第一个是标题，第二个是一个json，里面是传递的信息
+            new Notification(title, options：通知的设置选项（可选）。)
+            
+        </code>
+        参数说明
+            title：通知的标题
+            options：通知的设置选项（可选）。
+                body：字符串。通知的body内容, 通知中额外显示的字符串。
+                tag：代表通知的一个识别标签，相同tag时只会打开一个通知窗口, 赋予通知一个ID，以便在必要的时候对通知进行刷新、替换或移除。
+                icon：字符串。要在通知中显示的图标的URL。 通知的缩略图,//icon 支持ico、png、jpg、jpeg格式
+                data：想要和通知关联的数据, 可以在new Notification返回的实例中找到。
+                dir: 文字的方向；它的值可以是 auto（自动）, ltr（从左到右）, 或者 rtl（从右到左） 
+                renotify: 布尔值。相同tag，新通知出现的时候是否替换之前的(开启此项，tag必须设置)。
+                requireInteraction：布尔值。通知不自动关闭，默认为false(自动关闭)。
+
+    </pre>
+    <button onclick="on_click()">手动触发桌面通知</button>
     <script>
         class NotificationDesktop {
-            constructor(title, options) {
-                this.title = title;
-                this.options = options;
+            constructor() {
+                this.notify = globalThis.Notification || window.mozNotification || window.webkitNotification;
+                this.init()
             }
-            show() {
-                if (Notification.permission === 'granted') {
-                    const notification = new Notification(this.title, this.options);
-                    notification.onclick = function () {
-                        console.log('Notification clicked.');
-                    };
-                } else if (Notification.permission !== 'denied') {
-                    Notification.requestPermission().then(function (permission) {
-                        if (permission === 'granted') {
-                            const notification = new Notification(this.title, this.options);
-                            notification.onclick = function () {
-                                console.log('Notification clicked.');
-                            };
-                        }
-                    });
+            init() {
+                this.notify.requestPermission((result) => {
+                    /* result可能的值包括：
+                        denied (用户拒绝了通知的显示), 
+                        granted (用户允许了通知的显示), 
+                        default (因为不知道用户的选择，所以浏览器的行为与 denied 时相同).
+                    */
+                    console.log(result);
+                })
+            }
+            show(title, options, callBack) {
+
+                console.log(this.notify.permission)
+                if ('granted' === this.notify.permission) {
+                    const notify = new this.notify(title, options);
+                    callBack && callBack(notify)
+
+                    console.log(title, options, callBack)
+                    // notify.onclick = function () {
+                    //     console.log('Notification clicked.');
+                    // };
+                } else {
+                    this.init()
                 }
             }
         }
+        const notify = new NotificationDesktop()
 
-        const notification = new NotificationDesktop('桌面通知', {
-            body: '这是通知内容',
-            icon: 'https://www.baidu.com/img/bd_logo1.png',
-            tag: '123',
-            data: '这是通知数据',
-            dir: 'auto',
-            lang: 'zh-CN',
-            renotify: true,
-            silent: true,
-            sound: 'https://www.baidu.com/img/bd_logo1.png',
-        })
-
-        notification.show();
-
-        /**
-         *  title：通知的标题
-            options：通知的设置选项（可选）。
-                body：字符串。通知的body内容。
-                tag：代表通知的一个识别标签，相同tag时只会打开一个通知窗口。
-                icon：字符串。要在通知中显示的图标的URL。
-                data：想要和通知关联的数据,可以在new Notification返回的实例中找到。
-                renotify: 布尔值。相同tag，新通知出现的时候是否替换之前的(开启此项，tag必须设置)。
-                requireInteraction：布尔值。通知不自动关闭，默认为false(自动关闭)。
-        */
+        function on_click() {
+            notify.show('桌面通知', {
+                body: '这是通知内容',
+                icon: 'https://www.baidu.com/img/bd_logo1.png',
+                tag: '123',
+                data: '这是通知数据',
+                dir: 'auto',
+                lang: 'zh-CN',
+                renotify: true,
+                requireInteraction: true,
+                silent: true,
+                sound: 'https://www.baidu.com/img/bd_logo1.png',
+            }, (self) => {
+                console.info(self, 66666666)
+            })
+        }
 
 
-        function showDeskTopNotice(id, title, msg) {
-            var Notification = window.Notification || window.mozNotification || window.webkitNotification;
+        function showDeskTopNotice(title, msg) {
+            const Notification = globalThis.Notification || window.mozNotification || window.webkitNotification;
             if (Notification) {
                 Notification.requestPermission(function (status) {
                     //status默认值'default'等同于拒绝 'denied' 意味着用户不想要通知 'granted' 意味着用户同意启用通知
                     if ("granted" != status) {
                         return;
                     } else {
-                        var tag = "sds" + Math.random();
-                        var notify = new Notification(title, {
+                        var tag = "tag-" + Math.random();
+                        const notify = new Notification(title, {
                             dir: 'auto',
                             lang: 'zh-CN',
                             requireInteraction: true,
-                            tag: id,//实例化的notification的id
-                            icon: '/kfmanage/public/assets/images/index/workerman_logo.png',//通知的缩略图,//icon 支持ico、png、jpg、jpeg格式
+                            tag: tag,//实例化的notification的id
+                            renotify: true,
+                            icon: 'https://www.baidu.com/img/bd_logo1.png',//通知的缩略图,//icon 支持ico、png、jpg、jpeg格式
                             body: msg //通知的具体内容
                         });
+
                         notify.onclick = function () {
                             //如果通知消息被点击,通知窗口将被激活
                             window.focus();
                             notify.close();
                             //打开对应的界面
                             $("#v" + id + " .visit_content").trigger('click');
-                        },
-                            notify.onerror = function () {
-                                console.log("HTML5桌面消息出错！！！");
-                            };
+                        };
+
+                        notify.onerror = function () {
+                            console.log("HTML5桌面消息出错！！！");
+                        };
+
                         notify.onclose = function () {
                             console.log("HTML5桌面消息关闭！！！");
                         };
@@ -104,10 +146,33 @@
             }
         };
 
-        const notification1 = new Notification(this.title, this.options);
-        notification1.onclick = function () {
-            console.log('Notification clicked.');
-        };
+        function deskNotice(title = '消息提醒', options, collBack) {
+            const Notification = globalThis.Notification || window.mozNotification || window.webkitNotification;
+            if (Notification) {
+                Notification.requestPermission(function (status) {
+                    console.log(options)
+                    if ('granted' == status) {
+                        const notify = new Notification(title, {
+                            dir: 'auto',
+                            body: '您有新的消息，请及时查看！',
+                            lang: 'zh-CN',
+                            requireInteraction: true,
+                            ...options
+                        });
+                        collBack && collBack(notify)
+                    }
+                });
+            } else {
+                console.log("当前Web浏览器没开启notification功能 或 不支持桌面消息功能!");
+                return false;
+            }
+        }
+        deskNotice('注意注意：', { body: '我是5秒后自动触发的桌面通知！' })
+        setTimeout(() => {
+            // showDeskTopNotice('注意注意：', '我是5秒后自动触发的桌面通知！')
+            // deskNotice('注意注意：', { body: '我是5秒后自动触发的桌面通知！' })
+        }, 5000);
+
     </script>
 </body>
 
