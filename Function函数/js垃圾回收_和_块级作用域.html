@@ -14,9 +14,9 @@
 		<pre>
 			什么是垃圾回收？
 			
-			在Javascript中，如果一个对象不再被引用，那么这个对象就会被GC(垃圾回收器)回收。
+			在Javascript中，如果一个变量、对象不再被引用，那么这个对象就会被GC(垃圾回收器)回收。
 			如果两个对象互相引用，而不再被第3者所引用，那么这两个互相引用的对象也会被回收。
-			因为函数a被b引用，b又被a外的c引用，这就是为什么函数a执行后不会被回收的原因
+			因为函数a被b引用，b又被a外的c引用，这就是为什么函数a执行后不会被回收的原因，最典型的就是闭包
 			
 			对于其他语言来说，如C,C++,需要开发者手动的来跟踪内存，
 			
@@ -54,55 +54,60 @@
 			
 			
 			//垃圾收集 方法1：标记方法 ；//方法2：引用计数法；(被引用一次就加1)
-	
-			function test()
-			{
+			function test() {
 				var a = 10; //使用后会被清除
 				var b = 20; //使用后会被清除
 			}
 			test() //调用执行完毕之后  a 、b 又被标记了一次，【标记为没被使用】
 			
 			
-			//块级作用域
-			function fn1()
-			{
-				for(var i = 1; i 《 = 5 ; i++)
-				{
-					alert(i);
+			// 块级作用域
+			function fn1() {
+				for(var i = 1; i 《 = 5 ; i++) {
+					console.log(i);
 				}
 				alert(i); //在这里还会弹出6
 			}
-			
 			fn1();
 			
-			function fn2()
-			{
-				//在这里把它变为块级作用域,让它立即执行(function(){})();
-				(function()
-				{
-					for(var i = 1; i 《= 5 ; i++)
-					{
+			function fn2() {
+				var num = 1024
+				// 在这里把它变为块级作用域
+				return function() {
+					console.log(num)
+					for(var i = 1; i 《= 5 ; i++) {
+						console.log(i);
+					}
+				};
+				// 注：这里的num变量是不会被GC的，因为num在返回函数中不知道什么时候被调用
+				//alert(i); //在这里没找不找6了
+			}
+			fn2()();
+			
+			function fn3() {
+				// 在这里把它变为块级作用域,让它立即执行(function(){})();
+				(function() {
+					for(var i = 1; i 《= 5 ; i++) {
 						alert(i);
 					}
 				})();
 					
 				//alert(i); //在这里没找不找6了
 			}
-			fn2();
+			fn3();
 			
 			
 			
-			//新知识：立即执行函数：(function(){})()注：后面一定要加括号！
-			
-			(function mupiao(){alert('我不需要调用，我可以立即执行');})();
+			// 立即执行函数：(function(){})()注：后面一定要加括号！
+			(function mupiao(){
+				alert('我不需要调用，我可以立即执行');
+			})();
 		</pre>
 	</body>
 	<script type="text/javascript" charset="UTF-8">
 
 		//垃圾收集 方法1：标记方法 ；//方法2：引用计数法；(被引用一次就加1)
-	
-		function test()
-		{
+		function test() {
 			var a = 10; //使用后会被清除
 			var b = 20; //使用后会被清除
 		}
@@ -110,36 +115,45 @@
 		
 		
 		//块级作用域
-		function fn1()
-		{
-			for(var i = 1; i <= 5 ; i++)
-			{
-				alert(i);
+		function fn1() {
+			for(var i = 1; i <= 5 ; i++) {
+				console.log(i);
 			}
 			alert(i); //在这里还会弹出6
 		}
-		
 		fn1();
 		
-		function fn2()
-		{
+		function fn2() {
+			var num = 1024
+			// 在这里把它变为块级作用域
+			return function() {
+				console.log(num)
+				for(var i = 1; i <= 5 ; i++) {
+					console.log(i);
+				}
+			};
+			// 注：这里的num变量是不会被GC的，因为num在返回函数中不知道什么时候被调用
+			//alert(i); //在这里没找不找6了
+		}
+		fn2()();
+		
+		function fn3() {
 			//在这里把它变为块级作用域,让它立即执行(function(){})();
-			(function()
-			{
-				for(var i = 1; i <= 5 ; i++)
-				{
-					alert(i);
+			(function() {
+				for(var i = 1; i <= 5 ; i++) {
+					console.log(i);
 				}
 			})();
 				
 			//alert(i); //在这里没找不找6了
 		}
-		fn2();
+		fn3();
 		
 		
-		//新知识：立即执行函数：(function(){})()注：后面一定要加括号！
-		
-		(function mupiao(){alert('我不需要调用，我可以立即执行');})();
+		// 立即执行函数：(function(){})()注：后面一定要加括号！
+		(function mupiao(){
+			alert('我不需要调用，我可以立即执行');
+		})();
 		
 	</script>
 </html>
