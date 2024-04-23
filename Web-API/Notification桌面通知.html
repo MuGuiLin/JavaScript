@@ -33,12 +33,11 @@
             只要调用上面的方法，浏览器就会显示下面图片的的通知，点击允许，回调接受的参数是granted，点击禁止，回调接受的参数是denied，点击右上角的×，回调接受的参数是default
 
 
-        2、new Notification() 来给用户发送通知，其中可以传参数，配置通知的信息
+        2、const notification = new Notification() 来给用户发送通知，其中可以传参数，配置通知的信息
         注意，只有当result为granted时，才会执行下方的new Notification代码，denied和default不会执行
         <code>
             // 传递的参数，第一个是标题，第二个是一个json，里面是传递的信息
             new Notification(title, options：通知的设置选项（可选）。)
-            
         </code>
         参数说明
             title：通知的标题
@@ -50,7 +49,18 @@
                 dir: 文字的方向；它的值可以是 auto（自动）, ltr（从左到右）, 或者 rtl（从右到左） 
                 renotify: 布尔值。相同tag，新通知出现的时候是否替换之前的(开启此项，tag必须设置)。
                 requireInteraction：布尔值。通知不自动关闭，默认为false(自动关闭)。
+                silent：布尔值。通知是否发出声音，默认为false(发出声音)。
 
+
+
+        3、notification 实例的方法 事件
+        事件说明：
+            notification.click(): 用户点击通知时被触发
+            notification.show(): 通知显示的时候被触发
+            notification.error(): 通知遇到错误时被触发
+            notification.close(): 用户关闭通知时被触发
+
+            
     </pre>
     <button onclick="on_click()">手动触发桌面通知</button>
     <script>
