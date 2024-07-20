@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/prism.css" />
+    <script src="./js/prism.js"></script>
+</head>
+
+<body>
+
+    <button onclick="openWin()">打开一个新窗口</button>
+
+    <pre>
+        <code class="language-html line-numbers">
+            &lt;head>
+                &lt;meta charset="UTF-8">
+                &lt;meta http-equiv="X-UA-Compatible" content="IE=edge">
+                &lt;meta name="viewport" content="width=device-width, initial-scale=1.0">
+                &lt;title>Document &lt;/title>
+                &lt;link rel="stylesheet" href="./css/prism.css" />
+            &lt;/head>
+        </code>
+    </pre>
+
+    <pre>
+        <code class="language-css line-numbers ">
+            html, body{
+                margin: 50px;
+                padding: 10px;
+            }
+            .box{
+                width: 100vw;
+                font-size: 18px;
+                color: #FFF;
+                background: blue;
+            }
+            @font-face {
+                src: url(https://lea.verou.me/logo.otf);
+                font-family: 'LeaVerou';
+            }
+        </code>
+    </pre>
+
+    <pre>
+        <code class="language-js line-numbers">
+            console.log("Hello World")
+            import Prism from 'prismjs';
+
+            module.exports = ({ file }) => {
+                let isWX = file && file.dirname && file.dirname.indexOf('wx') > -1;
+                let viewportWidth = isWX ? 750 : 1920; 
+                let viewportHeight = isWX ? 1334 : 1080; 
+
+                return {
+                    plugins: {
+                        autoprefixer: {},
+                        'postcss-px-to-viewport': {
+                            viewportWidth: viewportWidth, // 视窗的宽度，对应的是我们设计稿的宽度，一般是750
+                            viewportHeight: viewportHeight, // 视窗的高度，根据750设备的宽度来指定，一般指定1334，也可以不配置
+                            unitPrecision: 3, // 指定`px`转换为视窗单位值的小数位数
+                            viewportUnit: 'vw', //指定需要转换成的视窗单位，建议使用vw
+                            selectorBlackList: ['.ignore', 'common-container'], // 指定不转换为视窗单位的类，可以自定义，可以无限添加,建议定义一至两个通用的类名
+                            minPixelValue: 1, // 小于或等于`1px`不转换为视窗单位，你也可以设置为你想要的值
+                            mediaQuery: false, // 允许在媒体查询中转换`px`
+                        },
+                    },
+                };
+            };
+        </code>
+    </pre>
+
+
+
+    <div id="html-code"></div>
+    <div id="css-code"></div>
+    <div id="js-code"></div>
+
+
+
+
+
+    <script>
+        // (function () {
+        //     var re = /x/;
+        //     var i = 0;
+        //     console.log(re);
+
+        //     re.toString = function () {
+        //         return '第 ' + (++i) + ' 次打开控制台';
+        //     };
+        // })();
+
+        ((function () {
+            var callbacks = [],
+                timeLimit = 50,
+                open = false;
+            setInterval(loop, 1);
+            return {
+                addListener: function (fn) {
+                    callbacks.push(fn);
+                },
+                cancleListenr: function (fn) {
+                    callbacks = callbacks.filter(function (v) {
+                        return v !== fn;
+                    });
+                }
+            }
+
+            function loop() {
+                var startTime = new Date();
+                debugger;
+                if (new Date() - startTime > timeLimit) {
+                    if (!open) {
+                        callbacks.forEach(function (fn) {
+                            fn.call(null);
+                        });
+                    }
+                    open = true;
+                    window.stop();
+                    alert('请尊重一下劳动成果，不要偷代码哦！');
+                    document.body.innerHTML = "";
+                } else {
+                    open = false;
+                }
+            }
+        })()).addListener(function () {
+            window.location.reload();
+        });
+
+        function openWin() {
+            window.open('http://www.muguilin.com/blog/home', 'myWin', `toolbar=0, menubar=0, location=0, resizable=no, status=no, scrollbars=0, top=0, left=0, width=${screen.availWidth}, height=${screen.availHeight}`)
+        }
+
+        const html = `<pre><code class="language-html line-numbers">
+            <h1> PrismJS Tutorial</h1>
+            <p>Prism is a lightweight, extensible syntax highlighter, built with modern web standards in mind.</p>
+            <h1> PrismJS Tutorial</h1>
+            <p>Prism is a lightweight, extensible syntax highlighter, built with modern web standards in mind.</p>
+            <h1> PrismJS Tutorial</h1>
+            <p>Prism is a lightweight, extensible syntax highlighter, built with modern web standards in mind.</p>
+            </code></pre>`;
+        document.querySelector('#html-code').innerHTML = html;
+
+        const css = `<pre><code class="language-css line-numbers">
+            html,body {
+                background: red;
+                width: 100vw;
+                height: 100vh;
+            }
+            .box {
+                font-size: 16px;
+                text-argin: center;
+            }
+            </code></pre>`;
+        document.querySelector('#css-code').innerHTML = css;
+
+        const js = `<pre><code class="language-js line-numbers">
+            const array = [1, 20, 3];
+            for (let index = 0; index < array.length; index++) {
+                const element = array[index];
+            }
+            if(array.length) {
+                alert(666)
+            }
+            function add(a, b) {
+                console.log(a, b);
+            }
+            </code></pre>`;
+        document.querySelector('#js-code').innerHTML = js;
+
+        // setTimeout(() => {
+        //     console.log(Prism);
+        //     Prism.highlightAll();
+        // }, 1000);
+
+    </script>
+
+</body>
+
+</html>
