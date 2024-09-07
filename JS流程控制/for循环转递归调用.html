@@ -48,10 +48,10 @@
 	{
 		// for循环转递归调用2
 		function sum(arr, i = 0) {
-			if (i >= arr.length) return;
-			return arr[i] + sum(arr, i++);
+			if (i >= arr.length) return 0;
+			return arr[i] + sum(arr, i + 1);
 		}
-		console.log('递归调用：', sum(array, 0));
+		console.log('递归调用：', sum(array));
 	}
 
 </script>
