@@ -33,8 +33,8 @@
 		function sum(arr) {
 			let h = 0;
 			let i = 0;
-			function _sum(){
-				if(i >= arr.length) return;
+			function _sum() {
+				if (i >= arr.length) return;
 				h += arr[i];
 				i++;
 				_sum()
@@ -45,13 +45,13 @@
 		sum(array)
 	}
 
-	{	
+	{
 		// for循环转递归调用2
 		function sum(arr, i = 0) {
-			if (i >= arr.length) return 0;
+			if (i >= arr.length) return;
 			return arr[i] + sum(arr, i++);
 		}
-		console.log('递归调用：', sum(array));
+		console.log('递归调用：', sum(array, 0));
 	}
 
 </script>
