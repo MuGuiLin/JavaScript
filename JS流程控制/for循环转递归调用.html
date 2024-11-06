@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>for循环转递归调用</title>
+
+<body>
+	<h1>for循环转递归调用</h1>
+	<hr />
+	<p>在控制台中查看！</p>
+</body>
+
+<script type="text/javascript">
+	/**
+	 * for循环转递归调用，基实，递归 和 循环 是可以互转的！！
+	 * 
+	 * 实例：
+	 * 		有一个纯数字的一维数组，要实现求和功能，要求不能用循环、和数组工具函数！
+	*/
+	const array = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+	{
+		let sum = 0;
+		for (let i = 0; i < array.length; i++) {
+			sum += array[i];
+		}
+		console.log('for循环：', sum);
+	}
+
+	{
+		// for循环转递归调用1
+		function sum(arr) {
+			let h = 0;
+			let i = 0;
+			function _sum() {
+				if (i >= arr.length) return;
+				h += arr[i];
+				i++;
+				_sum()
+			}
+			_sum()
+			console.log('递归调用：', h);
+		}
+		sum(array)
+	}
+
+	{
+		// for循环转递归调用2
+		function sum(arr, i = 0) {
+			if (i >= arr.length) return 0;
+			return arr[i] + sum(arr, i + 1);
+		}
+		console.log('递归调用：', sum(array));
+	}
+
+</script>
+
+</html>
