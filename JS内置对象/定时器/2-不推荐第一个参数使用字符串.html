@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>点击执行对应函数 不是eval </title>
 </head>
 <body>
-    <input type="text">
-    <button>点击执行对应函数</button>
+    <textarea type="text" cols="100" rows="5" placeholder="输入要执行的函数名 如：
+    (function(){
+        document.body.style.background = 'blue';
+    })()"></textarea>
+    <button>点击执行对应函数 不是eval</button>
     <script>
         // setTimeout('fn()',1000);
 
@@ -23,12 +26,11 @@
                 2. xss注入
         */
 
-        var input = document.querySelector('input');
-        var btn = document.querySelector('button');
+        var textarea = document.querySelector('textarea');
+        var button = document.querySelector('button');
 
-        btn.onclick = function(){
-            var txt = input.value;
-
+        button.onclick = function(){
+            var txt = textarea.value;
             setTimeout(txt,1000);
         }
 
