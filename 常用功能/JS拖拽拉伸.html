@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS拖拽拉伸</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .container {
+            height: 100vh;
+            background: #000;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .transform {
+            position: relative;
+            outline: 1px solid #1890ff;
+            touch-action: none;
+            cursor: move;
+        }
+
+        img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .point {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #1890ff;
+        }
+
+        .point-n {
+            top: -4px;
+            left: calc(50% - 4px);
+        }
+
+        .point-e {
+            right: -4px;
+            top: calc(50% - 4px);
+        }
+
+        .point-s {
+            bottom: -4px;
+            left: calc(50% - 4px);
+        }
+
+        .point-w {
+            left: -4px;
+            top: calc(50% - 4px);
+        }
+
+        .point-ne {
+            top: -4px;
+            right: -4px;
+        }
+
+        .point-se {
+            bottom: -4px;
+            right: -4px;
+        }
+
+        .point-sw {
+            left: -4px;
+            bottom: -4px;
+        }
+
+        .point-nw {
+            left: -4px;
+            top: -4px;
+        }
+
+        .rotate {
+            position: absolute;
+            top: -30px;
+            left: calc(50% - 10px);
+            z-index: 1;
+            width: 20px;
+            height: 20px;
+            cursor: grab;
+            background: url(http://test.codeman.top/rotate.svg) 0 0/20px 20px no-repeat;
+        }
+
+        .log {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 99;
+            padding: 6px;
+            color: #FFF;
+            font-size: 12px;
+            line-height: 18px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- https://juejin.cn/post/7109020859490107423 -->
+    <div class="container">
+        <div class="control" data-key="drag">
+            <img src="./抽奖/img/tema.jpg" alt="">
+            <div class="point point-nw" data-key="nw"></div>
+            <div class="point point-n" data-key="n"></div>
+            <div class="point point-ne" data-key="ne"></div>
+            <div class="point point-e" data-key="e"></div>
+            <div class="point point-se" data-key="se"></div>
+            <div class="point point-s" data-key="s"></div>
+            <div class="point point-sw" data-key="sw"></div>
+            <div class="point point-w" data-key="w"></div>
+            <div class="rotate" data-key="rotate"></div>
+        </div>
+    </div>
+    <div class="log"></div>
+
+    <script>
+        // 声明变量
+        let defaultWidth = 200, defaultHeight = 160, isPointerdown = false, diff = { x: 0, y: 0 }, lastPointermove = { x: 0, y: 0 }, key = '', vertexOfRotate;
+        let sx = 1, sy = 1;
+        const box = {
+            element: document.querySelector('.control'),
+            x: (window.innerWidth - defaultWidth) * 0.5,
+            y: (window.innerHeight - defaultHeight) * 0.5,
+            rect: null,
+            width: defaultWidth,
+            height: defaultHeight,
+            rotate: 0
+        }
+        const currentPoint = { x: 0, y: 0 }, origin = { x: 0, y: 0 };
+        const logEl = document.querySelector('.log');
+        const imgEl = document.querySelector('img');
+        // 设置初始位置
+        box.element.style.width = box.width + 'px';
+        box.element.style.height = box.height + 'px';
+        box.element.style.transform = 'translate3d(' + box.x + 'px, ' + box.y + 'px, 0px) rotate(0deg)';
+        logEl.innerHTML = `x = ${box.x}<br>y = ${box.y}<br>width = ${box.width}<br>height = ${box.height}<br>rotate=${box.rotate}`;
+        // 旋转角度
+        function getAngle(a, b) {
+            const x = a.x - b.x
+            const y = a.y - b.y;
+            return 180 * Math.atan2(y, x) / Math.PI;
+        }
+        // 点绕点旋转公式
+        function calcRotate(a, b, angle) {
+            const x = (a.x - b.x) * Math.cos(angle * Math.PI / 180) - (a.y - b.y) * Math.sin(angle * Math.PI / 180) + b.x
+            const y = (a.x - b.x) * Math.sin(angle * Math.PI / 180) + (a.y - b.y) * Math.cos(angle * Math.PI / 180) + b.y
+            return { x: x, y: y };
+        }
+        // 获取旋转后顶点坐标
+        function getVertexOfRotate(angle) {
+            // 变换原点坐标
+            origin.x = box.x + box.width * 0.5;
+            origin.y = box.y + box.height * 0.5;
+            // 矩形旋转前8个点坐标
+            const vertex = {
+                nw: { x: box.x, y: box.y },
+                n: { x: box.x + box.width * 0.5, y: box.y },
+                ne: { x: box.x + box.width, y: box.y },
+                e: { x: box.x + box.width, y: box.y + box.height * 0.5 },
+                se: { x: box.x + box.width, y: box.y + box.height },
+                s: { x: box.x + box.width * 0.5, y: box.y + box.height },
+                sw: { x: box.x, y: box.y + box.height },
+                w: { x: box.x, y: box.y + box.height * 0.5 }
+            }
+            // 矩形旋转后8个点坐标
+            vertexOfRotate = {
+                nw: calcRotate(vertex.nw, origin, box.rotate),
+                n: calcRotate(vertex.n, origin, box.rotate),
+                ne: calcRotate(vertex.ne, origin, box.rotate),
+                e: calcRotate(vertex.e, origin, box.rotate),
+                se: calcRotate(vertex.se, origin, box.rotate),
+                s: calcRotate(vertex.s, origin, box.rotate),
+                sw: calcRotate(vertex.sw, origin, box.rotate),
+                w: calcRotate(vertex.w, origin, box.rotate)
+            }
+        }
+        // 获取两点中心坐标
+        function getCenter(a, b) {
+            const x = (a.x + b.x) / 2;
+            const y = (a.y + b.y) / 2;
+            return { x: x, y: y };
+        }
+        // 两点距离
+        function getDistance(a, b) {
+            const x = a.x - b.x;
+            const y = a.y - b.y;
+            return Math.hypot(x, y); // Math.sqrt(x * x + y * y);
+        }
+        // 功能函数
+        const action = {
+            drag: function () {
+                box.x += diff.x;
+                box.y += diff.y;
+            },
+            n: function () {
+                // 拖动边点的计算方式
+                // 1.鼠标按下时获取当前点击的边点的坐标
+                // 2.鼠标移动时更新边点坐标，同时根据旋转角度计算出未旋转时边点的坐标
+                // 3.利用未旋转时边点的y坐标和按下时边点的x坐标组合，得到图形拉伸后正在拖拽的边点坐标
+                // 4.根据对称点计算出中心坐标后计算出高度即可
+                const currentPointOfRotate = calcRotate(currentPoint, vertexOfRotate.n, -box.rotate);
+                const n = { x: vertexOfRotate.n.x, y: currentPointOfRotate.y };
+                const newN = calcRotate(n, vertexOfRotate.n, box.rotate);
+                const c = getCenter(newN, vertexOfRotate.s);
+                box.height = getDistance(newN, vertexOfRotate.s);
+                box.x = c.x - box.width * 0.5;
+                box.y = c.y - box.height * 0.5;
+                if (box.rotate > 270 || box.rotate < 90) {
+                    box.sy = newN.y > vertexOfRotate.s.y ? -sy : sy;
+                } else if (box.rotate === 90) {
+                    box.sy = newN.x > vertexOfRotate.s.x ? sy : -sy;
+                } else if (box.rotate === 270) {
+                    box.sy = newN.x > vertexOfRotate.s.x ? -sy : sy;
+                } else {
+                    box.sy = newN.y > vertexOfRotate.s.y ? sy : -sy;
+                }
+            },
+            e: function () {
+                const currentPointOfRotate = calcRotate(currentPoint, vertexOfRotate.e, -box.rotate);
+                const e = { x: currentPointOfRotate.x, y: vertexOfRotate.e.y };
+                const newE = calcRotate(e, vertexOfRotate.e, box.rotate)
+                const c = getCenter(newE, vertexOfRotate.w);
+                box.width = getDistance(newE, vertexOfRotate.w);
+                box.x = c.x - box.width * 0.5;
+                box.y = c.y - box.height * 0.5;
+                if (box.rotate > 270 || box.rotate < 90) {
+                    box.sx = newE.x > vertexOfRotate.w.x ? sx : -sx
+                } else if (box.rotate === 90) {
+                    box.sx = newE.y > vertexOfRotate.w.y ? sx : -sx
+                } else if (box.rotate === 270) {
+                    box.sx = newE.y > vertexOfRotate.w.y ? -sx : sx
+                } else {
+                    box.sx = newE.x > vertexOfRotate.w.x ? -sx : sx
+                }
+            },
+            s: function () {
+                const currentPointOfRotate = calcRotate(currentPoint, vertexOfRotate.s, -box.rotate);
+                const s = { x: vertexOfRotate.s.x, y: currentPointOfRotate.y };
+                const newS = calcRotate(s, vertexOfRotate.s, box.rotate)
+                const c = getCenter(newS, vertexOfRotate.n);
+                box.height = getDistance(newS, vertexOfRotate.n);
+                box.x = c.x - box.width * 0.5;
+                box.y = c.y - box.height * 0.5;
+                if (box.rotate > 270 || box.rotate < 90) {
+                    box.sy = newS.y > vertexOfRotate.n.y ? sy : -sy;
+                } else if (box.rotate === 90) {
+                    box.sy = newS.x > vertexOfRotate.n.x ? -sy : sy;
+                } else if (box.rotate === 270) {
+                    box.sy = newS.x > vertexOfRotate.n.x ? sy : -sy;
+                } else {
+                    box.sy = newS.y > vertexOfRotate.n.y ? -sy : sy;
+                }
+            },
+            w: function () {
+                const currentPointOfRotate = calcRotate(currentPoint, vertexOfRotate.w, -box.rotate);
+                const w = { x: currentPointOfRotate.x, y: vertexOfRotate.w.y };
+                const newW = calcRotate(w, vertexOfRotate.w, box.rotate)
+                const c = getCenter(newW, vertexOfRotate.e);
+                box.width = getDistance(newW, vertexOfRotate.e);
+                box.x = c.x - box.width * 0.5;
+                box.y = c.y - box.height * 0.5;
+                if (box.rotate > 270 || box.rotate < 90) {
+                    box.sx = newW.x > vertexOfRotate.e.x ? -sx : sx
+                } else if (box.rotate === 90) {
+                    box.sx = newW.y > vertexOfRotate.e.y ? -sx : sx
+                } else if (box.rotate === 270) {
+                    box.sx = newW.y > vertexOfRotate.e.y ? sx : -sx
+                } else {
+                    box.sx = newW.x > vertexOfRotate.e.x ? sx : -sx
+                }
+            },
+            nw: function () {
+                // 拖动顶点的计算方式
+                // 1.鼠标按下时获取当前点击的顶点的坐标和对应的对称点坐标。通俗一点来讲就是，比如正在拖拽的顶点是左上角，则其对称点是右下角
+                // 2.鼠标移动时更新左上角坐标，同时根据对称点坐标计算出这两点的中心坐标
+                // 3.根据旋转角度和中心点计算出未旋转时左上角和对称点的坐标
+                // 4.右下角坐标与左上角坐标做差，即可计算出图形宽高和当前位置
+                const c = getCenter(currentPoint, vertexOfRotate.se);
+                const newNw = calcRotate(currentPoint, c, -box.rotate);
+                const newSe = calcRotate(vertexOfRotate.se, c, -box.rotate);
+                box.width = Math.abs(newSe.x - newNw.x);
+                box.height = Math.abs(newSe.y - newNw.y);
+                box.x = newNw.x < newSe.x ? newNw.x : newSe.x;
+                box.y = newNw.y < newSe.y ? newNw.y : newSe.y;
+                box.sx = newNw.x > newSe.x ? -sx : sx;
+                box.sy = newNw.y > newSe.y ? -sy : sy;
+            },
+            ne: function () {
+                const c = getCenter(currentPoint, vertexOfRotate.sw);
+                const newNe = calcRotate(currentPoint, c, -box.rotate);
+                const newSw = calcRotate(vertexOfRotate.sw, c, -box.rotate);
+                box.width = Math.abs(newNe.x - newSw.x);
+                box.height = Math.abs(newSw.y - newNe.y);
+                box.x = (newNe.x < newSw.x ? newSw.x : newNe.x) - box.width;
+                box.y = newNe.y < newSw.y ? newNe.y : newSw.y;
+                box.sx = newNe.x > newSw.x ? sx : -sx;
+                box.sy = newNe.y > newSw.y ? -sy : sy;
+            },
+            se: function () {
+                const c = getCenter(currentPoint, vertexOfRotate.nw);
+                const newSe = calcRotate(currentPoint, c, -box.rotate);
+                const newNw = calcRotate(vertexOfRotate.nw, c, -box.rotate);
+                box.width = Math.abs(newSe.x - newNw.x);
+                box.height = Math.abs(newSe.y - newNw.y);
+                box.x = newNw.x < newSe.x ? newNw.x : newSe.x;
+                box.y = newNw.y < newSe.y ? newNw.y : newSe.y;
+                box.sx = newSe.x > newNw.x ? sx : -sx;
+                box.sy = newSe.y > newNw.y ? sy : -sy;
+            },
+            sw: function () {
+                const c = getCenter(currentPoint, vertexOfRotate.ne);
+                const newSw = calcRotate(currentPoint, c, -box.rotate);
+                const newNe = calcRotate(vertexOfRotate.ne, c, -box.rotate);
+                box.width = Math.abs(newNe.x - newSw.x);
+                box.height = Math.abs(newSw.y - newNe.y);
+                box.x = (newNe.x < newSw.x ? newSw.x : newNe.x) - box.width;
+                box.y = newNe.y < newSw.y ? newNe.y : newSw.y;
+                box.sx = newSw.x > newNe.x ? -sx : sx;
+                box.sy = newSw.y > newNe.y ? sy : -sy;
+            },
+            rotate: function (e) {
+                const angle = getAngle(origin, { x: e.clientX, y: e.clientY }) - getAngle(origin, lastPointermove);
+                box.rotate = (box.rotate + angle + 360) % 360;
+            }
+        }
+        // 绑定事件
+        box.element.addEventListener('pointerdown', function (e) {
+            isPointerdown = true;
+            e.target.setPointerCapture(e.pointerId);
+            lastPointermove.x = e.clientX;
+            lastPointermove.y = e.clientY;
+            key = e.target.dataset.key;
+            box.rect = box.element.getBoundingClientRect();
+            getVertexOfRotate(box.rotate);
+            if (key !== 'drag' && key !== 'rotate') {
+                currentPoint.x = vertexOfRotate[key].x;
+                currentPoint.y = vertexOfRotate[key].y;
+            }
+            sx = box.sx;
+            sy = box.sy;
+        });
+        box.element.addEventListener('pointermove', function (e) {
+            if (isPointerdown) {
+                const current = { x: e.clientX, y: e.clientY };
+                diff.x = current.x - lastPointermove.x;
+                diff.y = current.y - lastPointermove.y;
+                if (key !== 'drag' && key !== 'rotate') {
+                    currentPoint.x += diff.x;
+                    currentPoint.y += diff.y;
+                }
+                action[key](e);
+                lastPointermove.x = current.x;
+                lastPointermove.y = current.y;
+                box.element.style.width = box.width + 'px';
+                box.element.style.height = box.height + 'px';
+                box.element.style.transform = 'translate3d(' + box.x + 'px, ' + box.y + 'px, 0) rotate(' + box.rotate.toFixed(0) + 'deg)';
+                logEl.innerHTML = `x = ${box.x}<br>y = ${box.y}<br>width = ${box.width}<br>height = ${box.height}<br>rotate=${box.rotate}`;
+                e.preventDefault();
+            }
+        });
+        box.element.addEventListener('pointerup', function (e) {
+            if (isPointerdown) {
+                isPointerdown = false;
+                getCursor();
+            }
+        });
+        box.element.addEventListener('pointercancel', function (e) {
+            if (isPointerdown) {
+                isPointerdown = false;
+                getCursor();
+            }
+        });
+        // 获取光标
+        const pointDomList = document.querySelectorAll('.point');
+        function getCursor() {
+            // 八个方向
+            const directionLIst = ['nw', 'n', 'ne', 'e', 'se', 's', 'sw', 'w'];
+            // 每个点对应的初始角度
+            const directionAngle = { nw: 0, n: 45, ne: 90, e: 135, se: 180, s: 225, sw: 270, w: 315 };
+            // 每个范围的角度对应的光标
+            const obj = {
+                nw: { start: 337.5, end: 22.5 },
+                n: { start: 22.5, end: 67.5 },
+                ne: { start: 67.5, end: 112.5 },
+                e: { start: 112.5, end: 157.5 },
+                se: { start: 157.5, end: 202.5 },
+                s: { start: 202.5, end: 247.5 },
+                sw: { start: 247.5, end: 292.5 },
+                w: { start: 292.5, end: 337.5 },
+            }
+            pointDomList.forEach((item, index) => {
+                // 初始角度+已旋转的角度
+                const angle = (directionAngle[directionLIst[index]] + box.rotate) % 360;
+                for (const key in obj) {
+                    if (angle < 22.5 || angle >= 337.5) {
+                        item.style.cursor = 'nw-resize';
+                        delete obj.nw;
+                        break;
+                    }
+                    if (obj[key].start <= angle && angle < obj[key].end) {
+                        item.style.cursor = key + '-resize';
+                        delete obj[key];
+                        break;
+                    }
+                }
+            })
+        }
+        getCursor();
+    </script>
+</body>
+
+</html>
