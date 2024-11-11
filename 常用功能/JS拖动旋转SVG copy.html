@@ -24,7 +24,7 @@
             fill: blue;
         }
 
-        /* 定义8个控制点的cursor样式 */
+        /* Control handles cursor styles */
         .resize-handle.top-left {
             cursor: nwse-resize;
         }
@@ -41,18 +41,12 @@
             cursor: nwse-resize;
         }
 
-        .resize-handle.middle-left {
-            cursor: ew-resize;
-        }
-
+        .resize-handle.middle-left,
         .resize-handle.middle-right {
             cursor: ew-resize;
         }
 
-        .resize-handle.middle-top {
-            cursor: ns-resize;
-        }
-
+        .resize-handle.middle-top,
         .resize-handle.middle-bottom {
             cursor: ns-resize;
         }
@@ -63,7 +57,7 @@
             stroke-width: 2;
         }
 
-        /* 初始隐藏控制手柄 */
+        /* Hide control handles by default */
         #control-handles {
             display: none;
         }
@@ -72,14 +66,14 @@
 
 <body>
     <svg width="500" height="500">
-        <!-- Group containing the rectangle for movement and rotation -->
+        <!-- Group for the rectangle, to allow translation and rotation -->
         <g id="group" transform="translate(150, 150) rotate(0)">
             <rect id="rect" width="100" height="60" />
         </g>
 
-        <!-- Control handles group, independent of 'group' -->
+        <!-- Separate group for control handles -->
         <g id="control-handles">
-            <!-- Border rectangle for visual tracking, same size as the main rect -->
+            <!-- Border rectangle that matches the size of the main rect -->
             <rect id="border-rect" class="border-rect" width="100" height="60" />
             <circle id="rotate-handle" class="rotate-handle" cx="150" cy="50" r="8" />
             <!-- 8 resize handles -->
@@ -119,28 +113,23 @@
             height: 60
         };
 
-        // 计算鼠标位置与矩形中心的角度
         function calculateAngle(x, y) {
             const dx = x - rotationData.translateX - rotationData.centerX;
             const dy = y - rotationData.translateY - rotationData.centerY;
             return Math.atan2(dy, dx) * 180 / Math.PI;
         }
 
-        // 更新旋转、控制点位置和边框
         function updateHandlePositions() {
             const angleRad = rotationData.currentRotation * Math.PI / 180;
 
-            // Sync control-handles transform with the main group
             controlHandles.setAttribute('transform', `translate(${rotationData.translateX}, ${rotationData.translateY}) rotate(${rotationData.currentRotation} ${rotationData.centerX} ${rotationData.centerY})`);
 
-            // 更新旋转手柄位置
             const handleDistance = 90;
             const handleX = rotationData.centerX + Math.cos(angleRad) * handleDistance;
             const handleY = rotationData.centerY + Math.sin(angleRad) * handleDistance;
             handle.setAttribute('cx', handleX);
             handle.setAttribute('cy', handleY);
 
-            // 设置8个控制点的位置
             const halfWidth = rotationData.width / 2;
             const halfHeight = rotationData.height / 2;
 
@@ -161,23 +150,23 @@
             controlHandles.querySelector('.middle-top').setAttribute('cy', rotationData.centerY - halfHeight);
             controlHandles.querySelector('.middle-bottom').setAttribute('cx', rotationData.centerX);
             controlHandles.querySelector('.middle-bottom').setAttribute('cy', rotationData.centerY + halfHeight);
+
+            borderRect.setAttribute('width', rotationData.width);
+            borderRect.setAttribute('height', rotationData.height);
         }
 
-        // 显示控制手柄
         rect.addEventListener('click', function (e) {
-            e.stopPropagation();  // 防止事件冒泡到SVG
+            e.stopPropagation();
             controlHandles.style.display = 'block';
             updateHandlePositions();
         });
 
-        // 隐藏控制手柄
         svg.addEventListener('click', function (e) {
             if (e.target !== rect) {
                 controlHandles.style.display = 'none';
             }
         });
 
-        // Rotation logic
         handle.addEventListener('mousedown', function (e) {
             rotationData.isRotating = true;
             rotationData.startX = e.clientX;
@@ -186,21 +175,72 @@
             svg.style.cursor = 'move';
         });
 
+        group.addEventListener('mousedown', function (e) {
+            if (!rotationData.isRotating) {
+                rotationData.isDragging = true;
+                rotationData.startX = e.clientX;
+                rotationData.startY = e.clientY;
+            }
+        });
+
+        document.querySelectorAll('.resize-handle').forEach(handle => {
+            handle.addEventListener('mousedown', function (e) {
+                e.stopPropagation();
+                rotationData.isResizing = true;
+                rotationData.activeHandle = handle;
+                rotationData.startX = e.clientX;
+                rotationData.startY = e.clientY;
+                svg.style.cursor = handle.style.cursor;
+            });
+        });
+
         svg.addEventListener('mousemove', function (e) {
             if (rotationData.isRotating) {
                 const angle = calculateAngle(e.clientX, e.clientY);
                 const deltaAngle = angle - rotationData.startAngle;
                 rotationData.currentRotation += deltaAngle;
 
-                group.setAttribute('transform', `translate(${rotationData.translateX}, ${rotationData.translateY}) rotate(${rotationData.currentRotation} ${rotationData.centerX} ${rotationData.centerY})`);
+                group.setAttribute('transform', `translate(${rotationData.translateX}, ${rotationData.translateY}) rotate(${rotationData.currentRotation} ${rotationData.centerX}, ${rotationData.centerY})`);
                 updateHandlePositions();
                 rotationData.startAngle = angle;
+            }
+
+            if (rotationData.isDragging) {
+                const dx = e.clientX - rotationData.startX;
+                const dy = e.clientY - rotationData.startY;
+
+                rotationData.translateX += dx;
+                rotationData.translateY += dy;
+
+                group.setAttribute('transform', `translate(${rotationData.translateX}, ${rotationData.translateY}) rotate(${rotationData.currentRotation} ${rotationData.centerX}, ${rotationData.centerY})`);
+                updateHandlePositions();
+
+                rotationData.startX = e.clientX;
+                rotationData.startY = e.clientY;
+            }
+
+            if (rotationData.isResizing) {
+                const dx = e.clientX - rotationData.startX;
+                const dy = e.clientY - rotationData.startY;
+                const handleClass = rotationData.activeHandle.classList;
+
+                if (handleClass.contains('top-left')) {
+                    rotationData.width -= dx;
+                    rotationData.height -= dy;
+                    rotationData.translateX += dx / 2;
+                    rotationData.translateY += dy / 2;
+                }
+                updateHandlePositions();
+                rotationData.startX = e.clientX;
+                rotationData.startY = e.clientY;
             }
         });
 
         svg.addEventListener('mouseup', function () {
             rotationData.isRotating = false;
             rotationData.isDragging = false;
+            rotationData.isResizing = false;
+            rotationData.activeHandle = null;
             svg.style.cursor = 'default';
         });
     </script>
