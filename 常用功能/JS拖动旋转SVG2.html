@@ -72,13 +72,14 @@
     <hr />
     <main id="main">
         <svg id="canvas" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1008 567">
-            <g id="group"  style="transform-box:fill-box; transform-origin:center;">
-                <rect id="target" x="100" y="100" width="300" height="200" fill="orange"></rect>
-                <rect id="rotate" x="145" y="50" width="20" height="20" fill="blueviolet" title="旋转"></rect>
+            <g id="group" transform="translate(100,100)">
+                <rect id="target" x="0" y="0" width="300" height="200" fill="orange"></rect>
+                <rect id="rotate" x="145" y="-50" width="20" height="20" fill="blueviolet" title="旋转"></rect>
             </g>
         </svg>
     </main>
     <script>
+
         const main = document.querySelector("#main");
         const canvas = document.querySelector("#canvas");
         const group = document.querySelector("#group");
@@ -88,7 +89,25 @@
         let isMove = false; // 是否移动
         let realAngle = 0;  // 当前旋转的角度
         let prevAngle = 0;  // 上一次旋转的角度
-        
+
+        const targetPoint = {
+            x: 100,
+            y: 100,
+            width: 300,
+            height: 200
+        }
+
+        const centerPoint = {
+            x: targetPoint.x + targetPoint.width / 2,
+            y: targetPoint.y + targetPoint.height / 2,
+        }
+
+        // 计算鼠标位置和中心点的角度
+        function calculateAngle(x, y) {
+            const dx = x - centerX;
+            const dy = y - centerY;
+            return Math.atan2(dy, dx) * 180 / Math.PI;
+        }
 
         // 第一次鼠标按下的位置
         const startData = {
@@ -104,18 +123,6 @@
         //     y: y + height / 2,
         // }
 
-        const centerPoint = {
-            x: 100 + 300 / 2,
-            y: 100 + 200 / 2,
-        }
-
-        // 计算鼠标旋转角度
-        function computedAngle(a, b) {
-            const x = a.x - b.x
-            const y = a.y - b.y;
-            return 180 * Math.atan2(y, x) / Math.PI;
-        }
-
         // 监听鼠标在旋转元素上按下时
         rotate.addEventListener("mousedown", function (e) {
             //获取/设置当前旋转后的角度
@@ -130,12 +137,12 @@
         // 监听鼠标在画布元素上移动时
         main.addEventListener("mousemove", function (e) {
             if (isMove) {
-                const angleCurrent = computedAngle(centerPoint, { x: e.clientX, y: e.clientY });
-                const angleStart = computedAngle(centerPoint, startData);
-                let angle = angleCurrent - angleStart;
+                const mousePos = mousePointInStage(e);
+                let angle = lineAngle(centerPoint, mousePos);
+                // 鼠标点和中心的点组成角度的补偿处理
+                angle += radianToAngle(Math.atan((targetPoint.height + 15) / targetPoint.width))
                 realAngle = angle += prevAngle;
-                console.log(angle, realAngle);
-                group.setAttribute('transform', `rotate(${realAngle}) translate(100,100)`);
+                group.setAttribute('transform', `rotate(${realAngle}, ${centerPoint.x}, ${centerPoint.y} ) translate(100,100)`);
             }
         });
 
