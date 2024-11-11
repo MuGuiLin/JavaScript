@@ -94,12 +94,20 @@
             x: 100,
             y: 100,
             width: 300,
-            height: 200
+            height: 200,
+            angle: 0,
         }
 
         const centerPoint = {
             x: targetPoint.x + targetPoint.width / 2,
             y: targetPoint.y + targetPoint.height / 2,
+        }
+
+        // 计算鼠标旋转角度
+        function computedAngle(a, b) {
+            const x = a.x - b.x
+            const y = a.y - b.y;
+            return 180 * Math.atan2(y, x) / Math.PI;
         }
 
         // 计算鼠标位置和中心点的角度
@@ -115,13 +123,6 @@
             y: 0
         };
 
-        // 三角函数的角度起点位置
-        // const { x, y, width, height } = target.getBoundingClientRect(target);
-        // console.dir(target);
-        // const centerPoint = {
-        //     x: x + width / 2,
-        //     y: y + height / 2,
-        // }
 
         // 监听鼠标在旋转元素上按下时
         rotate.addEventListener("mousedown", function (e) {
@@ -137,11 +138,11 @@
         // 监听鼠标在画布元素上移动时
         main.addEventListener("mousemove", function (e) {
             if (isMove) {
-                const mousePos = mousePointInStage(e);
-                let angle = lineAngle(centerPoint, mousePos);
-                // 鼠标点和中心的点组成角度的补偿处理
-                angle += radianToAngle(Math.atan((targetPoint.height + 15) / targetPoint.width))
-                realAngle = angle += prevAngle;
+                const angle = calculateAngle(e.clientX, e.clientY); // 计算新的角度
+                const deltaAngle = angle - startAngle; // 角度差
+
+                // 更新旋转
+                currentRotation += deltaAngle;
                 group.setAttribute('transform', `rotate(${realAngle}, ${centerPoint.x}, ${centerPoint.y} ) translate(100,100)`);
             }
         });
