@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS拖动旋转</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        #main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 50px auto;
+            width: 80vw;
+            height: 80vh;
+            border: 1px solid gray;
+        }
+
+
+        #canvas {
+            position: relative;
+            width: 1008px;
+            height: 567px;
+            border: 1px solid gray;
+        }
+
+        #target {
+            position: absolute;
+            top: 100px;
+            left: 100px;
+            width: 300px;
+            height: 200px;
+            background: orange;
+        }
+
+        #rotate {
+            position: absolute;
+            left: calc(50% - 10px);
+            top: -60px;
+            display: block;
+            width: 20px;
+            height: 20px;
+            color: white;
+            background-color: blueviolet;
+            border: 1px solid blue;
+            border-radius: 50%;
+            text-align: center;
+            user-select: none;
+            cursor: alias;
+            z-index: 99;
+        }
+
+        #rotate::after {
+            content: '';
+            display: block;
+            position: absolute;
+            left: 9.5px;
+            width: 1px;
+            height: 40px;
+            background-color: blue;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>JS拖动旋转</h1>
+    <hr />
+    <main id="main">
+        <div id="canvas">
+            <div id="target">
+                <div id="rotate" title="旋转">转</div>
+            </div>
+        </div>
+    </main>
+    <script>
+        const main = document.querySelector("#main");
+        const canvas = document.querySelector("#canvas");
+        const target = document.querySelector("#target");
+        const rotate = document.querySelector("#rotate");
+
+        let isMove = false; // 是否移动
+        let realAngle = 0;  // 当前旋转的角度
+        let prevAngle = 0;  // 上一次旋转的角度
+
+        // 第一次鼠标按下的位置
+        const startData = {
+            x: 0,
+            y: 0
+        };
+
+        // 三角函数的角度起点位置
+        const { x, y, width, height } = target.getBoundingClientRect(target);
+        const centerPoint = {
+            x: x + width / 2,
+            y: y + height / 2,
+        }
+
+        // 计算鼠标旋转角度
+        function computedAngle(a, b) {
+            const x = a.x - b.x
+            const y = a.y - b.y;
+            return 180 * Math.atan2(y, x) / Math.PI;
+        }
+
+        // 监听鼠标在旋转元素上按下时
+        rotate.addEventListener("mousedown", function (e) {
+            //获取/设置当前旋转后的角度
+            if (realAngle) {
+                prevAngle = realAngle;
+            }
+            isMove = true;
+            startData.x = e.clientX;
+            startData.y = e.clientY;
+        });
+
+        // 监听鼠标在画布元素上移动时
+        main.addEventListener("mousemove", function (e) {
+            if (isMove) {
+                const angleCurrent = computedAngle(centerPoint, { x: e.clientX, y: e.clientY });
+                const angleStart = computedAngle(centerPoint, startData);
+                let angle = angleCurrent - angleStart;
+                realAngle = angle += prevAngle;
+                console.log(angle, realAngle);
+                target.style.transform = `rotate(${realAngle}deg)`;
+            }
+        });
+
+        // 监听鼠标在画布元素上抬起时
+        main.addEventListener("mouseup", function (e) {
+            isMove = false;
+        });
+
+    </script>
+</body>
+
+</html>
