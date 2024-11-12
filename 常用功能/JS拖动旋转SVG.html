@@ -28,6 +28,10 @@
             border: 1px solid gray;
         }
 
+        .target:hover {
+            cursor: move;
+        }
+
         #handle {
             display: none;
         }
@@ -74,10 +78,10 @@
     <main id="main">
         <svg id="canvas" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1008 567">
             <g id="group" transform="translate(100, 100) rotate(0)">
-                <rect id="target" width="300" height="200" fill="orange"></rect>
+                <rect class="target" id="target" width="300" height="200" fill="orange"></rect>
             </g>
             <g id="group2" transform="translate(500, 200) rotate(0)">
-                <rect id="target2" width="200" height="150" fill="green"></rect>
+                <rect class="target" id="target2" width="200" height="150" fill="green"></rect>
             </g>
             <g id="handle" transform="translate(100, 100) rotate(0)">
                 <line id="rotate-line" x1="150" y1="-50" x2="150" y2="0" stroke="blueviolet"></line>
