@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旋转角度以5度为增量</title>
+    <style>
+        .rotate-box {
+            width: 200px;
+            height: 200px;
+            background-color: lightblue;
+            margin: 100px;
+            transform-origin: center;
+            transition: transform 0.2s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="rotate-box" id="rotateBox"></div>
+
+    <script>
+        // 获取元素
+        const rotateBox = document.getElementById('rotateBox');
+        let angle = 0; // 当前的旋转角度
+        let isShiftPressed = false; // 是否按下 Shift 键
+
+        // 监听 shift 键按下
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Shift') {
+                isShiftPressed = true;  // 按下 Shift 键
+            }
+        });
+
+        // 监听 shift 键抬起
+        document.addEventListener('keyup', (e) => {
+            if (e.key === 'Shift') {
+                isShiftPressed = false; // 松开 Shift 键
+            }
+        });
+
+        // 鼠标旋转
+        let isDragging = false;
+        let startX = 0; // 记录鼠标按下时的X坐标
+
+        // 鼠标按下事件
+        rotateBox.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX; // 记录鼠标起始位置
+            e.preventDefault();
+        });
+
+        // 鼠标移动事件
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+
+            // 计算旋转角度变化
+            let deltaX = e.clientX - startX;
+            let newAngle = angle + (isShiftPressed ? Math.round(deltaX / 45) * 45 : deltaX); // 使用5度倍数变化
+
+            // 限制角度范围，例如：-360° 到 360°之间
+            newAngle = newAngle % 360;
+
+            // 设置新的旋转角度
+            rotateBox.style.transform = `rotate(${newAngle}deg)`;
+
+            angle = newAngle;  // 更新当前角度
+            startX = e.clientX; // 更新起始位置
+        });
+
+        // 鼠标松开事件
+        document.addEventListener('mouseup', () => {
+            isDragging = false; // 停止拖动
+        });
+    </script>
+</body>
+
+</html>
