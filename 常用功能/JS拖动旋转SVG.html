@@ -237,7 +237,8 @@
             mouse.r = calculateAngle(mouse.x, mouse.y);
             mouse.isSpin = true;
         });
-
+        // 记录当前增量旋转角度
+        let currentAngle = 0;
         // 监听鼠标在画布元素上移动时
         main.addEventListener("mousemove", function (e) {
             // 位移
@@ -252,7 +253,17 @@
             if (mouse.isSpin) {
                 const [x, y] = getMousePos(canvas, e);
                 const angle = calculateAngle(x, y);
-                view_info.axis.r += angle - mouse.r;
+
+                // 当按下shift键时，以45度的步长进行增量旋转
+                if (isShiftPressed) {
+                    let incrementAngle = Math.round(angle / 15) * 15; // 增量旋转，按5度调整
+                    if (incrementAngle !== currentAngle) {
+                        currentAngle = incrementAngle;
+                        view_info.axis.r = currentAngle;
+                    }
+                } else {
+                    view_info.axis.r += angle - mouse.r;
+                }
                 setAttribute()
                 mouse.r = angle
             }
@@ -261,7 +272,7 @@
                 const handle = mouse.handle.classList;
                 let dx = e.clientX - mouse.x;
                 let dy = e.clientY - mouse.y;
-                // 当按下shift键时，对称放大缩小
+                // 当按下shift键时，对称（等比例）放大缩小
                 if (isShiftPressed) {
                     if (handle.contains('top-left')) {
                         view_info.attr.width -= dx;

@@ -18,61 +18,77 @@
 </head>
 
 <body>
-    <div class="rotate-box" id="rotateBox"></div>
+    <svg id="svgCanvas" width="500" height="500" xmlns="http://www.w3.org/2000/svg">
+        <rect id="rotatableRect" x="100" y="100" width="100" height="100" fill="blue" />
+    </svg>
 
     <script>
-        // 获取元素
-        const rotateBox = document.getElementById('rotateBox');
-        let angle = 0; // 当前的旋转角度
-        let isShiftPressed = false; // 是否按下 Shift 键
+       // 获取SVG元素和矩形
+        const svgCanvas = document.getElementById("svgCanvas");
+        const rect = document.getElementById("rotatableRect");
 
-        // 监听 shift 键按下
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Shift') {
-                isShiftPressed = true;  // 按下 Shift 键
+        let isShiftPressed = false; // 用于检测Shift键是否按下
+        let currentAngle = 0; // 记录当前角度
+        let initialAngle = 0; // 记录开始旋转时的初始角度
+        let isRotating = false; // 判断是否正在旋转
+
+        // 监听Shift键按下和抬起事件
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Shift") {
+                isShiftPressed = true; // Shift键被按下
             }
         });
 
-        // 监听 shift 键抬起
-        document.addEventListener('keyup', (e) => {
-            if (e.key === 'Shift') {
-                isShiftPressed = false; // 松开 Shift 键
+        document.addEventListener("keyup", (event) => {
+            if (event.key === "Shift") {
+                isShiftPressed = false; // Shift键被松开
+                isRotating = false; // 旋转结束
             }
         });
 
-        // 鼠标旋转
-        let isDragging = false;
-        let startX = 0; // 记录鼠标按下时的X坐标
+        // 监听鼠标按下事件来初始化旋转
+        svgCanvas.addEventListener("mousedown", (event) => {
+            if (isShiftPressed && event.button === 0) { // 只有按下左键时才开始旋转
+                isRotating = true;
+                const centerX = rect.x.baseVal.value + rect.width.baseVal.value / 2;
+                const centerY = rect.y.baseVal.value + rect.height.baseVal.value / 2;
 
-        // 鼠标按下事件
-        rotateBox.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            startX = e.clientX; // 记录鼠标起始位置
-            e.preventDefault();
+                // 计算初始旋转角度
+                const mouseX = event.clientX - svgCanvas.getBoundingClientRect().left;
+                const mouseY = event.clientY - svgCanvas.getBoundingClientRect().top;
+
+                initialAngle = Math.atan2(mouseY - centerY, mouseX - centerX) * (180 / Math.PI); // 初始角度
+                currentAngle = parseFloat(getComputedStyle(rect).transform.split(',')[0].slice(7)) || 0; // 获取当前矩形的旋转角度
+            }
         });
 
-        // 鼠标移动事件
-        document.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
+        // 监听鼠标移动事件来实现旋转
+        svgCanvas.addEventListener("mousemove", (event) => {
+            if (isShiftPressed && isRotating && event.buttons === 1) { // 判断是否按下了Shift键且鼠标左键被按住
+                const centerX = rect.x.baseVal.value + rect.width.baseVal.value / 2;
+                const centerY = rect.y.baseVal.value + rect.height.baseVal.value / 2;
 
-            // 计算旋转角度变化
-            let deltaX = e.clientX - startX;
-            let newAngle = angle + (isShiftPressed ? Math.round(deltaX / 45) * 45 : deltaX); // 使用5度倍数变化
+                const mouseX = event.clientX - svgCanvas.getBoundingClientRect().left;
+                const mouseY = event.clientY - svgCanvas.getBoundingClientRect().top;
 
-            // 限制角度范围，例如：-360° 到 360°之间
-            newAngle = newAngle % 360;
+                // 计算新的角度
+                const angle = Math.atan2(mouseY - centerY, mouseX - centerX) * (180 / Math.PI);
+                let angleDiff = angle - initialAngle; // 计算当前角度与初始角度的差值
 
-            // 设置新的旋转角度
-            rotateBox.style.transform = `rotate(${newAngle}deg)`;
+                // 增量旋转，按5度调整
+                let incrementAngle = Math.round(angleDiff / 15) * 15;
 
-            angle = newAngle;  // 更新当前角度
-            startX = e.clientX; // 更新起始位置
+                // 更新矩形旋转角度
+                const newAngle = currentAngle + incrementAngle;
+                rect.setAttribute("transform", `rotate(${newAngle}, ${centerX}, ${centerY})`);
+            }
         });
 
-        // 鼠标松开事件
-        document.addEventListener('mouseup', () => {
-            isDragging = false; // 停止拖动
+        // 监听鼠标松开事件来停止旋转
+        svgCanvas.addEventListener("mouseup", () => {
+            isRotating = false; // 停止旋转
         });
+
     </script>
 </body>
 
