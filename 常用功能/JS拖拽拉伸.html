@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JS拖拽拉伸</title>
+    <title>JS拖拽DIV-位移、旋转、拉伸</title>
     <style>
         body {
             margin: 0;
@@ -30,6 +30,10 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
+        }
+
+        img:hover {
+            cursor: move;
         }
 
         .point {
@@ -81,13 +85,24 @@
 
         .rotate {
             position: absolute;
-            top: -30px;
+            top: -50px;
             left: calc(50% - 10px);
             z-index: 1;
             width: 20px;
             height: 20px;
-            cursor: grab;
-            background: url(http://test.codeman.top/rotate.svg) 0 0/20px 20px no-repeat;
+            border-radius: 50%;
+            cursor: alias;
+            background: purple url(http://test.codeman.top/rotate.svg) 0 0/20px 20px no-repeat;
+        }
+
+        .rotate::after {
+            content: '';
+            display: block;
+            position: absolute;
+            left: 9.5px;
+            width: 1px;
+            height: 50px;
+            background-color: purple;
         }
 
         .log {
@@ -111,6 +126,9 @@
     <div class="container">
         <div class="control" data-key="drag">
             <img src="./抽奖/img/tema.jpg" alt="">
+
+            <div class="rotate" data-key="rotate"></div>
+
             <div class="point point-nw" data-key="nw"></div>
             <div class="point point-n" data-key="n"></div>
             <div class="point point-ne" data-key="ne"></div>
@@ -119,7 +137,7 @@
             <div class="point point-s" data-key="s"></div>
             <div class="point point-sw" data-key="sw"></div>
             <div class="point point-w" data-key="w"></div>
-            <div class="rotate" data-key="rotate"></div>
+
         </div>
     </div>
     <div class="log"></div>
