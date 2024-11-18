@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JS拖拽DIV-位移、旋转、拉伸</title>
+    <title>JS拖拽DIV-位移、旋转、拉伸(缩放)</title>
     <style>
         body {
             margin: 0;
@@ -145,7 +145,7 @@
 
     <script>
         // 声明变量
-        let defaultWidth = 200, defaultHeight = 160, isPointerdown = false, diff = { x: 0, y: 0 }, lastPointermove = { x: 0, y: 0 }, key = '', vertexOfRotate, currentAngle = 0, isShiftPressed = false;
+        let defaultWidth = 200, defaultHeight = 160, isPointerdown = false, diff = { x: 0, y: 0 }, lastPointermove = { x: 0, y: 0 }, key = '', vertexOfRotate, isShiftPressed = false;
         let sx = 1, sy = 1;
         const box = {
             element: document.querySelector('.control'),
@@ -350,15 +350,10 @@
             },
             rotate: function (e) {
                 const angle = getAngle(origin, { x: e.clientX, y: e.clientY }) - getAngle(origin, lastPointermove);
-
                 let r = (box.rotate + angle + 360) % 360;
-                // 当按下shift键时，以45度的步长进行增量旋转
+                // 当按下shift键时，以15度的步长进行增量旋转
                 if (isShiftPressed) {
-                    let incrementAngle = Math.round(r / 15) * 15; // 增量旋转，按15度调整
-                    if (incrementAngle !== currentAngle) {
-                        currentAngle = incrementAngle;
-                        box.rotate = currentAngle;
-                    }
+                    box.rotate = Math.round(r / 15) * 15; // 增量旋转，按15度调整
                 } else {
                     box.rotate = r;
                 }
