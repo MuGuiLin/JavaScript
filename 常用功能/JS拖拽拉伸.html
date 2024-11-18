@@ -92,17 +92,18 @@
             height: 20px;
             border-radius: 50%;
             cursor: alias;
-            background: purple url(http://test.codeman.top/rotate.svg) 0 0/20px 20px no-repeat;
+            background: url(./rotate.png) 0 0/20px 20px no-repeat;
         }
 
         .rotate::after {
             content: '';
             display: block;
             position: absolute;
+            top: 10px;
             left: 9.5px;
             width: 1px;
-            height: 50px;
-            background-color: purple;
+            height: 40px;
+            background-color: #d4237a;
         }
 
         .log {
@@ -144,7 +145,7 @@
 
     <script>
         // 声明变量
-        let defaultWidth = 200, defaultHeight = 160, isPointerdown = false, diff = { x: 0, y: 0 }, lastPointermove = { x: 0, y: 0 }, key = '', vertexOfRotate;
+        let defaultWidth = 200, defaultHeight = 160, isPointerdown = false, diff = { x: 0, y: 0 }, lastPointermove = { x: 0, y: 0 }, key = '', vertexOfRotate, currentAngle = 0, isShiftPressed = false;
         let sx = 1, sy = 1;
         const box = {
             element: document.querySelector('.control'),
@@ -349,7 +350,18 @@
             },
             rotate: function (e) {
                 const angle = getAngle(origin, { x: e.clientX, y: e.clientY }) - getAngle(origin, lastPointermove);
-                box.rotate = (box.rotate + angle + 360) % 360;
+
+                let r = (box.rotate + angle + 360) % 360;
+                // 当按下shift键时，以45度的步长进行增量旋转
+                if (isShiftPressed) {
+                    let incrementAngle = Math.round(r / 15) * 15; // 增量旋转，按15度调整
+                    if (incrementAngle !== currentAngle) {
+                        currentAngle = incrementAngle;
+                        box.rotate = currentAngle;
+                    }
+                } else {
+                    box.rotate = r;
+                }
             }
         }
         // 绑定事件
@@ -397,6 +409,20 @@
             if (isPointerdown) {
                 isPointerdown = false;
                 getCursor();
+            }
+        });
+
+        // 监听 shift 键按下
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Shift') {
+                isShiftPressed = true;  // 按下 Shift 键
+            }
+        });
+
+        // 监听 shift 键抬起
+        document.addEventListener('keyup', (e) => {
+            if (e.key === 'Shift') {
+                isShiftPressed = false; // 松开 Shift 键
             }
         });
         // 获取光标
