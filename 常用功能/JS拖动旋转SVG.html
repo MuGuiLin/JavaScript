@@ -254,9 +254,9 @@
                 const [x, y] = getMousePos(canvas, e);
                 const angle = calculateAngle(x, y);
 
-                // 当按下shift键时，以45度的步长进行增量旋转
+                // 当按下shift键时，以15度的步长进行增量旋转
                 if (isShiftPressed) {
-                    let incrementAngle = Math.round(angle / 15) * 15; // 增量旋转，按5度调整
+                    let incrementAngle = Math.round(angle / 15) * 15; // 增量旋转，按15度调整
                     if (incrementAngle !== currentAngle) {
                         currentAngle = incrementAngle;
                         view_info.axis.r = currentAngle;

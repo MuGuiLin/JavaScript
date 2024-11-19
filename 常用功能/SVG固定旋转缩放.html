@@ -1,0 +1,147 @@
+<svg width="800" height="600" style="border: 1px solid black;">
+    <!-- 矩形 -->
+    <rect x="100" y="100" width="150" height="100" fill="blue" transform="rotate(30 175 150)" id="myRect"></rect>
+
+    <!-- 控制点 -->
+    <circle id="tl" r="5" fill="red" cursor="pointer" />
+    <circle id="tr" r="5" fill="red" cursor="pointer" />
+    <circle id="bl" r="5" fill="red" cursor="pointer" />
+    <circle id="br" r="5" fill="red" cursor="pointer" />
+</svg>
+
+<script>
+    const svg = document.querySelector("svg");
+    const rect = document.getElementById("myRect");
+    const handles = {
+        tl: document.getElementById("tl"), // 左上角
+        tr: document.getElementById("tr"), // 右上角
+        bl: document.getElementById("bl"), // 左下角
+        br: document.getElementById("br"), // 右下角
+    };
+
+    let isDragging = false;
+    let activeHandle = null;
+    let initialMousePos, initialRect;
+
+    // 获取变换矩阵的逆矩阵
+    function getInverseMatrix() {
+        const matrix = rect.getCTM();
+        return matrix.inverse();
+    }
+
+    // 转换鼠标坐标到SVG坐标系
+    function getSVGPoint(event, inverseMatrix) {
+        const point = svg.createSVGPoint();
+        point.x = event.clientX;
+        point.y = event.clientY;
+        return point.matrixTransform(inverseMatrix);
+    }
+
+    // 更新控制点位置
+    function updateHandles() {
+        const rectMatrix = rect.getCTM();
+        const x = parseFloat(rect.getAttribute("x"));
+        const y = parseFloat(rect.getAttribute("y"));
+        const width = parseFloat(rect.getAttribute("width"));
+        const height = parseFloat(rect.getAttribute("height"));
+
+        const points = {
+            tl: { x, y },
+            tr: { x: x + width, y },
+            bl: { x, y: y + height },
+            br: { x: x + width, y: y + height },
+        };
+
+        Object.keys(handles).forEach((key) => {
+            const point = svg.createSVGPoint();
+            point.x = points[key].x;
+            point.y = points[key].y;
+            const transformedPoint = point.matrixTransform(rectMatrix);
+            handles[key].setAttribute("cx", transformedPoint.x);
+            handles[key].setAttribute("cy", transformedPoint.y);
+        });
+    }
+
+    // 初始化矩形信息和鼠标位置
+    function startResize(event, handle) {
+        isDragging = true;
+        activeHandle = handle;
+
+        const inverseMatrix = getInverseMatrix();
+        initialMousePos = getSVGPoint(event, inverseMatrix);
+
+        initialRect = {
+            x: parseFloat(rect.getAttribute("x")),
+            y: parseFloat(rect.getAttribute("y")),
+            width: parseFloat(rect.getAttribute("width")),
+            height: parseFloat(rect.getAttribute("height")),
+        };
+
+        event.preventDefault();
+    }
+
+    // 处理拖动
+    function resize(event) {
+        if (!isDragging || !activeHandle) return;
+
+        const inverseMatrix = getInverseMatrix();
+        const currentMousePos = getSVGPoint(event, inverseMatrix);
+
+        const dx = currentMousePos.x - initialMousePos.x;
+        const dy = currentMousePos.y - initialMousePos.y;
+
+        // 根据不同的控制点调整宽高
+        let newX = initialRect.x;
+        let newY = initialRect.y;
+        let newWidth = initialRect.width;
+        let newHeight = initialRect.height;
+
+        if (activeHandle === "tl") {
+            newX += dx;
+            newY += dy;
+            newWidth -= dx;
+            newHeight -= dy;
+        } else if (activeHandle === "tr") {
+            newY += dy;
+            newWidth += dx;
+            newHeight -= dy;
+        } else if (activeHandle === "bl") {
+            newX += dx;
+            newWidth -= dx;
+            newHeight += dy;
+        } else if (activeHandle === "br") {
+            newWidth += dx;
+            newHeight += dy;
+        }
+
+        // 限制最小宽高
+        newWidth = Math.max(10, newWidth);
+        newHeight = Math.max(10, newHeight);
+
+        rect.setAttribute("x", newX);
+        rect.setAttribute("y", newY);
+        rect.setAttribute("width", newWidth);
+        rect.setAttribute("height", newHeight);
+
+        updateHandles();
+    }
+
+    // 结束拖动
+    function stopResize() {
+        isDragging = false;
+        activeHandle = null;
+    }
+
+    // 为每个控制点添加事件
+    Object.keys(handles).forEach((key) => {
+        const handle = handles[key];
+        handle.addEventListener("mousedown", (event) => startResize(event, key));
+    });
+
+    // 全局事件
+    svg.addEventListener("mousemove", resize);
+    document.addEventListener("mouseup", stopResize);
+
+    // 初始设置控制点位置
+    updateHandles();
+</script>

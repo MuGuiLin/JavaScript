@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JS拖拽拉伸</title>
+    <title>JS拖拽DIV-位移、旋转、拉伸(缩放)</title>
     <style>
         body {
             margin: 0;
@@ -16,6 +16,14 @@
             background: #000;
             overflow: hidden;
             user-select: none;
+        }
+
+        .control {
+            outline: 1px solid #1890ff;
+        }
+
+        .control:hover {
+            cursor: move;
         }
 
         .transform {
@@ -81,13 +89,24 @@
 
         .rotate {
             position: absolute;
-            top: -30px;
+            top: -50px;
             left: calc(50% - 10px);
             z-index: 1;
             width: 20px;
             height: 20px;
-            cursor: grab;
-            background: url(http://test.codeman.top/rotate.svg) 0 0/20px 20px no-repeat;
+            cursor: alias;
+            background: url(./rotate.png) 0 0/20px 20px no-repeat;
+        }
+
+        .rotate::after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 18px;
+            left: 9.5px;
+            width: 1px;
+            height: 30px;
+            background-color: #1890ff;
         }
 
         .log {
@@ -109,24 +128,27 @@
 <body>
     <!-- https://juejin.cn/post/7109020859490107423 -->
     <div class="container">
-        <div class="control" data-key="drag">
-            <img src="./抽奖/img/tema.jpg" alt="">
-            <div class="point point-nw" data-key="nw"></div>
-            <div class="point point-n" data-key="n"></div>
-            <div class="point point-ne" data-key="ne"></div>
-            <div class="point point-e" data-key="e"></div>
-            <div class="point point-se" data-key="se"></div>
-            <div class="point point-s" data-key="s"></div>
-            <div class="point point-sw" data-key="sw"></div>
-            <div class="point point-w" data-key="w"></div>
-            <div class="rotate" data-key="rotate"></div>
+        <div class="control" data-key="move">
+            <img src="./抽奖/img/tema.jpg" alt="图片" />
+
+            <div class="rotate" data-key="rotate" title="旋转：按下Shift键时，以15度的步长增量旋转！"></div>
+
+            <div class="point point-nw" data-key="nw" title="nw - 左上角"></div>
+            <div class="point point-n" data-key="n" title="n 中上"></div>
+            <div class="point point-ne" data-key="ne" title="ne 右上角"></div>
+            <div class="point point-e" data-key="e" title="e 中右"></div>
+            <div class="point point-se" data-key="se" title="se 右下角"></div>
+            <div class="point point-s" data-key="s" title="s 中下"></div>
+            <div class="point point-sw" data-key="sw" title="sw 左下角"></div>
+            <div class="point point-w" data-key="w" title="w 中左"></div>
+
         </div>
     </div>
     <div class="log"></div>
 
     <script>
         // 声明变量
-        let defaultWidth = 200, defaultHeight = 160, isPointerdown = false, diff = { x: 0, y: 0 }, lastPointermove = { x: 0, y: 0 }, key = '', vertexOfRotate;
+        let defaultWidth = 300, defaultHeight = 200, isPointerdown = false, diff = { x: 0, y: 0 }, lastPointermove = { x: 0, y: 0 }, key = '', vertexOfRotate, isShiftPressed = false;
         let sx = 1, sy = 1;
         const box = {
             element: document.querySelector('.control'),
@@ -199,7 +221,7 @@
         }
         // 功能函数
         const action = {
-            drag: function () {
+            move: function () {
                 box.x += diff.x;
                 box.y += diff.y;
             },
@@ -343,7 +365,7 @@
             key = e.target.dataset.key;
             box.rect = box.element.getBoundingClientRect();
             getVertexOfRotate(box.rotate);
-            if (key !== 'drag' && key !== 'rotate') {
+            if (key !== 'move' && key !== 'rotate') {
                 currentPoint.x = vertexOfRotate[key].x;
                 currentPoint.y = vertexOfRotate[key].y;
             }
@@ -355,17 +377,25 @@
                 const current = { x: e.clientX, y: e.clientY };
                 diff.x = current.x - lastPointermove.x;
                 diff.y = current.y - lastPointermove.y;
-                if (key !== 'drag' && key !== 'rotate') {
+                if (key !== 'move' && key !== 'rotate') {
                     currentPoint.x += diff.x;
                     currentPoint.y += diff.y;
+                }
+                // 当按下shift键时
+                let rotate = box.rotate
+                if (isShiftPressed) {
+                    // 以15度的步长进行增量旋转
+                    if (key === 'rotate') {
+                        rotate = Math.round(box.rotate / 15) * 15; // 增量旋转，按15度调整
+                    }
                 }
                 action[key](e);
                 lastPointermove.x = current.x;
                 lastPointermove.y = current.y;
                 box.element.style.width = box.width + 'px';
                 box.element.style.height = box.height + 'px';
-                box.element.style.transform = 'translate3d(' + box.x + 'px, ' + box.y + 'px, 0) rotate(' + box.rotate.toFixed(0) + 'deg)';
-                logEl.innerHTML = `x = ${box.x}<br>y = ${box.y}<br>width = ${box.width}<br>height = ${box.height}<br>rotate=${box.rotate}`;
+                box.element.style.transform = 'translate3d(' + box.x + 'px, ' + box.y + 'px, 0) rotate(' + rotate.toFixed(0) + 'deg)';
+                logEl.innerHTML = `x = ${box.x}<br>y = ${box.y}<br>width = ${box.width}<br>height = ${box.height}<br>rotate=${rotate}`;
                 e.preventDefault();
             }
         });
@@ -379,6 +409,20 @@
             if (isPointerdown) {
                 isPointerdown = false;
                 getCursor();
+            }
+        });
+
+        // 监听 shift 键按下
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Shift') {
+                isShiftPressed = true;  // 按下 Shift 键
+            }
+        });
+
+        // 监听 shift 键抬起
+        document.addEventListener('keyup', (e) => {
+            if (e.key === 'Shift') {
+                isShiftPressed = false; // 松开 Shift 键
             }
         });
         // 获取光标
