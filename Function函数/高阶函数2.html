@@ -40,7 +40,7 @@
             const data = new Array(100000).fill(0).map((_, i) => i);
 
             insert_btn.onclick = () => {
-                // 调用
+                // 调用高阶函数
                 performChunk(data, (item, i) => {
                     const div = document.createElement('div');
                     div.innerText = i;
@@ -60,7 +60,7 @@
                         return
                     }
 
-                    // requestIdleCallback 是浏览器原生API, 一个渲染帧中，空闲时开启分片执行， 16.6ms的空闲时间
+                    // requestIdleCallback 是浏览器原生API（Node.js环境没有）, 一个渲染帧中，空闲时开启分片执行， 16.6ms的空闲时间
                     requestIdleCallback((idel) => {
                         // 当渲染帧有空闲剩余时间，并且还有循环任务时
                         while (0 < idel.timeRemaining() && i < data.length) {
@@ -77,19 +77,28 @@
 
          // 通用高阶函数插入
          {
-            const insert_btn = document.querySelector('#insert-btn2');
+            const insert_btn = document.querySelector('#insert-btn3');
             const data = new Array(100000).fill(0).map((_, i) => i);
 
             insert_btn.onclick = () => {
-                // 调用
+                // 调度器
+                const scheduler = (task) => {
+                    // 分片（任务间隔调用）
+                    setTimeout(() => {
+                        const now = performance.now();
+                        // 设置每个分片要执行的时间
+                        task(() => performance.now() - now <= 10)
+                    }, 1000);
+                }
+                // 调用高阶函数
                 performChunk(data, (item, i) => {
                     const div = document.createElement('div');
                     div.innerText = i;
                     document.body.append(div);
-                })
+                }, scheduler)
             }
 
-            function performChunk(data, call) {
+            function performChunk(data, call, scheduler) {
                 if (0 === data.length) {
                     return;
                 }
@@ -101,10 +110,10 @@
                         return
                     }
 
-                    // requestIdleCallback 是浏览器原生API, 一个渲染帧中，空闲时开启分片执行， 16.6ms的空闲时间
-                    requestIdleCallback((idel) => {
+                    // 任务调度器
+                    scheduler((goOn) => {
                         // 当渲染帧有空闲剩余时间，并且还有循环任务时
-                        while (0 < idel.timeRemaining() && i < data.length) {
+                        while (goOn() && i < data.length) {
                             call(data[i], i)
                             i++
                         }
