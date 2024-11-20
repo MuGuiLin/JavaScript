@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数字千分位</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        input {
+            padding: 10px;
+            width: 500px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>数字千分位</h1>
+    <hr>
+    <input type="number" placeholder="请输入数字！" />
+    <h2></h2>
+
+    <script>
+        input = document.querySelector('input')
+        h2 = document.querySelector('h2');
+        input.oninput = () => {
+            h2.innerText = input.value.replace(/\B(?=(\d{4})+$)/g, ', ');
+            /*
+                (?=规则) 正则前瞻运算符，可以不消耗字符，只匹配位置
+                \d 表示 数字
+                {}$ 表示 连续的
+                \d{3} 表示3个连续的数字
+                ()+ 出现1次或多次
+                (?=(\d{3})+$) 表示 匹配每3个连续出现1次或多次数字的位置
+                \B 表示 非边界 不在匹配边界范围
+                g 表示 所有 
+            */
+        }
+    </script>
+</body>
+
+</html>
