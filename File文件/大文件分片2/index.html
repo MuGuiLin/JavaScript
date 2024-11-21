@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大文件分片</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>大文件分片（多线程版）</h1>
+    <hr />
+    <input type="file" id="file" />
+
+    <script src="./md5.js"></script>
+    <script>
+        const inpfile = document.querySelector('#file');
+
+
+        // 定义文件每片的分片大小 5MB
+        const CHUNK_SIZE = 1024 * 1024 * 5;
+
+        // 获取当前计算机CUP核心数
+        const CUP_THREAD_NUM = globalThis.navigator.hardwareConcurrency || 4;
+
+        const cutFile = async (file) => {
+            return new Promise((resolve, reject) => {
+                // 计算文件总分片数
+                const chunkCount = Math.ceil(file.size / CHUNK_SIZE); // 分片向上取整，如：5.5片就要分6片
+                console.log('文件总分片数：', chunkCount);
+
+                // 计算每个线程能够分到的分片数量
+                const hereadChunkCount = Math.ceil(chunkCount / CUP_THREAD_NUM);
+                console.log('每个线程分片数：', hereadChunkCount);
+
+
+                console.log('\n文件分片中...！🚀如果文件是存储SSD固态硬盘中的话，读取速度会有非常大的提升哦！！\n\n');
+
+
+                const chunks = [];
+                let finishCount = 0; //完成的分片数
+
+                // 根据CUP核心数 创建线程，并分配获取文件分片每片信息的任务
+                for (let i = 0; i < CUP_THREAD_NUM; i++) {
+
+                    // 使用线程来完成片信任务，这样就不影响主(渲染)线程，从而达到提升文件分片的任务！！注：Worker要在http服务器环境下才能运行！！
+                    // const worker = new Worker('./worker.js', {
+                    //     type: 'module'   // 可以在worker.js中导入其他js模块
+                    // });
+                    const worker = new Worker('./worker.js');
+                    // 线程要处理分片的起始位置
+                    let startChunkIndex = i * hereadChunkCount;
+                    // 线程要处理分片的结束位置
+                    let endChunkIndex = (i + 1) * hereadChunkCount;
+                    // 如果endChunkIndex超出了总分片数量，就等于总分片数量
+                    if (chunkCount < endChunkIndex) {
+                        endChunkIndex = chunkCount;
+                    }
+                    // 往线程传递消息（每个线程要处理多个分片任务）
+                    worker.postMessage({
+                        file,           // 要分片的文件
+                        CHUNK_SIZE,     // 每个分片的大小
+                        startChunkIndex,// 线程要处理分片的起始位置
+                        endChunkIndex,  // 线程要处理分片的结束位置
+                    });
+                    // 接收线程处理结果
+                    worker.onmessage = (e) => {
+                        // 这样直接添加会造成文件分片的顺序混乱，因为没法确定哪个线程任务先完成和后完成。
+                        // chunks.push(...e.data);
+
+                        // 所以给线程任务对应的下标赋值文件分片，就不会有顺序混乱的问题了
+                        for (let i = startChunkIndex; i < endChunkIndex; i++) {
+                            // 将线程每次分片任务完成的结果，依次汇总
+                            chunks[i] = e.data[i - startChunkIndex];
+                        }
+                        // 每完成一个线程，就结束一个线程
+                        worker.terminate();
+                        // 每完成一个线程，就记录上加一次
+                        finishCount++;
+                        // 当所有线程任务都完成时，后返回分片结果
+                        if (finishCount === CUP_THREAD_NUM) {
+                            resolve(chunks)
+                        }
+                    }
+                }
+            });
+        };
+
+        inpfile.onchange = async (e) => {
+            const file = e.target.files[0];
+            console.time('耗时');
+
+            const chunks = await cutFile(file);
+
+            console.timeEnd('耗时');
+
+            console.log('分片结果：', chunks);
+        }
+    </script>
+</body>
+
+</html>
