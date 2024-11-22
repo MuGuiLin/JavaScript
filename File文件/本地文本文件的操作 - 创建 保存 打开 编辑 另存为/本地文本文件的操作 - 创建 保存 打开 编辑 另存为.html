@@ -61,6 +61,7 @@
       ],
     };
 
+    // JSON数据序列化
     textarea.value = JSON.stringify(data);
 
     async function Create(isSave) {
@@ -71,6 +72,7 @@
       return FH;
     }
 
+    // 打开文件
     async function Open() {
       const [FileHandle] = await globalThis.showOpenFilePicker();
       FH = FileHandle;
@@ -87,6 +89,7 @@
       document.querySelector("#h5").innerHTML = JSON.stringify(obj);
     }
 
+    // 保存文件
     async function Save(FileHandle) {
       if (!FileHandle) return;
       try {
@@ -99,6 +102,7 @@
       }
     }
 
+    // 另存为文件
     async function SaveAs(isSave) {
       const FileHandle = isSave && !!FH ? FH : await Create(true);
       Save(FileHandle);
