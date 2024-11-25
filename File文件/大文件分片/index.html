@@ -22,7 +22,7 @@
         const inpfile = document.querySelector('#file');
 
 
-        // 创建文件分片
+        // 创建文件分片（通过文件分片内容计算HASH值）
         const createChunk = (file, index, chunkSize) => {
             // console.log(file, index, chunkSize);
             return new Promise((resolve, reject) => {
@@ -31,13 +31,15 @@
                 // 文件切片
                 const blob = file.slice(start, end);
                 const fileReader = new FileReader();
+
+                // 监听文件分片内容加载完成时，用文件分片内容计算HASH值，但这样做速度太慢了，可以考虑通过抽样的形式的计算HASH值
                 fileReader.onload = (e) => {
                     // console.log(e.target.result);
                     resolve({
                         start,
                         end,
                         index,
-                        hash: md5(index),
+                        hash: md5(index + e.target.result),
                         blob,
                     });
                 };
@@ -49,8 +51,27 @@
                 // fileReader.onprogress = (e) => {
                 //     console.log('切片进度：', e);
                 // };
-
+                
+                //  开始读取指定 Blob 或 File 的内容（读取操作完成时，readyState 属性变为 DONE，并触发 loadend 事件）
                 fileReader.readAsArrayBuffer(blob);
+            })
+        };
+
+        // 创建文件分片（通过分片索引计算HASH值）
+        const createChunk2 = (file, index, chunkSize) => {
+            // console.log(file, index, chunkSize);
+            return new Promise((resolve, reject) => {
+                const start = index * chunkSize;
+                const end = start + chunkSize;
+                // 文件切片
+                const blob = file.slice(start, end);
+                resolve({
+                    start,
+                    end,
+                    index,
+                    hash: md5(index),
+                    blob,
+                });
             })
         };
 
@@ -73,7 +94,8 @@
                 // chunks.push(chunk);
 
                 // 所以 试先直接添加分片任务，最后用Promise并行创建分片
-                chunks.push(createChunk(file, i, CHUNK_SIZE))
+                // chunks.push(createChunk(file, i, CHUNK_SIZE))
+                chunks.push(createChunk2(file, i, CHUNK_SIZE))
             }
             // return chunks;
             // 最后用Promise并行创建分片

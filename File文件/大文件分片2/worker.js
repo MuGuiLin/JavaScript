@@ -9,6 +9,7 @@ const createChunk = (file, index, chunkSize) => {
         // 文件切片
         const blob = file.slice(start, end);
         const fileReader = new FileReader();
+        // 监听文件分片内容加载完成时，用文件分片内容计算HASH值，但这样做速度太慢了，可以考虑通过抽样的形式的计算HASH值
         fileReader.onload = (e) => {
             // console.log(e.target.result);
             resolve({
@@ -27,7 +28,7 @@ const createChunk = (file, index, chunkSize) => {
         // fileReader.onprogress = (e) => {
         //     console.log('切片进度：', e);
         // };
-
+        //  开始读取指定 Blob 或 File 的内容（读取操作完成时，readyState 属性变为 DONE，并触发 loadend 事件）
         fileReader.readAsArrayBuffer(blob);
     })
 };
