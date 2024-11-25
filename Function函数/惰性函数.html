@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>JS惰性函数</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
+<body>
+
+    <h1>JS惰性函数</h1>
+    <hr />
+    <p>什么是惰性函数： 调用函数时，返回值只需要判断一次！（这样就不用每次调用一次函数，都要判断一次啦！）</p>
+    <script>
+        // 只少需要调用一次才能判断好
+        function copyToClipboard(text) {
+            if (globalThis.navigator.clipboard) {
+                copyToClipboard = (text) => globalThis.navigator.clipboard.writeText(text);
+            } else {
+                copyToClipboard = (text) => {
+                    const input = globalThis.document.createElement('input');
+                    input.setAttribute('value', text);
+                    globalThis.document.appendChild(input);
+                    input.select();
+                    globalThis.document.execCommand('copy');
+                    globalThis.document.body.removeChild(input);
+                }
+            }
+            copyToClipboard(text);
+        };
+        copyToClipboard('Hello World!');
+        console.log(copyToClipboard)
+
+
+
+
+        // 直接在函数初始化时就判断好了 【推荐】
+        const copyToClipboard2 = (() => {
+            if (globalThis.navigator.clipboard) {
+                return (text) => globalThis.navigator.clipboard.writeText(text);
+            } else {
+                return (text) => {
+                    const input = globalThis.document.createElement('input');
+                    input.setAttribute('value', text);
+                    globalThis.document.appendChild(input);
+                    input.select();
+                    globalThis.document.execCommand('copy');
+                    globalThis.document.body.removeChild(input);
+                }
+            }
+        })();
+
+        console.log(copyToClipboard2)
+
+    </script>
+</body>
+
+</html>
