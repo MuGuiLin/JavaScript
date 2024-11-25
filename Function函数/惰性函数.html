@@ -5,6 +5,11 @@
     <title>JS惰性函数</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
@@ -30,12 +35,12 @@
             copyToClipboard(text);
         };
         copyToClipboard('Hello World!');
-        console.log(copyToClipboard)
+        console.log('返回值：', copyToClipboard)
 
 
 
 
-        // 直接在函数初始化时就判断好了 【推荐】
+        // 直接在函数初始化时就判断好了 【推荐】！！！
         const copyToClipboard2 = (() => {
             if (globalThis.navigator.clipboard) {
                 return (text) => globalThis.navigator.clipboard.writeText(text);
@@ -51,7 +56,7 @@
             }
         })();
 
-        console.log(copyToClipboard2)
+        console.log('返回值：', copyToClipboard2)
 
     </script>
 </body>
