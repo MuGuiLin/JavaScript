@@ -18,7 +18,7 @@
     <hr />
     <p>什么是惰性函数： 调用函数时，返回值只需要判断一次！（这样就不用每次调用一次函数，都要判断一次啦！）</p>
     <script>
-        // 只少需要调用一次才能判断好
+        // 惰性函数写法1 只少需要调用一次才能判断好
         function copyToClipboard(text) {
             if (globalThis.navigator.clipboard) {
                 copyToClipboard = (text) => globalThis.navigator.clipboard.writeText(text);
@@ -40,7 +40,7 @@
 
 
 
-        // 直接在函数初始化时就判断好了 【推荐】！！！
+        // 惰性函数写法2 直接在函数初始化时就判断好了 【推荐】！！！
         const copyToClipboard2 = (() => {
             if (globalThis.navigator.clipboard) {
                 return (text) => globalThis.navigator.clipboard.writeText(text);
