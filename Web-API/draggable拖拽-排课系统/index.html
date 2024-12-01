@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>draggable拖拽-排课系统</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        main {
+            display: flex;
+            justify-content: space-between;
+            margin: 50px auto;
+            width: 1280px;
+            border: 1px solid gray;
+        }
+
+        .left {
+            background: #EBEBEB;
+        }
+
+        .course {
+            margin: 10px;
+            padding: 12px 0px;
+            width: 100px;
+            text-align: center;
+            cursor: move;
+        }
+
+        .gb-color1 {
+            background-color: #F05788;
+        }
+
+        .gb-color2 {
+            background-color: #56EDA1;
+        }
+
+        .gb-color3 {
+            background-color: #76DFF7;
+        }
+
+        .gb-color4 {
+            background-color: #D076F6;
+        }
+
+        .gb-color5 {
+            background-color: #FFE55D;
+        }
+
+        .gb-color6 {
+            background-color: #9DF54B;
+        }
+
+        .gb-color7 {
+            background-color: #4B6FF5;
+        }
+
+        .gb-color8 {
+            background-color: #F5B24B;
+        }
+
+        .drop-enter {
+            background-color: green;
+        }
+
+        .right {
+            margin-left: 10px;
+            background: #EBEBEB;
+        }
+
+        table {
+            padding: 10px;
+            width: 1100px;
+        }
+
+        th,
+        td {
+            border: 1px solid gray;
+            width: 100px;
+            height: 50px;
+            text-align: center;
+            background-color: #C5C5C5;
+        }
+
+        td {
+            background-color: #FFF;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>draggable拖拽-排课系统</h1>
+    <hr>
+    <main id="main">
+        <div class="left" data-drop="move">
+            <div class="course gb-color1" data-effect="copy" draggable="true">语文</div>
+            <div class="course gb-color2" data-effect="copy" draggable="true">数学</div>
+            <div class="course gb-color3" data-effect="copy" draggable="true">政治</div>
+            <div class="course gb-color4" data-effect="copy" draggable="true">历史</div>
+            <div class="course gb-color5" data-effect="copy" draggable="true">物理</div>
+            <div class="course gb-color6" data-effect="copy" draggable="true">化学</div>
+            <div class="course gb-color7" data-effect="copy" draggable="true">代数</div>
+            <div class="course gb-color8" data-effect="copy" draggable="true">几何</div>
+            <div class="course gb-color1" data-effect="copy" draggable="true">生物</div>
+            <div class="course gb-color3" data-effect="copy" draggable="true">自然</div>
+            <div class="course gb-color5" data-effect="copy" draggable="true">美术</div>
+            <div class="course gb-color6" data-effect="copy" draggable="true">音乐</div>
+            <div class="course gb-color2" data-effect="copy" draggable="true">体育</div>
+            <div class="course gb-color4" data-effect="copy" draggable="true">外语</div>
+            <div class="course gb-color3" data-effect="copy" draggable="true">自习</div>
+        </div>
+        <div class="right">
+            <table>
+                <colgroup>
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th colspan="2">时间</th>
+                        <th>星期一</th>
+                        <th>星期二</th>
+                        <th>星期三</th>
+                        <th>星期四</th>
+                        <th>星期五</th>
+                        <th>星期六</th>
+                        <th>星期日</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th rowspan="4">上午</th>
+                        <td>08:30-09:10</td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                    </tr>
+                    <tr>
+                        <td>09:20-10:00</td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                    </tr>
+                    <tr>
+                        <td>10:10-10:50</td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                    </tr>
+                    <tr>
+                        <td>11:00-11:40</td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                    </tr>
+                <tbody>
+                    <tr>
+                        <th style="height: 30px; background: #ebebeb;" colspan="9">中午休息</th>
+                    </tr>
+                    <tr>
+                        <th rowspan="4">下午</th>
+                        <td>13:30-14:10</td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                    </tr>
+                    <tr>
+                        <td>14:20-15:00</td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                    </tr>
+                    <tr>
+                        <td>15:10-15:50</td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                    </tr>
+                    <tr>
+                        <td>16:00-16:40</td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                    </tr>
+                </tbody>
+                <tbody>
+                    <tr>
+                        <th style="height: 30px; background: #ebebeb;" colspan="9">自由活动</th>
+                    </tr>
+                    <tr>
+                        <th rowspan="4">晚上</th>
+                        <td>19:00-19:40</td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                    </tr>
+                    <tr>
+                        <td>19:50-20:30</td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                        <td data-drop="copy"></td>
+                    </tr>
+                </tbody>
+                <tfoot></tfoot>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        const main = document.querySelector('#main');
+
+        // 当前被拖拽的元素
+        let nowNode = null;
+
+
+        // 删除之前拖拽进入目标元素的样式
+        const removeStyle = () => {
+            document.querySelectorAll('.drop-enter').forEach((node) => {
+                node.classList.remove('drop-enter')
+            })
+        };
+        // 获取拖拽进入目标元素节点
+        const getDrapNode = (node) => {
+            while (node) {
+                // 如果拖拽进入目标元素是右侧节点时
+                if (node.dataset && node.dataset.drop) {
+                    return node;
+                }
+                // 否则就获取左侧课程的父节点
+                node = node.parentNode;
+            };
+        };
+
+        // 由于需要拖拽元素太多给每个元素去绑定事件太麻烦了，所以用事件委托给外面最顶层父元素绑定事件就好了！
+        main.ondragstart = (e) => {
+            console.log('拖拽开始：', e.target);
+            // 设置光标样式，从自定义属性data-effect中获取
+            e.dataTransfer.effectAllowed = e.target.dataset.effect; // 'copy'; // move
+            nowNode = e.target;
+        };
+
+        main.ondragover = (e) => {
+            e.preventDefault(); // 注：此处一定要阻止默认行为，这样 ondrop 事件才会生效！！
+            // console.log('拖拽中：', e.target);
+        };
+
+        main.ondragenter = (e) => {
+            console.log('拖拽进入：', e.target);
+
+            // 设置拖拽进入目标元素的样式
+            // if (nowNode.dataset.effect === e.target.dataset.drop) {
+            //     e.target.classList.add('drop-enter')
+            // }
+
+            // 除了设置右边拖拽进入目标元素的样式，拖拽进入右边课程的父元素也要设置样式
+            const drapNode = getDrapNode(e.target);
+            if (!drapNode) {
+                return;
+            };
+            removeStyle();
+            if (nowNode.dataset.effect === drapNode.dataset.drop) {
+                drapNode.classList.add('drop-enter')
+            }
+        };
+
+        main.ondrop = (e) => {
+            console.log('拖拽结束：', e.target);
+            const drapNode = getDrapNode(e.target);
+            if (!drapNode) {
+                return;
+            };
+            // 拖拽结束时如果不是进入目标元素节点就不做任何操作
+            if (nowNode.dataset.effect !== drapNode.dataset.drop) {
+                return;
+            };
+            removeStyle();
+            if (drapNode.dataset.drop === 'copy') {
+                // 深度克隆被拖拽的元素节点
+                const newNode = nowNode.cloneNode(true);
+                newNode.dataset.effect = 'move';
+                drapNode.innerHTML = '';
+                // 将克隆的节点添加到目标元素节点上
+                drapNode.appendChild(newNode);
+            } else {
+                nowNode.remove();
+            }
+        };
+    </script>
+</body>
+
+</html>
