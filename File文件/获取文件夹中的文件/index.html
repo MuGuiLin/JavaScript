@@ -26,7 +26,7 @@
         }
 
         li {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             line-height: 32px;
             border-bottom: 1px solid gray;
         }
@@ -34,6 +34,8 @@
         li>b {
             display: inline-block;
             width: 500px;
+            line-height: 16px;
+            color: chocolate;
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
@@ -41,8 +43,14 @@
 
         li>i {
             display: inline-block;
-            padding: 0 50px;
-            width: 200px;
+            width: 300px;
+            color: blue;
+        }
+
+        li>q {
+            padding-left: 20px;
+            quotes: none; /*去除q标签两边的""引号*/
+            color: green;
         }
     </style>
 </head>
@@ -52,7 +60,7 @@
     <hr />
     <main>
         <input type="file" name="file" id="file" webkitdirectory mozdirectory odirectory />
-        <p>注：在上传file元素标签上添加directory属性以后，在选择文件夹时，子文夹中的文件都会被一起递归的取出来！</p>
+        <p>注：在上传file元素标签上添加directory属性以后，在选择文件夹时，子文夹中的文件都会被一起递归的取出来！(如果文件过多，或文件夹层级过深会导致加载过慢！)</p>
         <ul id="ul"></ul>
     </main>
 
@@ -60,23 +68,22 @@
         const file = document.querySelector('#file');
         const ul = document.querySelector('#ul');
 
-        const formatFileSize = (file) => {
-            const fs = file.size;
-            const KB = 1024;
-            const MB = 1024 * KB;
-            const GB = 1024 * MB;
-            const TB = 1024 * GB;
+        const formatFileSize = (size) => {
+            const KB = 1024,
+                MB = 1024 * KB,
+                GB = 1024 * MB,
+                TB = 1024 * GB;
 
-            if (fs < KB) {
-                return `${fs} B`;
-            } else if (fs < MB) {
-                return `${(fs / KB).toFixed(2)} KB`;
-            } else if (fs < GB) {
-                return `${(fs / MB).toFixed(2)} MB`;
-            } else if (fs < TB) {
-                return `${(fs / GB).toFixed(2)} GB`;
+            if (size < KB) {
+                return `${size} B`;
+            } else if (size < MB) {
+                return `${(size / KB).toFixed(2)} KB`;
+            } else if (size < GB) {
+                return `${(size / MB).toFixed(2)} MB`;
+            } else if (size < TB) {
+                return `${(size / GB).toFixed(2)} GB`;
             } else {
-                return `${(fs / TB).toFixed(2)} TB`;
+                return `${(size / TB).toFixed(2)} TB`;
             }
         }
 
@@ -88,7 +95,7 @@
                 const f = files[key];
                 // 如果有文件类型的文件才显示在li中
                 if (f.type) {
-                    li += `<li><b>文件名：${f.name}</b><i>文件类型：${f.type}</i>文件大小：${formatFileSize(f.size)}</li>`;
+                    li += `<li><b>文件名：${f.name}</b><i>文件类型：${f.type}</i><q>文件大小：${formatFileSize(f.size)}</q></li>`;
                 }
             }
             ul.innerHTML = li;
