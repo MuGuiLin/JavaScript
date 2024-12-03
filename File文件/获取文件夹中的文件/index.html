@@ -21,7 +21,8 @@
 
         ul {
             margin: auto;
-            width: 500px;
+            width: 1000px;
+            text-align: left;
         }
     </style>
 </head>
@@ -32,17 +33,25 @@
     <main>
         <input type="file" name="file" id="file" webkitdirectory mozdirectory odirectory />
         <p>注：在上传file元素标签上添加directory属性以后，在选择文件夹时，子文夹中的文件都会被一起递归的取出来！</p>
-        <ul id="ul">
-            <li>sdfsdf</li>
-        </ul>
+        <ul id="ul"></ul>
     </main>
 
     <script>
         const file = document.querySelector('#file');
+        const ul = document.querySelector('#ul');
 
         file.onchange = (e) => {
             const files = e.target.files
             console.log(files)
+            let li = ''
+            for (const key in files) {
+                const f = files[key];
+                li += `<li>文件名：${f.name}，文件类型：${f.type}，文件大小：${f.size}</li>`
+                console.log(f)
+               
+            }
+            ul.innerHTML = li;
+
         }
     </script>
 </body>
