@@ -24,6 +24,26 @@
             width: 1000px;
             text-align: left;
         }
+
+        li {
+            margin-bottom: 20px;
+            line-height: 32px;
+            border-bottom: 1px solid gray;
+        }
+
+        li>b {
+            display: inline-block;
+            width: 500px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        li>i {
+            display: inline-block;
+            padding: 0 50px;
+            width: 200px;
+        }
     </style>
 </head>
 
@@ -40,18 +60,38 @@
         const file = document.querySelector('#file');
         const ul = document.querySelector('#ul');
 
+        const formatFileSize = (file) => {
+            const fs = file.size;
+            const KB = 1024;
+            const MB = 1024 * KB;
+            const GB = 1024 * MB;
+            const TB = 1024 * GB;
+
+            if (fs < KB) {
+                return `${fs} B`;
+            } else if (fs < MB) {
+                return `${(fs / KB).toFixed(2)} KB`;
+            } else if (fs < GB) {
+                return `${(fs / MB).toFixed(2)} MB`;
+            } else if (fs < TB) {
+                return `${(fs / GB).toFixed(2)} GB`;
+            } else {
+                return `${(fs / TB).toFixed(2)} TB`;
+            }
+        }
+
         file.onchange = (e) => {
             const files = e.target.files
-            console.log(files)
+            console.log(files);
             let li = ''
             for (const key in files) {
                 const f = files[key];
-                li += `<li>文件名：${f.name}，文件类型：${f.type}，文件大小：${f.size}</li>`
-                console.log(f)
-               
+                // 如果有文件类型的文件才显示在li中
+                if (f.type) {
+                    li += `<li><b>文件名：${f.name}</b><i>文件类型：${f.type}</i>文件大小：${formatFileSize(f.size)}</li>`;
+                }
             }
             ul.innerHTML = li;
-
         }
     </script>
 </body>
