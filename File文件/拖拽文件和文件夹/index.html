@@ -23,12 +23,17 @@
             height: 200px;
             border-radius: 10px;
             border: 1px solid gray;
+            cursor: pointer;
         }
 
         #box::after {
             content: '🚀 请将文件 或 文件夹拖拽到此处！';
             font-size: 22px;
             color: gray;
+        }
+
+        .drop-enter {
+            box-shadow: 0 0 8px 0 green;
         }
 
         ul {
@@ -100,20 +105,43 @@
         }
         box.ondragenter = (e) => {
             e.preventDefault();
-        }
+            e.target.classList.add('drop-enter');
+        };
         box.ondragover = (e) => {
             e.preventDefault();
-        }
+        };
+        box.ondragleave = (e) => {
+            e.preventDefault();
+            e.target.classList.remove('drop-enter');
+        };
         box.ondrop = (e) => {
             e.preventDefault();
-            const files = e.target.files
-            console.log(files);
+            e.target.classList.remove('drop-enter');
+
+            const items = e.dataTransfer.items;
+            console.log(items, items.length);
+
             let li = ''
-            for (const key in files) {
-                const f = files[key];
-                // 如果有文件类型的文件才显示在li中
-                if (f.type) {
+            for (const item of items) {
+                const fileEntry = item.webkitGetAsEntry();
+                const f = item.getAsFile();
+
+                // 如果是文件
+                if (fileEntry.isFile) {
                     li += `<li><b>文件名：${f.name}</b><i>文件类型：${f.type}</i><q>文件大小：${formatFileSize(f.size)}</q></li>`;
+                    // fileEntry.file((file) => {
+                    //     console.log(file);
+                    // });
+                } else {
+                    // 如果是文件夹，就读取文件夹
+                    const reader = fileEntry.createReader();
+                    console.info('文件夹递归获取文件', reader)
+                    reader.readEntries((entries) => {
+                        console.info('文件夹', entries);
+                        // entries.file((file) => {
+                        //     console.log(file);
+                        // });
+                    });
                 }
             }
             ul.innerHTML = li;
