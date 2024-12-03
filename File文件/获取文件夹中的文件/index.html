@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>获取文件夹中的文件</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        main {
+            text-align: center;
+        }
+
+        #file {
+            margin: 50px;
+            font-size: 24px;
+        }
+
+        ul {
+            margin: auto;
+            width: 500px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>获取文件夹中的文件 directory 属性</h1>
+    <hr />
+    <main>
+        <input type="file" name="file" id="file" webkitdirectory mozdirectory odirectory />
+        <p>注：在上传file元素标签上添加directory属性以后，在选择文件夹时，子文夹中的文件都会被一起递归的取出来！</p>
+        <ul id="ul">
+            <li>sdfsdf</li>
+        </ul>
+    </main>
+
+    <script>
+        const file = document.querySelector('#file');
+
+        file.onchange = (e) => {
+            const files = e.target.files
+            console.log(files)
+        }
+    </script>
+</body>
+
+</html>
