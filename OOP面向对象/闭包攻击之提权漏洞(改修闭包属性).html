@@ -19,12 +19,13 @@
 	<pre>
 
 		关于JS中的 Object.prototype.valueOf()方法
+			该方法返回指定对象的原始值，若对象没有原始值，则将返回对象本身。通常由 JavaScript 内部调用，而不是在代码中显式调用。当遇到需要使用预期的原始值的对象时（比如对象的强制类型转换），JavaScript 会自动调用它。
 		
-		该方法返回指定对象的原始值，若对象没有原始值，则将返回对象本身。通常由 JavaScript 内部调用，而不是在代码中显式调用。当遇到需要使用预期的原始值的对象时（比如对象的强制类型转换），JavaScript 会自动调用它。
-		 
+		关于JS中的 Object.defineProperty()方法
 	</pre>
 
 	<script>
+
 		const bibao = (function () {
 			// 以下是一个典型的JS闭包场景，这种做法可以做到屏蔽bibao函数内部的obj对象，不让在外部直接访问obj，只能通过返回的get方法读取。
 			const obj = {
@@ -44,7 +45,7 @@
 
 		// bibao.set('name', 'MuGuiLin')
 		console.log(bibao)
-		console.log('获取obj闭包对象中的属性：', bibao.get('name'))
+		console.log('获取obj闭包对象中的属性：', bibao.get('name')) // '沐枫'
 
 		// 除了使用以上被注释的代码来修改闭包boj对象中的属性以外，如何实现在不改变上面代码的情况下，修改上面闭包boj对象中的属性！
 
@@ -61,7 +62,7 @@
 		const vf = bibao.get('valueOf')
 		console.log(vf) // 可以获取到 ƒ valueOf() { [native code] }
 		vf.name = 'MuGuiLin'
-		console.log('尝试修改：', bibao.get('name'))
+		console.log('尝试修改：', bibao.get('name')) // '沐枫'
 
 		// console.log(vf()) // 但不能执行，有报错  Cannot convert undefined or null to object at valueOf (<anonymous>) 由于valueOf语法为：obj.valueOf()，上述代码执行后等于直接调用valueOf()，所以该方法不适合上述场景。
 		{
@@ -93,6 +94,85 @@
 			console.log('修改后：', fn.get('name'))
 		}
 
+
+		// 当一个属性为访问器时，读取这个属性，就会变成函数调用。
+		// 此时通过bibao中的get函数读取原型上的属性upbibao时，就会触发get函数，return的this就是bibao中的obj啦呀，哈哈！！。
+		Object.defineProperty(Object.prototype, 'upbibao', {
+			get() {
+				return this
+			}
+		});
+		console.log('\n\n\n修改前：', bibao.get('age')) // 18
+		const up = bibao.get('upbibao')
+		up.age = 28
+		console.log('修改后：', bibao.get('age')) // 28
+
+
+
+
+
+		// 如何处理这个漏洞
+		// 注：如果封装一些公共模块儿时，一定要注意处理这个漏洞，避免数据被污染或恶意篡改。
+		console.log('\n\n\n提权漏洞修复后')
+		{
+			// 1、检查参数
+			// get的参数key，通过Object.hasOwnProperty()静态方法来检查，必须为obj本身的属性，不能是原型上的。
+			{
+				const fn = function () {
+					const obj = {
+						name: '沐枫',
+						age: 18,
+						lang: ['HTML', 'CSS', 'JavaScript'],
+					}
+					return {
+						get: function (key) {
+							// 检查参数
+							if (obj.hasOwnProperty(key)) {
+								return obj[key]
+							}
+							return undefined
+						}
+					}
+				}();
+				Object.defineProperty(Object.prototype, 'mupiao1', {
+					get() {
+						return this
+					}
+				});
+				let o = fn.get('mupiao1')
+				console.log(o) // undefined
+				// o.age = 16 // 报错 Cannot set properties of undefined (setting 'age')
+				console.log(fn.get('age')) // 18
+			}
+
+			// 2、将fn内的obj原型设为空
+			// 使用Object.setPrototypeOf()，将obj的原型设置为空。
+			{
+				const fn = function () {
+					const obj = {
+						name: '沐枫',
+						age: 18,
+						lang: ['HTML', 'CSS', 'JavaScript'],
+					}
+					Object.setPrototypeOf(obj, null);  // 置空原型
+					return {
+						get: function (key) {
+							return obj[key]
+						}
+					}
+				}();
+				Object.defineProperty(Object.prototype, 'mupiao2', {
+					get() {
+						return this
+					}
+				});
+				let o = fn.get('mupiao2')
+				console.log(o) // undefined
+				// o.age = 16 // 报错 Cannot set properties of undefined (setting 'age')
+				console.log(fn.get('age')) // 18
+			}
+
+		}
 	</script>
 </body>
 
