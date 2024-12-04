@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>JS 数据类型转换</title>
+	<style>
+		h1 {
+			text-align: center;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>JS 数据类型转换</h1>
+	<hr />
+
+	<input id="txt1" type="text" />
+	<input id="txt2" type="text" />
+	<button id="but">求 和</button>
+
+	<br> <br>
+	<img src="./数据类型转换.jpg" />
+
+	<script>
+
+		// 思考下面的结果是多少？
+		console.log('100' + 100) // '100100' 成了字符串拼接了，不是数值计算！！
+
+
+		// 数据类型的隐式转换
+		let num = +'1024'
+		console.log('将数字字符串隐式转换为数字类型', num, typeof num)
+
+
+		// 数据类型的显式转换
+		let aTxt1 = document.getElementById('txt1');
+		let aTxt2 = document.getElementById('txt2');
+
+		but.onclick = function () {
+			console.log(aTxt1.value + aTxt2.value);
+			console.log(isNaN(aTxt1.value));
+			console.log(parseInt(aTxt1.value) + parseFloat(aTxt2.value)); // parseInt()把字符串转成数字，parseFloat()把字符串转成数字的小数点，从左到右提取数字，或将小数转为整数！
+
+			const sum = parseInt(aTxt1.value) + parseInt(aTxt2.value); 
+			alert(sum);
+			
+		};
+		
+
+		window.onload = function mupiao() {
+			let tim = 126; //126等于多少分多少秒
+			alert('126等于多少分多少秒');
+			alert(parseInt(tim / 60) + '分' + tim % 60 + '秒');
+		};
+
+	</script>
+</body>
+
+</html>
