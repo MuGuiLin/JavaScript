@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>闭包攻击之提权漏洞(改修闭包属性)</title>
+	<style>
+		h1 {
+			text-align: center;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>闭包攻击之提权漏洞(改修闭包属性)</h1>
+	<hr />
+	<p>实现在外部修改闭包内的属性！</p>
+	<pre>
+
+		关于JS中的 Object.prototype.valueOf()方法
+		
+		该方法返回指定对象的原始值，若对象没有原始值，则将返回对象本身。通常由 JavaScript 内部调用，而不是在代码中显式调用。当遇到需要使用预期的原始值的对象时（比如对象的强制类型转换），JavaScript 会自动调用它。
+		 
+	</pre>
+
+	<script>
+		const bibao = (function () {
+			// 以下是一个典型的JS闭包场景，这种做法可以做到屏蔽bibao函数内部的obj对象，不让在外部直接访问obj，只能通过返回的get方法读取。
+			const obj = {
+				name: '沐枫',
+				age: 18,
+				lang: ['HTML', 'CSS', 'JavaScript'],
+			}
+			return {
+				get: function (key) {
+					return obj[key];
+				},
+				// set: function (key, value) {
+				// 	obj[key] = value
+				// },
+			}
+		})();
+
+		// bibao.set('name', 'MuGuiLin')
+		console.log(bibao)
+		console.log('获取obj闭包对象中的属性：', bibao.get('name'))
+
+		// 除了使用以上被注释的代码来修改闭包boj对象中的属性以外，如何实现在不改变上面代码的情况下，修改上面闭包boj对象中的属性！
+
+		/**
+		 * 分析：
+		 * 在上述写法中，get方法的权限过大，除了obj对象自身的属性name、age、lage之外，还可以通过valueOf访问到obj的原型成员。
+		 * 
+		 * 关于JS中的 Object.prototype.valueOf()方法
+		 *	该方法返回指定对象的原始值，若对象没有原始值，则将返回对象本身。通常由 JavaScript 内部调用，而不是在代码中显式调用。当遇到需要使用预期的原始值的对象时（比如对象的强制类型转换），JavaScript 会自动调用它。
+		 *
+		*/
+
+		// 通过以上分析：初步想法是通过原型上的 valueOf 方法，获取obj本身。
+		const vf = bibao.get('valueOf')
+		console.log(vf) // 可以获取到 ƒ valueOf() { [native code] }
+		vf.name = 'MuGuiLin'
+		console.log('尝试修改：', bibao.get('name'))
+
+		// console.log(vf()) // 但不能执行，有报错  Cannot convert undefined or null to object at valueOf (<anonymous>) 由于valueOf语法为：obj.valueOf()，上述代码执行后等于直接调用valueOf()，所以该方法不适合上述场景。
+		{
+			// 如果get方法返回的不是一个值，而是函数调用的话，那么该方法就可以正常执行了
+			const fn = (function () {
+				const obj = {
+					name: function () {
+						return '沐枫'
+					},
+					age: function () {
+						return 18
+					},
+					lang: function () {
+						return ['HTML', 'CSS', 'JavaScript']
+					},
+				}
+				return {
+					get: function (key) {
+						return obj[key]();
+					},
+
+				}
+			})();
+			console.log('\n\n\n修改前：', fn.get('name'))
+			const o = fn.get('valueOf')
+			o.name = function () {
+				return 'MuGuiLin'
+			}
+			console.log('修改后：', fn.get('name'))
+		}
+
+	</script>
+</body>
+
+</html>
