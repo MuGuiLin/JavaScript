@@ -1,13 +1,26 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 	<head>
 		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>乘法口决表</title>
 		<style type="text/css">
-			i{ display: inline-block; width: 140px; border: 1px solid gray;}
-			b{ display: inline-block; width: 69px; border: 1px solid gray; text-align: center;}
-			.red{color: red;}
+			i {
+				display: inline-block;
+				width: 140px;
+				border: 1px solid gray;
+			}
+
+			b {
+				display: inline-block;
+				width: 69px;
+				border: 1px solid gray;
+				text-align: center;
+			}
+
+			.red {
+				color: red;
+			}
 		</style>
 	</head>
 
@@ -15,31 +28,31 @@
 		<h1>阶梯式乘法口决表</h1>
 		<hr />
 		<h1 id="id"></h1>
-		
+
 		<h1>坐标式乘法口决表</h1>
 		<hr />
 		<h1 id="id2"></h1>
 	</body>
-	
+
 	<script type="text/javascript">
 		let dom = "";
-		for(let i = 1; i <= 9; i++) {
-			for(let j = 1; j <= i; j++) {
-				dom += '<i>'+ j +'*'+ i +'='+ i * j +'</i>';
+		for (let i = 1; i <= 9; i++) {
+			for (let j = 1; j <= i; j++) {
+				dom += '<i>' + j + '*' + i + '=' + i * j + '</i>';
 			}
 			dom += '</br>';
 		}
 		document.querySelector('#id').innerHTML = dom;
-		
+
 		let dom2 = "";
-		for(let i = 1; i < 10; i++) {
-			for(let j = 1; j < 10; j++) {
-				if(j == 7 || i == 7) {
-					dom2 += '<b class="red">'+ i * j +'</b>';
+		for (let i = 1; i < 10; i++) {
+			for (let j = 1; j < 10; j++) {
+				if (j == 7 || i == 7) {
+					dom2 += '<b class="red">' + i * j + '</b>';
 				} else {
-					dom2 += '<b>'+ i * j +'</b>';
+					dom2 += '<b>' + i * j + '</b>';
 				}
-				if(j % 9 == 0) {
+				if (j % 9 == 0) {
 					dom2 += '</br>';
 				}
 			}
