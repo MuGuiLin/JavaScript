@@ -297,6 +297,23 @@
 	
 	<script type="text/javascript">
 		//一、ES5中的作用域
+
+		/*
+			注：无论是ES5 还是 ES6
+				如果用var声明变量，只有就全局作用域 和 函数作用域
+				if(true) {
+					var x = 100;
+				}
+				console.log(x) // 100
+
+
+				如果用let声明变量，就有就全局作用域 和 函数作用域 以及 块级作用域{}
+				if(true) {
+					let x = 100;
+				}
+				console.log(x) // ReferenceError：x is not defined 
+		*/
+
 			//先看代码：
 			for(var i = 0; i < 10; i++){
 				
