@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sort排序-字典顺序和编码顺序</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>sort()排序-字典顺序和编码顺序</h1>
+    <hr />
+    <button onclick="initSort()">初始顺序</button>
+    <button onclick="codeSort()">编码顺序（Unicode编码 顺序）</button>
+    <button onclick="listSort()">字典顺序（中文排序）</button>
+
+    <ul id="ul"></ul>
+    <script>
+        const data = ['王二小', '张麻子', '李四', '冯老六', '叶良飞', '阿呆', '程成', '石磊', '小初', '龙日天']
+        const render = (arr, key) => {
+            let li = ''
+            switch (key) {
+                case 2:
+                    arr.forEach((item, index) => {
+                        li += `<li>${item.charAt(0)}、\t${item} \t - ${item.charCodeAt(0)}</li>`;
+                    });
+                    break;
+                case 3:
+                    arr.forEach((item, index) => {
+                        li += `<li>${item.charAt(0)}、\t${item}</li>`;
+                    });
+                    break;
+                default:
+                    arr.forEach((item, index) => {
+                        li += `<li>${index}、\t${item}</li>`;
+                    });
+                    break;
+            }
+
+            ul.innerHTML = li;
+        }
+        render(data)
+
+        function initSort() {
+            render(['王二小', '张麻子', '李四', '冯老六', '叶良飞', '阿呆', '程成', '石磊', '小初', '龙日天']);
+        }
+
+
+        function codeSort() {
+            render(data.sort(), 2);
+        }
+
+        function listSort() {
+            // 1、用js自带方法 localeCompare()
+            render(data.sort((a, b) => a.localeCompare(b)), 3);
+
+            // 2、用拼音库排序会更准确
+        }
+
+    </script>
+</body>
+
+</html>
