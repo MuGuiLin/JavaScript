@@ -36,21 +36,39 @@
         foo()
         bar()
 
-        // 高阶函数
-        const gjhs = (function (fns) {
-            let count = 0
-            function run() {
+        {
+            // 普通函数
+            var count = 0
+            const pths = function () {
                 ++count
                 console.log(`函数的调用次数: ${count} `);
                 return count;
+
+                return run
             }
-            return run
-        })()
+            var count = 100 // 这里会影响pths函数中的count
+            pths()
+            pths()
+            pths()
+        }
 
-        gjhs()
-        gjhs()
-        gjhs()
+        {
+            // 高阶函数
+            const gjhs = (function (fns) {
+                var count = 0
+                function run() {
+                    ++count
+                    console.log(`函数的调用次数: ${count} `);
+                    return count;
+                }
+                return run
+            })()
 
+            var count = 100 // 这里不会影响gjhs函数中的count
+            gjhs()
+            gjhs()
+            gjhs()
+        }
 
         /*
         * 现在有一个新需求，在不改变上面的foo()和bar()函数中任何代码的情况下，计算它们的运行时间
