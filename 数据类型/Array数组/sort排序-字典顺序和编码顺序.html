@@ -21,7 +21,7 @@
 
     <ul id="ul"></ul>
     <script>
-        const data = ['王二小', '张麻子', '李四', '冯老六', '叶良飞', '阿呆', '程成', '石磊', '小初', '龙日天']
+        const data = ['王二小', '张麻子', '李四', '冯老六', '叶良飞', '阿呆', '程成', '石磊', '小初', '龙笑天']
         const render = (arr, key) => {
             let li = ''
             switch (key) {
@@ -47,7 +47,7 @@
         render(data)
 
         function initSort() {
-            render(['王二小', '张麻子', '李四', '冯老六', '叶良飞', '阿呆', '程成', '石磊', '小初', '龙日天']);
+            render(['王二小', '张麻子', '李四', '冯老六', '叶良飞', '阿呆', '程成', '石磊', '小初', '龙笑天']);
         }
 
 
@@ -56,6 +56,7 @@
         }
 
         function listSort() {
+            console.log('如果 衣的字典顺序 大于 福的字典顺序 就返回1', '衣'.localeCompare('福'))
             // 1、用js自带方法 localeCompare()
             render(data.sort((a, b) => a.localeCompare(b)), 3);
 

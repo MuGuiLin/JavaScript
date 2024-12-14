@@ -34,6 +34,19 @@
         foo()
         bar()
 
+         // 高阶函数
+         const gjhs = (function(fns){
+            let count = 0
+            function run(){
+                ++count
+                console.log(`函数的调用次数: ${count} `);
+                return count;
+            }
+            return run
+        })()
+
+        console.log(gjhs())
+
 
         /*
         * 现在有一个新需求，在不改变上面的foo()和bar()函数中任何代码的情况下，计算它们的运行时间
@@ -72,6 +85,8 @@
             }
             return run
         }
+
+       
 
         /*
         * 通过高阶函数 在不改变原来foo()、bar()函数的情况下通过高阶函数 进行重写赋值。
