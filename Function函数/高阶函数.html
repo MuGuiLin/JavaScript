@@ -1,32 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>JS高阶函数</title>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <style>
-            h1 {
-                text-align: center;
-            }
-        </style>
-    </head>
-    <body>
-    
+
+<head>
+    <title>JS高阶函数</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
     <h1>JS高阶函数</h1>
-    <hr/>
+    <hr />
     <p>什么是高阶函数：
 
-            1、将函数作为参数传递接收的函数
+        1、将函数作为参数传递接收的函数
 
-            2、返回值是一个新的函数的函数</p>
+        2、返回值是一个新的函数的函数</p>
     <script>
-        function foo(){
-            for (let i = 0; i < 5000000; i++) {}
+        function foo() {
+            for (let i = 0; i < 5000000; i++) { }
             console.log('我是foo函数')
         }
 
-        function bar(){
-            for (let i = 0; i < 10000000; i++) {}
+        function bar() {
+            for (let i = 0; i < 10000000; i++) { }
             console.log('我是bar函数')
         }
 
@@ -34,10 +36,10 @@
         foo()
         bar()
 
-         // 高阶函数
-         const gjhs = (function(fns){
+        // 高阶函数
+        const gjhs = (function (fns) {
             let count = 0
-            function run(){
+            function run() {
                 ++count
                 console.log(`函数的调用次数: ${count} `);
                 return count;
@@ -45,7 +47,9 @@
             return run
         })()
 
-        console.log(gjhs())
+        gjhs()
+        gjhs()
+        gjhs()
 
 
         /*
@@ -53,9 +57,9 @@
         */
 
         // 高阶函数
-        function dec(fns){
+        function dec(fns) {
 
-            return function() {
+            return function () {
                 // 记录开始时间
                 const start_time = new Date().getTime();
 
@@ -69,9 +73,9 @@
             }
         }
         // 高阶函数
-        function dec2(fns){
-            
-            function run(){
+        function dec2(fns) {
+
+            function run() {
                 // 记录开始时间
                 const start_time = new Date().getTime();
 
@@ -86,7 +90,7 @@
             return run
         }
 
-       
+
 
         /*
         * 通过高阶函数 在不改变原来foo()、bar()函数的情况下通过高阶函数 进行重写赋值。
@@ -111,5 +115,6 @@
         */
 
     </script>
-    </body>
+</body>
+
 </html>
