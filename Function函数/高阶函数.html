@@ -36,39 +36,40 @@
         foo()
         bar()
 
-        {
-            // 普通函数
-            var count = 0
-            const pths = function () {
+
+        // 普通函数
+        var count = 0  // 在这里声明的变量是全局变量，容易会被污染(修改)
+        const pths = function () {
+            ++count
+            console.log(`函数的调用次数: ${count} `);
+            return count;
+
+            return run
+        }
+        var count = 100 // 这里会影响pths函数中的count
+        pths()
+        pths()
+        pths()
+
+
+
+        // 高阶函数
+        const gjhs = (function (fns) {
+
+            var count = 0  // 在这里面声明的变量是局部变量了（这就是闭包，也就是所谓的变量作用域），就不会被外界全局污染(修改)
+            function run() {
                 ++count
                 console.log(`函数的调用次数: ${count} `);
                 return count;
-
-                return run
             }
-            var count = 100 // 这里会影响pths函数中的count
-            pths()
-            pths()
-            pths()
-        }
+            return run
+        })()
 
-        {
-            // 高阶函数
-            const gjhs = (function (fns) {
-                var count = 0
-                function run() {
-                    ++count
-                    console.log(`函数的调用次数: ${count} `);
-                    return count;
-                }
-                return run
-            })()
+        var count = 100 // 这里不会影响gjhs函数中的count
+        gjhs()
+        gjhs()
+        gjhs()
 
-            var count = 100 // 这里不会影响gjhs函数中的count
-            gjhs()
-            gjhs()
-            gjhs()
-        }
 
         /*
         * 现在有一个新需求，在不改变上面的foo()和bar()函数中任何代码的情况下，计算它们的运行时间
