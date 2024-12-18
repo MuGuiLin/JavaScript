@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>canvas浏览器指纹</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>canvas浏览器指纹</h1>
+    <hr>
+    <textarea id="textarea" cols="100" rows="50"></textarea>
+    <textarea id="textarea2" cols="100" rows="50"></textarea>
+
+    <script>
+        {
+
+
+            function generateBrowserFingerprint() {
+                let canvas, ctx;
+                let fingerprint = '';
+
+                try {
+                    canvas = document.createElement('canvas');
+                    ctx = canvas.getContext('2d');
+                    ctx.textBaseline = 'top';
+                    ctx.font = '14px "Arial"';
+                    ctx.textBaseline = 'alphabetic';
+                    ctx.fillStyle = '#f60';
+                    ctx.fillRect(125, 1, 62, 20);
+                    ctx.fillStyle = '#069';
+                    ctx.fillText(navigator.userAgent, 5, 17);
+                    fingerprint = canvas.toDataURL();
+                } catch (e) {
+                    console.error('canvas或fillText不受支持：', e);
+                }
+
+                return fingerprint;
+            };
+
+            const browserFingerprint = generateBrowserFingerprint();
+            textarea.value = browserFingerprint;
+        };
+
+        {
+            const getCanvasFingerprint2 = () => {
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                const text = 'Canvas Fingerprint';
+                context.font = '10px Arial';
+                context.fillText(text, 10, 10);
+                return canvas.toDataURL('image/png');
+            };
+            textarea2.value = getCanvasFingerprint2();
+        }
+    </script>
+</body>
+
+</html>
