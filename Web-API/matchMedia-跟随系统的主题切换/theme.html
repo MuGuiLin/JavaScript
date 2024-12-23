@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>matchMedia-跟随系统的主题切换</title>
+    <style>
+        html[data-theme="dark"] {
+            --text-color: #fff;
+            --bg-color: #666;
+        }
+
+        html[data-theme="ligth"] {
+            --text-color: #666;
+            --bg-color: #fff;
+        }
+
+        :root {
+            --text-color: #fff;
+            --bg-color: #666;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        h1 {
+            color: var(--text-color);
+            text-align: center;
+        }
+
+        select {
+            display: block;
+            margin: 20px auto;
+            font-size: 32px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>matchMedia-跟随系统的主题切换</h1>
+    <hr>
+    <select name="theme" id="theme">
+        <option value="ligth">亮色</option>
+        <option value="drak">暗色</option>
+        <option value="os">系统跟随</option>
+    </select>
+    <script>
+        // 获取系统主题
+        const metch = window.matchMedia('(prefers-color-scheme: dark)')
+
+        // 监听系统主题切换
+        metch.addEventListener('change', (e) => {
+            document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'ligth')
+        })
+
+        const theme = document.getElementById('theme')
+        theme.addEventListener('change', (e) => {
+            document.documentElement.setAttribute('data-theme', e.target.value)
+        })
+    </script>
+</body>
+
+</html>
