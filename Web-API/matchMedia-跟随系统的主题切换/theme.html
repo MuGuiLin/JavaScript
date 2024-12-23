@@ -2,23 +2,38 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>matchMedia-跟随系统的主题切换</title>
     <style>
-        html[data-theme="dark"] {
-            --text-color: #fff;
-            --bg-color: #666;
-        }
-
-        html[data-theme="ligth"] {
-            --text-color: #666;
+        :root {
+            --text-color: #333;
             --bg-color: #fff;
         }
 
-        :root {
+        html[data-theme="dark"] {
             --text-color: #fff;
-            --bg-color: #666;
+            --bg-color: #333;
+        }
+
+        html[data-theme="ligth"] {
+            --text-color: #333;
+            --bg-color: #fff;
+        }
+
+        html[data-theme="red"] {
+            --text-color: #fff;
+            --bg-color: #ff0064;
+        }
+
+        html[data-theme="green"] {
+            --text-color: #fff;
+            --bg-color: #67c23a;
+        }
+
+        html[data-theme="blue"] {
+            --text-color: #fff;
+            --bg-color: #0091db;
         }
 
         body {
@@ -42,24 +57,38 @@
 <body>
     <h1>matchMedia-跟随系统的主题切换</h1>
     <hr>
+
     <select name="theme" id="theme">
         <option value="ligth">亮色</option>
-        <option value="drak">暗色</option>
+        <option value="dark">暗色</option>
         <option value="os">系统跟随</option>
+        <option value="red">红色</option>
+        <option value="green">绿色</option>
+        <option value="blue">蓝色</option>
     </select>
+
     <script>
+        const theme = document.getElementById('theme');
+        
         // 获取系统主题
-        const metch = window.matchMedia('(prefers-color-scheme: dark)')
+        const metch = window.matchMedia('(prefers-color-scheme: dark)');
 
-        // 监听系统主题切换
-        metch.addEventListener('change', (e) => {
-            document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'ligth')
-        })
+        // 设置主题
+        const setTheme = (theme = '') => {
+            document.documentElement.setAttribute('data-theme', theme ? theme : metch.matches ? 'dark' : 'ligth');
+        };
 
-        const theme = document.getElementById('theme')
+        // 监听主题切换
         theme.addEventListener('change', (e) => {
-            document.documentElement.setAttribute('data-theme', e.target.value)
-        })
+            if ('os' === e.target.value) {
+                setTheme();
+                // 监听系统主题切换
+                metch.addEventListener('change', setTheme);
+            } else {
+                setTheme(e.target.value);
+                metch.removeEventListener('change', setTheme);
+            }
+        });
     </script>
 </body>
 
