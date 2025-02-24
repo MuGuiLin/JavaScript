@@ -46,6 +46,11 @@
             text-align: center;
         }
 
+        h5 {
+            text-align: center;
+            color: red;
+        }
+
         select {
             display: block;
             margin: 20px auto;
@@ -67,21 +72,23 @@
         <option value="blue">蓝色</option>
     </select>
 
+    <h5>注：如果想要在系统主题色切换时，也跟着一起切换，请选中 “系统跟随” 选项！</h5>
+
     <script>
         const theme = document.getElementById('theme');
-        
+
         // 获取系统主题
         const metch = window.matchMedia('(prefers-color-scheme: dark)');
 
         // 设置主题
-        const setTheme = (theme = '') => {
-            document.documentElement.setAttribute('data-theme', theme ? theme : metch.matches ? 'dark' : 'ligth');
+        const setTheme = (theme) => {
+            document.documentElement.setAttribute('data-theme', Object.prototype.toString.call(theme) === '[object MediaQueryListEvent]' ? metch.matches ? 'dark' : 'ligth' : theme);
         };
 
         // 监听主题切换
         theme.addEventListener('change', (e) => {
             if ('os' === e.target.value) {
-                setTheme();
+                setTheme(metch.matches ? 'dark' : 'ligth');
                 // 监听系统主题切换
                 metch.addEventListener('change', setTheme);
             } else {
