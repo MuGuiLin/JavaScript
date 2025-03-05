@@ -2,9 +2,11 @@
 
 ###                                                                                             
 
-### 								                          	     													— 穆贵林
+### 								                          	     																																					— 穆贵林
 
-2025年02月28日
+​																		2025年03月6日
+
+###### CSDN：[JS媒体查询之matchMedia API 实现跟随系统主题色切换效果](https://blog.csdn.net/muguli2008/article/details/144797009)
 
 
 
@@ -53,7 +55,7 @@ Window 的 [matchMedia()](https://developer.mozilla.org/zh-CN/docs/Web/API/Windo
             --bg-color: #333;
         }
 
-        html[data-theme="ligth"] {
+        html[data-theme="light"] {
             --text-color: #333;
             --bg-color: #fff;
         }
@@ -101,7 +103,7 @@ Window 的 [matchMedia()](https://developer.mozilla.org/zh-CN/docs/Web/API/Windo
     <hr>
 
     <select name="theme" id="theme">
-        <option value="ligth">亮色</option>
+        <option value="light">亮色</option>
         <option value="dark">暗色</option>
         <option value="os">系统跟随</option>
         <option value="red">红色</option>
@@ -119,13 +121,13 @@ Window 的 [matchMedia()](https://developer.mozilla.org/zh-CN/docs/Web/API/Windo
 
         // 设置主题
         const setTheme = (theme) => {
-            document.documentElement.setAttribute('data-theme', Object.prototype.toString.call(theme) === '[object MediaQueryListEvent]' ? metch.matches ? 'dark' : 'ligth' : theme);
+            document.documentElement.setAttribute('data-theme', Object.prototype.toString.call(theme) === '[object MediaQueryListEvent]' ? metch.matches ? 'dark' : 'light' : theme);
         };
 
         // 监听主题切换
         theme.addEventListener('change', (e) => {
             if ('os' === e.target.value) {
-                setTheme(metch.matches ? 'dark' : 'ligth');
+                setTheme(metch.matches ? 'dark' : 'light');
                 // 监听系统主题切换
                 metch.addEventListener('change', setTheme);
             } else {
@@ -202,7 +204,7 @@ export function useTheme() {
 	<h1>JS媒体查询之matchMedia API 实现跟随系统主题色切换效果</h1>
     <hr>
 	<select v-model="theme">
-		<option value="ligth">亮色</option>
+		<option value="light">亮色</option>
         <option value="dark">暗色</option>
         <option value="os">系统跟随</option>
         <option value="red">红色</option>
@@ -223,7 +225,7 @@ export function useTheme() {
         --bg-color: #333;
     }
 
-    html[data-theme="ligth"] {
+    html[data-theme="light"] {
         --text-color: #333;
         --bg-color: #fff;
     }
