@@ -1,0 +1,276 @@
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+    <meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+    <title>日期选择</title>
+</head>
+
+<body bgcolor="#FFDDFF" link="#FFFF00" vlink="#00FF00" onLoad="calc_day('2025','03')">
+
+    <script language="JavaScript">
+        function change_year(Mv) {
+            var tempstr;
+            var tempdate;
+            tempdate = new Date();
+            tempstr = parseInt(document.form1.year_str.value);
+
+            if (Mv == "Up") {
+                tempstr = tempstr + 1;
+            }
+            if (Mv == "Down") {
+                tempstr = tempstr - 1;
+            }
+
+            document.form1.year_str.value = tempstr;
+
+            calc_day(document.form1.year_str.value, document.form1.month_str.value);
+            mod_datestr("year")
+        }
+
+        function change_month() {
+            calc_day(document.form1.year_str.value, document.form1.month_str.value);
+            mod_datestr("month");
+        }
+
+        function calc_maxday(year_str, month_str) {
+            var maxday;
+            if (month_str == 1 || month_str == 3 || month_str == 5 || month_str == 7 || month_str == 8 || month_str == 10 || month_str == 12) {
+                maxday = 31;
+            }
+
+            if (month_str == 4 || month_str == 6 || month_str == 9 || month_str == 11) {
+                maxday = 30;
+            }
+
+            /* 闰年标准：被4整除，被100整除非闰年，被400整除是闰年 */
+            if (month_str == 2) {
+                maxday = 28;
+                if (parseInt(year_str) % 4 == 0) {
+                    maxday = 29
+                    if (parseInt(year_str) % 100 == 0) {
+                        maxday = 28;
+                    }
+                    if (parseInt(year_str) % 400 == 0) {
+                        maxday = 29;
+                    }
+                }
+            }
+            return maxday;
+        }
+
+        function calc_day(year_str, month_str) {
+            /* 日期按钮其始值document.form1.elements[6] */
+            var tempyear;
+            var tempmonth;
+            var tempdate;
+            var dateArray;
+            var i, j, k;
+            var tempstr;
+            var maxday;
+
+            i = 0;
+            j = 1;
+            k = 0;
+            for (i = 0; i <= 6 * 7 - 1; i++) {
+                document.form1.elements[6 + i].value = " ";
+            }
+
+            tempyear = parseInt(year_str);
+            tempmonth = parseInt(month_str, 10);
+            tempdate = new Date();
+            i = tempdate.setDate(1);
+            i = tempdate.setYear(tempyear);
+            i = tempdate.setMonth(tempmonth - 1);
+            maxday = calc_maxday(tempyear, tempmonth);
+            k = tempdate.getDate();
+            k = tempdate.getDay();
+            //window.alert(k+" "+tempdate);
+            document.form1.elements[6 + k].value = 1;
+
+            for (i = 1; i <= 31; i++) {
+                tempstr = "" + i;
+                if (tempstr.length == 1) {
+                    tempstr = "00" + tempstr;
+                } else {
+                    tempstr = "0" + tempstr;
+                }
+                tempstr = tempstr.substring(tempstr.length - 2, tempstr.length);
+                if (i <= maxday) {
+                    document.form1.elements[6 + k + i - 1].value = tempstr;
+                }
+            }
+
+            for (i = 6; i <= 6 + 6 * 7 - 1; i++) {
+                if (document.form1.elements[i].value == " ") {
+                    document.form1.elements[i].enabled = false;
+                }
+            }
+        }
+
+        function gen_datestr(i) {
+            if (document.form1.elements[i].value != " ") {
+                document.form1.date_str.value = document.form1.year_str.value + "/" + document.form1.month_str.value + "/" + document.form1.elements[i].value;
+            }
+        }
+
+        function Update(where) {
+            if (document.form1.date_str.value != "") {
+                if (where == 'date_str') {
+                    window.opener.document.form1.date_str.value = document.form1.date_str.value;
+                    window.opener.document.form1.date_str_2.value = document.form1.date_str.value;
+                } else if (where == 'begin') {
+                    window.opener.document.form1.begin_date.value = document.form1.date_str.value;
+                    window.opener.document.form1.begin_date_2.value = document.form1.date_str.value;
+                } else if (where == 'end') {
+                    window.opener.document.form1.end_date.value = document.form1.date_str.value;
+                    window.opener.document.form1.end_date_2.value = document.form1.date_str.value;
+                }
+                window.close();
+            } else {
+                alert("请选择日期!");
+            }
+        }
+
+        function mod_datestr(obj) {
+            var date_str;
+            date_str = document.form1.date_str.value;
+
+            if (date_str != "") {
+                if (obj == "month") {
+                    date_str = date_str.substring(0, 5) + document.form1.month_str.value + date_str.substring(7, 10);
+                } else if (obj == "year") {
+                    date_str = document.form1.year_str.value + date_str.substring(4, 10);
+                }
+            }
+            document.form1.date_str.value = date_str;
+        }
+
+    </script>
+
+    <form name="form1" method="POST" action="javascript:Update('date_str')">
+        <div align="center">
+            <center>
+                <table border="0" width="350" height="140">
+                    <tr>
+                        <td colspan="7">
+                            <font color="#FF0000">
+                                <small>
+                                    <marquee border="1" scrolldelay="120">请选择年份和月份，点击日期按钮，确定后按“提交”。</marquee>
+                                </small>
+                            </font>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <input type="text" name="year_str" size="5" value="2025" disabled>
+                            <input type="button" name="Up" value="∧" onClick="change_year('Up');">
+                            <input type="button" name="Down" value="∨" onClick="change_year('Down');">
+                        </td>
+                        <td valign="bottom"><select name="month_str" onChange="change_month()">
+                                <option value="01">01</option>
+                                <option value="02">02</option>
+                                <option value="03" selected>03</option>
+                                <option value="04">04</option>
+                                <option value="05">05</option>
+                                <option value="06">06</option>
+                                <option value="07">07</option>
+                                <option value="08">08</option>
+                                <option value="09">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                        </td>
+                        <td colspan="2" valign="bottom"><input type="text" name="date_str" size="10" value="2025/03/14"
+                                disabled>
+                        </td>
+                        <td valign="bottom"><input type="submit" name="B1" value="提交"></td>
+                    </tr>
+                    <tr>
+                        <td width="50"><b>
+                                <font color="#FF0000" face="Times New Roman">Sun</font>
+                            </b></td>
+                        <td width="50"><b>
+                                <font color="#008000" face="Times New Roman">Mon</font>
+                            </b></td>
+                        <td width="50"><b>
+                                <font color="#008000" face="Times New Roman">Tue</font>
+                            </b></td>
+                        <td width="50"><b>
+                                <font color="#008000" face="Times New Roman">Wed</font>
+                            </b></td>
+                        <td width="50"><b>
+                                <font color="#008000" face="Times New Roman">Thr</font>
+                            </b></td>
+                        <td width="50"><b>
+                                <font color="#008000" face="Times New Roman">Fri</font>
+                            </b></td>
+                        <td width="50"><b>
+                                <font color="#FF0000" face="Times New Roman">Sat</font>
+                            </b></td>
+                    </tr>
+                    <tr>
+                        <td width="50"><input type="button" name="su1" value=" " onClick="gen_datestr(6)"></td>
+                        <td width="50"><input type="button" name="mo1" value=" " onClick="gen_datestr(7)"></td>
+                        <td width="50"><input type="button" name="tu1" value=" " onClick="gen_datestr(8)"></td>
+                        <td width="50"><input type="button" name="we1" value=" " onClick="gen_datestr(9)"></td>
+                        <td width="50"><input type="button" name="th1" value=" " onClick="gen_datestr(10)"></td>
+                        <td width="50"><input type="button" name="fr1" value=" " onClick="gen_datestr(11)"></td>
+                        <td width="50"><input type="button" name="sa1" value=" " onClick="gen_datestr(12)"></td>
+                    </tr>
+                    <tr>
+                        <td width="50"><input type="button" name="su2" value=" " onClick="gen_datestr(13)"></td>
+                        <td width="50"><input type="button" name="mo2" value=" " onClick="gen_datestr(14)"></td>
+                        <td width="50"><input type="button" name="tu2" value=" " onClick="gen_datestr(15)"></td>
+                        <td width="50"><input type="button" name="we2" value=" " onClick="gen_datestr(16)"></td>
+                        <td width="50"><input type="button" name="th2" value=" " onClick="gen_datestr(17)"></td>
+                        <td width="50"><input type="button" name="fr2" value=" " onClick="gen_datestr(18)"></td>
+                        <td width="50"><input type="button" name="sa2" value=" " onClick="gen_datestr(19)"></td>
+                    </tr>
+                    <tr>
+                        <td width="50"><input type="button" name="su3" value=" " onClick="gen_datestr(20)"></td>
+                        <td width="50"><input type="button" name="mo3" value=" " onClick="gen_datestr(21)"></td>
+                        <td width="50"><input type="button" name="tu3" value=" " onClick="gen_datestr(22)"></td>
+                        <td width="50"><input type="button" name="we3" value=" " onClick="gen_datestr(23)"></td>
+                        <td width="50"><input type="button" name="th3" value=" " onClick="gen_datestr(24)"></td>
+                        <td width="50"><input type="button" name="fr3" value=" " onClick="gen_datestr(25)"></td>
+                        <td width="50"><input type="button" name="sa3" value=" " onClick="gen_datestr(26)"></td>
+                    </tr>
+                    <tr>
+                        <td width="50"><input type="button" name="su4" value=" " onClick="gen_datestr(27)"></td>
+                        <td width="50"><input type="button" name="mo4" value=" " onClick="gen_datestr(28)"></td>
+                        <td width="50"><input type="button" name="tu4" value=" " onClick="gen_datestr(29)"></td>
+                        <td width="50"><input type="button" name="we4" value=" " onClick="gen_datestr(30)"></td>
+                        <td width="50"><input type="button" name="th4" value=" " onClick="gen_datestr(31)"></td>
+                        <td width="50"><input type="button" name="fr4" value=" " onClick="gen_datestr(32)"></td>
+                        <td width="50"><input type="button" name="sa4" value=" " onClick="gen_datestr(33)"></td>
+                    </tr>
+                    <tr>
+                        <td width="50"><input type="button" name="su5" value=" " onClick="gen_datestr(34)"></td>
+                        <td width="50"><input type="button" name="mo5" value=" " onClick="gen_datestr(35)"></td>
+                        <td width="50"><input type="button" name="tu5" value=" " onClick="gen_datestr(36)"></td>
+                        <td width="50"><input type="button" name="we5" value=" " onClick="gen_datestr(37)"></td>
+                        <td width="50"><input type="button" name="th5" value=" " onClick="gen_datestr(38)"></td>
+                        <td width="50"><input type="button" name="fr5" value=" " onClick="gen_datestr(39)"></td>
+                        <td width="50"><input type="button" name="sa5" value=" " onClick="gen_datestr(40)"></td>
+                    </tr>
+                    <tr>
+                        <td width="50"><input type="button" name="su6" value=" " onClick="gen_datestr(41)"></td>
+                        <td width="50"><input type="button" name="mo6" value=" " onClick="gen_datestr(42)"></td>
+                        <td width="50"><input type="button" name="tu6" value=" " onClick="gen_datestr(43)"></td>
+                        <td width="50"><input type="button" name="we6" value=" " onClick="gen_datestr(44)"></td>
+                        <td width="50"><input type="button" name="th6" value=" " onClick="gen_datestr(45)"></td>
+                        <td width="50"><input type="button" name="fr6" value=" " onClick="gen_datestr(46)"></td>
+                        <td width="50"><input type="button" name="sa6" value=" " onClick="gen_datestr(47)"></td>
+                    </tr>
+                </table>
+            </center>
+        </div>
+    </form>
+
+</body>
+
+</html>
