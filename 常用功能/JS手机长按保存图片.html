@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JS手机长按保存图片</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        img {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>JS手机长按保存图片</h1>
+    <img src="https://zwdtuser.sh.gov.cn/uc/login/img/loginbg.jpg" alt="JS手机长按保存图片" />
+    <script>
+        window.addEventListener("longtap", function (event) {
+            const name = event.target.tagName;
+            alert(name);
+            if (name === "IMG") {
+                console.log(event.target.src);
+                // 下载图片
+                const url = event.target.src;
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "download.jpg";
+                a.click();
+                a.remove();
+                // event.preventDefault();
+                // event.stopPropagation();
+            }
+        });
+    </script>
+</body>
+
+</html>
