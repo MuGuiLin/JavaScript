@@ -8,7 +8,9 @@
 
 ### [WebAssembly](https://developer.mozilla.org/zh-CN/docs/WebAssembly)是什么？
 
-[WebAssembly](https://developer.mozilla.org/en-US/docs/WebAssembly/Concepts) 是一种能把**除了JavaScript**以外的编程语言编写的代码经过编译器编译转换为能在现代浏览器中运行的代码的技术。
+[WebAssembly](https://developer.mozilla.org/en-US/docs/WebAssembly/Concepts) 是一种能把**除了JavaScript**以外的编程语言(C/C++、C#、Go、Java、Rust、Python等)编写的代码，经过编译器编译转换为能在现代浏览器中运行的代码.wasm的技术。
+
+[WebAssembly](https://developer.mozilla.org/en-US/docs/WebAssembly/Concepts) 是一种高性能二进制格式、用于在各种现代硬件上快速运行，与web生态系统无缝集成。2019年12月5日，其正式成为**W3C标准**。
 
 ![webassembly.org/css/webassembly.svg](https://webassembly.org/css/webassembly.svg)
 
@@ -33,3 +35,4 @@
 - WebAssembly 包含对机器更友好的指令；
 - JavaScript 无法人为控制垃圾回收，而 WebAssembly 可以有效控制内存回收的时机；
 
+![在Web应用中嵌入WebAssembly](D:\GitHub\JavaScript\WebAssembly-编译目标\在Web应用中嵌入WebAssembly.png)
