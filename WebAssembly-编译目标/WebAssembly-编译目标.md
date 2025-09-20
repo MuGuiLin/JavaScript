@@ -36,3 +36,82 @@
 - JavaScript 无法人为控制垃圾回收，而 WebAssembly 可以有效控制内存回收的时机；
 
 ![在Web应用中嵌入WebAssembly](D:\GitHub\JavaScript\WebAssembly-编译目标\在Web应用中嵌入WebAssembly.png)
+
+
+
+
+
+## 实例：将C/C++编译为WebAssembly
+
+
+
+[Emscripten](https://emscripten.org/) 是一个开源项目，主要用于将C和C++代码编译为WebAssembly（Wasm），使其能够在Web浏览器、Node.js以及其他支持WebAssembly的运行时环境中运行。
+
+
+
+**[🚀下载安装：Download and install — Emscripten 4.0.15-git (dev) documentation](https://emscripten.org/docs/getting_started/downloads.html)**
+
+
+
+**[🚀编译 C/C++ 为 WebAssembly - WebAssembly | MDN](https://developer.mozilla.org/zh-CN/docs/WebAssembly/Guides/C_to_Wasm)**
+
+
+
+1.下载emsdk
+
+```shell
+# emsdk克隆项目代码
+git clone https://github.com/juj/emsdk.git
+
+# 进入emsdk目录
+cd emsdk
+```
+
+
+
+2.在Windows上安装
+
+```shell
+# 在 Linux 或者 Mac macOS 上
+./emsdk install --build=Release sdk-incoming-64bit binaryen-master-64bit
+./emsdk activate --global --build=Release sdk-incoming-64bit binaryen-master-64bit
+# 如果在你的 macos 上获得以下错误
+Error: No tool or SDK found by name 'sdk-incoming-64bit'
+# 请执行
+./emsdk install latest
+# 按照提示配置环境变量即可
+./emsdk activate latest
+
+# 在 Windows 上
+emsdk install --build=Release sdk-incoming-64bit binaryen-master-64bit
+emsdk activate --global --build=Release sdk-incoming-64bit binaryen-master-64bit
+```
+
+
+
+3. C语言代码 hello.c
+
+   ```c
+   #include <stdio.h>
+   #include <emscripten/emscripten.h>
+   
+   int main(int argc, char ** argv) {
+       printf("Hello World\n");
+   }
+   
+   #ifdef __cplusplus
+   extern "C" {
+   #endif
+   
+   int EMSCRIPTEN_KEEPALIVE myFunction(int argc, char ** argv) {
+     printf("我的函数已被调用\n");
+   }
+   
+   #ifdef __cplusplus
+   }
+   #endif
+   ```
+
+   
+
+4. 
