@@ -169,6 +169,13 @@
    # 1、out_file可以带路径。
    # 2、若为-o test.wasm，则只生成test.wasm这个文件；若为-o test.js，则生成test.js文件 ，
    # 还有test.wasm；若为-o test.html，则生成test.html文件，还有test.js和test.wasm。
+   
+   
+   emcc hello.c -o hello.html
+   # 生成:
+   # - hello.html (HTML包装器)
+   # - hello.js (JavaScript胶水代码)
+   # - hello.wasm (WebAssembly模块)
    ```
 
    
