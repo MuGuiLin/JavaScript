@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>高阶函数2</title>
+    <title>高阶函数-requestIdleCallback函数</title>
     <style>
         h1 {
             text-align: center;
@@ -13,8 +13,15 @@
 </head>
 
 <body>
-    <h1>高阶函数</h1>
+    <h1>高阶函数-requestIdleCallback函数</h1>
     <hr>
+    <pre>
+        RequestIdleCallback
+        简单的说，判断一帧有空闲时间，则去执行某个任务。目的是为了解决当任务需要长时间占用主进程，导致更高优先级任务(如动画或事件任务)，无法及时响应，而带来的页面丢帧(卡死)情况。故RequestIdleCallback 定位处理的是:
+        不重要且不紧急的任务。
+
+        了解更多：https://cloud.tencent.com/developer/article/2436905
+    </pre>
     <button id="insert-btn">插入100000个DIV元素 - 普通插入</button>
     <button id="insert-btn2">插入100000个DIV元素 - 高阶函数插入</button>
     <button id="insert-btn3">插入100000个DIV元素 - 通用高阶函数插入</button>
@@ -62,6 +69,7 @@
 
                     // requestIdleCallback 是浏览器原生API（Node.js环境没有）, 一个渲染帧中，空闲时开启分片执行， 16.6ms的空闲时间
                     requestIdleCallback((idel) => {
+                        console.log('idel', idel)
                         // 当渲染帧有空闲剩余时间，并且还有循环任务时
                         while (0 < idel.timeRemaining() && i < data.length) {
                             call(data[i], i)
