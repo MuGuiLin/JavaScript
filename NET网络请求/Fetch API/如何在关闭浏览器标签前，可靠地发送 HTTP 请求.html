@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>如何在关闭浏览器标签前，可靠地发送 HTTP 请求</title>
+    <style>
+      h1 {
+        text-align: center;
+      }
+      pre {
+        font-size: 16px;
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>如何在关闭浏览器标签前，可靠地发送 HTTP 请求</h1>
+    <hr />
+    <pre>
+        <b>问题的根源：为什么常规请求会失败？</b>
+        当用户关闭一个标签页时，浏览器会触发一系列页面卸载（Unload）事件，如 pagehide 和 unload。
+        在这个过程中，任何在 unload 事件处理器中发起的标准异步 fetch 或 XMLHttpRequest 请求都会面临一个问题：请求刚刚发出，页面就已经被销毁了。
+        由于页面的 JavaScript 执行环境已不复存在，浏览器没有义务继续完成这个请求，因此会主动取消它。
+        过去，开发者为了解决这个问题，会使用同步的 XMLHttpRequest。它会强制阻塞主线程，直到请求完成。
+        这种方法虽然“有效”，但对用户体验是毁灭性的——它会导致浏览器 UI 卡死，页面无法响应，直到网络请求结束。
+        那么，我们该如何在不破坏用户体验的前提下，可靠地发送这“最后一封信”呢？
+
+        <b>解决方案一：navigator.sendBeacon()</b>
+        navigator.sendBeacon() 是 W3C 专门为解决此类问题而设计的 API。
+        它的核心使命就是：以异步、非阻塞的方式，可靠地将少量数据发送到服务器。
+        工作原理当我们调用 sendBeacon() 时，浏览器会将这个请求添加到一个内部队列中，然后立即返回，不会阻塞页面卸载。
+        浏览器会保证在合适的时机（例如在后台）发送这个请求，即使发起请求的页面已经关闭。
+        特点
+            可靠性高： 由浏览器保证发送，不受页面卸载影响
+            异步非阻塞：不影响用户关闭页面的速度和体验
+            使用简单：API 非常直观
+            数据有限制：只能单向发送 POST 请求，且无法自定义请求头（Headers
+    </pre>
+  </body>
+  <script>
+    // 在关闭浏览器标签前，可靠地发送 HTTP 请求
+    // window.addEventListener("beforeunload", (event) => {
+
+    // 推荐使用 'pagehide' 事件，它比 'unload' 更可靠
+    window.addEventListener("pagehide", (event) => {
+      console.log("关闭浏览器标签前，可靠地发送 HTTP 请求", event);
+      alert("关闭浏览器标签前，可靠地发送 HTTP 请求");
+    });
+
+    // 解决方案一：navigator.sendBeacon() 使用 sendBeacon 发送数据
+    {
+      // 推荐使用 'pagehide' 事件，它比 'unload' 更可靠
+      window.addEventListener("pagehide", (event) => {
+        // 当event.persisted 为 true 表示页面进入了往返缓存 (bfcache)，此时并未真正卸载
+        if (event.persisted) {
+          // 在这种情况下，我们通常不发送信标
+          return;
+        }
+
+        // 要发送的数据，内容格式都可自定义
+        const data = {
+          lastAction: "close_tab",
+          content: "我是要发送的数据",
+          timeOnPage: Math.round(performance.now()),
+        }; 
+        
+        // 将数据转换为 Blob类型（这是 sendBeacon 支持的格式之一）
+        const blob = new Blob([JSON.stringify(data)], {
+          type: "application/json; charset=UTF-8",
+        }); 
+        
+        // 使用 sendBeacon 发送数据 
+        // 该方法会返回 true (成功加入队列) 或 false (数据过大或格式错误)
+        const success = navigator.sendBeacon("https://www.example.com/api/v1/save", blob);
+        if (success) {
+          console.log("OK，要发送的数据已成功加入发送队列！");
+        } else {
+          console.error("喔嚯，无法发送要发送的数据！");
+        }
+      });
+    }
+
+    // 解决方案二：fetch() 与 keepalive: true 发送数据
+    {
+      window.addEventListener("pagehide", (event) => {
+        // 当event.persisted 为 true 表示页面进入了往返缓存 (bfcache)，此时并未真正卸载
+        if (event.persisted) {
+          // 在这种情况下，我们通常不发送信标
+          return;
+        }
+
+        // 要发送的数据，内容格式都可自定义
+        const data = {
+          lastAction: "close_tab",
+          content: "我是要发送的数据",
+          timestamp: Date.now(),
+        };
+
+        // 注意：即使请求成功，这里的 .then 和 .catch 也可能不会执行，因为页面正在卸载
+        try {
+          fetch("https://www.example.com/api/v1/save", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+            keepalive: true, // 这是关键！ keepalive: true
+          });
+          console.log("OK，浏览器关闭标签前，可靠地发送 HTTP 请求！");
+        } catch (e) {
+          // 这个 catch 块很可能不会捕获到网络错误
+          console.error("喔嚯，HTTP请求时发生错误:", e);
+        }
+      });
+    }
+  </script>
+</html>
