@@ -404,7 +404,7 @@ navigator.sendBeacon('/track', formData);</code></pre>
         // 测试发送字符串数据
         testStringBtn.addEventListener('click', function() {
             const data = `event=button_click&id=testString&time=${Date.now()}&random=${Math.random()}`;
-            const success = navigator.sendBeacon('https://httpbin.org/post', data);
+            const success = navigator.sendBeacon('http://127.0.0.1:666/api/v1/insert', data);
             
             if (success) {
                 addLog('字符串数据已加入发送队列', 'success');
@@ -420,7 +420,7 @@ navigator.sendBeacon('/track', formData);</code></pre>
             formData.append('timestamp', Date.now().toString());
             formData.append('userAgent', navigator.userAgent);
             
-            const success = navigator.sendBeacon('https://httpbin.org/post', formData);
+            const success = navigator.sendBeacon('http://127.0.0.1:666/api/v1/insert', formData);
             
             if (success) {
                 addLog('FormData 已加入发送队列', 'success');
@@ -439,7 +439,7 @@ navigator.sendBeacon('/track', formData);</code></pre>
             };
             
             const blob = new Blob([JSON.stringify(jsonData)], { type: 'application/json' });
-            const success = navigator.sendBeacon('https://httpbin.org/post', blob);
+            const success = navigator.sendBeacon('http://127.0.0.1:666/api/v1/insert', blob);
             
             if (success) {
                 addLog('Blob 数据已加入发送队列', 'success');
@@ -456,7 +456,7 @@ navigator.sendBeacon('/track', formData);</code></pre>
                 view[0] = 123456;
                 view[1] = 789012;
                 
-                const success = navigator.sendBeacon('https://httpbin.org/post', buffer);
+                const success = navigator.sendBeacon('http://127.0.0.1:666/api/v1/insert', buffer);
                 
                 if (success) {
                     addLog('ArrayBuffer 数据已加入发送队列', 'success');
@@ -481,7 +481,7 @@ navigator.sendBeacon('/track', formData);</code></pre>
                     referrer: document.referrer
                 });
                 
-                navigator.sendBeacon('https://httpbin.org/post', data);
+                navigator.sendBeacon('http://127.0.0.1:666/api/v1/insert', data);
                 addLog('页面卸载事件已触发，sendBeacon 已调用', 'info');
             });
             
@@ -511,7 +511,7 @@ navigator.sendBeacon('/track', formData);</code></pre>
                 timeSpent: Math.round(performance.now())
             });
             
-            navigator.sendBeacon('https://httpbin.org/post', data);
+            navigator.sendBeacon('http://127.0.0.1:666/api/v1/insert', data);
         });
     </script>
 </body>

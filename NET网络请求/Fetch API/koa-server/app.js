@@ -26,17 +26,21 @@ App.use(
     },
     maxAge: 5, //指定本次预检请求的有效期，单位为秒。
     credentials: true, //是否允许发送Cookie
-    // allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], //设置所允许的HTTP请求方法
+    allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], //设置所允许的HTTP请求方法
     // allowHeaders: ["Content-Type", "Authorization", "Accept"], //设置服务器支持的所有头信息字段
     // exposeHeaders: ["WWW-Authenticate", "Server-Authorization"], //设置获取其他自定义字段
   })
 );
 
-Router.get("/", (ctx, next) => {
+// 默认get路由
+Router.get("/", async (ctx, next) => {
   ctx.body = "欢迎使用 Koa Server！";
+  await next();
 })
-  .get("/random.js", (ctx, next) => {
-    var arr = [
+
+  // get
+  .get("/random.js", async (ctx, next) => {
+    const arr = [
       "http://www.baidu.com",
       2,
       "https://www.2345.com/?kmupiao",
@@ -60,13 +64,16 @@ Router.get("/", (ctx, next) => {
   })
 
   // post
-  .post("/post-logs", async (ctx, next) => {
+  .post("/insert", async (ctx, next) => {
     console.log(ctx.request);
-    console.log(ctx.request.body);
+    console.log('query:', ctx.query);
+    console.log('body:', ctx.request.body);
+
     ctx.body = {
       code: 200,
       data: {
         list: [],
+        res: ctx.request.body,
       },
       message: "post ok!",
       timestamp: Date.now(),
@@ -76,7 +83,8 @@ Router.get("/", (ctx, next) => {
   // put
   .put("/update", async (ctx, next) => {
     console.log(ctx.request);
-    console.log(ctx.request.body);
+    console.log('query:', ctx.query);
+    console.log('body:', ctx.request.body);
 
     ctx.body = {
       code: 200,

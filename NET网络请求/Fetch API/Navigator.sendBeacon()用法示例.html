@@ -303,7 +303,7 @@
             });
             
             // 使用 sendBeacon 发送数据
-            const success = navigator.sendBeacon('https://httpbin.org/post', data);
+            const success = navigator.sendBeacon('http://127.0.0.1:666/api/v1/insert', data);
             
             if (success) {
                 addLog('sendBeacon 请求已成功加入发送队列', 'success');
@@ -325,7 +325,7 @@
                     testId: 'unload_test_' + Date.now()
                 });
                 
-                navigator.sendBeacon('https://httpbin.org/post', data);
+                navigator.sendBeacon('http://127.0.0.1:666/api/v1/insert', data);
             });
             
             // 3秒后跳转
@@ -353,7 +353,7 @@
                 timeSpent: Math.round(performance.now())
             });
             
-            navigator.sendBeacon('https://httpbin.org/post', data);
+            navigator.sendBeacon('http://127.0.0.1:666/api/v1/insert', data);
         });
         
         // 添加一些模拟分析事件
@@ -367,7 +367,7 @@
             });
             
             // 使用 sendBeacon 发送点击数据
-            navigator.sendBeacon('https://httpbin.org/post', data);
+            navigator.sendBeacon('http://127.0.0.1:666/api/v1/insert', data);
         });
     </script>
 </body>

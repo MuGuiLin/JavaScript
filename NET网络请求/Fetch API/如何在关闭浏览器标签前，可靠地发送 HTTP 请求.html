@@ -43,7 +43,7 @@
             可靠性高： 由浏览器保证发送，不受页面卸载影响。
             异步非阻塞：不影响用户关闭页面的速度和体验。
             使用简单：API 非常直观。
-            数据有限制：只能单向发送 POST 请求【只支持POST请求】，且无法自定义请求头（Headers）
+            数据有限制：只能单向(不能处理响应)的发送 POST 请求【只能POST请求】，且无法自定义请求头（Headers）
 
        <h3>解决方案二：fetch() 与 keepalive: true</h3>
        fetch API 作为现代网络请求的基石，也提供了一种优雅的解决方案。
@@ -71,23 +71,32 @@
     {
       function sendBeaconData() {
         // 要发送的数据，内容格式都可自定义
-        const data1 = {
+        const data1 = JSON.stringify({
           lastAction: "close_tab",
           content: "我是要发送的数据",
+          url: window.location.href,
+          timestamp: Date.now(),
           timeOnPage: Math.round(performance.now()),
-        };
+        });
 
         // 将数据转换为 Blob类型（这是 sendBeacon 支持的格式之一）
-        const blob = new Blob([JSON.stringify(data1)], {
+        const body = new Blob([data1], {
           type: "application/json; charset=UTF-8",
         });
+
+        // 创建一个 URLSearchParams 对象，将数据转换为查询字符串
+        const params = new URLSearchParams();
+        params.append("lastAction", "close_tab");
+        params.append("content", "我是要发送的数据");
+        params.append("timestamp", Date.now());
 
         // 使用 sendBeacon 发送数据
         // 该方法会返回 true (成功加入队列) 或 false (数据过大或格式错误)
         const success = navigator.sendBeacon(
-          "https://www.example.com/api/v1/post-logs",
-          blob
+          "http://127.0.0.1:666/api/v1/insert?" + params.toString(),
+          body
         );
+
         if (success) {
           console.log("OK，要发送的数据已成功加入发送队列！");
         } else {
@@ -142,7 +151,7 @@
           // 在这种情况下，我们通常不发送信标
           return;
         }
-        fetchSendData();
+        // fetchSendData();
       });
 
       document.querySelector("#fetch-btn").onclick = function () {
