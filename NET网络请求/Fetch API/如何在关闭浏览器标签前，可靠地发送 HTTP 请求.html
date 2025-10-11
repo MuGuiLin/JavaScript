@@ -60,6 +60,10 @@
             灵活性高：相比 sendBeacon，它支持更多的 HTTP 方法（如 POST, PUT 等），并允许有限的请求头自定义。
             API 统一：如果我们项目中已经大量使用 fetch，使用 keepalive 可以保持代码风格一致。
             同样无法处理响应：和 sendBeacon 一样，由于页面已经关闭，我们无法在前端读取或处理服务器返回的响应。
+
+      <h3>如何选择解决方案？</h3>
+      如果我们的需求是发送简单的分析或日志数据，navigator.sendBeacon() 是最直接、最符合语义的选择。
+      如果我们需要更大的灵活性，比如使用 PUT 方法更新资源或需要设置特定的请求头，fetch({ keepalive: true }) 是更好的选择。
     </pre>
   </body>
   <script>
