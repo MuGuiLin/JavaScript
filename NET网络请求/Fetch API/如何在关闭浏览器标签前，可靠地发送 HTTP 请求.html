@@ -12,9 +12,14 @@
         font-size: 16px;
         line-height: 1.5;
         h3 {
+          color: red;
           margin: 0;
           line-height: 0;
         }
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
       }
     </style>
   </head>
@@ -93,8 +98,8 @@
         // 使用 sendBeacon 发送数据
         // 该方法会返回 true (成功加入队列) 或 false (数据过大或格式错误)
         const success = navigator.sendBeacon(
-          "http://127.0.0.1:666/api/v1/insert?" + params.toString(),
-          body
+          "http://127.0.0.1:666/api/v1/insert?" + params.toString()
+          //   body // 传递数据
         );
 
         if (success) {
@@ -151,7 +156,7 @@
           // 在这种情况下，我们通常不发送信标
           return;
         }
-        // fetchSendData();
+        fetchSendData();
       });
 
       document.querySelector("#fetch-btn").onclick = function () {
