@@ -1,0 +1,38 @@
+.DS_Store
+node_modules/
+dist/
+logs/
+build/
+SQL/
+*.venv/
+课件资料/
+LobeChat/
+.parcel-cache/
+.ipynb_checkpoints/
+__pycache__/
+
+# */.git/ 用于忽略在根.git仓库管理目录下的所有子.git仓库管理能力（因为在一个.git仓库下不能再出现.git仓库，否则会报错误），但同时，不会影响各个子目录下的.git仓库管理能力！
+*/.git/
+
+# local env files
+.env.local
+.env.*.local
+
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.log
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.zip
+*.rar

@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigator.sendBeacon() 用法示例</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to right, #4a00e0, #8e2de2);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+        
+        .explanation {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+        }
+        
+        .demo {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            margin-left: 10px;
+        }
+        
+        h2 {
+            color: #4a00e0;
+            margin: 20px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eaeaea;
+        }
+        
+        h3 {
+            color: #6c63ff;
+            margin: 15px 0 10px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        code {
+            background-color: #f1f1f1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+        }
+        
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(to right, #4a00e0, #8e2de2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 10px 5px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(to right, #11998e, #38ef7d);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+        }
+        
+        .log {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            height: 200px;
+            overflow-y: auto;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .log-entry {
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #444;
+        }
+        
+        .success {
+            color: #4CAF50;
+        }
+        
+        .error {
+            color: #f44336;
+        }
+        
+        .info {
+            color: #2196F3;
+        }
+        
+        .feature-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .feature-list li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #eaeaea;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .demo {
+                margin-left: 0;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Navigator.sendBeacon()</h1>
+            <p class="subtitle">在页面卸载时可靠地发送数据</p>
+        </header>
+        
+        <div class="content">
+            <div class="explanation">
+                <h2>什么是 sendBeacon？</h2>
+                <p><code>navigator.sendBeacon()</code> 方法用于通过HTTP将少量数据异步传输到Web服务器。</p>
+                
+                <h3>主要特点</h3>
+                <ul class="feature-list">
+                    <li>在页面卸载时可靠地发送数据</li>
+                    <li>不会延迟页面卸载或影响下一导航的加载性能</li>
+                    <li>异步执行，不阻塞页面</li>
+                    <li>适用于分析、诊断和数据收集</li>
+                </ul>
+                
+                <h3>语法</h3>
+                <pre><code>navigator.sendBeacon(url, data);</code></pre>
+                
+                <h3>参数</h3>
+                <p><strong>url</strong>: 数据将要被发送到的网络地址</p>
+                <p><strong>data</strong>: 要发送的数据，可以是ArrayBuffer、ArrayBufferView、Blob、DOMString或FormData</p>
+                
+                <h3>返回值</h3>
+                <p>如果用户代理成功排队传输数据，则返回<code>true</code>，否则返回<code>false</code>。</p>
+                
+                <h2>使用场景</h2>
+                <ul class="feature-list">
+                    <li>页面关闭前的数据统计</li>
+                    <li>用户行为分析</li>
+                    <li>错误日志记录</li>
+                    <li>会话结束事件</li>
+                </ul>
+            </div>
+            
+            <div class="demo">
+                <h2>示例演示</h2>
+                <p>点击下面的按钮测试 sendBeacon 功能：</p>
+                
+                <button id="testBeacon" class="btn">测试 sendBeacon</button>
+                <button id="testUnload" class="btn btn-secondary">测试页面卸载</button>
+                <button id="clearLog" class="btn btn-danger">清除日志</button>
+                
+                <div class="log" id="log">
+                    <div class="log-entry info">日志区域 - 这里将显示操作结果</div>
+                </div>
+                
+                <h3>实际应用示例</h3>
+                <p>在页面卸载时发送数据到服务器：</p>
+                <pre><code>window.addEventListener('beforeunload', function() {
+  const data = JSON.stringify({
+    event: 'page_unload',
+    url: window.location.href,
+    timestamp: Date.now()
+  });
+  
+  navigator.sendBeacon('/api/analytics', data);
+});</code></pre>
+                
+                <h3>与传统方法的比较</h3>
+                <p>使用 <code>XMLHttpRequest</code> 在 <code>beforeunload</code> 中发送请求可能会阻塞页面卸载，而 <code>sendBeacon</code> 不会。</p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Navigator.sendBeacon() 示例 &copy; 2023</p>
+        </footer>
+    </div>
+
+    <script>
+        // 获取DOM元素
+        const testBeaconBtn = document.getElementById('testBeacon');
+        const testUnloadBtn = document.getElementById('testUnload');
+        const clearLogBtn = document.getElementById('clearLog');
+        const logElement = document.getElementById('log');
+        
+        // 添加日志函数
+        function addLog(message, type = 'info') {
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry ${type}`;
+            logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logElement.appendChild(logEntry);
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+        
+        // 测试 sendBeacon
+        testBeaconBtn.addEventListener('click', function() {
+            const data = JSON.stringify({
+                event: 'button_click',
+                button: 'test_beacon',
+                timestamp: Date.now(),
+                randomId: Math.random().toString(36).substring(2, 9)
+            });
+            
+            // 使用 sendBeacon 发送数据
+            const success = navigator.sendBeacon('https://httpbin.org/post', data);
+            
+            if (success) {
+                addLog('sendBeacon 请求已成功加入发送队列', 'success');
+            } else {
+                addLog('sendBeacon 请求失败', 'error');
+            }
+        });
+        
+        // 测试页面卸载
+        testUnloadBtn.addEventListener('click', function() {
+            addLog('页面将在3秒后跳转，测试 sendBeacon 在页面卸载时的表现', 'info');
+            
+            // 设置页面卸载事件
+            window.addEventListener('beforeunload', function() {
+                const data = JSON.stringify({
+                    event: 'page_unload_test',
+                    url: window.location.href,
+                    timestamp: Date.now(),
+                    testId: 'unload_test_' + Date.now()
+                });
+                
+                navigator.sendBeacon('https://httpbin.org/post', data);
+            });
+            
+            // 3秒后跳转
+            setTimeout(function() {
+                window.location.href = 'https://httpbin.org/';
+            }, 3000);
+        });
+        
+        // 清除日志
+        clearLogBtn.addEventListener('click', function() {
+            logElement.innerHTML = '<div class="log-entry info">日志已清除</div>';
+        });
+        
+        // 页面加载完成时添加日志
+        window.addEventListener('load', function() {
+            addLog('页面已加载，可以开始测试 sendBeacon', 'success');
+        });
+        
+        // 实际应用：在页面卸载时发送数据
+        window.addEventListener('beforeunload', function() {
+            const data = JSON.stringify({
+                event: 'page_unload',
+                url: window.location.href,
+                timestamp: Date.now(),
+                timeSpent: Math.round(performance.now())
+            });
+            
+            navigator.sendBeacon('https://httpbin.org/post', data);
+        });
+        
+        // 添加一些模拟分析事件
+        document.addEventListener('click', function(e) {
+            if (e.target.tagName === 'BUTTON') return; // 避免重复记录按钮点击
+            
+            const data = JSON.stringify({
+                event: 'click',
+                target: e.target.tagName,
+                timestamp: Date.now()
+            });
+            
+            // 使用 sendBeacon 发送点击数据
+            navigator.sendBeacon('https://httpbin.org/post', data);
+        });
+    </script>
+</body>
+</html>

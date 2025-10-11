@@ -11,14 +11,20 @@
       pre {
         font-size: 16px;
         line-height: 1.5;
+        h3 {
+          margin: 0;
+          line-height: 0;
+        }
       }
     </style>
   </head>
   <body>
     <h1>如何在关闭浏览器标签前，可靠地发送 HTTP 请求</h1>
     <hr />
+    <button id="sendBeacon-btn">navigator.sendBeacon手动请求测试</button>
+    <button id="fetch-btn">fetch手动请求测试</button>
     <pre>
-        <b>问题的根源：为什么常规请求会失败？</b>
+        <h3>问题的根源：为什么常规请求会失败？</h3>
         当用户关闭一个标签页时，浏览器会触发一系列页面卸载（Unload）事件，如 pagehide 和 unload。
         在这个过程中，任何在 unload 事件处理器中发起的标准异步 fetch 或 XMLHttpRequest 请求都会面临一个问题：请求刚刚发出，页面就已经被销毁了。
         由于页面的 JavaScript 执行环境已不复存在，浏览器没有义务继续完成这个请求，因此会主动取消它。
@@ -26,16 +32,29 @@
         这种方法虽然“有效”，但对用户体验是毁灭性的——它会导致浏览器 UI 卡死，页面无法响应，直到网络请求结束。
         那么，我们该如何在不破坏用户体验的前提下，可靠地发送这“最后一封信”呢？
 
-        <b>解决方案一：navigator.sendBeacon()</b>
+        <h3>解决方案一：navigator.sendBeacon()</h3>
+        navigator.sendBeacon() 是一个用于在页面卸载时异步发送少量数据到服务器的API，特别适用于数据统计、日志记录等场景。
         navigator.sendBeacon() 是 W3C 专门为解决此类问题而设计的 API。
         它的核心使命就是：以异步、非阻塞的方式，可靠地将少量数据发送到服务器。
-        工作原理当我们调用 sendBeacon() 时，浏览器会将这个请求添加到一个内部队列中，然后立即返回，不会阻塞页面卸载。
-        浏览器会保证在合适的时机（例如在后台）发送这个请求，即使发起请求的页面已经关闭。
-        特点
-            可靠性高： 由浏览器保证发送，不受页面卸载影响
-            异步非阻塞：不影响用户关闭页面的速度和体验
-            使用简单：API 非常直观
-            数据有限制：只能单向发送 POST 请求，且无法自定义请求头（Headers
+        <b>工作原理：</b>
+            当我们调用 sendBeacon() 时，浏览器会将这个请求添加到一个内部队列中，然后立即返回，不会阻塞页面卸载。
+            浏览器会保证在合适的时机（例如在后台）发送这个请求，即使发起请求的页面已经关闭。
+        <b>特点：</b>
+            可靠性高： 由浏览器保证发送，不受页面卸载影响。
+            异步非阻塞：不影响用户关闭页面的速度和体验。
+            使用简单：API 非常直观。
+            数据有限制：只能单向发送 POST 请求【只支持POST请求】，且无法自定义请求头（Headers）
+
+       <h3>解决方案二：fetch() 与 keepalive: true</h3>
+       fetch API 作为现代网络请求的基石，也提供了一种优雅的解决方案。
+       通过在 fetch 的 init 对象中设置 keepalive: true，我们可以告诉浏览器：“这个请求很重要，请在页面卸载后继续完成它。”
+       <b>工作原理：</b>
+       fetch({ keepalive: true }) 的工作方式与 sendBeacon 类似。它将一个 fetch 请求标记为“持续活动”，使其生命周期可以超越当前页面。
+       浏览器会像处理 sendBeacon 请求一样，在后台处理它。
+       <b>特点：</b>
+            灵活性高：相比 sendBeacon，它支持更多的 HTTP 方法（如 POST, PUT 等），并允许有限的请求头自定义。
+            API 统一：如果我们项目中已经大量使用 fetch，使用 keepalive 可以保持代码风格一致。
+            同样无法处理响应：和 sendBeacon 一样，由于页面已经关闭，我们无法在前端读取或处理服务器返回的响应。
     </pre>
   </body>
   <script>
@@ -50,6 +69,31 @@
 
     // 解决方案一：navigator.sendBeacon() 使用 sendBeacon 发送数据
     {
+      function sendBeaconData() {
+        // 要发送的数据，内容格式都可自定义
+        const data1 = {
+          lastAction: "close_tab",
+          content: "我是要发送的数据",
+          timeOnPage: Math.round(performance.now()),
+        };
+
+        // 将数据转换为 Blob类型（这是 sendBeacon 支持的格式之一）
+        const blob = new Blob([JSON.stringify(data1)], {
+          type: "application/json; charset=UTF-8",
+        });
+
+        // 使用 sendBeacon 发送数据
+        // 该方法会返回 true (成功加入队列) 或 false (数据过大或格式错误)
+        const success = navigator.sendBeacon(
+          "https://www.example.com/api/v1/post-logs",
+          blob
+        );
+        if (success) {
+          console.log("OK，要发送的数据已成功加入发送队列！");
+        } else {
+          console.error("喔嚯，无法发送要发送的数据！");
+        }
+      }
       // 推荐使用 'pagehide' 事件，它比 'unload' 更可靠
       window.addEventListener("pagehide", (event) => {
         // 当event.persisted 为 true 表示页面进入了往返缓存 (bfcache)，此时并未真正卸载
@@ -57,41 +101,19 @@
           // 在这种情况下，我们通常不发送信标
           return;
         }
-
-        // 要发送的数据，内容格式都可自定义
-        const data = {
-          lastAction: "close_tab",
-          content: "我是要发送的数据",
-          timeOnPage: Math.round(performance.now()),
-        }; 
-        
-        // 将数据转换为 Blob类型（这是 sendBeacon 支持的格式之一）
-        const blob = new Blob([JSON.stringify(data)], {
-          type: "application/json; charset=UTF-8",
-        }); 
-        
-        // 使用 sendBeacon 发送数据 
-        // 该方法会返回 true (成功加入队列) 或 false (数据过大或格式错误)
-        const success = navigator.sendBeacon("https://www.example.com/api/v1/save", blob);
-        if (success) {
-          console.log("OK，要发送的数据已成功加入发送队列！");
-        } else {
-          console.error("喔嚯，无法发送要发送的数据！");
-        }
+        sendBeaconData();
       });
+
+      document.querySelector("#sendBeacon-btn").onclick = function () {
+        sendBeaconData();
+      };
     }
 
     // 解决方案二：fetch() 与 keepalive: true 发送数据
     {
-      window.addEventListener("pagehide", (event) => {
-        // 当event.persisted 为 true 表示页面进入了往返缓存 (bfcache)，此时并未真正卸载
-        if (event.persisted) {
-          // 在这种情况下，我们通常不发送信标
-          return;
-        }
-
+      function fetchSendData(data) {
         // 要发送的数据，内容格式都可自定义
-        const data = {
+        const data2 = {
           lastAction: "close_tab",
           content: "我是要发送的数据",
           timestamp: Date.now(),
@@ -99,12 +121,13 @@
 
         // 注意：即使请求成功，这里的 .then 和 .catch 也可能不会执行，因为页面正在卸载
         try {
-          fetch("https://www.example.com/api/v1/save", {
+          //   fetch("https://www.example.com/api/v1/update", {
+          fetch("http://127.0.0.1:666/api/v1/update", {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify(data2),
             keepalive: true, // 这是关键！ keepalive: true
           });
           console.log("OK，浏览器关闭标签前，可靠地发送 HTTP 请求！");
@@ -112,7 +135,41 @@
           // 这个 catch 块很可能不会捕获到网络错误
           console.error("喔嚯，HTTP请求时发生错误:", e);
         }
+      }
+      window.addEventListener("pagehide", (event) => {
+        // 当event.persisted 为 true 表示页面进入了往返缓存 (bfcache)，此时并未真正卸载
+        if (event.persisted) {
+          // 在这种情况下，我们通常不发送信标
+          return;
+        }
+        fetchSendData();
       });
+
+      document.querySelector("#fetch-btn").onclick = function () {
+        fetchSendData();
+      };
+
+      //   // 测试页面卸载
+      //   testUnloadBtn.addEventListener("click", function () {
+      //     addLog("页面将在3秒后跳转，测试 sendBeacon 在页面卸载时的表现", "info");
+
+      //     // 设置页面卸载事件
+      //     window.addEventListener("beforeunload", function () {
+      //       const data = JSON.stringify({
+      //         event: "page_unload_test",
+      //         url: window.location.href,
+      //         timestamp: Date.now(),
+      //         testId: "unload_test_" + Date.now(),
+      //       });
+
+      //       navigator.sendBeacon("https://httpbin.org/post", data);
+      //     });
+
+      //     // 3秒后跳转
+      //     setTimeout(function () {
+      //       window.location.href = "https://httpbin.org/";
+      //     }, 3000);
+      //   });
     }
   </script>
 </html>
