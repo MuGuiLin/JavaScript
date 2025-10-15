@@ -7,7 +7,9 @@
 console.log('我是子线程 self：', self);
 
 self.addEventListener('message', function (e) {
-
+    /**
+     * 在这里可以计算和处理来自主线程的复杂消息任务，不会堵塞主线程
+     */
     console.log(e, e.data);
 
     if (e.data?.send) {
