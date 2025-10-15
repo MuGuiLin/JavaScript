@@ -11,9 +11,7 @@
     <h1>使用Blob加载workerJs文件</h1>
     <hr />
     <h3>
-        注意：由于Content Security Policy
-        (CSP)限制导致的。现代浏览器出于安全考虑，可能会阻止通过Blob URL创建Web
-        Worker。
+        注意：由于Content Security Policy (CSP)限制导致的。现代浏览器出于安全考虑，可能会阻止通过Blob URL创建Web Worker。
     </h3>
     <script>
         const simpleWorker = `
@@ -23,7 +21,7 @@
             };
         `;
         console.log("workerJs字符串代码：", simpleWorker);
-        
+
         try {
             // 开始创建Worker
             const blob = new Blob([simpleWorker], {
@@ -31,7 +29,7 @@
             });
             const workerUrl = URL.createObjectURL(blob);
             const worker = new Worker(workerUrl);
-            
+
             // Worker创建成功，监听Worker返回消息
             worker.onmessage = function (e) {
                 console.log("收到线程simpleWorker返回的信息：", e.data);

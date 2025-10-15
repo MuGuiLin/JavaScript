@@ -303,7 +303,7 @@ registerPaint(
 
 Worklet 将 Web 的可编程性带入了一个新的维度，它让我们有能力去干预和定制浏览器最底层的渲染行为，这是过去无法想象的。
 
-## 总结
+## 4、总结
 
 回顾一下今天我们认识的这些“工人们”：
 
@@ -321,7 +321,7 @@ Worklet 将 Web 的可编程性带入了一个新的维度，它让我们有能�
 
 
 
-## 推荐链接
+## 5、推荐链接
 
 - [Web Worker 使用教程 - 阮一峰](https://link.juejin.cn?target=https%3A%2F%2Fwww.ruanyifeng.com%2Fblog%2F2018%2F07%2Fweb-worker.html)
 - [WebWorker 与 ServiceWorker - free-coder](https://link.juejin.cn?target=https%3A%2F%2Fwww.bilibili.com%2Fvideo%2FBV1j44y1w7v1)

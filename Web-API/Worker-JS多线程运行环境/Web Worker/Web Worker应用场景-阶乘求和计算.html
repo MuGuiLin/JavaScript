@@ -53,7 +53,7 @@
       const workerjs = `
         // 监听来自主线程的消息
         self.onmessage = function (event) {
-            console.log("\n\nWorker：收到计算任务 ->", event.data.loopNumber, typeof event.data.loopNumber);
+            console.log("Worker：收到计算任务 ->", event.data.loopNumber, typeof event.data.loopNumber);
 
             if (typeof event.data.loopNumber !== "number") {
                 self.postMessage("对不起：loopNumber参数必须是数字！");
@@ -75,7 +75,8 @@
             self.close();
             console.log("Worker：关闭自己！");
         };
-        `;
+    `;
+        
 
       // main.js (主线程代码)
       let worker = null;
@@ -83,27 +84,12 @@
       const $takeTime = document.querySelector("#takeTime");
       document.getElementById("btn").addEventListener("click", function () {
         let start_time = "";
-                const simpleWorker = `
-        self.onmessage = function(e) {
-            self.postMessage("Hello from worker!");
-        };
-        `;
 
-        try {
-        const worker = new Worker(new Blob([simpleWorker], { type: "application/javascript" }));
-        worker.onmessage = function(e) {
-            console.log(e.data); // 应该输出 "Hello from worker!"
-            worker.terminate();
-        };
-        worker.postMessage("");
-        } catch(e) {
-        console.error("Simple worker test failed:", e);
-        }
         // 创建一个新的 Worker
         // worker = new Worker("worker.js");
-        // const worker = new Worker(new URL('./worker.js', import.meta.url));
-        worker = new Worker(new Blob([workerjs], { type: "application/javascript" })); // 使用 Blob 对象 来创建 Worker线程，这样就不用去加载外部的worker.js文件，就可以避免 CORS 问题了！！
-
+        // worker = new Worker(new URL('./worker.js', import.meta.url)); // 在Vue.js中加载worker.js文件
+        // worker = new Worker(new Blob([workerjs], {type: "application/javascript"})); // 使用 Blob 对象 来创建 Worker线程，这样就不用去加载外部的worker.js文件，就可以避免 CORS 问题了！！
+        worker = new Worker(URL.createObjectURL(new Blob([workerjs], {type: "application/javascript"})));  // 注意：由于Content Security Policy (CSP)限制导致的。现代浏览器出于安全考虑，可能会阻止通过Blob URL创建Web Worker。
         // 监听来自 Worker 的消息
         worker.onmessage = function (event) {
           // event.data 是 Worker 返回的结果
