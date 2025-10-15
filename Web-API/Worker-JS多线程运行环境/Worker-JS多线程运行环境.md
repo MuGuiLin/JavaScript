@@ -116,7 +116,7 @@ window.addEventListener('message', function (event) {
 **`main.js` (主线程)**
 
 ```javascript
-javascript 体验AI代码助手 代码解读复制代码// 创建一个新的 Worker
+// 创建一个新的 Worker
 const worker = new Worker("worker.js");
 
 // 向 Worker 发送消息，开始计算
@@ -138,7 +138,7 @@ worker.onerror = function (error) {
 **`worker.js` (Worker 线程)**
 
 ```javascript
-javascript 体验AI代码助手 代码解读复制代码// 监听来自主线程的消息
+// 监听来自主线程的消息
 self.onmessage = function (event) {
   console.log("Worker：收到计算任务 ->", event.data.number);
 
@@ -186,7 +186,7 @@ Service Worker 的生命周期比 Web Worker 复杂，主要包括三个阶段�
 **`main.js` (主线程)**
 
 ```javascript
-javascript 体验AI代码助手 代码解读复制代码if ("serviceWorker" in navigator) {
+if ("serviceWorker" in navigator) {
   navigator.serviceWorker
     .register("/sw.js")
     .then((registration) => {
@@ -201,7 +201,7 @@ javascript 体验AI代码助手 代码解读复制代码if ("serviceWorker" in n
 **`sw.js` (Service Worker 线程)**
 
 ```javascript
-javascript 体验AI代码助手 代码解读复制代码const CACHE_NAME = "my-cache-v1";
+const CACHE_NAME = "my-cache-v1";
 const urlsToCache = ["/", "/styles/main.css", "/script/main.js"];
 
 // 安装阶段，缓存核心资源
@@ -260,7 +260,7 @@ Worklet 是一种非常轻量、高度专用的 Worker。你可以把它想象�
 **`main.js` (主线程)**
 
 ```javascript
-javascript 体验AI代码助手 代码解读复制代码// 注册 PaintWorklet
+// 注册 PaintWorklet
 if ("paintWorklet" in CSS) {
   CSS.paintWorklet.addModule("houdini-checkerboard.js");
 }
@@ -269,7 +269,7 @@ if ("paintWorklet" in CSS) {
 **`style.css`**
 
 ```css
-css 体验AI代码助手 代码解读复制代码textarea {
+textarea {
   background-image: paint(checkerboard);
 }
 ```
@@ -277,7 +277,7 @@ css 体验AI代码助手 代码解读复制代码textarea {
 **`houdini-checkerboard.js` (PaintWorklet)**
 
 ```javascript
-javascript 体验AI代码助手 代码解读复制代码// 定义一个名为 'checkerboard' 的绘制器
+// 定义一个名为 'checkerboard' 的绘制器
 registerPaint(
   "checkerboard",
   class {

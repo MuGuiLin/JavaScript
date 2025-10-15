@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web Worker应用场景-阶乘求和计算</title>
+    <style>
+      h1 {
+        text-align: center;
+      }
+      .box {
+        box-sizing: border-box;
+        margin: 50px auto;
+        padding: 50px;
+        width: 680px;
+        font-size: 22px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+
+        input,
+        button {
+          font-size: 18px;
+        }
+
+        p {
+          font-size: 18px;
+          &#result {
+            color: red;
+          }
+          &#takeTime {
+            color: blue;
+          }
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Web Worker应用场景-阶乘求和计算</h1>
+    <hr />
+    <div class="box">
+      循环计算次数：
+      <input type="number" id="num" value="2000000000" />
+      <button id="btn">开始计算</button>
+      <button id="btn2">停止计算</button>
+      <p id="result"></p>
+      <p id="takeTime"></p>
+    </div>
+
+    <script>
+      // worker.js (Worker 线程代码)
+
+      const workerjs = `
+        // 监听来自主线程的消息
+        self.onmessage = function (event) {
+            console.log("\n\nWorker：收到计算任务 ->", event.data.loopNumber, typeof event.data.loopNumber);
+
+            if (typeof event.data.loopNumber !== "number") {
+                self.postMessage("对不起：loopNumber参数必须是数字！");
+                return;
+            }
+                
+            // 执行耗时计算
+            let result = 0;
+            let loop = event.data.loopNumber;
+            for (let i = 0; i < loop; i++) {
+                result += i; // 模拟一个耗时操作
+            }
+
+            // 将结果发送回主线程
+            console.log("Worker：计算完成 ->", result);
+            self.postMessage(result);
+
+            // 计算完成后，可以关闭自己
+            self.close();
+            console.log("Worker：关闭自己！");
+        };
+        `;
+
+      // main.js (主线程代码)
+      let worker = null;
+      const $result = document.querySelector("#result");
+      const $takeTime = document.querySelector("#takeTime");
+      document.getElementById("btn").addEventListener("click", function () {
+        let start_time = "";
+                const simpleWorker = `
+        self.onmessage = function(e) {
+            self.postMessage("Hello from worker!");
+        };
+        `;
+
+        try {
+        const worker = new Worker(new Blob([simpleWorker], { type: "application/javascript" }));
+        worker.onmessage = function(e) {
+            console.log(e.data); // 应该输出 "Hello from worker!"
+            worker.terminate();
+        };
+        worker.postMessage("");
+        } catch(e) {
+        console.error("Simple worker test failed:", e);
+        }
+        // 创建一个新的 Worker
+        // worker = new Worker("worker.js");
+        // const worker = new Worker(new URL('./worker.js', import.meta.url));
+        worker = new Worker(new Blob([workerjs], { type: "application/javascript" })); // 使用 Blob 对象 来创建 Worker线程，这样就不用去加载外部的worker.js文件，就可以避免 CORS 问题了！！
+
+        // 监听来自 Worker 的消息
+        worker.onmessage = function (event) {
+          // event.data 是 Worker 返回的结果
+          console.log("\n\n主线程：收到计算结果 ->", event.data);
+          const ms = (performance.now() - start_time).toFixed(2);
+
+          $takeTime.innerHTML =
+            "耗时：" + ms + "毫秒(ms)，" + (ms / 1000).toFixed(2) + "秒(s)";
+          $result.innerHTML = "结果：" + event.data;
+        };
+
+        // 监听错误
+        worker.onerror = function (error) {
+          console.error("主线程：Worker 发生错误 ->", error);
+          $result.innerHTML = "错误：" + error.message;
+        };
+
+        // 获取用户输入的数字
+        const num = document.getElementById("num").value;
+
+        // 向 Worker 发送消息，开始计算
+        console.log("主线程：开始发送计算任务...");
+        $result.innerHTML = "Worker线程 正在计算中...";
+        $takeTime.innerHTML = "";
+        start_time = performance.now();
+        worker.postMessage({ loopNumber: Number(num) });
+      });
+
+      document.getElementById("btn2").addEventListener("click", function () {
+        // 停止 Worker
+        worker.terminate();
+        console.log("主线程：停止计算...");
+        $result.innerHTML = "已停止计算...";
+      });
+    </script>
+  </body>
+</html>
