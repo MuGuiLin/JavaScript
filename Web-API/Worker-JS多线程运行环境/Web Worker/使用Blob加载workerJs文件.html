@@ -29,6 +29,8 @@
             });
             const workerUrl = URL.createObjectURL(blob);
             const worker = new Worker(workerUrl);
+            // 释放URL对象
+            URL.revokeObjectURL(workerUrl);
 
             // Worker创建成功，监听Worker返回消息
             worker.onmessage = function (e) {

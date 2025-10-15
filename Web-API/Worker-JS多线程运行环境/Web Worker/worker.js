@@ -7,6 +7,7 @@ self.onmessage = function (event) {
         self.postMessage("对不起：loopNumber参数必须是数字！");
         return;
     }
+    
     // 执行耗时计算
     let result = 0;
     // for (let i = 0; i < event.data.loopNumber; i++) { // 巨坑：经过多次测试后发现，将从主线程发送过来的参数event.data.loopNumber，直接放在for循环中，会导致循环计算的时间会大大增加（当loopNumber的值为2000000000的情况下，循环耗时90.44秒），原因：由于for循环中的参数event.data.loopNumber，在每循环一次都会重新计算，导致循环时间变长！
