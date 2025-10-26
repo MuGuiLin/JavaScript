@@ -34,11 +34,55 @@ Server-Sent Events (SSE) 是一种允许服务器通过**单个、持久的 HTTP
 
 在前端，你不需要引入任何第三方库。浏览器原生提供了 `EventSource` API，使用起来极其简单：
 
-![图片](D:\GitHub\JavaScript\NET网络通信\SSE-Server-Sent Events\EventSourceAPI.png)
+```js
+let index = 1;
+const msg = document.querySelector("#msg");
 
+// 创建SSE对象，连接SSE服务器的事件流端点，路由为/api/v1/sse
+const source = new EventSource("http://localhost:666/api/v1/sse");
+console.log(source);
 
+// 监听SSE打开事件
+source.onopen = function (event) {
+    console.log("onopen", event);
+    msg.innerHTML = event.type;
+};
 
-就是这么简单！没有复杂的连接状态管理，没有心跳检测，更没有手动重连逻辑。浏览器为你搞定了一切。
+source.onmessage = function (event) {
+    console.log("onmessage", event.data);
+    msg.innerHTML = event.type;
+    const { time, message } = JSON.parse(event.data);
+    const li = document.createElement("li");
+    li.innerHTML = `${time} ${message}`
+    ul.append(li);
+};
+
+source.addEventListener('update', (event) => {
+    console.log(JSON.parse(event.data));
+    msg.innerHTML = event.type;
+    const { time, message } = JSON.parse(event.data);
+    const li = document.createElement("li");
+    li.innerHTML = `${time} ${message}`;
+    ul.append(li);
+});
+
+source.onerror = function (event) {
+    console.log("onerror", event);
+    msg.innerHTML = event.type;
+    // source.close(); // 注：如果不使用source.close()方法来断开连接，浏览器会自动重连的哦！
+    const li = document.createElement("li");
+    li.innerHTML = `错误重连 ${ index++} 次`;
+    ul.append(li);
+};
+
+source.onclose = function (event) {
+    console.log("onclose", event);
+    msg.innerHTML = event.type;
+};
+
+```
+
+**就是这么简单！没有复杂的连接状态管理，没有心跳检测，更没有手动重连逻辑。浏览器为你搞定了一切。**
 
 
 
@@ -59,13 +103,108 @@ Server-Sent Events (SSE) 是一种允许服务器通过**单个、持久的 HTTP
 
 ### 实战演示：一个简单的实时时钟
 
-让我们看看用 Node.js (Express) 实现一个 SSE 服务有多简单。
+让我们看看用 Node.js (Koa) 实现一个 SSE 服务有多简单。
 
-**后端 (server.js):**
+**后端 (koa-service.js):**
 
-![图片](https://mmbiz.qpic.cn/sz_mmbiz_png/btsCOHx9LAMdwee30vUSm8nnb7HbwRCjfUlLgCsxwphKiasc3qdWXKxq8LsWzqibtQSQCxVP4QXUTm9KM2WdWJbA/640?wx_fmt=png&from=appmsg&tp=wxpic&wxfrom=5&wx_lazy=1#imgIndex=1)
+```js
+import Koa from "koa";
+import Cors from "koa2-cors";
+import KoaRouter from "@koa/router";
+import bodyParser from "koa-bodyparser";
+
+let App = new Koa();
+
+// 路由中间件
+const Router = new KoaRouter(
+    { prefix: "/api/v1" }
+);
+
+// 请数据解析中间件
+App.use(bodyParser());
+
+// 跨域处理中间件
+App.use(
+    Cors({
+        origin: function (ctx) {
+            // 设置允许来自指定域名请求
+            if (ctx.url === "/test") {
+                return "*"; // 允许来自所有域名请求
+            }
+            // return "http://localhost:8080"; //只允许http://localhost:8080这个域名的请求
+            return "*";
+        },
+        maxAge: 5, //指定本次预检请求的有效期，单位为秒。
+        credentials: true, //是否允许发送Cookie
+        allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], //设置所允许的HTTP请求方法
+        // allowHeaders: ["Content-Type", "Authorization", "Accept"], //设置服务器支持的所有头信息字段
+        // exposeHeaders: ["WWW-Authenticate", "Server-Authorization"], //设置获取其他自定义字段
+    })
+);
+
+// 默认get路由
+Router.get("/", async (ctx, next) => {
+    ctx.body = "欢迎使用 Koa Service 666 端口启动成功！";
+    await next();
+}).get("/sse", async (ctx, next) => {
+    // 必须禁用Koa的默认响应处理，否则然会覆盖SSE的响应头
+    ctx.respond = false;
+
+    // 设置SSE必须的头部信息
+    ctx.res.writeHead(200, {
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache", // 禁用缓存
+        "Connection": "keep-alive", // 连接控制为持久连接
+        "X-Accel-Buffering": "no", // 如果是Nginx反向代理，防止代理服务器缓冲
+
+        // "Access-Control-Allow-Origin": "*", // 允许跨域
+        // "Access-Control-Allow-Credentials": "true",
+        // "Access-Control-Allow-Methods": "PUT,POST,GET,DELETE,OPTIONS",
+        // "Access-Control-Allow-Headers": "Content-Type,Access-Control-Allow-Headers,Authorization,X-Requested-With",
+        // "X-Powered-By": "3.2.1",
+    });
+
+    // 每秒向客户端发送数据（当前时间）
+    const interval = setInterval(() => {
+        // 发送SSE事件, 类型为update
+        ctx.res.write(`event: update\n`);
+
+        // 自定义SSE发送事件，类型为message 发送数据
+        ctx.res.write(`data: ${JSON.stringify({
+            time: new Date().toLocaleTimeString(),
+            message: `服务端推送数据${Math.random()}`,
+        })}\n\n`); // 数据格式‌：每条消息以\n\n结尾，支持自定义事件类型
+    }, 1000);
+
+    // 监听当客户端断开连接时，清除定时器
+    ctx.res.on("close", () => {
+        clearInterval(interval);
+        console.log("客户端已断开连接！");
+        ctx.res.end();
+    });
+})
 
 
+// 全局中间件
+App.use(async (ctx, next) => {
+    ctx.set("Access-Control-Allow-Origin", "*"); //允许来自所有域名请求(不携带cookie请求可以用*，如果有携带cookie请求必须指定域名)
+    //   console.log(ctx);
+
+    await next();
+    if (404 == ctx.status) {
+        ctx.body = 404;
+    }
+})
+
+    .use(Router.routes())
+
+    .listen(666, "127.0.0.1", () => {
+        console.log(
+            "\n\nKoa服务器已启动, 监听 http://127.0.0.1:666 端口，API前缀为 /api/v1！"
+        );
+    });
+
+```
 
 后端代码清晰明了：设置头部，然后在一个循环里用 `res.write()` 发送格式化的数据即可。
 

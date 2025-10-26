@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSE</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Server-Sent Events 服务端推送！</h1>
+    <hr />
+    <h3><a href="http://localhost:666/api/v1/sse">SSE</a></h3>
+    <ul id="ul">
+        <li><b id="msg"></b></li>
+    </ul>
+    <script>
+	let index = 1;
+        const msg = document.querySelector("#msg");
+        // 创建SSE对象，连接SSE服务器的事件流端点，路由为/api/v1/sse
+        const source = new EventSource("http://localhost:666/api/v1/sse");
+        console.log(source);
+
+        // 监听SSE打开事件
+        source.onopen = function (event) {
+            console.log("onopen", event);
+            msg.innerHTML = event.type;
+        };
+
+        source.onmessage = function (event) {
+            console.log("onmessage", event.data);
+            msg.innerHTML = event.type;
+            const { time, message } = JSON.parse(event.data);
+            const li = document.createElement("li");
+            li.innerHTML = `${time} ${message}`
+            ul.append(li);
+        };
+
+        source.addEventListener('update', (event) => {
+            console.log(JSON.parse(event.data));
+            msg.innerHTML = event.type;
+            const { time, message } = JSON.parse(event.data);
+            const li = document.createElement("li");
+            li.innerHTML = `${time} ${message}`;
+            ul.append(li);
+        });
+
+        source.onerror = function (event) {
+            console.log("onerror", event);
+            msg.innerHTML = event.type;
+            // source.close(); // 注：如果不使用source.close()方法来断开连接，浏览器会自动重连的哦！
+ 	    const li = document.createElement("li");
+            li.innerHTML = `错误重连 ${ index++} 次`;
+            ul.append(li);
+
+        };
+
+        source.onclose = function (event) {
+            console.log("onclose", event);
+            msg.innerHTML = event.type;
+        };
+    </script>
+
+</body>
+
+</html>

@@ -1,5 +1,5 @@
 {
-  "name": "koa-server",
+  "name": "koa-service",
   "version": "1.0.0",
   "description": "测试在关闭Web浏览器标签前，接收发过来的HTTP请求的服务端",
   "scripts": {
