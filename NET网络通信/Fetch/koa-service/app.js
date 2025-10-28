@@ -3,7 +3,7 @@ import Cors from "koa2-cors";
 import KoaRouter from "@koa/router";
 import bodyParser from "koa-bodyparser";
 
-let App = new Koa();
+const App = new Koa();
 
 // 路由中间件
 const Router = new KoaRouter({
