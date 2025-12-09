@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>对象的深拷贝</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        h2,
+        h4 {
+            line-height: 50px;
+            text-align: center;
+        }
+
+        section {
+            padding: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>对象的深拷贝 structuredClone </h1>
+    <hr>
+
+    <section>
+        <h2>structuredClone() API是结构化克隆算法进行深拷贝（支持大部分数据类型，但不支持函数和Symbol）</h2>
+        <h4>深拷贝是指创建一个对象的完全独立副本，副本与原始对象在内存中是不同的引用，修改副本不会影响原始对象。深拷贝通常需要递归地复制对象的所有属性和嵌套对象。</h4>
+    </section>
+
+    <script>
+
+        //数组或对象的深拷贝方法2
+        const deepCopy = (val) => {
+            let oVal = Array.isArray(val) ? [] : {};
+            for (let v in val) {
+                if (val.hasOwnProperty(v)) {
+                    if ('object' === typeof val[v]) {
+                        // 这里是深拷贝的关键所在（递归调用）
+                        oVal[v] = deepCopy(val[v]);
+                    } else {
+                        oVal[v] = val[v];
+                    };
+                }
+            };
+            return oVal;
+        };
+
+        const deepClone = (obj, hash = new WeakMap()) => {
+            if (obj === null) return null;
+            if (obj instanceof Date) return new Date(obj);
+            if (obj instanceof RegExp) return new RegExp(obj);
+            if (typeof obj !== "object") return obj;
+            if (hash.has(obj)) return hash.get(obj); // 处理循环引用
+            let clone = Array.isArray(obj) ? [] : {};
+            hash.set(obj, clone); // 在拷贝前存储原始对象和其对应的克隆对象的关系
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key) || isObject(key)) {
+                    clone[key] = deepClone(obj[key], hash);
+                }
+            }
+            return clone;
+        }
+
+
+
+        //对象数组深拷贝测试
+        let obj = { h5: 'H5', cs: 'CSS', back: { a: 'PHP', b: 'Java', c: ['A', 'B', ['一', 2, '三'], 3, { d: '3D' }] }, js: 'ES6', null: null, nan: NaN, undefined: undefined, infinity: Infinity, regexp: /[a-zA-Z0-9_]/g, symbol: Symbol(''), fun: function (e) { console.log(666) } };
+
+        let nObj = deepCopy(obj);
+        nObj.back.c[0] = 'AAA';
+        nObj.back.c[2][0] = '壹';
+        nObj.back.c[2][2] = '叁';
+        nObj.fn = function (abc) {
+            alert(888)
+        }
+        console.log('修改前：', obj);
+        console.log('修改后1：', nObj);
+
+        let nObj2 = deepClone(obj);
+        console.log('修改后2：', nObj2);
+
+        // 使用structuredClone结构化克隆算法进行深拷贝（支持大部分数据类型，但不支持函数和Symbol）
+        let nObj3 = structuredClone(obj);
+        console.log('修改后3：', nObj3)
+    </script>
+</body>
+
+</html>
