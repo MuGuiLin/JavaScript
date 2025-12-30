@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>js函数的call和apply方法</title>
+	<style type="text/css">
+		h1 {
+			text-align: center;
+		}
+
+		pre {
+			font-size: 16px;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>JS函数的call和apply与bind方法</h1>
+	<hr />
+
+	<pre>
+		在 JavaScript 中，call、apply 和 bind 是函数对象的三个内置方法，用于显式地设置函数执行时的 this 上下文。它们都属于 Function.prototype，因此所有函数都可以使用。
+
+		一、call、apply 和 bind的共同点
+			1.都可以改变函数内部 this 的指向。
+			2.第一个参数都是要绑定给 this 的对象（如果传入 null 或 undefined，在非严格模式下会默认指向全局对象，如浏览器中的 window）。
+		
+
+		二、call、apply 和 bind的区别
+			<table border="1" cellpadding="10" cellspacing="0" style="margin: auto;">
+				<tr><th>方法</th><th>是否立即执行</th><th>参数传递方式</th><th>返回值</th></tr>
+				<tr><td>call</td><td>✅ 立即执行</td><td>逐个参数传递 func.call(thisArg, arg1, arg2, ...)</td><td>函数执行结果</td></tr>
+				<tr><td>apply</td><td>✅ 立即执行</td><td>以数组形式传递参数 func.apply(thisArg, [arg1, arg2, ...])</td><td>函数执行结果</td></tr>
+				<tr><td>bind</td><td>❌ 不立即执行</td><td>逐个参数传递（可预设）func.bind(thisArg, arg1, arg2, ...)</td><td>返回一个新函数</td></tr>
+			</table>
+		
+		三、call、apply 和 bind的语法与示例
+		1. call
+		语法：
+			func.call(thisArg, arg1, arg2, ...)
+		示例：
+			function greet(greeting, punctuation) {
+				console.log(`${greeting}, ${this.name}${punctuation}`);
+			}
+			const person = { name: 'Alice' };
+			greet.call(person, 'Hello', '!'); // 输出: Hello, Alice!
+			
+
+		2. apply
+		语法：
+			func.apply(thisArg, [argsArray])
+		示例：
+			greet.apply(person, ['Hi', '?']); // 输出: Hi, Alice?
+			
+			常用于将数组作为参数传给函数，例如：
+			const numbers = [1, 2, 3, 4];
+			const max = Math.max.apply(null, numbers); // 等价于 Math.max(1,2,3,4)
+			
+
+		3. bind
+		语法：
+			const newFunc = func.bind(thisArg, arg1, arg2, ...);
+		特点：
+			1.返回一个新函数，其 this 被永久绑定（即使再用 call/apply 也无法改变）。
+			2.可用于预设部分参数（柯里化）。
+		示例：
+			const boundGreet = greet.bind(person, 'Hey');
+			boundGreet('!'); // 输出: Hey, Alice!
+		
+		典型用途：
+			1.事件处理中绑定 this
+			2.创建具有固定上下文的回调函数
+			class Button {
+				constructor(name) {
+					this.name = name;
+				}
+				handleClick() {
+					console.log(`Button ${this.name} clicked`);
+				}
+			}
+
+			const btn = new Button('Submit');
+			document.getElementById('myBtn').addEventListener('click', btn.handleClick.bind(btn)); // 绑定 this，避免在事件回调中丢失
+			
+
+			四、总结口诀
+				“Call 一个个，Apply 用数组，Bind 不执行只返回。”
+				call 和 apply 立即调用，区别在于参数形式；
+				bind 返回绑定后的新函数，常用于延迟执行或固定上下文。
+
+			每一个函数都包含两个非继承而来的方法：call、apply。这俩个方法的用途都是在特定的作用域中调用函数，实际上等于设置函数体内this对象的值。
+			
+			call、apply的用途之一就是传递参数，但事实上，它们真正强大的地方式能够扩充函数赖以运行的作用域。
+			使用call（）、aplly（）来扩充作用域的最大好处就是对象不需要与方法有任何耦合关系。
+			call方法简单的实现。
+
+			
+		</pre>
+</body>
+<script type="text/javascript" charset="UTF-8">
+
+	//call  apply  bind 的最简调用
+	{
+		// 任意一个函数都包含call和apply和bind方法
+		function sum(x, y) {
+			return x + y;
+		}
+
+		// call的语法：function.call(thisArg, arg1, arg2, ...);
+		var result1 = sum.call(null, 10, 20);//用call方法把sum函数绑定到this【Fn1】函数中（这俩个方法的用途都是在特定的作用域中调用函数，实际上等于设置函数体内this对象的值。）
+		console.log('call的调用：', result1);
+
+
+		// apply的语法：function.apply(thisArg, [argsArray]);
+		var result2 = sum.apply(null, [100, 200]); //apply方法和call方法差不多，把另一个方法绑定到当前方法中，【注：apply里面是 数组，这是它和 call方法的区别】
+		console.log('apply的调用：', result2);
+
+
+		// bind的语法：function.bind(thisArg, arg1, arg2, ...);
+		var result3 = sum.bind(null, 30, 40); //bind方法创建一个新的函数，在调用时this值被绑定到传入的第一个参数上，后续参数作为预设参数传递给函数。
+		console.log('bind的调用：', result3()); // 注：bind调用绑定后返回的是一个函数，需要加括号执行调用。
+	}
+
+	//call  apply  简单的用法：绑定一些函数或一个作用域中，用于传递参数和调用
+	{
+		// 任意一个函数都包含call和apply和bind方法
+		function sum(x, y) {
+			console.log('调用时的this指向：', this); // 查看this指向
+			return x + y;
+		}
+
+		function Fn1(num1, num2) {
+			return sum.call(this, num1, num2);//用call方法把sum函数绑定到this【Fn1】函数中（这俩个方法的用途都是在特定的作用域中调用函数，实际上等于设置函数体内this对象的值。）
+		}
+
+		function Fn2(num1, num2) {
+			this.add = 666; // 给this对象添加一个属性，用于验证this指向
+			return function () {
+				return sum.apply(this, [num1, num2]); //apply方法和call方法差不多，把另一个方法绑定到当前方法中，【注：apply里面是 数组，这是它和 call方法的区别】
+			}(); // 这里使用一个立即调用的函数表达式来确保this指向正确
+		}
+
+		function Fn3(num1, num2) {
+			var boundSum = sum.bind(this, num1, num2); //bind方法创建一个新的函数，在调用时this值被绑定到传入的第一个参数上，后续参数作为预设参数传递给函数。
+			return boundSum(); // 调用绑定后的函数
+		}
+
+		console.log('\ncall的调用：', Fn1(10, 20));
+		console.log('\napply的调用：', Fn2(50, 30));
+		console.log('\nbind的调用：', Fn3(70, 80));
+	}
+
+	//call  apply  扩充函数的作用域：下如实现重载功能！
+	{
+		window.color = 'red';//创建一个全局变量
+		var obj = { color: 'blue' }//创建一个对象
+
+		function mupiao() {
+			alert(this.color); //mupiao函数在这里就只是把自己的color对应的值弹出来(使用call（）、aplly（）来扩充作用域的最大好处就是对象不需要与方法有任何耦合关系。)
+		}
+
+		mupiao.call(window); //调用mupiao方法
+		mupiao.call(obj);
+	}
+
+
+	//call apply 方法的【原理】简单模拟与实现
+	{
+		function test1(a, b) { //函数或方法(实现求和功能)
+			return a + b;
+		}
+
+		function Obj(x, y) { //自定义对象
+			this.x = x; //属性等于它自己
+			this.y = y;
+		}
+
+		var o = new Obj(10, 20);//实例化自定义对象
+		o.method = test1;  //用o对象的method方法来接收test1方法【此时: o.method到相当于test1了!】
+		alert('结果：' + o.method(o.x, o.y));
+		delete o.method;//因为o.method是临时定义的，所以用完要删除掉！
+
+		//alert(test1.call(o , o.x , o.y));
+	}
+</script>
+
+</html>
