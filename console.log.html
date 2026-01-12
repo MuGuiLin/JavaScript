@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>有趣的console.log()</title>
+	<style>
+		h1 {
+			text-align: center;
+		}
+
+		p {
+			text-align: center;
+			font-size: 1.2em;
+			color: blue;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>有趣的console.log()</h1>
+	<hr>
+	<p>
+		打开浏览器控制台(console)看看效果吧~
+	</p>
+	<script>
+		let t = 'text-shadow:0.7px -1px 0 rgb(255 255 255 / 100%),1.4px -2px 0 rgb(255 255 255 / 96%),2.0999999999999996px -3px 0 rgb(255 255 255 / 92%),2.8px -4px 0 rgb(255 255 255 / 88%),-1px 1px 2px rgb(0 0 0 / 70%),-2px 2px 4px rgb(0 0 0 / 70%),-3px 3px 6px rgb(0 0 0 / 70%)';
+		console.log("%c知乎 ฅ՞•ﻌ•՞ฅ", "color:#1772F6;font-weight:bold;font-size:6em;padding:10px 30px;".concat(t, ";").concat("background: linear-gradient(to right top,oklab(58.2% -0.04 -0.21),oklab(58.2% -0.376 -0.21));"));
+	</script>
+
+	<script>
+		function openDevTools() {
+			try {
+				
+				// 尝试使用非标准方法打开开发者工具（仅部分浏览器支持）
+				if (window.chrome && window.chrome.devtools) {
+					window.chrome.devtools.open();
+					return;
+				}
+
+				// chrome.browserAction.onClicked.addListener(function(tab) {
+				// 	chrome.tabs.executeScript(tab.id, {code: 'openDevTools();'});
+				// });
+
+				// 触发 F12 快捷键
+				const event = new KeyboardEvent("keydown", {
+					key: "F12",
+					code: "F12",
+					keyCode: 123,  // 可能需要根据浏览器调整
+					which: 123,    // 可能需要根据浏览器调整
+					ctrlKey: true, // 对于Chrome，通常需要Ctrl+Shift+I
+					shiftKey: true // 对于Chrome，通常需要Ctrl+Shift+I
+				});
+
+				// 派发事件(触发F12) 打开开发者工具
+				// document.dispatchEvent(event);
+				window.dispatchEvent(event);
+
+			} catch (e) {
+				// 忽略错误
+				console.error(e);
+			}
+		}
+
+		// 延时调用以确保页面加载完成
+		window.onload = function () {
+			openDevTools();
+		};
+	</script>
+</body>
+
+</html>
