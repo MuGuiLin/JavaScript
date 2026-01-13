@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>子页面</title>
+    <style>
+        main {
+            display: flex;
+            width: 100%;
+            border: 1px solid gray;
+        }
+
+        aside {
+            flex: 1;
+            padding: 10px;
+        }
+
+        .tree {
+            border-right: 1px solid gray;
+        }
+
+        .tree>input {
+            width: 100%;
+        }
+
+        .selected {}
+    </style>
+</head>
+
+<body>
+    <h1>子页面</h1>
+    <hr>
+    <h3 id="urlpar"></h3>
+    <main>
+        <aside class="tree">
+            <input type="search" id="search" placeholder="搜索部门、成员"></input>
+        </aside>
+        <aside class="selected">
+            <p>已选择的部门、成员</p>
+        </aside>
+    </main>
+
+    <script>
+        const urlpar = document.querySelector('#urlpar')
+        const params = new URLSearchParams(window.location.search);
+        let pars = {}
+        params.forEach((value, key) => {
+            console.log(`${key}: ${value}`);
+            pars[key] = value
+        });
+        urlpar.innerText = JSON.stringify(pars);
+
+
+        const textarea = document.querySelector('#textarea')
+        window.getTextareaValue = function () {
+            return textarea.value;
+        }
+
+        textarea.oninput = function (e) {
+            console.log(e.target.value)
+            localStorage.setItem('textarea', e.target.value)
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>父页面</title>
+</head>
+
+<body>
+  <h1>父页面</h1>
+  <hr />
+  <div>
+    <iframe id="child" src="./child.html?app=abc123&uid=user666" width="800" height="300"></iframe>
+    <button id="btn">获取子页面的数据</button>
+    <h3 id="message"></h3>
+  </div>
+
+
+  <script>
+    const child = document.querySelector('#child');
+    console.log(child.contentWindow)
+
+    const btn = document.querySelector('#btn');
+    btn.onclick = function () {
+      try {
+        console.log(localStorage.getItem('textarea'))
+        console.log(child.contentWindow.getTextareaValue())
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  </script>
+</body>
+
+</html>
