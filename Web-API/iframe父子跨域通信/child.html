@@ -13,7 +13,7 @@
             --text-color: #333;
             --secondary-text: #666;
             --item-height: 32px;
-            /* Fixed height for virtual scroll */
+            /* 虚拟滚动的固定高度 */
         }
 
         * {
@@ -32,7 +32,7 @@
             flex-direction: column;
         }
 
-        /* Container split */
+        /* 容器分割 */
         .container {
             display: flex;
             flex: 1;
@@ -53,7 +53,7 @@
             border-right: 1px solid var(--border-color);
         }
 
-        /* Search */
+        /* 搜索框 */
         .search-box {
             margin-bottom: 12px;
             position: relative;
@@ -62,7 +62,7 @@
 
         .search-box input {
             width: 100%;
-            padding: 8px 30px 8px 30px;
+            padding: 8px 30px 8px 34px;
             border: 1px solid #d9d9d9;
             border-radius: 4px;
             outline: none;
@@ -96,15 +96,14 @@
             width: 16px;
             height: 16px;
             text-align: center;
-            line-height: 16px;
+            line-height: 13px;
         }
 
         .clear-icon:hover {
             color: red;
-            background: #ccc;
         }
 
-        /* Tree View - Virtual Scroll */
+        /* 树形视图 - 虚拟滚动 */
         .tree-viewport {
             flex: 1;
             overflow-y: auto;
@@ -164,7 +163,7 @@
             visibility: hidden;
         }
 
-        /* Right Panel - Selected */
+        /* 右侧面板 - 已选列表 */
         .selected-header {
             font-size: 14px;
             color: #999;
@@ -181,7 +180,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 8px 0;
+            padding: 4px 0;
             border-bottom: 1px solid #f9f9f9;
         }
 
@@ -225,7 +224,7 @@
             visibility: visible;
         }
 
-        /* Loading */
+        /* 加载状态 */
         .loading {
             position: absolute;
             top: 50%;
@@ -239,7 +238,7 @@
 
 <body>
     <div class="container">
-        <!-- Left Panel -->
+        <!-- 左侧面板 -->
         <div class="left-panel">
             <div class="search-box">
                 <span class="search-icon">🔍</span>
@@ -254,30 +253,30 @@
             </div>
         </div>
 
-        <!-- Right Panel -->
+        <!-- 右侧面板 -->
         <div class="right-panel">
             <div class="selected-header">
                 已选择的人员 (<span id="selectedCount">0</span>)
             </div>
             <div class="selected-list" id="selectedList">
-                <!-- Selected items will be rendered here -->
+                <!-- 已选项目将渲染在这里 -->
             </div>
         </div>
     </div>
 
     <script>
-        // --- CONFIGURATION ---
+        // --- 配置 ---
         const API_URL = '/api/org-structure'; // Todo: 真实上线时修改此API地址 mock: /api/org-structure
         const USE_MOCK_SERVER = true;         // Todo: 真实上线时设为 false
 
-        // --- MOCK SERVER SETUP ---
+        // --- 模拟服务器设置 ---
         if (USE_MOCK_SERVER) {
             (function () {
-                console.log('--- Mock Server Enabled ---');
+                console.log('--- 启用模拟服务器 ---');
 
-                // Helper to generate data
+                // 生成大数据助手函数
                 function generateLargeData() {
-                    console.log('Mock Server: Generating 10k data...');
+                    console.log('模拟服务器: 正在生成 10k 数据...');
                     const roots = [];
                     for (let i = 1; i <= 5; i++) {
                         const root = {
@@ -309,14 +308,14 @@
                         }
                         roots.push(root);
                     }
-                    console.log('Mock Server: Data generated.');
+                    console.log('模拟服务器: 数据已生成。');
                     return roots;
                 }
 
                 const mockData = generateLargeData();
                 const OriginalXHR = window.XMLHttpRequest;
 
-                // Patch XMLHttpRequest
+                // 拦截 XMLHttpRequest
                 window.XMLHttpRequest = class MockXHR extends OriginalXHR {
                     constructor() {
                         super();
@@ -332,18 +331,18 @@
 
                     send(body) {
                         if (this._url === API_URL) {
-                            console.log(`Mock Server: Intercepted request to ${this._url}`);
-                            // Simulate network delay
+                            console.log(`模拟服务器: 拦截到请求 ${this._url}`);
+                            // 模拟网络延迟
                             setTimeout(() => {
-                                // We can't easily write to readonly properties of standard XHR, 
-                                // but we can trigger events defined on 'this' instance.
+                                // 我们无法轻易写入标准 XHR 的只读属性，
+                                // 但可以触发定义在 'this' 实例上的事件。
 
-                                // Create a response
+                                // 创建响应
                                 const responseData = JSON.stringify(mockData);
 
-                                // Define properties on this instance to override prototype getters if needed,
-                                // or just set them if they are writable. 
-                                // Note: In many browsers these are read-only.
+                                // 定义实例属性以覆盖原型 getter（如果需要），
+                                // 或者如果它们是可写的，直接设置即可。
+                                // 注意：在许多浏览器中这些是只读的。
                                 Object.defineProperty(this, 'responseText', { value: responseData, writable: true });
                                 Object.defineProperty(this, 'response', { value: responseData, writable: true });
                                 Object.defineProperty(this, 'status', { value: 200, writable: true });
@@ -356,9 +355,9 @@
                                 if (this.onload) {
                                     this.onload();
                                 }
-                            }, 500); // 500ms delay
+                            }, 500); // 500ms 延迟
                         } else {
-                            // Pass through unknown requests
+                            // 放行未知请求
                             super.send(body);
                         }
                     }
@@ -366,10 +365,10 @@
             })();
         }
 
-        // --- CONSTANTS ---
+        // --- 常量 ---
         const ITEM_HEIGHT = 32;
 
-        // --- State ---
+        // --- 状态 ---
         const state = {
             selectedIds: new Set(),
             selectedNodes: [],
@@ -379,7 +378,7 @@
             scrollTop: 0
         };
 
-        // --- DOM Elements ---
+        // --- DOM 元素 ---
         const treeViewport = document.getElementById('treeViewport');
         const treePhantom = document.getElementById('treePhantom');
         const treeContent = document.getElementById('treeContent');
@@ -389,7 +388,7 @@
         const clearBtn = document.getElementById('clearBtn');
         const loadingEl = document.getElementById('loading');
 
-        // --- Fetch Data (The "Real" Code) ---
+        // --- 获取数据 (真实代码) ---
         function fetchData() {
             loadingEl.style.display = 'block';
 
@@ -401,28 +400,29 @@
                     if (xhr.status === 200) {
                         try {
                             const data = JSON.parse(xhr.responseText);
+                            originalData = JSON.parse(JSON.stringify(data)); // 深拷贝作为主数据
                             state.treeData = data;
                             state.flatNodes = flattenTree(state.treeData);
                             renderVirtualTree();
                         } catch (e) {
-                            console.error('Failed to parse JSON', e);
+                            console.error('JSON 解析失败', e);
                             alert('数据加载失败');
                         }
                     } else {
-                        console.error('API Error', xhr.status, xhr.statusText);
+                        console.error('API 错误', xhr.status, xhr.statusText);
                         alert('数据请求失败');
                     }
                 }
             };
             xhr.onerror = function () {
                 loadingEl.style.display = 'none';
-                console.error('Network Error');
+                console.error('网络错误');
                 alert('网络错误');
             };
             xhr.send();
         }
 
-        // --- Core Logic: Flatten Tree ---
+        // --- 核心逻辑: 扁平化树 ---
         function flattenTree(nodes, level = 0, result = []) {
             for (const node of nodes) {
                 result.push({ ...node, level });
@@ -433,7 +433,7 @@
             return result;
         }
 
-        // --- Core Logic: Filtering ---
+        // --- 核心逻辑: 过滤 ---
         function filterData(nodes, keyword) {
             const result = [];
             for (const node of nodes) {
@@ -458,7 +458,7 @@
             return result;
         }
 
-        // --- Virtual Render ---
+        // --- 虚拟渲染 ---
         function renderVirtualTree() {
             const viewportHeight = treeViewport.clientHeight;
             const totalHeight = state.flatNodes.length * ITEM_HEIGHT;
@@ -521,7 +521,7 @@
             return row;
         }
 
-        // --- Interaction Logic ---
+        // --- 交互逻辑 ---
         function toggleNode(id) {
             function toggle(nodes) {
                 for (const node of nodes) {
@@ -604,9 +604,9 @@
             selectedListEl.appendChild(fragment);
         }
 
-        // --- Search ---
+        // --- 搜索 ---
         let debounceTimer = null;
-        let originalData = null; // To store initial data after fetch
+        let originalData = null; // 用于存储 fetch 后的初始数据
 
         searchInput.addEventListener('input', (e) => {
             const keyword = e.target.value.trim();
@@ -629,19 +629,10 @@
         });
 
         function performSearch(keyword) {
-            // Need original data reference?
-            // When we fetch, we should store a copy of the original data.
-            // Let's modify fetchData to save originalData.
-            if (!originalData) originalData = state.treeData; // Hack for now, better in fetchData
-
-            // Correction: state.treeData IS the source of truth if we don't swap it.
-            // But search needs to filter FROM the full dataset.
-            // When we load data, we should set `originalData`.
-
-            // If we are searching...
+            // 需要原始数据引用
+            // 如果我们正在搜索...
             if (!originalData && state.treeData.length > 0) {
-                // First search?
-                // Wait, originalData needs to be set when data loads.
+                // 首次搜索?
             }
 
             if (!keyword) {
@@ -654,48 +645,15 @@
             renderVirtualTree();
         }
 
-        // Hook into fetch to save originalData
-        const originalFetchSuccess = function (data) {
-            originalData = data; // Keep reference to raw data
-            state.treeData = data; // Deep clone? For now modification toggles internal state of referenced objs?
-            // Actually, toggling modifies the object. If we filter, we create new objects.
-            // So if we clear search, we might get back the collapsed unique objects or new ones?
-            // Simplist: filterData assumes immutable source -> new objects.
-            // toggleNode mutates state.treeData elements.
-            // If we restore originalData, we restore the state it was last in?
-            // Yes if referenced.
-            state.flatNodes = flattenTree(state.treeData);
-            renderVirtualTree();
-        }
-
-        // Redefine fetchData success block slightly to capture originalData
-        // Override the previous fetchData function for simplicity in this full-write replacement
-        // See 'fetchData' above... I need to update it in this string block.
-        // I will change the fetchData function body in the big string above before outputting.
-
-        // RE-WRITING fetchData in the string block above to include originalData assignment.
-        // DONE in the block above (conceptually). 
-        // Wait, I didn't edit the block above. I need to make sure the wrote code works.
-        // Code above has:
-        // const data = JSON.parse(xhr.responseText);
-        // state.treeData = data;
-        // ...
-        // I need to add `originalData = data;` inside fetchData.
-        // I'll do a quick replace in my head before sending the tool call...
-        // Actually, I can just write the correct code.
-
-        // --- Event Listeners ---
+        // --- 事件监听 ---
         treeViewport.addEventListener('scroll', () => {
             window.requestAnimationFrame(renderVirtualTree);
         });
 
-        // --- Init ---
-        fetchData(); // Load data on start
+        // --- 初始化 ---
+        fetchData(); // 启动时加载数据
 
-        // Ensure fetchData sets originalData.
-        // I will sneakily update fetchData in the HTML I generate.
-
-        // --- API (PostMessage) ---
+        // --- API (PostMessage 通信) ---
         window.addEventListener('message', (event) => {
             if (event.data && event.data.type === 'GET_SELECTED_ITEMS') {
                 const data = JSON.parse(JSON.stringify(state.selectedNodes));
@@ -706,36 +664,6 @@
             }
         });
 
-    </script>
-    <script>
-        // Patch fetchData to save originalData correctly
-        // (Just overriding the function I defined above to be safe and clear)
-        const _oldFetch = fetchData;
-        fetchData = function () {
-            loadingEl.style.display = 'block';
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', API_URL);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4) {
-                    loadingEl.style.display = 'none';
-                    if (xhr.status === 200) {
-                        try {
-                            const data = JSON.parse(xhr.responseText);
-                            originalData = JSON.parse(JSON.stringify(data)); // Deep copy to serve as master
-                            state.treeData = data;
-                            state.flatNodes = flattenTree(state.treeData);
-                            renderVirtualTree();
-                        } catch (e) {
-                            console.error(e);
-                        }
-                    }
-                }
-            };
-            xhr.send();
-        }
-
-        // Call it
-        fetchData();
     </script>
 </body>
 
