@@ -3,66 +3,599 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>子页面</title>
+    <title>Selection Component</title>
     <style>
-        main {
+        :root {
+            --primary-color: #1890ff;
+            --hover-bg: #f5f5f5;
+            --border-color: #e8e8e8;
+            --text-color: #333;
+            --secondary-text: #666;
+            --item-height: 32px;
+            /* Fixed height for virtual scroll */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: var(--text-color);
+            height: 100vh;
+            overflow: hidden;
+            background: #fff;
             display: flex;
-            width: 100%;
-            border: 1px solid gray;
+            flex-direction: column;
         }
 
-        aside {
+        /* Container split */
+        .container {
+            display: flex;
             flex: 1;
-            padding: 10px;
+            height: 100%;
+            overflow: hidden;
         }
 
-        .tree {
-            border-right: 1px solid gray;
+        .left-panel,
+        .right-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 16px;
         }
 
-        .tree>input {
+        .left-panel {
+            border-right: 1px solid var(--border-color);
+        }
+
+        /* Search */
+        .search-box {
+            margin-bottom: 12px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .search-box input {
             width: 100%;
+            padding: 8px 30px 8px 30px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            outline: none;
+            font-size: 14px;
         }
 
-        .selected {}
+        .search-box input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ccc;
+        }
+
+        .clear-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #FFF;
+            cursor: pointer;
+            display: none;
+            font-size: 16px;
+            background: #ddd;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            text-align: center;
+            line-height: 16px;
+        }
+
+        .clear-icon:hover {
+            color: red;
+            background: #ccc;
+        }
+
+        /* Tree View - Virtual Scroll */
+        .tree-viewport {
+            flex: 1;
+            overflow-y: auto;
+            position: relative;
+            /* Enhance scrolling performance */
+            /* contain: strict; */
+        }
+
+        .tree-phantom {
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            z-index: -1;
+        }
+
+        .tree-content {
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+        }
+
+        .tree-node {
+            display: flex;
+            align-items: center;
+            height: var(--item-height);
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        .tree-node:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .u-icon {
+            margin: 0 6px;
+            font-size: 16px;
+            color: var(--primary-color);
+        }
+
+        .toggle-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            transition: transform 0.2s;
+            font-size: 12px;
+        }
+
+        .toggle-icon.expanded {
+            transform: rotate(90deg);
+        }
+
+        .toggle-icon.leaf {
+            visibility: hidden;
+        }
+
+        /* Right Panel - Selected */
+        .selected-header {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 12px;
+            flex-shrink: 0;
+        }
+
+        .selected-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .selected-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f9f9f9;
+        }
+
+        .selected-item:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .item-info {
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .item-info span:last-child {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .remove-btn {
+            color: #999;
+            cursor: pointer;
+            font-size: 22px;
+            margin-left: 10px;
+            padding: 0 8px;
+            flex-shrink: 0;
+        }
+
+        .remove-btn:hover {
+            color: #ff4d4f;
+        }
+
+        .check-mark {
+            color: var(--primary-color);
+            font-weight: bold;
+            margin-right: 8px;
+            visibility: hidden;
+        }
+
+        .check-mark.checked {
+            visibility: visible;
+        }
     </style>
 </head>
 
 <body>
-    <h1>子页面</h1>
-    <hr>
-    <h3 id="urlpar"></h3>
-    <main>
-        <aside class="tree">
-            <input type="search" id="search" placeholder="搜索部门、成员"></input>
-        </aside>
-        <aside class="selected">
-            <p>已选择的部门、成员</p>
-        </aside>
-    </main>
+    <div class="container">
+        <!-- Left Panel -->
+        <div class="left-panel">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="搜索 部门、人员" id="searchInput">
+                <span class="clear-icon" id="clearBtn">×</span>
+            </div>
+
+            <div class="tree-viewport" id="treeViewport">
+                <div class="tree-phantom" id="treePhantom"></div>
+                <div class="tree-content" id="treeContent"></div>
+            </div>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="right-panel">
+            <div class="selected-header">
+                已选择的人员 (<span id="selectedCount">0</span>)
+            </div>
+            <div class="selected-list" id="selectedList">
+                <!-- Selected items will be rendered here -->
+            </div>
+        </div>
+    </div>
 
     <script>
-        const urlpar = document.querySelector('#urlpar')
-        const params = new URLSearchParams(window.location.search);
-        let pars = {}
-        params.forEach((value, key) => {
-            console.log(`${key}: ${value}`);
-            pars[key] = value
+        // --- CONSTANTS ---
+        const ITEM_HEIGHT = 32;
+
+        // --- Data Generation ---
+        function generateLargeData() {
+            // console.time('Data Generation');
+            let idCounter = 0;
+
+            // Hierarchy: Root (5) -> Dept (20) -> User (100) = 5 * 20 * 100 = 10,000 users + 100 depts + 5 roots = ~10,105
+            const roots = [];
+
+            for (let i = 1; i <= 5; i++) {
+                const root = {
+                    id: `root-${i}`,
+                    name: `总部机构 ${i}`,
+                    type: 'dept',
+                    expanded: false,
+                    children: []
+                };
+
+                for (let j = 1; j <= 20; j++) {
+                    const dept = {
+                        id: `dept-${i}-${j}`,
+                        name: `研发部门 ${i}-${j}`,
+                        type: 'dept',
+                        expanded: false,
+                        children: []
+                    };
+
+                    for (let k = 1; k <= 100; k++) {
+                        const user = {
+                            id: `user-${i}-${j}-${k}`,
+                            name: `工程师 ${i}-${j}-${k}`,
+                            type: 'user',
+                            expanded: false,
+                            children: [] // Users have no children
+                        };
+                        dept.children.push(user);
+                    }
+                    root.children.push(dept);
+                }
+                roots.push(root);
+            }
+            // console.timeEnd('Data Generation');
+            return roots;
+        }
+
+        // --- State ---
+        const state = {
+            selectedIds: new Set(),
+            selectedNodes: [],
+            treeData: [],         // Full Hierarchical Data
+            flatNodes: [],        // Flattened List for Virtual Scroll (Visible Nodes only)
+            searchKeyword: '',
+            scrollTop: 0
+        };
+
+        // --- DOM Elements ---
+        const treeViewport = document.getElementById('treeViewport');
+        const treePhantom = document.getElementById('treePhantom');
+        const treeContent = document.getElementById('treeContent');
+        const selectedListEl = document.getElementById('selectedList');
+        const selectedCountEl = document.getElementById('selectedCount');
+        const searchInput = document.getElementById('searchInput');
+        const clearBtn = document.getElementById('clearBtn');
+
+        // --- Core Logic: Flatten Tree ---
+        // Converts hierarchical data to flat array based on expanded state
+        function flattenTree(nodes, level = 0, result = []) {
+            for (const node of nodes) {
+                // If searching, we might skip nodes that don't match, 
+                // BUT the filtering logic should have already handled the hierarchy structure.
+                // Here we just flatten what is passed to us.
+                result.push({ ...node, level }); // Store reference to node + visual level
+
+                if (node.expanded && node.children && node.children.length > 0) {
+                    flattenTree(node.children, level + 1, result);
+                }
+            }
+            return result;
+        }
+
+        // --- Core Logic: Filtering ---
+        // Returns a filtered deep Clone of data where matches are kept and paths are expanded
+        function filterData(nodes, keyword) {
+            const result = [];
+            for (const node of nodes) {
+                const isMatch = node.name.toLowerCase().includes(keyword.toLowerCase());
+
+                let filteredChildren = [];
+                let hasMatchingChildren = false;
+
+                if (node.children && node.children.length > 0) {
+                    filteredChildren = filterData(node.children, keyword);
+                    hasMatchingChildren = filteredChildren.length > 0;
+                }
+
+                if (isMatch || hasMatchingChildren) {
+                    // Clone node to avoid mutating original state (specifically 'expanded')
+                    const newNode = { ...node, children: filteredChildren };
+
+                    // If children match, must expand to show them.
+                    // If self matches, expanded state is optional, but usually collapsed unless searching.
+                    if (hasMatchingChildren) {
+                        newNode.expanded = true;
+                    }
+                    // Retain original expanded state if it was manually set? 
+                    // For search, usually better to force expand path.
+
+                    result.push(newNode);
+                }
+            }
+            return result;
+        }
+
+        // --- Data Initialization ---
+        const originalData = generateLargeData();
+        state.treeData = originalData; // Start with full data
+        state.flatNodes = flattenTree(state.treeData);
+
+        // --- Virtual Render ---
+        function renderVirtualTree() {
+            const viewportHeight = treeViewport.clientHeight;
+            const totalHeight = state.flatNodes.length * ITEM_HEIGHT;
+
+            // Update phantom height
+            treePhantom.style.height = `${totalHeight}px`;
+
+            // Calculate visible range
+            const scrollTop = treeViewport.scrollTop;
+            const startIndex = Math.floor(scrollTop / ITEM_HEIGHT);
+            const endIndex = Math.min(state.flatNodes.length, Math.ceil((scrollTop + viewportHeight) / ITEM_HEIGHT) + 1); // +1 buffer
+
+            // Create fragment
+            const fragment = document.createDocumentFragment();
+
+            // Render subset
+            for (let i = startIndex; i < endIndex; i++) {
+                const flatNode = state.flatNodes[i];
+                const nodeEl = createNodeElement(flatNode);
+                fragment.appendChild(nodeEl);
+            }
+
+            treeContent.innerHTML = '';
+            treeContent.appendChild(fragment);
+            treeContent.style.transform = `translateY(${startIndex * ITEM_HEIGHT}px)`;
+        }
+
+        function createNodeElement(flatNode) {
+            const row = document.createElement('div');
+            row.className = 'tree-node';
+            row.style.paddingLeft = `${flatNode.level * 20}px`;
+
+            // Toggle
+            const toggleBtn = document.createElement('div');
+            const hasChildren = flatNode.children && flatNode.children.length > 0;
+            toggleBtn.className = `toggle-icon ${hasChildren ? (flatNode.expanded ? 'expanded' : '') : 'leaf'}`;
+            toggleBtn.textContent = '▶';
+            toggleBtn.onclick = (e) => {
+                e.stopPropagation();
+                if (hasChildren) toggleNode(flatNode.id);
+            };
+            row.appendChild(toggleBtn);
+
+            // Icon
+            const icon = document.createElement('span');
+            icon.className = `u-icon ${flatNode.type}`;
+            icon.textContent = flatNode.type === 'dept' ? '📂' : '👤';
+            row.appendChild(icon);
+
+            // Name
+            const name = document.createElement('span');
+            name.textContent = flatNode.name;
+            name.style.flex = 1;
+            name.style.marginLeft = '4px';
+            row.appendChild(name);
+
+            // Check
+            const isSelected = state.selectedIds.has(flatNode.id);
+            const check = document.createElement('div');
+            check.className = `check-mark ${isSelected ? 'checked' : ''}`;
+            check.textContent = '✓';
+            row.appendChild(check);
+
+            row.onclick = () => {
+                handleCheck(flatNode);
+            };
+
+            return row;
+        }
+
+        // --- Interaction Logic ---
+        function toggleNode(id) {
+            function toggle(nodes) {
+                for (const node of nodes) {
+                    if (node.id === id) {
+                        node.expanded = !node.expanded;
+                        return true;
+                    }
+                    if (node.children && toggle(node.children)) return true;
+                }
+                return false;
+            }
+
+            toggle(state.treeData);
+
+            // Re-flatten
+            state.flatNodes = flattenTree(state.treeData);
+            renderVirtualTree();
+        }
+
+        function handleCheck(node) {
+            const id = node.id;
+            if (state.selectedIds.has(id)) {
+                state.selectedIds.delete(id);
+                state.selectedNodes = state.selectedNodes.filter(n => n.id !== id);
+            } else {
+                state.selectedIds.add(id);
+                state.selectedNodes.push({ id: node.id, name: node.name, type: node.type });
+            }
+
+            // Update UI
+            renderVirtualTree(); // To update checkmark
+            renderSelectedList();
+        }
+
+        function renderSelectedList() {
+            selectedCountEl.textContent = state.selectedIds.size;
+
+            selectedListEl.innerHTML = '';
+            // Limit render if too many?
+            const MAX_RENDER = 200;
+            const itemsToRender = state.selectedNodes.slice(0, MAX_RENDER);
+
+            const fragment = document.createDocumentFragment();
+            itemsToRender.forEach(node => {
+                const item = document.createElement('div');
+                item.className = 'selected-item';
+
+                const info = document.createElement('div');
+                info.className = 'item-info';
+
+                const icon = document.createElement('span');
+                icon.className = `u-icon ${node.type}`;
+                icon.textContent = node.type === 'dept' ? '📂' : '👤';
+
+                const name = document.createElement('span');
+                name.textContent = node.name;
+                name.style.marginLeft = '8px';
+
+                info.appendChild(icon);
+                info.appendChild(name);
+
+                const remove = document.createElement('div');
+                remove.className = 'remove-btn';
+                remove.textContent = '×';
+                remove.onclick = () => {
+                    // Find the full node to reuse handleCheck logic or just manual remove
+                    state.selectedIds.delete(node.id);
+                    state.selectedNodes = state.selectedNodes.filter(n => n.id !== node.id);
+                    renderVirtualTree();
+                    renderSelectedList();
+                };
+
+                item.appendChild(info);
+                item.appendChild(remove);
+                fragment.appendChild(item);
+            });
+
+            if (state.selectedNodes.length > MAX_RENDER) {
+                const more = document.createElement('div');
+                more.style.padding = '8px';
+                more.style.textAlign = 'center';
+                more.style.color = '#999';
+                more.textContent = `还有 ${state.selectedNodes.length - MAX_RENDER} 个项未显示...`;
+                fragment.appendChild(more);
+            }
+
+            selectedListEl.appendChild(fragment);
+        }
+
+        // --- Search ---
+        let debounceTimer = null;
+        searchInput.addEventListener('input', (e) => {
+            const keyword = e.target.value.trim();
+            if (keyword === state.searchKeyword) return;
+            state.searchKeyword = keyword;
+
+            if (debounceTimer) clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                performSearch(keyword);
+            }, 300);
+
+            // Toggle Clear Btn immediate
+            clearBtn.style.display = keyword ? 'block' : 'none';
         });
-        urlpar.innerText = JSON.stringify(pars);
 
+        clearBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            state.searchKeyword = '';
+            clearBtn.style.display = 'none';
+            performSearch('');
+        });
 
-        const textarea = document.querySelector('#textarea')
-        window.getTextareaValue = function () {
-            return textarea.value;
+        function performSearch(keyword) {
+            // console.time('Search');
+            if (!keyword) {
+                state.treeData = originalData;
+            } else {
+                state.treeData = filterData(originalData, keyword);
+            }
+            state.flatNodes = flattenTree(state.treeData);
+            treeViewport.scrollTop = 0; // Reset scroll
+            renderVirtualTree();
+            // console.timeEnd('Search');
         }
 
-        textarea.oninput = function (e) {
-            console.log(e.target.value)
-            localStorage.setItem('textarea', e.target.value)
-        }
+        // --- Event Listeners ---
+        treeViewport.addEventListener('scroll', () => {
+            window.requestAnimationFrame(renderVirtualTree);
+        });
+
+        // --- Init ---
+        // Force one layout calculation
+        renderVirtualTree();
+
+        // --- API (PostMessage) ---
+        window.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'GET_SELECTED_ITEMS') {
+                const data = JSON.parse(JSON.stringify(state.selectedNodes));
+                // Send back to parent. TargetOrigin '*' allows any parent, 
+                // in production usage replace '*' with specific origin for security.
+                event.source.postMessage({
+                    type: 'SELECTED_ITEMS_DATA',
+                    data: data
+                }, '*');
+            }
+        });
+
     </script>
 </body>
 
