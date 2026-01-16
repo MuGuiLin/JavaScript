@@ -6,9 +6,14 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no">
     <title>通讯录展示组件 open-data</title>
     <!-- <script type="text/javascript" src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
-    <script type="text/javascript" src="//open.work.weixin.qq.com/wwopen/js/jwxwork-1.0.0.js"></script> -->
+    <script type="text/javascript" src="//open.work.weixin.qq.com/wwopen/js/jwxwork-1.0.0.js"></script>
+    注：以下两个是直接在页面上引入 open-data SDK
+        1、SDK内容是动态返回的，请严格按照上面的方式引入，不要保存到项目本地后打包引入
+        2、referrerpolicy 声明为 origin 是为了让 SDK 能够顺利识别关键域名，不能去掉
+    -->
     <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js" referrerpolicy="origin"></script>
     <script src="https://open.work.weixin.qq.com/wwopen/js/jwxwork-1.0.0.js" referrerpolicy="origin"></script>
+
     <script>
         /**
          * wx.config 参数
@@ -30,7 +35,7 @@
     <hr>
     <div id="container">
         <a href="https://developer.work.weixin.qq.com/document/path/91958" target="_blank"
-            rel="noopener noreferrer">第三方应用开发-服务端API-通讯录展示组件</a>
+            rel="noopener noreferrer">第三方应用开发-服务端API-通讯录展示组件使用说明</a>
         <div>安全控件展示页面</div>
         <div>显示出前 100 名可见范围人员名单</div>
     </div>
