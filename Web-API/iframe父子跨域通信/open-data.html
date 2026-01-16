@@ -28,14 +28,25 @@
          */
         window.agentConfigParams = { /* ... */ }
     </script>
+
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        #container {
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
     <h1>通讯录展示组件 open-data</h1>
     <hr>
     <div id="container">
+        <p>WWOpenData.__version__ = <b id="__version__"></b></p>
         <a href="https://developer.work.weixin.qq.com/document/path/91958" target="_blank"
-            rel="noopener noreferrer">第三方应用开发-服务端API-通讯录展示组件使用说明</a>
+            rel="noopener noreferrer">🚀第三方应用开发-服务端API-通讯录展示组件使用说明</a>
         <div>安全控件展示页面</div>
         <div>显示出前 100 名可见范围人员名单</div>
     </div>
@@ -49,7 +60,10 @@
             */
             (async () => {
                 try {
-                    console.info('WWOpenData demo start')
+                    if (WWOpenData) {
+                        console.info('WWOpenData demo start')
+                        __version__.innerText = WWOpenData.__version__
+                    }
                     if (/MicroMessenger/i.test(navigator.userAgent)) {
                         await config(window.configParams)
                     }

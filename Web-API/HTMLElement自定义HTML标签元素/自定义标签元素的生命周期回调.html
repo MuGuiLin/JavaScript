@@ -52,14 +52,15 @@
         customElements.define("custom-square", Square);
 
         function updateStyle(elem) {
+            // 创建
             const shadow = elem.shadowRoot;
             shadow.querySelector("style").textContent = `
-    div {
-      width: ${elem.getAttribute("size")}px;
-      height: ${elem.getAttribute("size")}px;
-      background-color: ${elem.getAttribute("color")};
-    }
-  `;
+                div {
+                width: ${elem.getAttribute("size")}px;
+                height: ${elem.getAttribute("size")}px;
+                background-color: ${elem.getAttribute("color")};
+                }
+            `;
         }
 
         const add = document.querySelector(".add");
