@@ -7,6 +7,7 @@
     <title>通讯录展示组件 open-data</title>
     <!-- <script type="text/javascript" src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
     <script type="text/javascript" src="//open.work.weixin.qq.com/wwopen/js/jwxwork-1.0.0.js"></script>
+   
     注：以下两个是直接在页面上引入 open-data SDK
         1、SDK内容是动态返回的，请严格按照上面的方式引入，不要保存到项目本地后打包引入
         2、referrerpolicy 声明为 origin 是为了让 SDK 能够顺利识别关键域名，不能去掉
@@ -15,22 +16,37 @@
     <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js" referrerpolicy="origin"></script>
     <script src="https://open.work.weixin.qq.com/wwopen/js/jwxwork-1.0.0.js" referrerpolicy="origin"></script>
 
+
     <script>
         /**
          * wx.config 参数
          *
          * @see https://open.work.weixin.qq.com/api/doc/90001/90144/90547
          */
-        window.configParams = {
-
-        }
+        window.configParams = { /* ... */ }
         /**
          * wx.agentConfig 参数
          *
          * @see https://open.work.weixin.qq.com/api/doc/90001/90144/90548
          */
         window.agentConfigParams = {
-
+            corpid: 'wxd93f0ffbb819bd4d', // 必填，企业微信的corpid，必须与当前登录的企业一致
+            agentid: 'wwf2b02add401fa463', // 必填，企业微信的应用id （e.g. 1000247）
+            timestamp: Date.now(), // 必填，生成签名的时间戳
+            nonceStr: 'asdfasdf', // 必填，生成签名的随机串
+            signature: '', // 必填，签名，见附录-JS-SDK使用权限签名算法
+            jsApiList: ['selectExternalContact'], //必填，传入需要使用的接口名称
+            success: function (result) {
+                console.log(result, '请求微信成功')
+                //  wx.agentConfig成功回调后，WWOpenData 才会注入到 window 对象上面
+                window.WWOpenData.bind(document.querySelector('ww-open-data'))
+            },
+            fail: function (res) {
+                console.log('查看错误信息' + res)
+                if (res.errMsg.indexOf('function not exist') > -1) {
+                    alert('版本过低请升级')
+                }
+            }
         }
     </script>
 
@@ -50,6 +66,7 @@
     <hr>
     <div id="container">
         <p>WWOpenData.__version__ = <b id="__version__"></b></p>
+        <p>WWOpenData.checkSession = <b id="checkSession"></b></p>
         <a href="https://developer.work.weixin.qq.com/document/path/91958" target="_blank"
             rel="noopener noreferrer">🚀第三方应用开发-服务端API-通讯录展示组件使用说明</a>
         <div>安全控件展示页面</div>
@@ -68,6 +85,7 @@
                     if (WWOpenData) {
                         console.info('WWOpenData demo start')
                         __version__.innerText = WWOpenData.__version__
+                        checkSession.innerText = WWOpenData.checkSession
                     }
                     if (/MicroMessenger/i.test(navigator.userAgent)) {
                         await config(window.configParams)
@@ -78,13 +96,14 @@
                     if (WWOpenData.checkSession) {
                         WWOpenData.checkSession({
                             success() {
-                                console.info('open-data 登录态校验成功')
+                                alert('open-data 登录态校验成功！')
                             },
                             fail() {
-                                console.error('open-data 登录态过期')
+                                alert('open-data 登录态过期！')
                             },
                         })
                     }
+
                     if (WWOpenData.on) {
                         /**
                          * ww-open-data 元素数据发生变更时触发
