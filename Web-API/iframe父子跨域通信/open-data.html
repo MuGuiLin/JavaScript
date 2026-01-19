@@ -11,6 +11,7 @@
         1、SDK内容是动态返回的，请严格按照上面的方式引入，不要保存到项目本地后打包引入
         2、referrerpolicy 声明为 origin 是为了让 SDK 能够顺利识别关键域名，不能去掉
     -->
+    <!-- <script src="https://wwcdn.weixin.qq.com/node/open/js/wecom-jssdk-2.3.3.js"></script> -->
     <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js" referrerpolicy="origin"></script>
     <script src="https://open.work.weixin.qq.com/wwopen/js/jwxwork-1.0.0.js" referrerpolicy="origin"></script>
 
@@ -20,13 +21,17 @@
          *
          * @see https://open.work.weixin.qq.com/api/doc/90001/90144/90547
          */
-        window.configParams = { /* ... */ }
+        window.configParams = {
+
+        }
         /**
          * wx.agentConfig 参数
          *
          * @see https://open.work.weixin.qq.com/api/doc/90001/90144/90548
          */
-        window.agentConfigParams = { /* ... */ }
+        window.agentConfigParams = {
+
+        }
     </script>
 
     <style>
