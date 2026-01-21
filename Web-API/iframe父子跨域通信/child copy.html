@@ -62,7 +62,7 @@
 
         .search-box input {
             width: 100%;
-            padding: 8px 30px 8px 30px;
+            padding: 8px 30px 8px 34px;
             border: 1px solid #d9d9d9;
             border-radius: 4px;
             outline: none;
@@ -96,12 +96,11 @@
             width: 16px;
             height: 16px;
             text-align: center;
-            line-height: 16px;
+            line-height: 13px;
         }
 
         .clear-icon:hover {
             color: red;
-            background: #ccc;
         }
 
         /* 树形视图 - 虚拟滚动 */
@@ -181,7 +180,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 8px 0;
+            padding: 4px 0;
             border-bottom: 1px solid #f9f9f9;
         }
 
@@ -238,7 +237,7 @@
 </head>
 
 <body>
-    <section class="container">
+    <div class="container">
         <!-- 左侧面板 -->
         <div class="left-panel">
             <div class="search-box">
@@ -263,11 +262,108 @@
                 <!-- 已选项目将渲染在这里 -->
             </div>
         </div>
-    </section>
+    </div>
 
     <script>
         // --- 配置 ---
-        const API_URL = 'https://cloudiam-dev.netapitest.com/third/index/get-depart-and-user-list?type=wechat&app=xnews&auth_corp_id=wp0nEPEgAAOnIX1_poIlPlXTecXEo-og';
+        const API_URL = '/api/org-structure'; // Todo: 真实上线时修改此API地址 mock: /api/org-structure
+        const USE_MOCK_SERVER = true;         // Todo: 真实上线时设为 false
+
+        // --- 模拟服务器设置 ---
+        if (USE_MOCK_SERVER) {
+            (function () {
+                console.log('--- 启用模拟服务器 ---');
+
+                // 生成大数据助手函数
+                function generateLargeData() {
+                    console.log('模拟服务器: 正在生成 10k 数据...');
+                    const roots = [];
+                    for (let i = 1; i <= 5; i++) {
+                        const root = {
+                            id: `root-${i}`,
+                            name: `总部机构 ${i}`,
+                            type: 'dept',
+                            expanded: false,
+                            children: []
+                        };
+                        for (let j = 1; j <= 20; j++) {
+                            const dept = {
+                                id: `dept-${i}-${j}`,
+                                name: `研发部门 ${i}-${j}`,
+                                type: 'dept',
+                                expanded: false,
+                                children: []
+                            };
+                            for (let k = 1; k <= 100; k++) {
+                                const user = {
+                                    id: `user-${i}-${j}-${k}`,
+                                    name: `工程师 ${i}-${j}-${k}`,
+                                    type: 'user',
+                                    expanded: false,
+                                    children: []
+                                };
+                                dept.children.push(user);
+                            }
+                            root.children.push(dept);
+                        }
+                        roots.push(root);
+                    }
+                    console.log('模拟服务器: 数据已生成。');
+                    return roots;
+                }
+
+                const mockData = generateLargeData();
+                const OriginalXHR = window.XMLHttpRequest;
+
+                // 拦截 XMLHttpRequest
+                window.XMLHttpRequest = class MockXHR extends OriginalXHR {
+                    constructor() {
+                        super();
+                        this._url = '';
+                        this._method = '';
+                    }
+
+                    open(method, url) {
+                        this._method = method;
+                        this._url = url;
+                        super.open(method, url);
+                    }
+
+                    send(body) {
+                        if (this._url === API_URL) {
+                            console.log(`模拟服务器: 拦截到请求 ${this._url}`);
+                            // 模拟网络延迟
+                            setTimeout(() => {
+                                // 我们无法轻易写入标准 XHR 的只读属性，
+                                // 但可以触发定义在 'this' 实例上的事件。
+
+                                // 创建响应
+                                const responseData = JSON.stringify(mockData);
+
+                                // 定义实例属性以覆盖原型 getter（如果需要），
+                                // 或者如果它们是可写的，直接设置即可。
+                                // 注意：在许多浏览器中这些是只读的。
+                                Object.defineProperty(this, 'responseText', { value: responseData, writable: true });
+                                Object.defineProperty(this, 'response', { value: responseData, writable: true });
+                                Object.defineProperty(this, 'status', { value: 200, writable: true });
+                                Object.defineProperty(this, 'readyState', { value: 4, writable: true });
+                                Object.defineProperty(this, 'statusText', { value: 'OK', writable: true });
+
+                                if (this.onreadystatechange) {
+                                    this.onreadystatechange();
+                                }
+                                if (this.onload) {
+                                    this.onload();
+                                }
+                            }, 500); // 500ms 延迟
+                        } else {
+                            // 放行未知请求
+                            super.send(body);
+                        }
+                    }
+                };
+            })();
+        }
 
         // --- 常量 ---
         const ITEM_HEIGHT = 32;
@@ -275,9 +371,9 @@
         // --- 状态 ---
         const state = {
             selectedIds: new Set(),
-            selectedNodes: [], // 选中的节点数据
-            treeData: [],      // 原始树结构
-            flatNodes: [],     // 扁平化后的渲染节点
+            selectedNodes: [],
+            treeData: [],
+            flatNodes: [],
             searchKeyword: '',
             scrollTop: 0
         };
@@ -292,16 +388,7 @@
         const clearBtn = document.getElementById('clearBtn');
         const loadingEl = document.getElementById('loading');
 
-        // --- 辅助：获取节点唯一标识 ---
-        function getNodeId(node) {
-            return node.userid || node.id;
-        }
-
-        function getNodeType(node) {
-            return node.userid ? 'user' : 'dept';
-        }
-
-        // --- 获取数据 ---
+        // --- 获取数据 (真实代码) ---
         function fetchData() {
             loadingEl.style.display = 'block';
 
@@ -312,91 +399,35 @@
                     loadingEl.style.display = 'none';
                     if (xhr.status === 200) {
                         try {
-                            const res = JSON.parse(xhr.responseText);
-
-                            // 校验返回码 (后端: { code: 100, data: { depart: [...] } })
-                            if (res.code === 100 && res.data && res.data.depart) {
-                                // 直接使用后端数据结构
-                                const rawData = res.data.depart;
-
-                                // 初始化 expanded 状态 (默认折叠)
-                                initExpandedState(rawData);
-
-                                originalData = JSON.parse(JSON.stringify(rawData)); // 保存原始数据副本
-                                state.treeData = rawData;
-                                state.flatNodes = flattenTree(state.treeData);
-                                renderVirtualTree();
-                            } else {
-                                console.error('数据格式错误', res);
-                                alert('数据加载异常: ' + (res.msg || '格式不符'));
-                            }
+                            const data = JSON.parse(xhr.responseText);
+                            originalData = JSON.parse(JSON.stringify(data)); // 深拷贝作为主数据
+                            state.treeData = data;
+                            state.flatNodes = flattenTree(state.treeData);
+                            renderVirtualTree();
                         } catch (e) {
                             console.error('JSON 解析失败', e);
-                            alert('数据加载失败: JSON解析错误');
+                            alert('数据加载失败');
                         }
                     } else {
                         console.error('API 错误', xhr.status, xhr.statusText);
-                        alert('数据请求失败: ' + xhr.status);
+                        alert('数据请求失败');
                     }
                 }
             };
             xhr.onerror = function () {
                 loadingEl.style.display = 'none';
                 console.error('网络错误');
-                alert('网络错误，请检查连接');
+                alert('网络错误');
             };
             xhr.send();
         }
 
-        // 递归初始化 expanded = false
-        function initExpandedState(nodes) {
-            if (!nodes || nodes.length === 0) return;
-            for (const node of nodes) {
-                // 如果是部门
-                if (!node.userid) {
-                    node.expanded = false;
-                    if (node.children) initExpandedState(node.children);
-                }
-            }
-        }
-
         // --- 核心逻辑: 扁平化树 ---
         function flattenTree(nodes, level = 0, result = []) {
-            if (!nodes) return result;
-
             for (const node of nodes) {
-                const isUser = !!node.userid;
-                const type = isUser ? 'user' : 'dept';
-
-                // 添加当前节点到扁平列表
-                result.push({
-                    _raw: node, // 引用原始数据
-                    id: getNodeId(node),
-                    name: node.name,
-                    level: level,
-                    type: type,
-                    expanded: node.expanded
-                });
-
-                // 如果是部门且已展开，递归处理
-                if (!isUser && node.expanded) {
-                    // 1. 先处理子部门
-                    if (node.children && node.children.length > 0) {
-                        flattenTree(node.children, level + 1, result);
-                    }
-                    // 2. 再处理部门下的用户
-                    if (node.users && node.users.length > 0) {
-                        for (const user of node.users) {
-                            result.push({
-                                _raw: user,
-                                id: user.userid,
-                                name: user.name,
-                                level: level + 1,
-                                type: 'user',
-                                expanded: false
-                            });
-                        }
-                    }
+                result.push({ ...node, level });
+                if (node.expanded && node.children && node.children.length > 0) {
+                    flattenTree(node.children, level + 1, result);
                 }
             }
             return result;
@@ -406,82 +437,48 @@
         function filterData(nodes, keyword) {
             const result = [];
             for (const node of nodes) {
-                const isUser = !!node.userid;
                 const isMatch = node.name.toLowerCase().includes(keyword.toLowerCase());
 
-                if (isUser) {
-                    if (isMatch) {
-                        result.push({ ...node });
+                let filteredChildren = [];
+                let hasMatchingChildren = false;
+
+                if (node.children && node.children.length > 0) {
+                    filteredChildren = filterData(node.children, keyword);
+                    hasMatchingChildren = filteredChildren.length > 0;
+                }
+
+                if (isMatch || hasMatchingChildren) {
+                    const newNode = { ...node, children: filteredChildren };
+                    if (hasMatchingChildren) {
+                        newNode.expanded = true;
                     }
-                } else {
-                    let filteredChildren = [];
-                    if (node.children) {
-                        filteredChildren = filterData(node.children, keyword);
-                    }
-
-                    let filteredUsers = [];
-                    if (node.users) {
-                        filteredUsers = filterData(node.users, keyword);
-                    }
-
-                    const hasMatchingChildren = filteredChildren.length > 0 || filteredUsers.length > 0;
-
-                    if (isMatch || hasMatchingChildren) {
-                        const newDept = { ...node };
-                        newDept.children = filteredChildren;
-                        newDept.users = filteredUsers;
-
-                        if (hasMatchingChildren) {
-                            newDept.expanded = true;
-                        }
-
-                        result.push(newDept);
-                    }
+                    result.push(newNode);
                 }
             }
             return result;
         }
 
         // --- 虚拟渲染 ---
-        /**
-         * 虚拟列表渲染核心函数
-         * 原理：只渲染当前可视区域内的节点，大大提高大数据量下的性能。
-         */
         function renderVirtualTree() {
-            // 1. 获取可视区域的高度
             const viewportHeight = treeViewport.clientHeight;
-
-            // 2. 计算列表总高度 (item数量 * 单行高度)
-            // treePhantom 用于撑开容器滚动条
             const totalHeight = state.flatNodes.length * ITEM_HEIGHT;
+
             treePhantom.style.height = `${totalHeight}px`;
 
-            // 3. 计算当前滚动位置对应的起始索引
             const scrollTop = treeViewport.scrollTop;
-            // 向下取整，确保顶部未显示完整的项也被计算在内（或不渲染）
             const startIndex = Math.floor(scrollTop / ITEM_HEIGHT);
-
-            // 4. 计算结束索引
-            // 它是 起始索引 + (可视区域能容纳的行数) + 缓冲行(这里+1)
             const endIndex = Math.min(state.flatNodes.length, Math.ceil((scrollTop + viewportHeight) / ITEM_HEIGHT) + 1);
 
-            // 5. 使用 DocumentFragment 批量构建 DOM，减少重排重绘
             const fragment = document.createDocumentFragment();
 
             for (let i = startIndex; i < endIndex; i++) {
-                if (i >= state.flatNodes.length) break;
-
                 const flatNode = state.flatNodes[i];
                 const nodeEl = createNodeElement(flatNode);
                 fragment.appendChild(nodeEl);
             }
 
-            // 6. 更新内容区域
             treeContent.innerHTML = '';
             treeContent.appendChild(fragment);
-
-            // 7. 使用 translateY 偏移内容区域，使其在滚动容器中处于正确位置
-            // 因为内容区域实际上只有可视区域那么高，所以需要移动到视窗位置
             treeContent.style.transform = `translateY(${startIndex * ITEM_HEIGHT}px)`;
         }
 
@@ -490,12 +487,8 @@
             row.className = 'tree-node';
             row.style.paddingLeft = `${flatNode.level * 20}px`;
 
-            const raw = flatNode._raw;
-            // 判断是否含有子节点（仅针对部门）
-            const hasChildren = !flatNode.type.includes('user') &&
-                ((raw.children && raw.children.length > 0) || (raw.users && raw.users.length > 0));
-
             const toggleBtn = document.createElement('div');
+            const hasChildren = flatNode.children && flatNode.children.length > 0;
             toggleBtn.className = `toggle-icon ${hasChildren ? (flatNode.expanded ? 'expanded' : '') : 'leaf'}`;
             toggleBtn.textContent = '▶';
             toggleBtn.onclick = (e) => {
@@ -515,130 +508,67 @@
             name.style.marginLeft = '4px';
             row.appendChild(name);
 
-            // --- 选中状态 ---
-            // 只有人员 (type === 'user') 才允许被选中
-            if (flatNode.type === 'user') {
-                const isSelected = state.selectedIds.has(flatNode.id);
-                const check = document.createElement('div');
-                check.className = `check-mark ${isSelected ? 'checked' : ''}`;
-                check.textContent = '✓';
-                row.appendChild(check);
+            const isSelected = state.selectedIds.has(flatNode.id);
+            const check = document.createElement('div');
+            check.className = `check-mark ${isSelected ? 'checked' : ''}`;
+            check.textContent = '✓';
+            row.appendChild(check);
 
-                // 点击行触发选择逻辑
-                row.onclick = () => {
-                    handleCheck(flatNode);
-                };
-            } else {
-                // 部门行点击只触发展开/收起 (如果有子节点)
-                row.style.cursor = hasChildren ? 'pointer' : 'default'; // 优化光标样式
-                row.onclick = () => {
-                    if (hasChildren) toggleNode(flatNode.id);
-                }
-            }
+            row.onclick = () => {
+                handleCheck(flatNode);
+            };
 
             return row;
         }
 
         // --- 交互逻辑 ---
-        /**
-         * 切换节点的展开/收起状态
-         * @param {string|number} id - 节点ID
-         */
         function toggleNode(id) {
-            // 递归查找并切换 expanded 状态
             function toggle(nodes) {
-                if (!nodes) return false;
                 for (const node of nodes) {
-                    // id 作为唯一标识符进行匹配
-                    if (getNodeId(node) === id) {
+                    if (node.id === id) {
                         node.expanded = !node.expanded;
                         return true;
                     }
-                    // 仅在子部门中继续递归查找，用户节点无 children
                     if (node.children && toggle(node.children)) return true;
                 }
                 return false;
             }
-
-            // 执行切换
             toggle(state.treeData);
-            // 重新计算扁平化节点列表，以更新视图
             state.flatNodes = flattenTree(state.treeData);
-            // 触发重新渲染
             renderVirtualTree();
         }
 
-        /**
-         * 处理节点选中/取消选中的逻辑
-         * @param {Object} flatNode - 扁平化后的节点对象(包含渲染信息)
-         */
-        function handleCheck(flatNode) {
-            // 再次防御性判断，仅允许 type='user'
-            if (flatNode.type !== 'user') return;
-
-            const id = flatNode.id;
-            const raw = flatNode._raw; // 获取原始数据对象
-
+        function handleCheck(node) {
+            const id = node.id;
             if (state.selectedIds.has(id)) {
-                // 如果 ID 已存在，表示这是一个取消操作
                 state.selectedIds.delete(id);
-                // 移除时这里用 id 判断 (因为 selectedNodes 里的 id 现在已经改名后的 id)
                 state.selectedNodes = state.selectedNodes.filter(n => n.id !== id);
             } else {
-                // 否则是一个选中操作
                 state.selectedIds.add(id);
-
-                // 构造选中的数据对象
-                const selectedNode = {
-                    ...raw,               // 展开原始数据的所有字段
-                    type: 'user',
-                    id: raw.userid || raw.id // 强制将 output 的 ID 字段统一为 'id'
-                    // 如果原始数据里有 open_userid 或 userid，这里会保留它们 (通过 ...raw)
-                    // 如果需要替换或删除，可以在下面 delete
-                };
-
-                // 将 open_userid 字段也改为 id (如果存在)
-                // 用户要求: "open_userid 字段名改为 id"
-                // 实际上我们已经在上面把主键设为 id 了。
-                // 如果需要严格清理旧字段名：
-                delete selectedNode.userid;
-                delete selectedNode.open_userid;
-
-                state.selectedNodes.push(selectedNode);
+                state.selectedNodes.push({ id: node.id, name: node.name, type: node.type });
             }
-
-            // 更新虚拟列表（刷新勾选图标状态）
             renderVirtualTree();
-            // 更新右侧已选列表视图
             renderSelectedList();
         }
 
-        /**
-         * 渲染右侧已选人员/部门列表
-         */
         function renderSelectedList() {
-            // 更新计数器
             selectedCountEl.textContent = state.selectedIds.size;
             selectedListEl.innerHTML = '';
 
-            // 限制渲染数量，避免大量选中时 DOM 卡顿
             const MAX_RENDER = 200;
             const itemsToRender = state.selectedNodes.slice(0, MAX_RENDER);
 
             const fragment = document.createDocumentFragment();
-
-            // 遍历构建 DOM
             itemsToRender.forEach(node => {
                 const item = document.createElement('div');
                 item.className = 'selected-item';
 
-                // 左侧信息区 (图标 + 名称)
                 const info = document.createElement('div');
                 info.className = 'item-info';
 
                 const icon = document.createElement('span');
                 icon.className = `u-icon ${node.type}`;
-                icon.textContent = node.type === 'dept' ? '📂' : '👤'; // 实际上现在只有 user
+                icon.textContent = node.type === 'dept' ? '📂' : '👤';
 
                 const name = document.createElement('span');
                 name.textContent = node.name;
@@ -647,16 +577,12 @@
                 info.appendChild(icon);
                 info.appendChild(name);
 
-                // 右侧移除按钮
                 const remove = document.createElement('div');
                 remove.className = 'remove-btn';
                 remove.textContent = '×';
                 remove.onclick = () => {
-                    // 点击移除
                     state.selectedIds.delete(node.id);
                     state.selectedNodes = state.selectedNodes.filter(n => n.id !== node.id);
-
-                    // 同步更新两个视图
                     renderVirtualTree();
                     renderSelectedList();
                 };
@@ -680,7 +606,7 @@
 
         // --- 搜索 ---
         let debounceTimer = null;
-        let originalData = null;
+        let originalData = null; // 用于存储 fetch 后的初始数据
 
         searchInput.addEventListener('input', (e) => {
             const keyword = e.target.value.trim();
@@ -703,10 +629,14 @@
         });
 
         function performSearch(keyword) {
-            if (!originalData && state.treeData.length > 0) { }
+            // 需要原始数据引用
+            // 如果我们正在搜索...
+            if (!originalData && state.treeData.length > 0) {
+                // 首次搜索?
+            }
 
             if (!keyword) {
-                state.treeData = JSON.parse(JSON.stringify(originalData));
+                state.treeData = originalData;
             } else {
                 state.treeData = filterData(originalData, keyword);
             }
@@ -721,7 +651,7 @@
         });
 
         // --- 初始化 ---
-        fetchData();
+        fetchData(); // 启动时加载数据
 
         // --- API (PostMessage 通信) ---
         window.addEventListener('message', (event) => {
