@@ -22,37 +22,45 @@
 
         了解更多：https://cloud.tencent.com/developer/article/2436905
     </pre>
-    <button id="insert-btn">插入100000个DIV元素 - 普通插入</button>
-    <button id="insert-btn2">插入100000个DIV元素 - 高阶函数插入</button>
-    <button id="insert-btn3">插入100000个DIV元素 - 通用高阶函数插入</button>
+    <button id="insert-btn">插入200000个DIV元素 - 普通插入(主线程会卡住) <b id="time1"></b></button>
+    <button id="insert-btn2">插入200000个DIV元素 - 高阶函数插入 <b id="time2"></b></button>
+    <button id="insert-btn3">插入200000个DIV元素 - 通用高阶函数插入 <b id="time3"></b></button>
 
     <script>
         // 普通插入
         {   
+            const time1 = document.querySelector('#time1');
+            const time2 = document.querySelector('#time2');
+            const time3 = document.querySelector('#time3');
+
             const insert_btn = document.querySelector('#insert-btn');
-            const data = new Array(100000).fill(0).map((_, i) => i);
+            const data = new Array(200000).fill(0).map((_, i) => i);
 
             insert_btn.onclick = () => {
+                const start = performance.now();
                 for (const i of data) {
                     const div = document.createElement('div');
                     div.innerText = i;
                     document.body.append(div);
                 }
+                time1.innerText = `耗时: ${performance.now() - start} 毫秒`;
             }
         };
 
         // 高阶函数插入
         {
             const insert_btn = document.querySelector('#insert-btn2');
-            const data = new Array(100000).fill(0).map((_, i) => i);
+            const data = new Array(200000).fill(0).map((_, i) => i);
 
             insert_btn.onclick = () => {
+                const start = performance.now();
                 // 调用高阶函数
                 performChunk(data, (item, i) => {
                     const div = document.createElement('div');
                     div.innerText = i;
                     document.body.append(div);
                 })
+                time2.innerText = `耗时: ${performance.now() - start} 毫秒`;
             }
 
             function performChunk(data, call) {
@@ -86,9 +94,10 @@
          // 通用高阶函数插入
          {
             const insert_btn = document.querySelector('#insert-btn3');
-            const data = new Array(100000).fill(0).map((_, i) => i);
+            const data = new Array(200000).fill(0).map((_, i) => i);
 
             insert_btn.onclick = () => {
+                const start = performance.now();
                 // 调度器
                 const scheduler = (task) => {
                     // 分片（任务间隔调用）
@@ -97,6 +106,7 @@
                         // 设置每个分片要执行的时间
                         task(() => performance.now() - now <= 10)
                     }, 1000);
+                     time3.innerText = `耗时: ${performance.now() - start} 毫秒`;
                 }
                 // 调用高阶函数
                 performChunk(data, (item, i) => {
@@ -104,6 +114,7 @@
                     div.innerText = i;
                     document.body.append(div);
                 }, scheduler)
+               
             }
 
             function performChunk(data, call, scheduler) {
