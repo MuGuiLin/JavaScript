@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>高阶函数之数字改变动画</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        h1, h2 {
+            text-align: center;
+        }
+        h2 {
+            font: 10vw sans-serif;
+            color: blue;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>高阶函数之数字改变动画</h1>
+    <hr />
+    <p>
+        什么是高阶函数：
+        1、将函数作为参数传递接收的函数
+        2、返回值是一个新的函数的函数
+    </p>
+    <button id="btn">数字动画</button>
+    <h2 id="num"></h2>
+
+    <script>
+        // 创建数字动画的高阶函数
+        const animate = (from = 0, to = 100, duration = 300, callback) => {
+            /*
+             * from 起始值
+             * to 目标值
+             * duration 动画时间（在duration毫秒内完成动画）
+             * callback 回调函数（高阶函数）
+             */
+
+            let v = from;
+
+            // 获取开始时间
+            const start_time = Date.now() || performance.now();
+
+            // 速度 = (目标值 - 起始值) / 动画时间
+            const move_speed = (to - from) / duration;
+
+            // 让v一点一点的增加
+            function _run() {
+                // 1 让v变化 
+                const time = Date.now() - start_time;
+
+                // 3.判断是否结束
+                if (time >= duration) {
+                    v = to;
+                    callback && callback(v);
+                    // 停止动画
+                    return cancelAnimationFrame(_run);
+                }
+                // from + 速度 * 时间
+                v = from + move_speed * time;
+                // console.log(v);
+
+                // 执行回调
+                callback && callback(v);
+
+                // 2.下一帧动画
+                requestAnimationFrame(_run);
+
+            }
+            _run();
+        }
+
+        const btn = document.querySelector('#btn');
+        const num = document.querySelector('#num');
+        btn.onclick = () => {
+            animate(0, 9999999, 9000, (current) => {
+                num.innerText = current.toFixed(2);
+            })
+        }
+
+    </script>
+</body>
+
+</html>
