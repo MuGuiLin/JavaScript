@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AbortController取消HTTP请求</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>fetch被abort()后无法“恢复”只能重新发起请求</h1>
+    <hr>
+    <p>在JavaScript中，使用AbortController和axios库来取消HTTP请求是一种常见的做法，特别是在需要中断长时间运行或不必要的请求时。</p>
+    <h5>controller.abort() 是不可逆的操作：一旦调用，当前的 AbortController 和关联的 fetch 请求会永久终止，不能恢复 / 重启这个已终止的请求。</h5>
+    <pre>
+
+    唯一的解决办法：创建新的 AbortController + 重新调用 fetch。
+   
+    核心原理：
+        abort() 会让请求抛出 AbortError 异常
+        原控制器失效，必须新建实例才能发起新请求
+        恢复 = 重新执行请求逻辑
+
+    </pre>
+    <button id="send">发起/重发HTTP请求</button>
+    <button id="cancel">取消HTTP请求</button>
+    <h2 id="h2"></h2>
+
+    <script>
+        {
+            // 1. 定义请求变量（方便复用）
+            let controller; // 当前控制器
+            let requestUrl = "https://jsonplaceholder.typicode.com/todos/1";
+
+            // 2. 发起/恢复请求的函数
+            async function startFetch() {
+                // ✅ 关键：每次都创建 NEW 控制器！
+                controller = new AbortController();
+                const signal = controller.signal;
+
+                try {
+                    console.log("请求开始");
+                    h2.innerText = "请求开始"
+
+                    const response = await fetch(requestUrl, { signal });
+                    const data = await response.json();
+                    console.log("请求成功：", data);
+
+                    h2.innerText = JSON.stringify(data);
+
+                } catch (err) {
+                    if (err.name === "AbortError") {
+                        console.warn("请求已手动中止（可恢复）");
+                        h2.innerText = "请求已手动中止" + JSON.stringify(err);
+                    } else {
+                        console.error("请求失败：", err);
+                    }
+                }
+            }
+
+            // 3. 中止请求
+            function stopFetch() {
+                if (controller) {
+                    controller.abort(); // 终止当前请求
+                }
+            }
+
+            // 发起HTTP请求
+            send.onclick = async () => {
+                startFetch();   // 发起请求， 再次调用 = 恢复/重新请求
+            }
+
+            // 取消HTTP请求
+            cancel.onclick = () => {
+                stopFetch();  // 中途调用 = 中止
+                console.log('取消请求', controller)
+            }
+        }
+    </script>
+</body>
+
+</html>

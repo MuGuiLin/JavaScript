@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AbortController取消HTTP请求</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>AbortController取消HTTP请求</h1>
+    <hr>
+    <p>在JavaScript中，使用AbortController和axios库来取消HTTP请求是一种常见的做法，特别是在需要中断长时间运行或不必要的请求时。</p>
+    <pre>
+    /**
+        * 注意：在调用  controller.abort () 之后，这个 fetch 无法恢复！！
+        * 
+        * 因为：AbortController 是一次性的，一旦 abort，这个请求 / 连接就永久作废，不能重启、不能恢复。
+        * 
+        * 具体为什么不能恢复？
+        *      - abort() 会彻底关闭连接
+        *      - 被中止的 signal 会永久标记为已中止
+        *      - 同一个 fetch 无法再次启动
+        *      - 没有 undo /resume 方法
+        *      - 这是浏览器标准设计，没有任何办法恢复。
+    */
+    </pre>
+    <button id="send">发起HTTP请求</button>
+    <button id="cancel">取消HTTP请求</button>
+    <h2 id="h2"></h2>
+    
+    <script>
+        const api = 'https://jsonplaceholder.typicode.com/todos/1'
+        {
+            // 创建AbortController实例
+            const controller = new AbortController();
+
+            // 发起HTTP请求
+            send.onclick = async () => {
+                console.log('发起请求...');
+                h2.innerText = "发起请求..."
+
+                fetch(api, {
+                    signal: controller.signal  // 绑定signal
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log('请求成功:', data);
+                        h2.innerText = JSON.stringify(data);
+                    })
+                    .catch(error => {
+                        if (error.name === 'AbortError') {
+                            console.warn('请求已被主动中止！');
+                            h2.innerText = "请求已手动中止" + JSON.stringify(error);
+                        } else {
+                            console.error('请求失败：', error);
+                        }
+                    });
+            }
+
+            // 取消HTTP请求
+            cancel.onclick = () => {
+                // 当你想要取消请求时，调用AbortController实例上的abort()方法。这应该在不再需要响应时执行
+                controller.abort(); // 调用 abort() 会自动移除所有通过该 signal 绑定的监听器
+
+                /**
+                 * 注意：在调用  controller.abort () 之后，这个 fetch 无法恢复！！
+                 * 
+                 * 因为：AbortController 是一次性的，一旦 abort，这个请求 / 连接就永久作废，不能重启、不能恢复。
+                 * 
+                 * 具体为什么不能恢复？
+                 *      - abort() 会彻底关闭连接
+                 *      - 被中止的 signal 会永久标记为已中止
+                 *      - 同一个 fetch 无法再次启动
+                 *      - 没有 undo /resume 方法
+                 *      - 这是浏览器标准设计，没有任何办法恢复。
+                */
+                console.log('取消请求', controller)
+            }
+        }
+
+        // 同时中止多个请求
+        {
+            const controller = new AbortController();
+            const { signal } = controller;
+            // 多个请求共用同一个 signal
+            const req1 = fetch(api, { signal });
+            const req2 = fetch(api, { signal });
+
+            Promise.all([req1, req2])
+                .then(responses => Promise.all(responses.map(r => r.json())))
+                .catch(err => {
+                    if (err.name === 'AbortError') console.log('所有请求已中止');
+                });
+
+            // 一键中止所有
+            controller.abort(); // 调用 abort() 会自动移除所有通过该 signal 绑定的监听器
+        }
+
+        // 自动超时中止
+        {
+            const controller = new AbortController();
+            const timeout = 5000; // 5秒超时
+
+            // 超时后自动中止
+            const timer = setTimeout(() => {
+                controller.abort('请求超时') // 调用 abort() 会自动移除所有通过该 signal 绑定的监听器
+            }, timeout);
+
+            fetch(api, { signal: controller.signal })
+                .then(res => res.json())
+                .finally(() => clearTimeout(timer)); // 清理定时器
+        }
+    </script>
+</body>
+
+</html>
