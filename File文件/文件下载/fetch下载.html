@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>fetch blob下载</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<style>
+		h1 {
+			text-align: center;
+		}
+
+		a {
+			display: block;
+			margin: 30px;
+			font-size: 18px;
+		}
+
+		input {
+			margin: 30px;
+			padding: 10px;
+			width: 360px;
+		}
+
+		button {
+			padding: 10px;
+		}
+
+		img {
+			max-width: 800px;
+		}
+
+		section {
+			padding: 50px;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>fetch blob下载</h1>
+	<hr />
+
+	<section>
+		<a href="./img/img.jpg" download>本地下载</a>
+
+		<a href="https://cn.bing.com/th?id=OHR.BanyakIslands_ZH-CN6620304821_1920x1080.jpg" download>跨域下载1（注：不是本域的文件，加上download属性，也会直接在浏览器中打开，当然，如果是后端API接口下载的话，可以让后端在响应头中加上content-Type为二进制类型）</a> 
+		
+		<a id="cross" download>跨域下载2（fetch blob下载）</a>
+
+		<input id="input" placeholder="请输入文件下载地址！" />
+
+		<button id="button">文件下载地址测试</button> <br />
+
+		<img id="img" />
+
+	</section>
+
+	<script>
+
+		async function download(url) {
+
+			const resp = await fetch(url || 'https://img.alicdn.com/imgextra/i3/399299073/O1CN01RHEk4l2GtULyZxBs3_!!399299073.jpg', {
+				// headers: {
+				// 	authorization: 'Bearer ' + localStorage.getItem('token')
+				// }
+			}).catch(() => {
+				alert("下载文件可能被做了防盗链！")
+			});
+
+			// 注：resp.blob()会把下载内容缓存到浏览器中（如果是上GB的大文件时，会有性能问题）
+			const blob = await resp.blob()
+			const src = URL.createObjectURL(blob)
+
+			const a = document.createElement('a')
+			a.download = "下载文件.jpg"
+			a.href = src
+			a.click()
+
+			cross.href = src
+			img.src = src
+		}
+
+		button.onclick = () => {
+			download(input.value)
+		}
+	</script>
+
+</body>
+
+</html>
