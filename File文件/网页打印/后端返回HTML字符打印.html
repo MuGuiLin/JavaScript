@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拖拽文件和文件夹</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        main {
+            text-align: center;
+        }
+
+        #box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 50px auto;
+            width: 800px;
+            height: 200px;
+            border-radius: 10px;
+            border: 1px solid gray;
+            cursor: pointer;
+        }
+
+        #box::after {
+            content: '🚀 请将文件 或 文件夹拖拽到此处！';
+            font-size: 22px;
+            color: gray;
+        }
+
+        .drop-enter {
+            box-shadow: 0 0 8px 0 green;
+        }
+
+        ul {
+            margin: auto;
+            width: 1000px;
+            text-align: left;
+        }
+
+        li {
+            margin-bottom: 30px;
+            line-height: 32px;
+            border-bottom: 1px solid gray;
+        }
+
+        li>b {
+            display: inline-block;
+            width: 500px;
+            line-height: 16px;
+            color: chocolate;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        li>i {
+            display: inline-block;
+            width: 300px;
+            color: blue;
+        }
+
+        li>q {
+            padding-left: 20px;
+            quotes: none;
+            /*去除q标签两边的""引号*/
+            color: green;
+        }
+    </style>
+</head>
+
+<body onload="window.print();" >
+    <h1>拖拽文件和文件夹</h1>
+    <hr />
+    <main>
+        <div id="box"></div>
+        <ul id="ul"></ul>
+    </main>
+
+    <script>
+        const box = document.querySelector('#box');
+        const ul = document.querySelector('#ul');
+
+        const formatFileSize = (size) => {
+            const KB = 1024,
+                MB = 1024 * KB,
+                GB = 1024 * MB,
+                TB = 1024 * GB;
+
+            if (size < KB) {
+                return `${size} B`;
+            } else if (size < MB) {
+                return `${(size / KB).toFixed(2)} KB`;
+            } else if (size < GB) {
+                return `${(size / MB).toFixed(2)} MB`;
+            } else if (size < TB) {
+                return `${(size / GB).toFixed(2)} GB`;
+            } else {
+                return `${(size / TB).toFixed(2)} TB`;
+            }
+        }
+        box.ondragenter = (e) => {
+            e.preventDefault();
+            e.target.classList.add('drop-enter');
+        };
+        box.ondragover = (e) => {
+            e.preventDefault();
+        };
+        box.ondragleave = (e) => {
+            e.preventDefault();
+            e.target.classList.remove('drop-enter');
+        };
+        box.ondrop = (e) => {
+            e.preventDefault();
+            e.target.classList.remove('drop-enter');
+
+            const items = e.dataTransfer.items;
+            console.log(items, items.length);
+
+            let li = ''
+            for (const item of items) {
+                const fileEntry = item.webkitGetAsEntry();
+                const f = item.getAsFile();
+
+                // 如果是文件
+                if (fileEntry.isFile) {
+                    li += `<li><b>文件名：${f.name}</b><i>文件类型：${f.type}</i><q>文件大小：${formatFileSize(f.size)}</q></li>`;
+                    // fileEntry.file((file) => {
+                    //     console.log(file);
+                    // });
+                } else {
+                    // 如果是文件夹，就读取文件夹
+                    const reader = fileEntry.createReader();
+                    console.info('文件夹递归获取文件', reader)
+                    reader.readEntries((entries) => {
+                        console.info('文件夹', entries);
+                        // entries.file((file) => {
+                        //     console.log(file);
+                        // });
+                    });
+                }
+            }
+            ul.innerHTML = li;
+        }
+    </script>
+</body>
+
+</html>

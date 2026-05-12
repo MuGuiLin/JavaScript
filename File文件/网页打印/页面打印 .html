@@ -1,0 +1,440 @@
+<html data-immersive-translate-page-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <title>打印预览</title>
+    <style>
+        /* 页面方向设置 */
+        @media print {
+            @page {
+                size: A4;
+                /* 纸张大小A4（210mm * 297mm） */
+                margin: 65px 10mm 10mm 10mm;
+
+                /*使用counter()页面计数器，来计算每页当前page页码 和 pages总页数*/
+                /* @top-left { */
+                /* @top-center { */
+                @top-right {
+                    /* @bottom-left { */
+                    /* @bottom-center { */
+                    /* @bottom-right { */
+                    content: "第 " counter(page) " 页 / 共 " counter(pages) " 页";
+                    font-size: 14px;
+                    color: #333;
+                }
+            }
+
+            body {
+                padding: 0;
+                -webkit-print-color-adjust: exact;
+            }
+
+            .page-break {
+                page-break-after: always;
+            }
+
+            .fixed-header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+            }
+
+            .screen-page-number {
+                display: none;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            font-family: "SimSun", "宋体", serif;
+            padding: 20px;
+            counter-reset: page;
+        }
+
+        .print-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100%;
+        }
+
+        .watermark {
+            position: fixed;
+            color: rgba(150, 150, 150, 0.5);
+            font-size: 18px;
+            font-weight: bold;
+            transform: rotate(-45deg);
+            pointer-events: none;
+            z-index: 1000;
+            white-space: nowrap;
+        }
+
+        .watermark-top-left {
+            top: 5%;
+            left: -3%;
+        }
+
+        .watermark-bottom-right {
+            bottom: 5%;
+            right: -3%;
+        }
+
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 15px 20px;
+            z-index: 999;
+            border-bottom: 1px solid #eee;
+
+            .header-content {
+                max-width: 800px;
+                margin: 0 auto;
+                text-align: center;
+            }
+
+            .date {
+                color: #666;
+                margin-bottom: 5px;
+                font-size: 14px;
+            }
+
+            .company {
+                margin-bottom: 5px;
+                font-size: 14px;
+                font-family: '黑体';
+            }
+
+            h1 {
+                font-size: 18px;
+                margin-bottom: 5px;
+            }
+        }
+
+        .screen-page-number {
+            position: fixed;
+            top: 10px;
+            right: 20px;
+            font-size: 14px;
+            color: #333;
+            z-index: 1000;
+        }
+
+        .print-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-top: 70px;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+
+            td {
+                padding: 8px 0;
+                vertical-align: top;
+            }
+
+            .label {
+                width: 100px;
+                font-weight: bold;
+            }
+        }
+
+        .content-section {
+            margin-bottom: 30px;
+
+            .title {
+                font-weight: bold;
+                border-bottom: 1px solid #333;
+                padding-bottom: 5px;
+                margin-bottom: 15px;
+            }
+
+            .content {
+                line-height: 1.6;
+            }
+        }
+
+        .audit-section {
+            margin-bottom: 30px;
+
+            .title {
+                font-weight: bold;
+                border-bottom: 1px solid #333;
+                padding-bottom: 5px;
+                margin-bottom: 15px;
+            }
+
+            .audit-content {
+                margin-bottom: 15px;
+            }
+
+            .audit-divider {
+                border-bottom: 1px solid #333;
+            }
+        }
+
+        .footer-note {
+            margin-top: 30px;
+        }
+
+        .footer-note .audio-band-code {
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 固定的公共头部，打印时每页头部都会有的内容 -->
+    <div class="fixed-header">
+        <div class="header-content">
+            <div class="date">2026年05月12日 11:20</div>
+            <div class="company">上海东方广播有限公司</div>
+            <h1>广播广告审核录制单</h1>
+        </div>
+    </div>
+
+    <!-- 固定的公共头部，通过CSS动态计算每页当前页码是第几页 和总页数 -->
+    <div class="screen-page-number">第 1 页 / 共 5 页</div>
+
+    <div class="print-container">
+
+        <!-- 设置页面左上角的水印内容 -->
+        <div class="watermark watermark-top-left">广播广告文稿审核单</div>
+        <!-- 设置页面右下角的水印内容 -->
+        <div class="watermark watermark-bottom-right">广播广告文稿审核单</div>
+
+        <div class="print-header"></div>
+
+        <table class="info-table">
+            <tbody>
+                <tr>
+                    <td class="label">插播品牌：</td>
+                    <td></td>
+                    <td class="label">文稿带号：</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">素材名称：</td>
+                    <td>长文本</td>
+                    <td class="label">广告长度：</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">播出形式：</td>
+                    <td></td>
+                    <td class="label">有效期限：</td>
+                    <td>2026-05-11-2026-08-09</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="content-section">
+            <div class="title">文稿内容：</div>
+            <div class="content">文丨苏扬<br>
+                <br>
+                编辑丨徐青阳<br>
+                <br>
+                市值不断创新高的SK海力士，“年终奖预测”给火爆的存储再添一些戏剧性。<br>
+                <br>
+                日前，消息称受AI驱动的存储需求暴涨的牵引，作为核心存储供应商的韩国企业SK海力士，2026年营业利润上限有望达到250万亿韩元，按照10%的分红规则，人均年终奖最高有望超过300万元。<br>
+                <br>
+                <img src="../文件下载/img/img.jpg" width="100%" alt="" /><br>
+                SK海力士业绩数据<br>
+                <br>
+                韩媒援引婚介公司的观点，称“SK海力士员工匹配的相亲，现在是无条件的A级”，综艺节目更是调侃SK海力士的马甲工服“含金量十足”。<br>
+                <br>
+                投行麦格理证券更是预测，SK海力士2027年营业利润将达到447万亿韩元，如果分红规则不变，2027年，人均可发放奖金约12.9亿韩元，接近610万人民币。<br>
+                <br>
+                在给《第一财经》的回应中，SK海力士确认了按营业利润10%分工规则的真实性，并强调由于2026年与明年的年度业绩尚未确定，奖金规模也无法预测，委婉地否认了610万元人民币奖金包的准确性。<br>
+                <br>
+                高额的年终奖预测未必属实，但中、韩两地员工的奖金存在明显差异。<br>
+                <br>
+                “他们已经取消奖金上限了，但国内的奖金上不去，”一位知情人士说，“韩国一年结算一次，中国这边是一年两次。”<br>
+                <br>
+                该知情人士透露，如果他们发300万奖金的话，中国员工5%都不到，折算下来15万元左右。“不是说奖金每个人都是15万，会根据评级去适当调整。<br>
+                <br>
+                <br>
+                超级周期下的存储产业，高额年终奖的预期引发媒体报道，称存储已经超越医生律师，成为韩国相亲市场上丈母娘最偏爱的职位。<br>
+                <br>
+                只不过，和现在的火热相比，存储下行周期又是另外一番景象。<br>
+                <br>
+                2023财年，全球半导体行业处于“寒冬期”，SK海力士年总营收同比下降约27%至32.77万亿韩元，净亏损达9.14万亿韩元。这种背景下，可能会面临无年终奖的情况。<br>
+                <br>
+                关于被热炒的“人均300万+，600万+的年终奖”话题，多位从业者都提出了质疑，强调人均不具有参考性。<br>
+                <br>
+                “人均有可能，但肯定不可能是每个人300万元，这里面高管拿得多，工程师几十万，作业员10万也可以了。”一位半导体从业者说。“以台积电工程师为例，全年算下来100万元人民币是有的。”<br>
+                <br>
+                “网上发的，和实际数字差距太大。”前述知情人士解释中韩员工年终奖差异的时说，“他们（韩国员工）月薪高，奖金都是按年薪的比重来发的。”<br>
+                <br>
+                目前，SK海力士在中国大陆主要有三座工厂，分别位于无锡、大连、重庆，其中无锡主要是DRAM业务，大连为收购英特尔资产后组建的Solidigm的NAND工厂，重庆厂是封测基地，深圳北京上海都有销售公司提供技术支持。<br>
+                <br>
+                <img src="../文件下载/img/img.jpg" width="100%" alt="" /><br>
+                <br>
+                根据猎聘网刊登的大连工厂招聘信息，相关工程师岗位月薪资普遍在1-3万元区间，承诺发放13薪，高级工程师岗位月薪最高可以达到3.5万元。<br>
+                <br>
+                薪资之外，SK海力士也为中国员工提供了年休假等常规福利，例如销售等支持性岗位不用加班，但没有股票等相关的激励。<br>
+                <br>
+                “管理层都有，但都是韩国人，中国人不能做管理层。”前述知情人士强调。<br>
+                <br>
+                多位韩国企业的前员工都表示，公司基本不向中国员工提供股票激励，在一位前三星员工看来，中国公司更像是一个销售主体、类似国家级代理商的概念。<br>
+                <br>
+                “现在也有中国大陆人进入中层，台积电也是如此，”前台积电建厂专家、蓉和半导体咨询CEO吴梓豪说，“韩国厂韩国人多，优先用很正常，随着在大陆越做越久，本土管理干部也会起来，不是这么绝对。”<br>
+                <br>
+                从行业和企业的预判来看，未来2-3年，存储都会是持续火热的议题，“婚恋梗” “工服梗”都会不断地出现。<br>
+                <br>
+                一季度业绩会上，SK海力士首席财务官表示，未来3年以HBM为代表的需求大概率将持续超过供给，而且相关增长都会继续围绕to B的需求来展开，这个信号也体现在SK海力士的官方新闻稿中。<br>
+                <br>
+                SK海力士表示：“尽管第一季度通常是季节性淡季，但在人工智能（AI）基础设施投资扩大的推动下，市场需求持续强劲。公司通过扩大高带宽存储器（HBM）、大容量服务器DRAM模块、企业级固态硬盘（eSSD）等高附加值产品的销售，延续了业绩上升势头。”<br>
+                <br>
+                概括来说，上述都是典型的to B客户需求。<br>
+                <br>
+                这也就意味着， 如果SK海力士这样的存储原厂，不加大对消费级产品提供产能支持，前期我们一直在讨论的内存涨价这个话题，会持续冲击消费级产品进而推动产品涨价潮，“电子黄金”就会持续困扰赛博玩家。<br>
+                <br>
+                <img src="../文件下载/img/img.jpg" width="100%" alt="" /><br>
+                推荐阅读<br>
+                <br>
+                <br>
+                一年股价翻3倍，陈立武“重置”英特尔，为苹果造“美国芯”<br>
+                <br>
+                <br>
+                50年前的芯片赌注，让三星闯入“万亿俱乐部”<br>
+                <br>
+                <br>
+                苏姿丰交出超预期财报：数据中心业务暴涨57%，AMD加码AI基建<br>
+                <br>
+                <br>
+                <br>
+                留言 16<br>
+                写留言<br>
+                <br>
+                nono1234<br>
+                广东<br>
+                3小时前<br>
+                170<br>
+                不懂就问：有过发这么多奖金的国产厂商吗？<br>
+                <br>
+                镜<br>
+                广东<br>
+                2小时前<br>
+                59<br>
+                寒武纪？国内奖金越多越低调。2025渤海租赁人均薪酬222.68万，百济神州94.63万…也有韩国人吃不起泡菜，大厂就那么些。想想怎么把SK海力士国产替代了<br>
+                <br>
+                Sumitomo<br>
+                山东<br>
+                2小时前<br>
+                85<br>
+                回复 镜：人均薪酬跟全体员工发奖金是一个概念？<br>
+                1条回复<br>
+                <br>
+                蓝衣人<br>
+                四川<br>
+                3小时前<br>
+                109<br>
+                和中国同行比呢？<br>
+                <br>
+                Sea<br>
+                浙江<br>
+                3小时前<br>
+                55<br>
+                正常，本来就是按照当地标准来，真按照总部标准发奖金，也就换一批更高标准的人才了<br>
+                <br>
+                LinChen<br>
+                浙江<br>
+                3小时前<br>
+                18<br>
+                有就行了<br>
+                <br>
+                Mr.王<br>
+                江苏<br>
+                3小时前<br>
+                14<br>
+                人均10-15万，也不少了<br>
+                <br>
+                Fang Bin<br>
+                上海<br>
+                3小时前<br>
+                14<br>
+                中国区销售为啥不去倒货呢？不拿奖金到这个更好<br>
+                <br>
+                少华有钱花<br>
+                天津<br>
+                3小时前<br>
+                12<br>
+                消费端在减少产能，以后消费电子的存储就国产的了<br>
+                <br>
+                赵磊多可爱<br>
+                河南<br>
+                3小时前<br>
+                10<br>
+                也是件好事，刺激人才、资源往芯片领域流动<br>
+                <br>
+                Sushi Killer<br>
+                广东<br>
+                3小时前<br>
+                8<br>
+                发展好自己的产业就行了，是短板就补短板<br>
+                <br>
+                江西<br>
+                1小时前<br>
+                2<br>
+                “人均”，这不是搞笑吗？<br>
+                <br>
+                琦玉sensei<br>
+                湖南<br>
+                3小时前<br>
+                1<br>
+                都去建存储厂吧
+                <br>
+                有点意思<br>
+                山西<br>
+                2小时前<br>
+                3<br>
+                好多厂都搬到贵州去了
+                <br>
+                小喵喵<br>
+                江苏<br>
+                2小时前<br>
+                1<br>
+                嗯嗯，好像是的哦！<br>
+                <img src="../文件与二进制.png" width="100%" alt="" />
+            </div>
+        </div>
+
+        <div class="audit-section">
+            <div class="title">文稿审核：</div>
+            <div class="audit-content">
+                <div style="margin-bottom: 10px;">沐枫 一审 2026-05-12 15:28</div>
+                <div style="margin-bottom: 10px;">沐枫 二审 2026-05-12 15:28</div>
+                <div style="margin-bottom: 10px;">沐枫 三审 2026-05-12 15:28</div>
+            </div>
+            <div class="audit-divider"></div>
+        </div>
+
+        <div class="footer-note">
+            <span class="title">关联音频带号：</span>
+            <span class="audio-band-code">0226040410001398</span>
+        </div>
+    </div>
+
+    <!-- 打开页面自动执行打印打操作 -->
+    <script>document.addEventListener("DOMContentLoaded", window.print())</script>
+</body>
+
+</html>
