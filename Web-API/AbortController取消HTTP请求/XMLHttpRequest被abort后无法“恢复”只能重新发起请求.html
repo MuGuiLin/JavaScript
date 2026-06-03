@@ -15,7 +15,7 @@
 <body>
     <h1>XMLHttpRequest被abort()后无法“恢复”只能重新发起请求</h1>
     <hr>
-    <p>在JavaScript中，使用AbortController和axios库来取消HTTP请求是一种常见的做法，特别是在需要中断长时间运行或不必要的请求时。</p>
+    <a target="_blank" href="https://htmlspecs.com/xhr/">XMLHttpRequest API 现行标准</a>
     <h5>使用XMLHttpRequest请求时，如果该请求已被发出，XMLHttpRequest.abort() 方法将终止该请求。当一个请求被终止，它的 readyState 将被置为 XMLHttpRequest.UNSENT (0)，并且请求的 status 置为 0。</h5>
 
     <button id="send">发起/重发HTTP请求</button>
@@ -36,7 +36,15 @@
                 console.log("请求开始");
                 h2.innerText = "请求开始"
 
-                xhr.open("GET", requestUrl, true);
+                xhr.open(
+                    "GET",  // 请求方式 GET、POST、PUT、PATCH、DELETE、HEAD、OPTIONS、TRACE
+                    requestUrl, // 请求地址
+                    true // 是否异步
+                );
+                xhr.timeout = 1000 * 60; // 60s超时
+                xhr.responseType = "json"; // 告诉服务器返回JSON格式数据【这样在下面不用JSON.parse(xhr.responseText)】，否则返回的是字符串
+                xhr.withCredentials = true; // 允许携带cookie
+                xhr.setRequestHeader("Content-Type", "application/json")
                 xhr.onreadystatechange = function () {
                     console.log("readyState:", xhr.readyState);
                     console.log("status:", xhr.status);
@@ -47,12 +55,41 @@
                     }
 
                     if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                        const data = JSON.parse(xhr.responseText);
-                        console.log("请求成功：", data);
-                        h2.innerText = JSON.stringify(data);
+                        console.log(xhr);
+                        // const data = JSON.parse(xhr.responseText);
+                        // h2.innerText = JSON.stringify(data);
+                        console.log("请求成功：", xhr.response);
+                        h2.innerText = JSON.stringify(xhr.response);
                     }
                 };
+                xhr.ontimeout = function () {
+                    console.warn("请求超时");
+                    h2.innerText = "请求超时";
+                };
+                xhr.onerror = function () {
+                    console.error("请求失败：", xhr.statusText);
+                    h2.innerText = "请求失败";
+                }
                 xhr.send();
+                /* 如果要在 XHR 请求中要发送的数据体 https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/send
+                xhr.send(ArrayBuffer data);
+                xhr.send(ArrayBufferView data);
+                xhr.send(Blob data);
+                xhr.send(Document data);
+                xhr.send(DOMString? data);
+                xhr.send(FormData data);
+
+                请求方式：
+                HEAD 方法请求一个与 GET 请求的响应相同的响应，但没有响应体。
+                OPTIONS 方法用于描述目标资源的通信选项。
+                CONNECT 方法建立一个到由目标资源标识的服务器的隧道。
+                GET 方法请求一个指定资源的表示形式，使用 GET 的请求应该只被用于获取数据。
+                POST 方法用于将实体提交到指定的资源，通常导致在服务器上的状态变化或副作用。
+                PUT 方法用有效载荷请求替换目标资源的所有当前表示。
+                PATCH 方法用于对资源应用部分修改。
+                DELETE 方法删除指定的资源。
+                TRACE 方法沿着到目标资源的路径执行一个消息环回测试。
+                */
             }
 
             // 3. 中止请求
