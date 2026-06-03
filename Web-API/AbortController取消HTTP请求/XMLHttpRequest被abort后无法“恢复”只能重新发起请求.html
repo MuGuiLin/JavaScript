@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XMLHttpRequest.abort()取消HTTP请求</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>XMLHttpRequest被abort()后无法“恢复”只能重新发起请求</h1>
+    <hr>
+    <p>在JavaScript中，使用AbortController和axios库来取消HTTP请求是一种常见的做法，特别是在需要中断长时间运行或不必要的请求时。</p>
+    <h5>使用XMLHttpRequest请求时，如果该请求已被发出，XMLHttpRequest.abort() 方法将终止该请求。当一个请求被终止，它的 readyState 将被置为 XMLHttpRequest.UNSENT (0)，并且请求的 status 置为 0。</h5>
+
+    <button id="send">发起/重发HTTP请求</button>
+    <button id="cancel">取消HTTP请求</button>
+    <h2 id="h2"></h2>
+
+    <script>
+        {
+            // 1. 定义请求变量（方便复用）
+            let xhr; 
+            let requestUrl = "https://jsonplaceholder.typicode.com/todos/1";
+
+            // 2. 发起/恢复请求的函数
+            async function startXHR() {
+                // ✅ 关键：每次都创建 NEW 控制器！
+                xhr = new XMLHttpRequest() || new ActiveXObject("Microsoft.XMLHTTP");
+                
+                console.log("请求开始");
+                h2.innerText = "请求开始"
+
+                xhr.open("GET", requestUrl, true);
+                xhr.onreadystatechange = function () {
+                    console.log("readyState:", xhr.readyState);
+                    console.log("status:", xhr.status);
+
+                    if (xhr.status === 0) {
+                        console.warn("请求已手动中止（可恢复）");
+                        h2.innerText = "请求已手动中止";
+                    }
+
+                    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                        const data = JSON.parse(xhr.responseText);
+                        console.log("请求成功：", data);
+                        h2.innerText = JSON.stringify(data);
+                    }
+                };
+                xhr.send();
+            }
+
+            // 3. 中止请求
+            function stopXHR() {
+                if (xhr) {
+                    xhr.abort(); // 终止当前请求
+                }
+            }
+
+            // 发起HTTP请求
+            send.onclick = async () => {
+                startXHR();   // 发起请求， 再次调用 = 恢复/重新请求
+            }
+
+            // 取消HTTP请求
+            cancel.onclick = () => {
+                stopXHR();  // 中途调用 = 中止
+                console.log('取消请求', xhr)
+            }
+        }
+    </script>
+</body>
+
+</html>
