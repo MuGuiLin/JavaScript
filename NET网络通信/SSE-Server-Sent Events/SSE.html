@@ -54,7 +54,7 @@
             console.log("onerror", event);
             msg.innerHTML = event.type;
             // source.close(); // 注：如果不使用source.close()方法来断开连接，浏览器会自动重连的哦！
- 	    const li = document.createElement("li");
+			const li = document.createElement("li");
             li.innerHTML = `错误重连 ${ index++} 次`;
             ul.append(li);
 
