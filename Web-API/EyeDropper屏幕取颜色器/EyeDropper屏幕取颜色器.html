@@ -34,14 +34,13 @@
                 console.log('EyeDropper取色器可以使用！');
                 try {
                     const eyeDropper = new EyeDropper();
-                    // eyeDropper.open().then(result => {
-                    //     console.log(result);
-                    //     document.body.style.background = label2.innerHTML = result.sRGBHex;
-                    // }).catch(err => {
-                    //     console.log(err);
-                    // });
-                    const result = await eyeDropper.open();
-                    document.body.style.background = label2.innerHTML = result.sRGBHex;
+                    eyeDropper.open().then(result => {
+                        document.body.style.background = label2.innerHTML = result.sRGBHex;
+                    }).catch(err => {
+                        console.log(err);
+                    });
+                    // const result = await eyeDropper.open();
+                    // document.body.style.background = label2.innerHTML = result.sRGBHex;
                 } catch (err) {
                     console.log(err);
                 }
