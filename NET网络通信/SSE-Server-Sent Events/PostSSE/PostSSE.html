@@ -9,6 +9,33 @@
         h1 {
             text-align: center;
         }
+
+        .box {
+            width: 50%;
+            margin: 0 auto;
+
+            main {
+                height: 50%;
+                overflow: auto;
+                border: 1px solid #ccc;
+            }
+
+            footer {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                textarea {
+                    flex: 1;
+                }
+
+                button {
+                    padding: 20px;
+                    flex: 0 0 auto;
+                    margin-left: 10px;
+                }
+            }
+        }
     </style>
 </head>
 
@@ -16,16 +43,18 @@
     <h1>Server-Sent Events 服务端推送！ Xcube 小T写作</h1>
     <hr />
     <h3><a href="https://aigc-center-test.netapitest.com/api/writer-v2/touch">SSE</a></h3>
-    <main class="box">
-        <ul id="ul">
-            <li><b id="msg"></b></li>
-        </ul>
-    </main>
-    <footer>
-        <textarea id="prompt" rows="4" cols="50" placeholder="请输入提示词！"
-            value="请根据素材内容，结合上下文编写一篇报告，内容详实，观点鲜明。"></textarea>
-        <button id="send">发送</button>
-    </footer>
+    <section class="box">
+        <main>
+            <ul id="ul">
+                <li><b id="msg"></b></li>
+            </ul>
+        </main>
+        <footer>
+            <textarea id="prompt" rows="4" cols="50" placeholder="请输入提示词！"
+                value="请根据素材内容，结合上下文编写一篇报告，内容详实，观点鲜明。"></textarea>
+            <button id="send">发送</button>
+        </footer>
+    </section>
     <script>
 
         // 模型选择
@@ -44,15 +73,25 @@
                 },
                 body: encodedBody,
                 // redirect: 'follow', // 跟随重定向
-            }).then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    callbackCallback(data);
-                })
-                .catch(error => console.error('Error:', error));;
-
-            if (!response.ok) throw new Error(`HTTP 错误：${response.status}`);
+            }).then(response => {
+                // return response.json();
+                return response.text();
+            }).then(data => {
+                console.log(data);
+                // 解析 JSON 数据
+                try {
+                    // const jsonData = JSON.parse(`'${data}'`);
+                    // callbackCallback(jsonData);
+                    console.log(data.data);
+                } catch (error) {
+                    // 解析失败，打印错误信息
+                    console.error('Error:', error);
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+            });
             return;
+            if (!response?.ok) throw new Error(`HTTP 错误：${response?.status}`);
             {
                 // 读取响应体
                 console.log('响应体:', response.body);
@@ -86,9 +125,9 @@
             PostSSE("https://aigc-center-test.netapitest.com/api/writer-v2/touch", {
                 prompt,
                 model,
-                conversation_id: 1957,
-            }, (data) => {
-                console.log('解析数据:', data);
+                // conversation_id: 1958,
+            }, (jsonData) => {
+                console.log('解析 JSON 数据:', jsonData);
             });
 
         });

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSE</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Server-Sent Events 服务端推送！ Xcube 小T写作</h1>
+    <hr />
+    <h3><a href="https://aigc-center-test.netapitest.com/api/writer-v2/touch">SSE</a></h3>
+    <main class="box">
+        <ul id="ul">
+            <li><b id="msg"></b></li>
+        </ul>
+    </main>
+    <footer>
+        <textarea id="prompt" rows="4" cols="50" placeholder="请输入提示词！"
+            value="请根据素材内容，结合上下文编写一篇报告，内容详实，观点鲜明。"></textarea>
+        <button id="send">发送</button>
+    </footer>
+    <script type="module">
+        import { fetchEventSource } from './@microsoft/fetch-event-source';
+
+        const controller = new AbortController();
+
+        async function startStream(url, body, callback) {
+            try {
+                await fetchEventSource(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded', // 表单数据编码传输
+                        'aigc-auth-token': "fa8d26880ec6de9d810dc13d6cc5b256",
+                        'aigc-u-id': "tb+KjpouGNgwsAXnpULy6g==",
+                    },
+                    body,
+                    signal: controller.signal,
+                    openWhenHidden: true, // 页面隐藏时保持连接
+
+                    onopen: (response) => {
+                        if (!response.ok) throw new Error(`连接失败: ${response.status}`);
+                    },
+
+                    onmessage: (event) => {
+                        // 解析服务端推送的数据
+                        const data = JSON.parse(event.data);
+                        console.log('接收片段:', data.token);
+                        callback(data);
+                    },
+
+                    onclose: () => {
+                        console.log('流结束');
+                    },
+
+                    onerror: (err) => {
+                        console.error('流错误:', err);
+                        // 关键：抛出错误以终止重试循环
+                        throw err;
+                    }
+                });
+            } catch (err) {
+                if (err.name === 'AbortError') console.log('请求已取消');
+                else console.error('请求失败', err);
+            }
+        }
+
+        // 手动取消连接
+        // controller.abort();
+        // ```‌‌:ml-citation{ref="1,8" appearance="aggregated" data="citationList"}
+
+        // ### 高级特性与注意事项
+        // - &zwnj;**错误响应捕获**&zwnj;：若服务端返回非 SSE 格式（如 JSON 错误），需在 `headers` 中设置 `Accept: '*/*'` 并在 `onopen` 中手动解析 `response.json()`，否则默认只接受 `text/event-stream` 导致错误信息丢失 。
+        // - &zwnj;**断线重连与 Last-Event-ID**&zwnj;：库本身不自动持久化 `last-event-id`，需手动在 `onmessage` 中记录 ID，重连时通过 `headers: { 'Last-Event-ID': savedId }` 传递以实现续传；原生不支持 pause/resume，需自行封装状态机 。
+        // - &zwnj;**数据格式规范**&zwnj;：服务端必须严格遵循 SSE 格式（`data: {...}\n\n`），否则 `onmessage` 可能不触发或解析失败 。‌‌:ml-citation{ref="13,2" appearance="aggregated" data="citationList"}
+
+        // :::ml-data{name=citationList}
+        // ```json
+        // [{"source":{"logo":"https://search-operate.cdn.bcebos.com/175c73f4973c6168ed6acae5b638fa15.png","name":"博客园"},"isVideo":false,"title":"fetchEventSource使用+源码解析","thumbnail":"","linkInfo":{"data-click-info":"{}","href":"https://www.cnblogs.com/sexintercourse/p/18431247","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"1\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"","name":"CSDN问答"},"isVideo":false,"title":"fetchEventSource如何实现连接的动态暂停与恢复?","thumbnail":"","linkInfo":{"data-click-info":"{}","href":"https://ask.csdn.net/questions/9832742","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"2\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"","name":"CSDN编程社区"},"isVideo":false,"title":"使用fetch-event-source 实现自定义 SSE 客户端","thumbnail":"http://t9.baidu.com/it/u=2614582348,3735404177&fm=217&app=137&f=JPEG?w=200&h=200&s=BE8CA044DC423A4D201E518A0300E09C","linkInfo":{"data-click-info":"{}","href":"http://yebd1h.smartapps.cn/pages/blog/index?blogId=149785349","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"3\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"https://mbs1.bdstatic.com/searchbox/mappconsole/image/20230919/5dccffb9-4723-45a7-ae33-c34d304c3a47.png","name":"博客"},"isVideo":false,"title":"@microsoft/fetch-event-source使用、","thumbnail":"","linkInfo":{"data-click-info":"{}","href":"https://wenku.csdn.net/answer/34bx5ajvfe","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"4\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"","name":"脚本之家"},"isVideo":false,"title":"如何使用fetchEventSource实现sse流式请求","thumbnail":"http://t8.baidu.com/it/u=2560565205,2462060656&fm=217&app=126&f=JPEG?w=799&h=246&s=FEAA3063A698DD20107044C7000080B2","linkInfo":{"data-click-info":"{}","href":"https://www.jb51.net/javascript/326697oz7.htm","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"5\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"https://mbs1.bdstatic.com/searchbox/mappconsole/image/20230919/5dccffb9-4723-45a7-ae33-c34d304c3a47.png","name":"博客"},"isVideo":false,"title":"@microsoft/fetch-event-source","thumbnail":"","linkInfo":{"data-click-info":"{}","href":"https://wenku.csdn.net/answer/65twzu2c72","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"6\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"","name":"CSDN编程社区"},"isVideo":false,"title":"使用fetch-event-source 实现自定义 SSE 客户端","thumbnail":"http://t9.baidu.com/it/u=2614582348,3735404177&fm=217&app=137&f=JPEG?w=200&h=200&s=BE8CA044DC423A4D201E518A0300E09C","linkInfo":{"data-click-info":"{}","href":"http://yebd1h.smartapps.cn/pages/blog/index?blogId=149785349","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"7\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"https://search-operate.cdn.bcebos.com/175c73f4973c6168ed6acae5b638fa15.png","name":"博客园"},"isVideo":false,"title":"fetchEventSource使用+源码解析","thumbnail":"","linkInfo":{"data-click-info":"{}","href":"https://www.cnblogs.com/sexintercourse/p/18431247","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"8\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"https://mbs1.bdstatic.com/searchbox/mappconsole/image/20230919/5dccffb9-4723-45a7-ae33-c34d304c3a47.png","name":"博客"},"isVideo":false,"title":"@microsoft/fetch-event-sou","thumbnail":"","linkInfo":{"data-click-info":"{}","href":"https://wenku.csdn.net/answer/43jneauvex","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"9\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"https://mbs1.bdstatic.com/searchbox/mappconsole/image/20230919/5dccffb9-4723-45a7-ae33-c34d304c3a47.png","name":"博客"},"isVideo":false,"title":"fetcheventsource 根据接收到的流式数据更新前端界面","thumbnail":"","linkInfo":{"data-click-info":"{}","href":"https://wenku.csdn.net/answer/4uh80c02b2","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"10\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"","name":"CSDN技术社区"},"isVideo":false,"title":"Fetch Event Source:新一代的服务器推送事件库","thumbnail":"","linkInfo":{"data-click-info":"{}","href":"https://fuhanghang.blog.csdn.net/article/details/141600850","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"11\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"","name":"CSDN编程社区"},"isVideo":false,"title":"vue项目中使用@microsoft/fetch-event-source库实现流式接口对接","thumbnail":"","linkInfo":{"data-click-info":"{}","href":"http://yebd1h.smartapps.cn/pages/blog/index?blogId=146017431","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"12\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"","name":"稀土掘金"},"isVideo":false,"title":"@microsoft/fetch-event-source 如何捕获非流式错误响应 ","thumbnail":"","linkInfo":{"data-click-info":"{}","href":"https://article.juejin.cn/post/7522484278568566834","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"13\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"","name":"极光推送"},"isVideo":false,"title":"GPTBots使用fetch-event-source实现SSE POST传参","thumbnail":"","linkInfo":{"data-click-info":"{}","href":"https://www.jiguang.cn/blog/88","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"14\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=3385518650,4195902768&fm=195&app=88&f=JPEG?w=200&h=200","name":"51CTO博客"},"isVideo":false,"title":"【EventSource错误解决方案】EventSource的onmessage回调函数不触发","thumbnail":"http://t9.baidu.com/it/u=2301527817,191572704&fm=217&app=126&f=JPEG?w=430&h=331&s=18207D32110EC54F4C55F0DA0000C0B3","linkInfo":{"data-click-info":"{}","href":"https://blog.51cto.com/u_15942590/11082580","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"15\",\"component_content\":{\"component_name\":\"reference\"}}"}},{"source":{"logo":"https://mbs1.bdstatic.com/searchbox/mappconsole/image/20230919/5dccffb9-4723-45a7-ae33-c34d304c3a47.png","name":"博客"},"isVideo":false,"title":"fetchEventSource怎么使用","thumbnail":"","linkInfo":{"data-click-info":"{}","href":"https://wenku.csdn.net/answer/5piq1j814o","target":"_blank","data-noblank":true,"data-show":"list","data-show-ext":"{\"pos\":\"16\",\"component_content\":{\"component_name\":\"reference\"}}"}}]
+
+
+        // 模型选择
+        const model = "deepseek"; // qwen-plus
+
+        // 点击发送按钮，发送提示词
+        document.querySelector("#send").addEventListener("click", function () {
+            const prompt = document.querySelector("#prompt").value.trim();
+            startStream("https://aigc-center-test.netapitest.com/api/writer-v2/touch", {
+                prompt,
+                model,
+                // conversation_id: 1957,
+            }, (data) => {
+                console.log('解析数据:', data);
+            });
+
+        });
+    </script>
+
+</body>
+
+</html>
