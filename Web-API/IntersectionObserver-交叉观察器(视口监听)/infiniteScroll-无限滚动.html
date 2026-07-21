@@ -66,7 +66,7 @@
         setTimeout(() => {
           let li = "";
           for (let i = 0; i < len; i++) {
-            li += `<li>第<b>【${index}】</b>次加载-0${i + 1}</li>`;
+            li += `<li>第<b>【${index}】</b>次加载-${9 > i ? 0 : ''}${i + 1}</li>`;
           }
           document.querySelector("#ul").innerHTML += li;
           console.log(`第【${index}】次加载`);

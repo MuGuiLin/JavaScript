@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>EyeDropper屏幕取颜色器</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>EyeDropper屏幕取颜色器</h1>
+    <hr />
+    <p>使用取色器 EyeDropper API 我们可以在屏幕上拾取颜色，就跟ps的吸管功能一样。 这是一个实验性的API，从Chrome v.95版才开始支持的。</p>
+    <h2>input:color 颜色选择器</h2>
+    <input class="color" type="color" /> <label id="label1"></label>
+    <h2>EyeDropper API 屏幕取颜色器</h2>
+    <button class="button">EyeDropper屏幕取颜色器</button> <label id="label2"></label>
+    <script>
+        const color = document.querySelector('.color');
+        color.addEventListener('input', function (e) {
+            document.body.style.background = label1.innerHTML = e.target.value;
+        });
+
+        const btn = document.querySelector('.button');
+        btn.addEventListener('click', async function () {
+            if ('EyeDropper' in window) {
+                console.log('EyeDropper取色器可以使用！');
+                try {
+                    const eyeDropper = new EyeDropper();
+                    eyeDropper.open().then(result => {
+                        document.body.style.background = label2.innerHTML = result.sRGBHex;
+                    }).catch(err => {
+                        console.log(err);
+                    });
+                    // const result = await eyeDropper.open();
+                    // document.body.style.background = label2.innerHTML = result.sRGBHex;
+                } catch (err) {
+                    console.log(err);
+                }
+            } else {
+                alert('当前浏览器不支持EyeDropper取色器！');
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>
