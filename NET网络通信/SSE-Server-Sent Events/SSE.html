@@ -20,10 +20,15 @@
         <li><b id="msg"></b></li>
     </ul>
     <script>
-	let index = 1;
+        let index = 1;
         const msg = document.querySelector("#msg");
         // 创建SSE对象，连接SSE服务器的事件流端点，路由为/api/v1/sse
-        const source = new EventSource("http://localhost:666/api/v1/sse");
+        const source = new EventSource("http://localhost:666/api/v1/sse", {
+            // withCredentials: true, // 跨域请求时是否需要使用凭证 ，默认false
+            // headers: {
+            //     "Authorization": "Bearer " + localStorage.getItem("token"), // 自定义请求头，包含token
+            // },
+        });
         console.log(source);
 
         // 监听SSE打开事件
@@ -54,8 +59,8 @@
             console.log("onerror", event);
             msg.innerHTML = event.type;
             // source.close(); // 注：如果不使用source.close()方法来断开连接，浏览器会自动重连的哦！
- 	    const li = document.createElement("li");
-            li.innerHTML = `错误重连 ${ index++} 次`;
+            const li = document.createElement("li");
+            li.innerHTML = `错误重连 ${index++} 次`;
             ul.append(li);
 
         };

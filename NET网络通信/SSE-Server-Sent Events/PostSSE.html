@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSE</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Server-Sent Events 服务端推送！ Xcube 小T写作</h1>
+    <hr />
+    <h3><a href="https://aigc-center-test.netapitest.com/api/writer-v2/touch">SSE</a></h3>
+    <main class="box">
+        <ul id="ul">
+            <li><b id="msg"></b></li>
+        </ul>
+    </main>
+    <footer>
+        <textarea id="prompt" rows="4" cols="50" placeholder="请输入提示词！"
+            value="请根据素材内容，结合上下文编写一篇报告，内容详实，观点鲜明。"></textarea>
+        <button id="send">发送</button>
+    </footer>
+    <script>
+
+        // 模型选择
+        const model = "deepseek"; // qwen-plus
+
+        // POST 请求的 SSE 服务端推送 (注：Server-Sent Events 是不支持 POST 请求的)
+        async function PostSSE(url, body, callbackCallback) {
+            // 编码表单数据
+            const encodedBody = new URLSearchParams(body).toString();
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded', // 表单数据编码传输
+                    'aigc-auth-token': "fa8d26880ec6de9d810dc13d6cc5b256",
+                    'aigc-u-id': "tb+KjpouGNgwsAXnpULy6g==",
+                },
+                body: encodedBody,
+                // redirect: 'follow', // 跟随重定向
+            }).then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    callbackCallback(data);
+                })
+                .catch(error => console.error('Error:', error));;
+
+            if (!response.ok) throw new Error(`HTTP 错误：${response.status}`);
+            return;
+            {
+                // 读取响应体
+                console.log('响应体:', response.body);
+                // 读取原始数据
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = '';
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    console.log('原始数据:', value);
+
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n\n');
+                    buffer = lines.pop() || ''; // 保留不完整的数据块
+
+                    lines.forEach(line => {
+                        if (line.startsWith('data: ')) {
+                            const data = line.slice(6);
+                            console.log('解析数据:', JSON.parse(data));
+                        }
+                    });
+                }
+            }
+        }
+
+        // 点击发送按钮，发送提示词
+        document.querySelector("#send").addEventListener("click", function () {
+            const prompt = document.querySelector("#prompt").value.trim();
+            PostSSE("https://aigc-center-test.netapitest.com/api/writer-v2/touch", {
+                prompt,
+                model,
+                conversation_id: 1957,
+            }, (data) => {
+                console.log('解析数据:', data);
+            });
+
+        });
+    </script>
+
+</body>
+
+</html>
