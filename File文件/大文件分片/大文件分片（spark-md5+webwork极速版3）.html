@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多 Worker 并发 - 极速 MD5</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .status-bar {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #log {
+            margin-top: 15px;
+            height: 200px;
+            overflow-y: auto;
+            background: #222;
+            color: #0f0;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 8px 16px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            background: #ccc;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <h1>🔥 多 Worker 并发计算 MD5</h1>
+        <p>当前 CPU 核心数：<span id="cores"></span></p>
+
+        <input type="file" id="fileInput" />
+
+        <div class="status-bar">
+            <span id="progressText">等待选择文件...</span>
+            <span id="speedText"></span>
+        </div>
+
+        <div id="log"></div>
+
+<pre>
+<b>把 CPU “榨干”并实现极速计算，需要引入 Worker Pool（线程池） 模式。</b>
+💡核心原理：
+    1、主线程：只负责“切片”和“调度”。它把大文件切成小块，然后像发牌一样分发给空闲的 Worker。
+    2、Worker 集群：根据 navigator.hardwareConcurrency（CPU 核心数）创建对应数量的 Worker。它们并行工作，互不干扰。
+    3、零拷贝优化：利用 file.slice() 的特性，传递的是文件的引用（句柄），而不是复制几 MB 的二进制数据，内存占用极低。
+</pre>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. Worker 代码 (作为字符串嵌入)
+        // ==========================================
+        const workerScript = `
+        // 在 Worker 内部加载 SparkMD5
+        // 注意：实际使用时建议下载 spark-md5.min.js 放在同级目录
+        // 这里为了演示方便，我们假设环境已准备好，或者使用 CDN 版本（需网络）
+        importScripts('https://cdn.jsdelivr.net/npm/spark-md5@3.0.2/spark-md5.min.js');
+
+        self.onmessage = function(e) {
+            const { file, start, end, index } = e.data;
+            
+            try {
+                // 1. 切片 (这是零拷贝的，只是创建一个视图)
+                const blob = file.slice(start, end);
+                
+                // 2. 读取文件
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const buffer = event.target.result;
+                    
+                    // 3. 计算 Hash (CPU 密集型操作)
+                    const hash = SparkMD5.ArrayBuffer.hash(buffer);
+                    
+                    // 4. 返回结果
+                    self.postMessage({ 
+                        index, 
+                        hash, 
+                        success: true 
+                    });
+                };
+                reader.onerror = function() {
+                    self.postMessage({ index, success: false, error: '读取失败' });
+                };
+                reader.readAsArrayBuffer(blob);
+            } catch (err) {
+                self.postMessage({ index, success: false, error: err.message });
+            }
+        };
+    `;
+
+        // ==========================================
+        // 2. 主线程逻辑
+        // ==========================================
+        const fileInput = document.getElementById('fileInput');
+        const progressText = document.getElementById('progressText');
+        const speedText = document.getElementById('speedText');
+        const logDiv = document.getElementById('log');
+        const coresSpan = document.getElementById('cores');
+
+        // 动态 Worker 数量：获取 CPU 核心数，决定开启多少 Worker 检测你的电脑是 4 核、8 核还是 16 核，并创建对应数量的 Worker。如果是 8 核电脑，它会同时跑 8 个计算任务。
+        const CORES = navigator.hardwareConcurrency || 4;
+        coresSpan.innerText = CORES;
+
+        let workers = [];
+        let taskQueue = []; // 任务队列
+        let activeTasks = 0;
+        let totalChunks = 0;
+        let finishedChunks = 0;
+        let startTime = 0;
+        let results = []; // 存储所有分片的 Hash
+
+        // 初始化 Worker 池
+        function initWorkers() {
+            for (let i = 0; i < CORES; i++) {
+                // 使用 Blob URL 创建 Worker，避免跨域和文件路径问题
+                const blob = new Blob([workerScript], { type: 'application/javascript' });
+                const worker = new Worker(URL.createObjectURL(blob));
+
+                worker.onmessage = handleWorkerMessage;
+                worker.onerror = (e) => console.error(`Worker ${i} error:`, e);
+
+                workers.push(worker);
+            }
+            log(`✅ 已启动 ${CORES} 个并发 Worker`);
+        }
+
+        // 处理 Worker 返回的消息
+        function handleWorkerMessage(e) {
+            const { index, hash, success } = e.data;
+
+            if (success) {
+                results[index] = hash; // 按顺序存入结果数组
+                finishedChunks++;
+                updateProgress();
+            } else {
+                log(`❌ 分片 ${index} 计算失败`);
+            }
+
+            // 关键：当前任务完成，立即从队列取下一个任务给这个 Worker
+            if (taskQueue.length > 0) {
+                const nextTask = taskQueue.shift();
+                assignTaskToWorker(e.target, nextTask);
+            } else {
+                activeTasks--;
+                checkCompletion();
+            }
+        }
+
+        // 分配任务给指定 Worker
+        function assignTaskToWorker(worker, task) {
+            worker.postMessage({
+                file: task.file,
+                start: task.start,
+                end: task.end,
+                index: task.index
+            });
+        }
+
+        // 更新进度条
+        function updateProgress() {
+            const percent = ((finishedChunks / totalChunks) * 100).toFixed(2);
+            const elapsed = (Date.now() - startTime) / 1000;
+            const speed = (finishedChunks / elapsed).toFixed(1);
+
+            progressText.innerText = `进度: ${percent}% (${finishedChunks}/${totalChunks})`;
+            speedText.innerText = `速度: ${speed} 片/秒`;
+        }
+
+        // 检查是否全部完成
+        function checkCompletion() {
+            if (finishedChunks === totalChunks) {
+                const totalTime = ((Date.now() - startTime) / 1000).toFixed(2);
+                log(`🎉 全部完成！耗时: ${totalTime}s`);
+                log(`最终合并 Hash (示例): ${results.slice(0, 3).join('...')}...`);
+                progressText.innerText = "计算完成";
+                fileInput.disabled = false;
+            }
+        }
+
+        // 日志辅助
+        function log(msg) {
+            const p = document.createElement('div');
+            p.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            logDiv.prepend(p);
+        }
+
+        // ==========================================
+        // 3. 事件监听
+        // ==========================================
+        initWorkers();
+
+        fileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // 重置状态
+            fileInput.disabled = true;
+            results = [];
+            finishedChunks = 0;
+            taskQueue = [];
+            activeTasks = 0;
+            startTime = Date.now();
+            logDiv.innerHTML = '';
+            log(`📂 开始处理文件: ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`);
+
+            // 1. 生成任务队列 (切片策略)
+            const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB 一片
+            totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+            log(`⚙️ 共切分为 ${totalChunks} 个分片`);
+
+            for (let i = 0; i < totalChunks; i++) {
+                taskQueue.push({
+                    file: file, // 传递 File 对象引用
+                    index: i,
+                    start: i * CHUNK_SIZE,
+                    end: Math.min((i + 1) * CHUNK_SIZE, file.size)
+                });
+            }
+
+            // 2. 启动并发
+            // 先填满所有 Worker
+            const initialBatch = Math.min(CORES, taskQueue.length);
+            for (let i = 0; i < initialBatch; i++) {
+                const task = taskQueue.shift();
+                assignTaskToWorker(workers[i], task);
+                activeTasks++;
+            }
+        });
+
+    </script>
+</body>
+
+</html>
