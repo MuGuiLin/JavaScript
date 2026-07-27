@@ -30,23 +30,36 @@
         // 引入spark-md5库
         // import { SparkMD5 } from './spark-md5.js';
 
-        function calculateFileHash(file) {
+        function calculateFileHash(file, index, chunkSize) {
             return new Promise((resolve, reject) => {
+                const start = index * chunkSize;
+
+                // 防止最后一个分片越界
+                const end = Math.min(start + chunkSize, file.size);
+                const blob = file.slice(start, end);
+                // console.log('分片开始：', start, '分片结束：', end);
+
+
+                // SparkMD5 是 MD5 算法的增量快速 md5 实现。此脚本基于 JKM md5 库，这是最快的算法。这最适合浏览器使用
                 const spark = new SparkMD5.ArrayBuffer();
                 const fileReader = new FileReader();
-                /*
-                SparkMD5 是 MD5 算法的增量快速 md5 实现。此脚本基于 JKM md5 库，这是最快的算法。这最适合浏览器使用
-                */
+
                 fileReader.onload = (e) => {
                     spark.append(e.target.result); // Append array buffer
-                    resolve(spark.end());
+                    resolve({
+                        start,
+                        end,
+                        index,
+                        hash: spark.end(),
+                        blob,
+                    });
                 };
 
                 fileReader.onerror = () => {
                     reject('无法读取文件');
                 };
 
-                fileReader.readAsArrayBuffer(file);
+                fileReader.readAsArrayBuffer(blob);
             });
         }
 

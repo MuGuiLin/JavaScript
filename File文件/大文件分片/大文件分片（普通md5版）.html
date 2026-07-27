@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>大文件MD5分片（普通版）</title>
+    <title>大文件分片（普通md5版）</title>
     <style>
         h1 {
             text-align: center;
@@ -18,10 +18,21 @@
 </head>
 
 <body>
-    <h1>大文件MD5分片（普通版）</h1>
+    <h1>大文件分片（普通md5版）</h1>
     <hr />
+    <pre>
+        <h5>当前代码存在的两个核心问题：</h5>
+        <b>问题一、普通的md5() 函数不支持 ArrayBuffer：</b>
+        普通的 md5.js（如 blueimp-md5）的 md5() 方法期望接收的是字符串。
+        当你把 ArrayBuffer 传给它时，它依然会将其强制转换为字符串 "[object ArrayBuffer]"，导致每个文件切片blob的哈希值都变成了相同的值。
+       
+        <b>问题二、Promise.all 并发导致主线程崩溃：</b>
+        如果文件有 1GB，分片大小(CHUNK_SIZE) 是 5MB，那么 总分片数(chunkCount) 就是 200。
+        Promise.all 会瞬间发起 200 个 FileReader 和 200 次 MD5 计算。虽然 FileReader 是异步的，
+        但 MD5 哈希计算是极其消耗 CPU 的同步操作。这会瞬间占满浏览器主线程，导致页面完全卡死甚至崩溃。
+    </pre>
     <div class="box">
-        MD5：<input type="file" id="file" />
+        普通md5版：<input type="file" id="file" />
         <h3 id="chunks"></h3>
     </div>
 
@@ -35,18 +46,26 @@
             return new Promise((resolve, reject) => {
                 const start = index * chunkSize;
                 const end = start + chunkSize;
+
                 // 文件切片
                 const blob = file.slice(start, end);
+
+                // 结合 FileReader 将 blob 读取为 ArrayBuffer 后再进行md5哈希计算。
                 const fileReader = new FileReader();
 
-                // 监听文件分片内容加载完成时，用文件分片内容计算HASH值，但这样做速度太慢了，可以考虑通过抽样的形式的计算HASH值
+                // 监听文件分片内容加载完成时，用文件分片内容计算HASH值，但这样做速度太慢了，可以考虑通过抽样（只读取文件分片内容的）的形式的计算HASH值。 注意：抽样不能反映文件内容的实际信息。在计算哈希值时，应该使用文件内容的实际信息。
                 fileReader.onload = (e) => {
                     // console.log(e.target.result);
                     resolve({
                         start,
                         end,
                         index,
-                        hash: md5(index + e.target.result),
+                        hash: md5(e.target.result), // 将文件切片内容的实际信息进行计算HASH值，后端也要进行同样的HASH值计算，以确保文件内容没有被修改
+                         /*
+                            在前端进行大文件上传时，计算文件切片的哈希值，是为了确保文件的完整性和唯一性。
+                            但是：当文件非常大（比如几个 GB），同时创建几百个FileReader 导致浏览器主线程卡顿甚至崩溃
+                            所以：建议加上 Web Worker 来彻底解放主线程。
+                        */
                         blob,
                     });
                 };
@@ -59,37 +78,11 @@
                 //     console.log('切片进度：', e);
                 // };
 
-                //  开始读取指定 Blob 或 File 的内容（读取操作完成时，readyState 属性变为 DONE，并触发 loadend 事件）
+                // 开始读取指定 Blob 或 File 的内容（读取操作完成时，readyState 属性变为 DONE，并触发 loadend 事件）
                 fileReader.readAsArrayBuffer(blob);
             })
         };
 
-        // 创建文件分片（通过分片索引计算HASH值）
-        const createChunk2 = (file, index, chunkSize) => {
-            // console.log(file, index, chunkSize);
-            return new Promise((resolve, reject) => {
-                const start = index * chunkSize;
-                const end = start + chunkSize;
-                // 文件切片
-                const blob = file.slice(start, end);
-                console.log('切片：', blob);
-                resolve({
-                    start,
-                    end,
-                    index,
-                    // hash: md5(index),
-                    hash: md5(blob),
-                    /*
-                        在前端进行大文件上传时，计算文件的哈希值通常是为了确保文件的完整性和唯一性。
-                        使用循环时的索引（index）来计算哈希值并不是一个合适的方法，
-                        因为索引只是一个循环变量，并不能反映文件内容的实际信息。
-                        在计算哈希值时，应该使用文件内容的实际信息，而不是索引来计算哈希值。
-                        所以 可以用 spark-md5
-                    */
-                    blob,
-                });
-            })
-        };
 
         // 定义文件每片的分片大小 5MB
         const CHUNK_SIZE = 1024 * 1024 * 5;
@@ -111,13 +104,12 @@
 
                 // 所以 试先直接添加分片任务，最后用Promise并行创建分片
                 chunks.push(createChunk(file, i, CHUNK_SIZE))
-                // chunks.push(createChunk2(file, i, CHUNK_SIZE))
             }
             // return chunks;
+
             // 最后用Promise并行创建分片
             return await Promise.all(chunks);
 
-            // 通过以上的尝试最后速度效果都差不多, 所以可以尝试用多线程worker的方式来处理。
         };
 
 

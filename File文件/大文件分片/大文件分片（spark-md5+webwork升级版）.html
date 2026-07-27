@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大文件分片（Web Worker 终极版）</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        .box {
+            margin: 20px;
+            font-size: 24px;
+        }
+
+        #progress {
+            margin-top: 10px;
+            color: #666;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>大文件分片（Web Worker 终极版）</h1>
+    <hr />
+    <pre>
+        <h5>当前代码存在的两个核心问题：</h5>
+        <b>🚫 坑一：直接用浏览器打开 HTML 文件：</b>
+        Web Worker 必须 在 HTTP 服务器下运行（file:// 协议下会直接报错或静默失败）。
+        ✅ 解决： 用 VS Code 的 Live Server 插件，或者在终端运行，然后访问 http://localhost:3000 (或对应端口)。
+        
+        <b>🚫 坑二：importScripts 路径错误：</b>
+        Worker 里的路径是相对于 Worker 文件本身的，不是相对于 HTML。
+        ✅ 解决： 确保 spark-md5.js 和 hashWorker.js 在同一个目录下，且代码写的是：importScripts('./spark-md5.js');
+    </pre>
+    <div class="box">
+        选择文件：<input type="file" id="file" />
+        <h3 id="chunks"></h3>
+        <div id="progress"></div>
+    </div>
+
+    <script>
+        const inpfile = document.querySelector('#file');
+        const progressEl = document.querySelector('#progress');
+        const chunksEl = document.querySelector('#chunks');
+
+        // 1. 创建 Web Worker
+        const worker = new Worker('./hashWorker.js');
+
+        // 2. 监听 Worker 发回的消息
+        worker.onmessage = (e) => {
+            const { type, data } = e.data;
+
+            if (type === 'progress') {
+                // 更新进度条
+                progressEl.innerText = `计算进度: ${data.percent}% (${data.current}/${data.total})`;
+            } else if (type === 'done') {
+                // 计算完成
+                console.timeEnd('耗时');
+                progressEl.innerText = '计算完成！';
+
+                // 展示结果（只显示前3个分片的hash）
+                const chunks = data.chunks;
+                chunksEl.innerText = `共 ${chunks.length} 个分片，前3个Hash: \n` +
+                    chunks.slice(0, 3).map(c => `分片${c.index}: ${c.hash}`).join('\n');
+                console.log('完整分片结果：', chunks);
+            }
+        };
+        worker.onerror = (err) => {
+            console.error('🔥 Worker 内部发生严重错误:', err);
+            progressEl.innerText = '❌ 计算失败，请查看控制台！';
+        };
+
+        // 定义文件每片的分片大小 5MB
+        const CHUNK_SIZE = 1024 * 1024 * 5;
+
+        inpfile.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            console.time('耗时');
+            progressEl.innerText = '开始计算...';
+            chunksEl.innerText = '';
+
+            // 3. 计算总分片数，并向 Worker 发送任务
+            const chunkCount = Math.ceil(file.size / CHUNK_SIZE);
+
+            // 向 Worker 传递必要的数据（注意：不能直接传 file 对象给 Worker，通常传 Blob 是可以的）
+            worker.postMessage({
+                file: file,
+                chunkSize: CHUNK_SIZE,
+                chunkCount: chunkCount
+            });
+        };
+    </script>
+</body>
+
+</html>
