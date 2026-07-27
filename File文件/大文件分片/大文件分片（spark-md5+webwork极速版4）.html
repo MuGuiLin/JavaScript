@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大文件分片计算与上传完整方案</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .status-bar {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #log {
+            margin-top: 15px;
+            height: 150px;
+            overflow-y: auto;
+            background: #222;
+            color: #0f0;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h1>🔥 极速 MD5 计算 + 分片上传</h1>
+        <p>当前 CPU 核心数：<span id="cores"></span></p>
+        <input type="file" id="fileInput" />
+        <div class="status-bar">
+            <span id="progressText">等待选择文件...</span>
+            <span id="speedText"></span>
+        </div>
+        <div id="log"></div>
+<pre>
+🔍 核心代码解析：
+1、Worker 依然保持纯粹：
+Worker 内部依然只返回 { index, hash, success: true }，绝不把 Blob 传回主线程，保证了计算阶段的丝滑流畅。
+
+2、主线程按需切片：
+在 startUploadChunks 函数中，当需要上传第 index 个分片时，主线程使用 currentFile.slice(start, end) 重新生成一个 Blob 对象。
+注：file.slice() 在浏览器底层只是创建了一个指向原始文件的内存视图（零拷贝），所以即使多次调用，也不会导致内存翻倍。
+
+3、并发上传控制：
+代码中加入了 MAX_CONCURRENT_UPLOADS = 3 的并发控制。如果文件有 100 个分片，浏览器会同时发起 3 个上传请求，当一个完成后，再自动触发下一个。这能有效防止瞬间发起上百个请求导致浏览器崩溃或服务器拒绝服务。
+
+</pre>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. Worker 代码 (仅计算，不传 Blob)
+        // ==========================================
+        const workerScript = `
+            importScripts('https://cdn.jsdelivr.net/npm/spark-md5@3.0.2/spark-md5.min.js');
+            self.onmessage = function(e) {
+                const { file, start, end, index } = e.data;
+                try {
+                    const blob = file.slice(start, end);
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const hash = SparkMD5.ArrayBuffer.hash(event.target.result);
+                        // ✅ 仅返回轻量级元数据
+                        self.postMessage({ index, hash, success: true });
+                    };
+                    reader.onerror = function() {
+                        self.postMessage({ index, success: false, error: '读取失败' });
+                    };
+                    reader.readAsArrayBuffer(blob);
+                } catch (err) {
+                    self.postMessage({ index, success: false, error: err.message });
+                }
+            };
+        `;
+
+        // ==========================================
+        // 2. 主线程逻辑
+        // ==========================================
+        const fileInput = document.getElementById('fileInput');
+        const progressText = document.getElementById('progressText');
+        const speedText = document.getElementById('speedText');
+        const logDiv = document.getElementById('log');
+        const coresSpan = document.getElementById('cores');
+
+        const CORES = navigator.hardwareConcurrency || 4;
+        coresSpan.innerText = CORES;
+
+        let workers = [];
+        let taskQueue = [];
+        let totalChunks = 0;
+        let finishedChunks = 0;
+        let startTime = 0;
+        let results = [];
+        let currentFile = null; // 保存当前文件引用，用于后续上传
+
+        // 初始化 Worker 池
+        function initWorkers() {
+            for (let i = 0; i < CORES; i++) {
+                const blob = new Blob([workerScript], { type: 'application/javascript' });
+                const worker = new Worker(URL.createObjectURL(blob));
+                worker.onmessage = handleWorkerMessage;
+                workers.push(worker);
+            }
+            log(`✅ 已启动 ${CORES} 个并发 Worker`);
+        }
+
+        // 处理 Worker 返回的消息
+        function handleWorkerMessage(e) {
+            const { index, hash, success, error } = e.data;
+            if (success) {
+                results[index] = hash;
+                finishedChunks++;
+                updateProgress();
+            } else {
+                log(`❌ 分片 ${index} 计算失败: ${error}`);
+            }
+
+            // 任务队列调度
+            if (taskQueue.length > 0) {
+                assignTaskToWorker(e.target, taskQueue.shift());
+            } else {
+                checkCompletion();
+            }
+        }
+
+        function assignTaskToWorker(worker, task) {
+            worker.postMessage({
+                file: task.file,
+                start: task.start,
+                end: task.end,
+                index: task.index
+            });
+        }
+
+        function updateProgress() {
+            const percent = ((finishedChunks / totalChunks) * 100).toFixed(2);
+            const elapsed = (Date.now() - startTime) / 1000;
+            const speed = (finishedChunks / elapsed).toFixed(1);
+            progressText.innerText = `计算进度: ${percent}% (${finishedChunks}/${totalChunks})`;
+            speedText.innerText = `速度: ${speed} 片/秒`;
+        }
+
+        // 计算完成，自动触发上传
+        function checkCompletion() {
+            if (finishedChunks === totalChunks) {
+                const totalTime = ((Date.now() - startTime) / 1000).toFixed(2);
+                log(`🎉 哈希计算完成！耗时: ${totalTime}s`);
+                log(`🚀 准备开始分片上传...`);
+                startUploadChunks(); // 开始上传
+            }
+        }
+
+        // ==========================================
+        // 3. 分片上传逻辑 (在主线程执行)
+        // ==========================================
+        async function startUploadChunks() {
+            const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB
+            // 模拟并发上传控制 (比如最多同时上传 3 个分片)
+            const MAX_CONCURRENT_UPLOADS = 3;
+            let uploadedCount = 0;
+
+            // 模拟上传请求 (实际开发中替换为真实的 axios/fetch 请求)
+            const uploadSingleChunk = async (index) => {
+                const start = index * CHUNK_SIZE;
+                const end = Math.min(start + CHUNK_SIZE, currentFile.size);
+
+                // ✅ 核心：在主线程重新 slice 获取 Blob 进行上传
+                const blob = currentFile.slice(start, end);
+
+                const formData = new FormData();
+                formData.append('file', blob);
+                formData.append('index', index);
+                formData.append('hash', results[index]);
+                formData.append('totalChunks', totalChunks);
+
+                // 模拟网络延迟
+                await new Promise(resolve => setTimeout(resolve, 300));
+
+                // 实际请求示例:
+                // await fetch('/api/upload', { method: 'POST', body: formData });
+            };
+
+            // 并发控制调度器
+            const runQueue = async () => {
+                while (uploadedCount < totalChunks) {
+                    const currentIndex = uploadedCount;
+                    uploadedCount++;
+                    await uploadSingleChunk(currentIndex);
+                    progressText.innerText = `上传进度: ${((uploadedCount / totalChunks) * 100).toFixed(2)}%`;
+                }
+                log(`✅ 所有分片上传完成！`);
+            };
+
+            // 启动并发上传
+            const uploadPromises = [];
+            for (let i = 0; i < Math.min(MAX_CONCURRENT_UPLOADS, totalChunks); i++) {
+                uploadPromises.push(runQueue());
+            }
+            await Promise.all(uploadPromises);
+        }
+
+        function log(msg) {
+            const p = document.createElement('div');
+            p.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            logDiv.prepend(p);
+        }
+
+        // ==========================================
+        // 4. 事件监听
+        // ==========================================
+        initWorkers();
+
+        fileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            currentFile = file; // 保存文件引用
+            results = [];
+            finishedChunks = 0;
+            taskQueue = [];
+            startTime = Date.now();
+            logDiv.innerHTML = '';
+            log(`📂 开始处理: ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`);
+
+            const CHUNK_SIZE = 5 * 1024 * 1024;
+            totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+
+            for (let i = 0; i < totalChunks; i++) {
+                taskQueue.push({
+                    file: file,
+                    index: i,
+                    start: i * CHUNK_SIZE,
+                    end: Math.min((i + 1) * CHUNK_SIZE, file.size)
+                });
+            }
+
+            const initialBatch = Math.min(CORES, taskQueue.length);
+            for (let i = 0; i < initialBatch; i++) {
+                assignTaskToWorker(workers[i], taskQueue.shift());
+            }
+        });
+    </script>
+</body>
+
+</html>

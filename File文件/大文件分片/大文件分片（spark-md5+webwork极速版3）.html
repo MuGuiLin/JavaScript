@@ -112,9 +112,12 @@
                     
                     // 4. 返回结果
                     self.postMessage({ 
+                        start, 
+                        end,
                         index, 
                         hash, 
-                        success: true 
+                        success: true,
+                        blob
                     });
                 };
                 reader.onerror = function() {
@@ -211,6 +214,8 @@
                 const totalTime = ((Date.now() - startTime) / 1000).toFixed(2);
                 log(`🎉 全部完成！耗时: ${totalTime}s`);
                 log(`最终合并 Hash (示例): ${results.slice(0, 3).join('...')}...`);
+                console.log(`最终合并 Hash: ${results.join('')}`);
+                console.log(results);
                 progressText.innerText = "计算完成";
                 fileInput.disabled = false;
             }
