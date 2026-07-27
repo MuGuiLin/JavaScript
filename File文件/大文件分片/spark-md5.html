@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大文件分片</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        .box {
+            margin: 20px;
+            font-size: 32px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>大文件分片 spark-md5（普通版）</h1>
+    <hr />
+    <div class="box">
+        spark-md5：<input type="file" id="file" />
+        <h3 id="chunks"></h3>
+    </div>
+
+    <script src="./spark-md5.js"></script>
+    <script type="module">
+        // 引入spark-md5库
+        // import { SparkMD5 } from './spark-md5.js';
+
+        function calculateFileHash(file) {
+            return new Promise((resolve, reject) => {
+                const spark = new SparkMD5.ArrayBuffer();
+                const fileReader = new FileReader();
+                /*
+                SparkMD5 是 MD5 算法的增量快速 md5 实现。此脚本基于 JKM md5 库，这是最快的算法。这最适合浏览器使用
+                */
+                fileReader.onload = (e) => {
+                    spark.append(e.target.result); // Append array buffer
+                    resolve(spark.end());
+                };
+
+                fileReader.onerror = () => {
+                    reject('无法读取文件');
+                };
+
+                fileReader.readAsArrayBuffer(file);
+            });
+        }
+
+        // 定义文件每片的分片大小 5MB
+        const CHUNK_SIZE = 1024 * 1024 * 5;
+
+        const cutfile = async (file) => {
+
+            // 计算文件总分片数
+            const chunkCount = Math.ceil(file.size / CHUNK_SIZE); // 分片向上取整，如：5.5片就要分6片
+            console.log('文件总分片数：', chunkCount);
+
+            console.log('\n文件分片中...！🚀如果文件是存储SSD固态硬盘中的话，读取速度会有非常大的提升哦！！\n\n');
+
+            const chunks = [];
+            // 获取文件分片每片的信息
+            for (let i = 0; i < chunkCount; i++) {
+                chunks.push(calculateFileHash(file, i, CHUNK_SIZE))
+            }
+            // return chunks;
+            // 最后用Promise并行创建分片
+            return await Promise.all(chunks);
+
+            // 通过以上的尝试最后速度效果都差不多, 所以可以尝试用多线程worker的方式来处理。
+        };
+
+        // 使用示例
+        document.querySelector('#file').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+
+            console.time('耗时');
+            const chunks = await cutfile(file);
+            console.timeEnd('耗时');
+
+            document.querySelector('#chunks').innerText = chunks
+            console.log('分片结果：', chunks);
+
+        });
+    </script>
+</body>
+
+</html>
