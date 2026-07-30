@@ -13,18 +13,25 @@
 </head>
 
 <body>
-    <h1>大文件分片（多线程版）</h1>
+    <h1>大文件分片（多线程+分片抽样）</h1>
     <hr />
     <pre>
-    获取当前计算机CUP核心数：
+    <h3>注：Web Worker 要在http服务器环境下才能运行！</h3>
+    <b>多线程</b>
         1. 获取当前计算机CUP核心数
         2. 创建多个线程，并分配获取文件分片每片信息的任务
         3. 创建多个线程，并分配计算文件分片每片的MD5值任务
-    </pre>
-    <input type="file" id="file" />
 
-    <script src="./spark-md5.min.js"></script>
-    <script>
+    <b>分片抽样</b>
+        分片MD5算法：取分片内容「头2字节 + 中间2字节 + 尾2字节」算MD5，不是对整个分片内容算MD5。
+        注意：这样不能保证分片内容的完整性！
+    </pre>
+
+    <input type="file" id="file" />
+    <h5 id="chunks"></h5>
+
+
+    <script type="module">
         const inpfile = document.querySelector('#file');
 
         // 定义文件每片的分片大小 5MB
@@ -56,11 +63,12 @@
                 // 根据CUP核心数 创建线程，并分配获取文件分片每片信息的任务
                 for (let i = 0; i < CUP_THREAD_NUM; i++) {
 
-                    // 使用线程来完成片信任务，这样就不影响主(渲染)线程，从而达到提升文件分片的任务！！注：Worker要在http服务器环境下才能运行！！
+                    // 使用线程(Worker)来完成片信任务，这样就不影响主(渲染)线程，从而达到提升文件分片的任务！
                     // const worker = new Worker('./worker.js', {
                     //     type: 'module'   // 可以在worker.js中导入其他js模块
                     // });
                     const worker = new Worker('./worker.js');
+
                     // 线程要处理分片的起始位置
                     let startChunkIndex = i * hereadChunkCount;
                     // 线程要处理分片的结束位置
@@ -112,6 +120,7 @@
 
             console.timeEnd('耗时');
 
+            document.querySelector('#chunks').innerText = JSON.stringify(chunks);
             console.log('分片结果：', chunks);
         }
     </script>

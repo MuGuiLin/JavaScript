@@ -1,4 +1,3 @@
-
 try {
     // 在 Worker 中引入 SparkMD5 库
     importScripts('./spark-md5.min.js');
@@ -11,13 +10,19 @@ try {
     self.close();
 }
 
-// 创建抽样切片
+/**
+ * 抽样计算HASH值  
+ * 抽样算法：取分片内容「头2字节 + 中间2字节 + 尾2字节」算MD5，不是对整个分片内容算MD5。
+ * @param {Blob} blob 文件分片
+ * @returns {Promise<string>} HASH值
+ */
 function calculateChunkMd5(blob) {
     return new Promise((resolve, reject) => {
         const spark = new SparkMD5.ArrayBuffer();
         const offset = blob.size;
         const mid = Math.floor(offset / 2);
         const end = offset;
+
         const chunks = [];
         // 抽样每个blob切片的前2个字节、中间2个字节、后2个字节，来进行HASH值计算
         chunks.push(blob.slice(0, 2));
