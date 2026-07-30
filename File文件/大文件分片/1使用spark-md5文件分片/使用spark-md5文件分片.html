@@ -21,11 +21,11 @@
     <h1>spark-md5文件分片</h1>
     <hr />
     <pre>
-        <b>普通的 md5：</b>
+    <b>普通的 md5：</b>
         普通的 md5.js（如 blueimp-md5）的 md5() 方法期望接收的是字符串。
         当你把 ArrayBuffer 传给它时，它依然会将其强制转换为字符串 "[object ArrayBuffer]"，导致每个文件切片blob的哈希值都变成了相同的值。
         
-        <b>SparkMD5：</b>
+    <b>SparkMD5：</b>
         SparkMD5 是 MD5 算法在 JavaScript 环境中的优化实现，重点解决了传统 MD5 在浏览器中处理大文件时的‌内存溢出‌和‌主线程阻塞‌问题。
         SparkMD5 并非替代 MD5 算法，而是让 MD5 在 JavaScript 环境中更高效、更稳定地运行，是前端文件处理领域的标准解决方案。
         
@@ -60,26 +60,25 @@
                 const blob = file.slice(start, end);
                 // console.log('分片开始：', start, '分片结束：', end);
 
-
-                // SparkMD5 是 MD5 算法的增量快速 md5 实现。此脚本基于 JKM md5 库，这是最快的算法。这最适合浏览器使用
-                const spark = new SparkMD5.ArrayBuffer();
                 const fileReader = new FileReader();
 
                 fileReader.onload = (e) => {
-                    spark.append(e.target.result); // Append array buffer
+                    // 使用非增量的 SparkMD5.ArrayBuffer.hash() 计算二进制数据的哈希
+                    const hash = SparkMD5.ArrayBuffer.hash(e.target.result);
                     resolve({
                         index,
                         start,
                         end,
-                        hash: spark.end(),
+                        hash,
                         blob,
                     });
                 };
 
                 fileReader.onerror = () => {
-                    reject('无法读取文件');
+                    console.log('文件分片读取失败！');
                 };
 
+                // 切片读取文件
                 fileReader.readAsArrayBuffer(blob);
             });
         }

@@ -21,7 +21,7 @@
     <h1>大文件分片（普通md5版）</h1>
     <hr />
     <pre>
-        <h5>当前代码存在的两个核心问题：</h5>
+    <h5>当前代码存在的两个核心问题：</h5>
         <b>问题一、普通的md5() 函数不支持 ArrayBuffer：</b>
         普通的 md5.js（如 blueimp-md5）的 md5() 方法期望接收的是字符串。
         当你把 ArrayBuffer 传给它时，它依然会将其强制转换为字符串 "[object ArrayBuffer]"，导致每个文件切片blob的哈希值都变成了相同的值。
@@ -58,9 +58,9 @@
                 fileReader.onload = (e) => {
                     // console.log(e.target.result);
                     resolve({
+                        index,
                         start,
                         end,
-                        index,
                         hash: md5(e.target.result), // 将文件切片内容的实际信息进行计算HASH值，后端也要进行同样的HASH值计算，以确保文件内容没有被修改
                          /*
                             在前端进行大文件上传时，计算文件切片的哈希值，是为了确保文件的完整性和唯一性。
@@ -79,7 +79,7 @@
                 //     console.log('切片进度：', e);
                 // };
 
-                // 开始读取指定 Blob 或 File 的内容（读取操作完成时，readyState 属性变为 DONE，并触发 loadend 事件）
+                // 切片读取文件 开始读取指定 Blob 或 File 的内容（读取操作完成时，readyState 属性变为 DONE，并触发 loadend 事件）
                 fileReader.readAsArrayBuffer(blob);
             })
         };

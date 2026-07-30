@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>大文件分片（spark-md5优化版）</title>
+    <title>spark-md5文件分片-优化版</title>
     <style>
         h1 {
             text-align: center;
@@ -23,10 +23,15 @@
 </head>
 
 <body>
-    <h1>大文件分片（spark-md5优化版）</h1>
+    <h1>spark-md5文件分片-优化版（SparkMD5 增量模式）</h1>
     <hr />
+    <pre>
+    <b>SparkMD5增量模式：</b>
+        在 JavaScript 中使用 new SparkMD5.ArrayBuffer() 开启‌增量模式‌，是处理大文件（如视频、镜像文件）进行 MD5校验的最佳实践。
+        该模式通过将文件分块读取并逐块追加哈希计算，避免了将整个文件加载到内存中，从而防止浏览器崩溃或内存溢出。
+    </pre>
     <div class="box">
-        spark-md5优化版：<input type="file" id="file" />
+        spark-md5文件分片-优化版：<input type="file" id="file" />
         <div id="progress"></div>
         <h3 id="chunks"></h3>
     </div>
@@ -41,6 +46,9 @@
         const inpfile = document.querySelector('#file');
         const progressEl = document.querySelector('#progress');
 
+        // SparkMD5 增量模式
+        const spark = new SparkMD5.ArrayBuffer();
+
         // 创建文件分片（通过文件分片内容计算HASH值）
         const createChunk = (file, index, chunkSize) => {
             return new Promise((resolve, reject) => {
@@ -53,20 +61,24 @@
                 const fileReader = new FileReader();
 
                 fileReader.onload = (e) => {
-                    // 核心：使用 SparkMD5.ArrayBuffer.hash() 计算二进制数据的哈希
-                    const hash = SparkMD5.ArrayBuffer.hash(e.target.result);
+                    // 增量追加计算当前数据块 (e.target.result 是 ArrayBuffer)
+                    spark.append(e.target.result); 
+                    // 获取最终哈希值
+                    const hash = spark.end();
                     resolve({
                         index,
                         start,
                         end,
-                        hash: hash,
+                        hash,
                         blob,
                     });
                 };
+
                 fileReader.onerror = () => {
-                    reject(new Error('文件分片读取失败'));
-                    console.log('文件分片读取失败');
+                    console.log('文件分片读取失败！');
                 };
+
+                // 切片读取文件
                 fileReader.readAsArrayBuffer(blob);
             })
         };
