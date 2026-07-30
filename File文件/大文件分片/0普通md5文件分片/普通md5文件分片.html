@@ -32,8 +32,9 @@
         但 MD5 哈希计算是极其消耗 CPU 的同步操作。这会瞬间占满浏览器主线程，导致页面完全卡死甚至崩溃。
     </pre>
     <div class="box">
-        普通md5版：<input type="file" id="file" />
-        <h3 id="chunks"></h3>
+        普通md5文件分片：<input type="file" id="file" />
+        <h5 id="chunks"></h5>
+        <h3>可以看出，使用普通md5计算的文件分片hash值都是完全一样的！</h3>
     </div>
 
     <script src="./md5.js"></script>
@@ -88,6 +89,7 @@
         const CHUNK_SIZE = 1024 * 1024 * 5;
 
         const cutFile = async (file) => {
+            console.log('文件总大小：', (file.size / 1024 / 1024 ).toFixed(2) + 'MB');
 
             // 计算文件总分片数
             const chunkCount = Math.ceil(file.size / CHUNK_SIZE); // 分片向上取整，如：5.5片就要分6片
@@ -120,7 +122,7 @@
             const chunks = await cutFile(file);
             console.timeEnd('耗时');
 
-            document.querySelector('#chunks').innerText = chunks
+            document.querySelector('#chunks').innerText = JSON.stringify(chunks);
             console.log('分片结果：', chunks);
         }
     </script>

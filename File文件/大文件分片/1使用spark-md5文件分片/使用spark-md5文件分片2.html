@@ -27,15 +27,17 @@
     <hr />
     <div class="box">
         spark-md5优化版：<input type="file" id="file" />
-        <h3 id="chunks"></h3>
         <div id="progress"></div>
+        <h3 id="chunks"></h3>
     </div>
 
     <!-- 引入专为前端大文件设计的 SparkMD5 -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/spark-md5@3.0.2/spark-md5.min.js"></script> -->
     <script src="./spark-md5.js"></script>
+    <script type="module">
+        // 引入spark-md5库
+        // import { SparkMD5 } from './spark-md5.js';
 
-    <script>
         const inpfile = document.querySelector('#file');
         const progressEl = document.querySelector('#progress');
 
@@ -54,9 +56,9 @@
                     // 核心：使用 SparkMD5.ArrayBuffer.hash() 计算二进制数据的哈希
                     const hash = SparkMD5.ArrayBuffer.hash(e.target.result);
                     resolve({
+                        index,
                         start,
                         end,
-                        index,
                         hash: hash,
                         blob,
                     });
@@ -73,6 +75,7 @@
         const CHUNK_SIZE = 1024 * 1024 * 5;
 
         const cutFile = async (file) => {
+            console.log('文件总大小：', (file.size / 1024 / 1024).toFixed(2) + 'MB');
 
             // 计算文件总分片数
             const chunkCount = Math.ceil(file.size / CHUNK_SIZE); // 分片向上取整，如：5.5片就要分6片
@@ -81,18 +84,15 @@
             console.log('\n文件分片中...🚀 正在串行计算MD5，请勿关闭页面！🚀如果文件是存储SSD固态硬盘中的话，读取速度会有非常大的提升哦！！\n');
 
             const chunks = [];
-
             // 获取文件分片每片的信息
             // 核心优化：采用串行计算（await 放在循环内）
             // 为什么不用 Promise.all？因为 MD5 是 CPU 密集型任务，并行计算会瞬间卡死浏览器主线程。
             // 串行计算虽然看起来是“依次等待”，但内存占用极低，且不会阻塞 UI 渲染。
             for (let i = 0; i < chunkCount; i++) {
-                const chunk = await createChunk(file, i, CHUNK_SIZE);
-                chunks.push(chunk);
+                chunks.push(await createChunk(file, i, CHUNK_SIZE));
 
                 // 更新进度
-                const percent = ((i + 1) / chunkCount * 100).toFixed(2);
-                progressEl.innerText = `计算进度: ${percent}% (正在切${i + 1}个，共计${chunkCount}个文件切片)`;
+                progressEl.innerText = `计算进度: ${((i + 1) / chunkCount * 100).toFixed(2) }% (正在切${i + 1}个，共计${chunkCount}个文件切片)`;
             }
 
             return chunks;
