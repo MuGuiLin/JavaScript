@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大文件整体hash值计算（普通worker版）</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        input {
+            font-size: 30px;
+        }
+
+        pre {
+            font-size: 16px;
+
+            b {
+                color: red;
+            }
+        }
+
+        progress {
+            width: 1000px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>大文件整体hash值计算（普通worker版）</h1>
+    <hr>
+    <pre>
+    使用 SparkMD5.js 计算大文件 Hash 值时，如果直接在主线程处理，极易导致页面假死。要实现“最快”且“体验最好”的计算，核心思路是避免阻塞主线程并优化计算策略。
+    
+    结合业界最佳实践，以下是实现最快计算的几种核心方法：
+
+        1. 使用 Web Worker 进行后台计算（最推荐）
+            将 CPU 密集型的 Hash 计算任务交由独立的子线程（Web Worker）处理，这是目前最主流且最稳妥的方案。主线程只负责接收文件并发起 Worker，计算完成后再进行上传，从而保证页面的绝对流畅。
+            <b>实现思路：</b>
+                主线程 (Vue3)：创建 Worker 实例，将 File 对象通过 postMessage 传递给 Worker，并通过 onmessage 接收最终计算好的 Hash 值。
+                Worker 线程 (如 worker.js)：在 Worker 内部引入 SparkMD5，利用 File.prototype.slice 方法将大文件分片，通过 FileReader 逐块读取（readAsArrayBuffer），并使用 spark.append() 增量更新 Hash 值，最后通过 spark.end() 输出结果。
+        
+        2. 利用 requestIdleCallback 利用空闲时间计算
+            如果你不想引入额外的 Worker 文件，或者文件体积在几百 MB 到几 GB 之间，可以借鉴 React Fiber 的架构思想，使用浏览器原生的 requestIdleCallback API。
+            这种方法会在浏览器主线程处于“空闲”状态时，一小块一小块地读取文件并计算 Hash。虽然整体耗时可能略长于 Worker，但它能完美避免页面卡顿，且代码量更少。
+        
+        3. 采用“抽样 Hash”算法（极致速度）
+            如果文件极大（例如几个 GB 甚至几十 GB），全量计算 Hash 依然会非常耗时。此时可以牺牲极小部分的唯一性来换取大幅度的速度提升。
+            <b>优化策略：</b>
+                文件切片后，只读取第一个切片和最后一个切片的<b>全部内容</b>，而中间的其他切片仅抽取<b>首、中、尾各几个字节（例如各 2 个字节）</b>参与 Hash 计算。这种方式可以大幅度减少读取和计算的字节数，速度提升极其显著。
+        
+        💡关键注意事项
+            <b>增量计算：</b>
+                无论采用哪种方式，<b>务必使用 SparkMD5.ArrayBuffer() 配合 append() 方法进行增量计算</b>，而不是将全量文件读入内存后一次性计算，这能有效避免内存溢出。
+            <b>分片大小设定：</b>
+                分片大小不宜过小（如 100KB 会导致请求数爆炸），也不宜过大（失去断点续传的意义）。业界经验表明，<b>5MB 到 10MB</b> 是一个兼顾性能和稳定性的舒适区间。
+    </pre>
+    <input type="file" multiple accept="*/*" name="file" id="fileInput" />
+    <pre id="fileInfo"></pre>
+    <progress value="0" max="100" id="progressBar"></progress> <b id="progressVal"></b>
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const progressBar = document.getElementById('progressBar');
+        const progressVal = document.getElementById('progressVal');
+
+        // 每个切片的大小，单位字节
+        const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB
+
+        const worker = new Worker('./hash.worker.js');
+        // 监听worker错误事件
+        worker.onerror = function (e) {
+            console.error('worker线程出错:', e);
+        };
+
+        // 监听worker消息
+        worker.onmessage = function (e) {
+            const { type, data } = e.data;
+            if (type === 'file-progress') {
+                // 更新进度条
+                progressBar.value = data;
+                progressVal.textContent = `hash计算进度: ${data}%`
+            }
+            else if (type === 'file-result') {
+                // 拿到文件hash值后，就可以进行文件上传等操作，服务器可以根据这个hash值判断文件是否存在（之前没有上传过）
+                fileInfo.textContent = `文件hash值: ${data}`;
+
+                // 计算完成后，关闭worker线程
+                // worker.terminate();
+
+                console.log('文件hash值计算耗时:', console.timeEnd('file-hash计算耗时'));
+            }
+        };
+
+        // 监听文件选择事件
+        fileInput.addEventListener('change', function (e) {
+            const files = e.target.files;
+            if (files.length > 0) {
+                fileInfo.textContent = `
+                文件名称: ${files[0].name}\n
+                文件大小: ${getFileSize(files[0].size)}\n
+                文件类型：${files[0].type}
+                `;
+            } else {
+                fileInfo.textContent = '';
+            }
+            console.time('file-hash计算耗时');
+            console.log('开始计算文件hash值...', worker, files[0].name);
+            // files[0]是 Blob 类型的对象，需要发送到worker进行hash值计算
+            worker.postMessage({ type: 'file-hash', file: files[0], chunk_size: CHUNK_SIZE });
+
+            // 清空文件选择框
+            e.target.value = ''
+        });
+
+        // 计算文件大小+单位
+        function getFileSize(size) {
+            const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+            let i = 0;
+            while (size >= 1024 && i < units.length - 1) {
+                size /= 1024;
+                i++;
+            }
+            return `${size.toFixed(2)} ${units[i]}`;
+        }
+    </script>
+</body>
+
+</html>
