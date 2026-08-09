@@ -64,10 +64,10 @@
                 for (let i = 0; i < CUP_THREAD_NUM; i++) {
 
                     // 使用线程(Worker)来完成片信任务，这样就不影响主(渲染)线程，从而达到提升文件分片的任务！
-                    // const worker = new Worker('./worker.js', {
-                    //     type: 'module'   // 可以在worker.js中导入其他js模块
+                    // const worker = new Worker('./hash.worker.js', {
+                    //     type: 'module'   // 可以在hash.worker.js中导入其他js模块
                     // });
-                    const worker = new Worker('./worker.js');
+                    const worker = new Worker('./hash.worker.js');
 
                     // 线程要处理分片的起始位置
                     let startChunkIndex = i * hereadChunkCount;
