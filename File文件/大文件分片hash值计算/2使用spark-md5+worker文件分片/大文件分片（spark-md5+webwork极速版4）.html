@@ -78,7 +78,7 @@ Worker 内部依然只返回 { index, hash, success: true }，绝不把 Blob 传
         // 1. Worker 代码 (仅计算，不传 Blob)
         // ==========================================
         const workerScript = `
-            importScripts('https://cdn.jsdelivr.net/npm/spark-md5@3.0.2/spark-md5.min.js');
+            self.importScripts('https://cdn.jsdelivr.net/npm/spark-md5@3.0.2/spark-md5.min.js');
             self.onmessage = function(e) {
                 const { file, start, end, index } = e.data;
                 try {
