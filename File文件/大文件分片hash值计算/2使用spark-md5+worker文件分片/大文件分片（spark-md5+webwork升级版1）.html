@@ -48,7 +48,7 @@
         const chunksEl = document.querySelector('#chunks');
 
         // 1. 创建 Web Worker
-        const worker = new Worker('./hashWorker.js');
+        const worker = new Worker('./hash.worker.js');
 
         // 2. 监听 Worker 发回的消息
         worker.onmessage = (e) => {
